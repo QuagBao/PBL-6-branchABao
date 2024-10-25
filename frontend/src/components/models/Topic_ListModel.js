@@ -33,11 +33,13 @@ export default function () {
       return response.data.map(entertainment => ({
         id: entertainment.id,
         name: entertainment.name,
+        location:entertainment.location,
         reviewNumber: entertainment.reviewNumber,
         tag: entertainment.tag,
         rating: entertainment.rating,
         description: entertainment.description,
         imageUrl: entertainment.imageUrl,
+        price:entertainment.price,
       }));
     } catch (error) {
       console.error('Error fetching entertainments:', error);

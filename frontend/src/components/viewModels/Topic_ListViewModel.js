@@ -77,6 +77,15 @@ export default function () {
     dropdownVisible.value = false; // Ẩn dropdown sau khi chọn
   };
 
+  // Hàm rút gọn mô tả sau 25 từ
+  const truncatedDescription = (description) => {
+    const words = description.split(' ');
+    if (words.length > 25) {
+      return words.slice(0, 25).join(' ') + '...';
+    }
+    return description;
+  };
+
   return {
     isMenuVisible,
     toggleMenu,
@@ -102,5 +111,8 @@ export default function () {
     dropdownVisible, // Trạng thái dropdown
     toggleDropdown, // Hàm bật/tắt dropdown
     selectRegion, // Hàm chọn tỉnh thành
+
+    // Hàm rút gọn mô tả
+    truncatedDescription
   };
 }

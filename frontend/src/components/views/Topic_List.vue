@@ -75,37 +75,65 @@
         </div>
       </div>
       
+      <div class="list-layout">
+        <div v-for="(item, index) in entertainments" :key="index" class="list-item">
+    
+        <!-- Save Button + Heart Icon with Number (entire element) -->
+        <div class="top-right">
       
-      <span class="thing-to-do-1">Top Attractions in HaNoi</span>
-      <div class="flex-row-cff">
-        <div v-for="(item, index) in entertainments" :key="index" class="picture">
-          
-          <img :src="getImageUrl(item.imageUrl)" alt="Entertainment Image" class="entertainment-img" />
-
-        
-          <div class="heart-button" @click="toggleLikeStatus(item.id)">
+          <div class="save-button" @click="toggleLikeStatus(item.id)">
             <img :src="liked[item.id] ? heartFull : heartEmpty" alt="heart icon" class="heart-icon" />
-          </div>
-
-      
-          <div class="info">
-            <h3 class="item-name">{{ item.name }}</h3>
-            <div class="rating">
-              <img v-for="star in generateStars(item.rating)" :src="star" class="star" />
-              <span class="rating-count">{{ item.reviewNumber }}</span>
-            </div>
-            <div class="tags">
-              <span v-for="tag in item.tag" :key="tag" class="tag">{{ tag }}</span>
-            </div>
-            <div class="line-10"></div>
-            <span class="item-description">{{ item.description }}</span>
+            <span class="save-text">Save</span>
           </div>
         </div>
+
+        <!-- Image -->
+        <div class="picture">
+          <img :src="getImageUrl(item.imageUrl)" alt="Entertainment Image" class="entertainment-img" />
+        </div>
+
+        <!-- Info Section -->
+        <div class="info">
+          <span class="item-number">{{ index + 1 }}.</span>
+          <h3 class="item-name">{{ item.name }}</h3>
+
+          <div class="location">
+            <i class="location-icon"></i>
+            <span class="location-name">{{ item.location }}</span>
+          </div>
+      
+          <!-- Rating -->
+          <div class="rating">
+            <img v-for="star in generateStars(item.rating)" :src="star" class="star" />
+            <span class="rating-count">{{ item.reviewNumber }}</span>
+          </div>
+          <!-- Description -->
+          <span class="item-description">{{ truncatedDescription(item.description) }}</span>
+
+          <div class="quick-facts">
+            <h4 class="quick-facts-title">Quick facts</h4>
+  
+            <!-- Tags Section -->
+            <div class="fact-item">
+              <span class="icon-cuisine">🍽️</span> <!-- You can replace this icon with your preferred SVG or image -->
+              <span class="fact-content">
+                <span v-for="(tag, index) in item.tag" :key="tag" class="tag">
+                  {{ tag }}<span v-if="index < item.tag.length - 1">, </span> <!-- Adds a comma between tags -->
+                </span>
+              </span>
+            </div>
+
+            <!-- Price Section -->
+            <div class="fact-item">
+              <span class="icon-price">💰</span> <!-- Icon representing the price -->
+              <span class="fact-content">Price: {{ item.price }}</span>
+            </div>
+          </div>
+        </div>    
       </div>
-      
-      
-    </div>
-  </template>
+    </div>     
+  </div>
+</template>
 
 <script setup>
 import destinationViewModel from '../viewModels/Topic_ListViewModel';
@@ -135,6 +163,8 @@ const {
     dropdownVisible, // Trạng thái dropdown
     toggleDropdown, // Hàm bật/tắt dropdown
     selectRegion, // Hàm chọn tỉnh thành
+
+    truncatedDescription,
 } = destinationViewModel();
 
 
@@ -669,81 +699,106 @@ button.selected {
   white-space: nowrap;
   z-index: 149;
 }
-.flex-row-cff {
+.list-item {
   display: flex;
-  flex-wrap: wrap;
-  width: calc(84% + 3.5% * 2); 
-  margin: 4.5% 0 0 8%;
-  z-index: 125;
-}
-
-.picture {
-  position: relative;
-  width: 25%;
-  height: calc(3 * 25%);
-  margin: 0 6% 12% 0;
+  flex-direction: row;
+  width: 80%;
+  margin-left: 10%;
+  margin-right: 10%;
+  justify-content: center;
+  height: 400px; /* Fixed height for each item */
+  margin-bottom: 24px; /* Space between each item */
   border-radius: 20px;
   overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between; /* Đảm bảo các phần tử nằm giữa */
-  border: 1px solid #ccc; /* Thêm viền */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Đổ bóng nhạt */
-  transition: all 0.3s ease-in-out; /* Hiệu ứng hover */
+  border: 1px solid #ccc;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative; /* Make the list-item relative to position the Save button correctly */
+  transition: all 0.3s ease-in-out;
 }
 
-.picture:hover {
-  transform: translateY(-5px); /* Nổi lên khi hover */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Tăng độ nổi bóng khi hover */
-  border-color: #888; /* Thay đổi màu viền khi hover */
+.list-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  border-color: #888;
 }
 
-.heart-button {
+/* Save Button + Number in the top-right of the entire element */
+.top-right {
   position: absolute;
-  width: 45px;
-  height: 45px;
-  top: 16px;
-  right: 16px;
-  background-color: #c5dff8; /* Màu xanh dương nhạt */
-  border-radius: 50%; /* Giữ hình tròn */
-  cursor: pointer;
-  z-index: 99;
+  top: 10px;
+  right: 10px;
   display: flex;
-  justify-content: center;
   align-items: center;
+  z-index: 99;
+}
+
+.item-number {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  margin-right: 8px;
+}
+
+.save-button {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  padding: 5px 12px;
+  border-radius: 25px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.save-button:hover {
+  background-color: #f0f0f0;
 }
 
 .heart-icon {
-  width: 36px;
-  height: 36px;
-  margin: auto;
-  background-size: 100% 100%;
-  background-position: center;
-  background-repeat: no-repeat;
+  width: 24px;
+  height: 24px;
+  margin-right: 5px;
 }
 
-/* Styling for the entertainment image */
+.save-text {
+  font-size: 16px;
+  color: #333;
+}
+
+/* Picture */
+.picture {
+  width: 30%;
+  height: 100%; /* Ensure picture takes full height */
+  position: relative;
+}
+
 .entertainment-img {
   width: 100%;
-  height: 70%;
-  object-fit: cover;
-  border-radius: 20px 20px 0 0;
-  flex-shrink: 0;
+  height: 100%; /* Full height image */
+  object-fit: cover; /* Ensures the image covers the area without distortion */
+  border-radius: 20px 0 0 20px;
 }
 
+/* Info Section */
 .info {
-  width: 100%;
-  text-align: left; /* Căn trái hoàn toàn */
+  padding: 20px;
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   color: #003366;
-  margin: 2px 0;
-  font-size: 1.25vw;
-  padding: 10px 5px;
 }
 
 .item-name {
-  font-weight: bold; /* In đậm tên */
-  font-size: 18px;
+  font-weight: bold;
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.rating {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
 }
 
 .rating img {
@@ -751,60 +806,63 @@ button.selected {
   height: 20px;
 }
 
-.tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
+.rating-count {
+  margin-left: 8px;
+  font-size: 16px;
+}
+
+
+
+
+
+.item-description {
+  font-size: 1.25vw;
+  color: #003366;
+}
+
+.location-icon::before{
+  content: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxNCIgaGVpZ2h0PSIxOCIgdmlld0JveD0iMCAwIDE0IDE4Ij4KICA8cGF0aCBkPSJNMTIgN2MwIDMuMzEtNiA5LTYgOUMyIDExLjMxIDAgOS4zMSAwIDdjMC0zLjMxIDItNiA2LTZzNiAyLjY5IDYgNnptLTYtN2MtMS42NiAwLTMgMS4zNC0zIDNzMS4zNCAzIDMgM2MxLjY2IDAgMy0xLjM0IDMtM3MtMS4zNC0zLTMtM3oiIGZpbGw9IiMwMDAwZmYiLz4KPC9zdmc+Cg==');
+}
+.location-name{
+  font-size: 1.25vw;
+  text-decoration: underline;
+  color: #003366;
+}
+
+.quick-facts {
+  margin-top: 20px;
+}
+
+.quick-facts-title {
+  font-size: 1.5vw;
+  font-weight: bold;
+  color: #003366;
+  margin-bottom: 10px;
+}
+
+.fact-item {
+  display: inline-flex;
   align-items: center;
-  font-size: 14px;
+  background-color: #ecebeb; /* Light grey background similar to the image */
+  padding: 10px 15px;
+  border-radius: 25px;
+  margin-right: 10px; /* Space between fact items */
+}
+
+.icon-cuisine, .icon-price {
+  font-size: 1.25vw; /* Adjust this based on your desired icon size */
+  margin-right: 8px; /* Space between icon and text */
+}
+
+.fact-content {
+  font-size: 1vw;
   color: #003366;
 }
 
 .tag {
   display: inline-block;
-  padding: 5px 10px;
-  background-color: #e8f4f8;
-  border-radius: 5px;
-  position: relative;
-  font-size: 0.8vw;
-  margin-right: 5px; /* Khoảng cách giữa các tag */
-}
-
-.tag::after {
-  content: "&"; /* Thêm ký tự & sau mỗi tag */
-  position: absolute;
-  right: -10px;
-  color: #003366;
-}
-
-.tag:last-child::after {
-  content: ""; /* Xóa ký tự & cho tag cuối cùng */
-}
-
-.line-10 {
-  width: 100%; /* Dòng kẻ kéo dài toàn bộ chiều rộng */
-  height: 1px; /* Độ dày của dòng kẻ */
-  background-color: #061a46; /* Màu xanh đậm */
-  margin: 10px 0; /* Khoảng cách trên và dưới dòng kẻ */
-}
-
-.item-description{
-  display: inline-block;
-  color: #003366;
-  padding: 5px 5px;
-  margin: 2px 0;
   font-size: 1vw;
-  border-radius: 5px;
-}
-
-.rating-count{
-  display: inline-block;
   color: #003366;
-  padding: 0px 5px;
-  margin: 2px 0;
-  border-radius: 5px;
 }
-
-
 
 </style>
