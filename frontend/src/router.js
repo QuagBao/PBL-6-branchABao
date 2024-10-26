@@ -19,6 +19,7 @@ const ThingToDo_list = () => import('./components/views/ThingToDo_List.vue');
 const Restaurant_list = () => import('./components/views/Restaurant_List.vue');
 const Hotel_list = () => import('./components/views/Hotel_List.vue');
 const Topic_list = () => import('./components/views/Topic_List.vue');
+const Create_Trip = () => import('./components/views/Create_Trip.vue');
 
 const routes = [
   {
@@ -109,7 +110,12 @@ const routes = [
   {
     path: '/uploadPicture',
     name: 'UploadPicture',
-    component: uploadPictureView,  // Lazy load detailLocation_Hotel
+    component: uploadPictureView,  
+  },
+  {
+    path: '/createTrip',
+    name: 'CreateTrip',
+    component: Create_Trip,  
   },
   // Đường dẫn mặc định nếu không có URL cụ thể
   {
