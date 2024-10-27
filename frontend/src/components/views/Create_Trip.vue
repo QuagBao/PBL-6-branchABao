@@ -28,37 +28,42 @@
         <div v-else-if="currentStep === 2">
             <h2 class="title">Select Your Travel Dates</h2>
             <VueDatePicker
-                v-model="selectedDates"
+                v-model="rawSelectedDates"
                 range
                 color="primary"
+                :multiCalendars="2"
                 :active-picker.sync="activePicker"
                 @change="onDateChange"
+                :enableTime="false" 
+                :format="'dd/MM/yyyy'"
                 class="calendar"
-                show-current="true"
+                show-current="false"
             />
             <button @click="goToDestinationSelection" class="back-button">Back</button>
-            <button @click="submitTrip" class="submit-button">Submit</button>
+            <button @click="submitTrip" class="submit-button">Next</button>
         </div>
     </div>
 </template>
 
 <script setup>
-import { ref } from 'vue';
 import CreateTripViewModel from '../viewModels/CreateTripViewModel';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 
 const {
     searchQuery,
-    suggestedDestinations,
-    searchDestinations,
-    goToCalendar,
-    goToDestinationSelection,
-    submitTrip,
-    currentStep,
-    selectedDates,
-    activePicker,
-    onDateChange,
+        suggestedDestinations,
+        searchDestinations,
+        goToCalendar,
+        goToDestinationSelection,
+        submitTrip,
+        currentStep,
+        selectedDates,
+        activePicker,
+        onDateChange,
+        rawSelectedDates,
+        startDay,
+        endDay
 } = CreateTripViewModel();
 </script>
 
@@ -152,21 +157,119 @@ const {
 
 .next-button {
     position: absolute;
-    bottom: 2vh;
-    right: 2vw;
-    padding: 1.5vh 3vw;
-    background-color: #00bcd4;
-    color: white;
+    bottom: 100px;
+    right: 100px;
+    padding: 12px 24px;
+    font-size: 1.2em;
+    font-weight: bold;
     border: none;
-    border-radius: 2vh;
+    border-radius: 30px;
+    color: #fff;
     cursor: pointer;
-    font-size: 2vw;
+    transition: background-color 0.3s ease;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+    background-color: #00bcd4;
+}
+
+.next-button:hover {
+    background-color: #0088a9;
 }
   
-.calendar{
-    background-color: #00bcd4;
-    color:aquamarine;
+.calendar {
+    background-color: #e3f2fd; /* Soft blue background */
+    color: #1a237e; /* Dark blue text for readability */
+    border-radius: 12px;
+    margin-left: 20%;
+    margin-right: 20%;
+    margin-top: 10%;
+    width: 60%;
+    padding: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow for elevation */
 }
+
+/* Header styling for the month and navigation arrows */
+.calendar .vc-nav-header {
+    color: #1a237e;
+    font-weight: bold;
+    font-size: 1.4em;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+}
+
+/* Styling for days in the calendar */
+.calendar .vc-day {
+    color: #1a237e; /* Regular day color */
+    font-weight: 500;
+    padding: 10px;
+    margin: 2px;
+    border-radius: 50%; /* Make days circular */
+    transition: background-color 0.3s, color 0.3s;
+    cursor: pointer;
+}
+
+/* Styling for hovered day */
+.calendar .vc-day:hover {
+    background-color: #bbdefb; /* Light blue hover */
+    color: #1a237e;
+}
+
+/* Styling for selected day */
+.calendar .vc-day.selected {
+    background-color: #0d47a1; /* Dark blue for selected day */
+    color: white;
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Disabled days style */
+.calendar .vc-day.disabled {
+    color: #90a4ae;
+    background-color: transparent;
+    cursor: not-allowed;
+}
+
+/* Style for the 'Select' and 'Cancel' buttons */
+.calendar .vc-actions button {
+    background-color: #1a237e;
+    color: white;
+    border-radius: 20px;
+    padding: 8px 16px;
+    font-size: 0.9em;
+    cursor: pointer;
+    margin: 0 6px;
+    transition: background-color 0.3s ease;
+}
+
+.calendar .vc-actions button:hover {
+    background-color: #3949ab; /* Darker on hover */
+}
+
+/* Separate style for the 'Cancel' button */
+.calendar .vc-actions .vc-btn-cancel {
+    background-color: #e0e0e0;
+    color: #455a64;
+}
+
+.calendar .vc-actions .vc-btn-cancel:hover {
+    background-color: #cfd8dc;
+    color: #263238;
+}
+
+/* Navigation arrows */
+.calendar .vc-nav-btn {
+    color: #1a237e;
+    font-size: 1.2em;
+    padding: 6px;
+    transition: color 0.2s ease;
+}
+
+.calendar .vc-nav-btn:hover {
+    color: #0d47a1;
+}
+
+
 
 
 .back-button, .submit-button {
@@ -179,12 +282,36 @@ const {
     font-size: 1em;
 }
 
+.back-button, .submit-button {
+    position: absolute;
+    bottom: 100px;
+    padding: 12px 24px;
+    font-size: 1.2em;
+    font-weight: bold;
+    border: none;
+    border-radius: 30px;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+}
+
 .back-button {
+    left: 100px;
     background-color: #888;
 }
 
+.back-button:hover {
+    background-color: #666;
+}
+
 .submit-button {
+    right: 100px;
     background-color: #00bcd4;
+}
+
+.submit-button:hover {
+    background-color: #0088a9;
 }
 
 

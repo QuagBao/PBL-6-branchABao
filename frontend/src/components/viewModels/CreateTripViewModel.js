@@ -1,4 +1,4 @@
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import CreateTripModel from '../models/CreateTripModel';
 
 export default function CreateTripViewModel() {
@@ -6,8 +6,8 @@ export default function CreateTripViewModel() {
     const currentStep = ref(1);
     const searchQuery = ref('');
     const suggestedDestinations = ref([]);
-    const selectedDates = ref([]);
     const activePicker = ref('');
+    const rawSelectedDates = ref([]);
 
     onMounted(async () => {
         suggestedDestinations.value = await model.fetchCities();
@@ -25,16 +25,44 @@ export default function CreateTripViewModel() {
         currentStep.value = 1;
     };
 
-    const submitTrip = () => {
-        console.log('Trip submitted with dates:', selectedDates.value);
+    // Computed properties for startDay and endDay
+    const startDay = computed(() => {
+        return rawSelectedDates.value && rawSelectedDates.value.length > 0 ? new Date(rawSelectedDates.value[0]) : null;
+    });
+
+    const endDay = computed(() => {
+        return rawSelectedDates.value && rawSelectedDates.value.length > 1 ? new Date(rawSelectedDates.value[1]) : null;
+    });
+
+    // Computed property to keep the dates without the time component
+    const selectedDates = computed(() => {
+        if (!rawSelectedDates.value || rawSelectedDates.value.length === 0) return null;
+        return rawSelectedDates.value.map(date => {
+            const newDate = new Date(date);
+            newDate.setHours(0, 0, 0, 0); // Set time to 00:00:00
+            return newDate;
+        });
+    });
+
+    const onDateChange = (dates) => {
+        rawSelectedDates.value = dates; // Keep raw dates
     };
 
-    const onDateChange = (value) => {
-        if (value.length === 2) {
-            selectedDates.value = value;
-            console.log('Selected dates:', selectedDates.value);
-        }
+    const submitTrip = () => {
+        console.log('Trip submitted with dates:', selectedDates.value);
+    
+        // Format startDay and endDay as dd/MM/yyyy
+        const startDateFormatted = startDay.value
+            ? startDay.value.toLocaleDateString('en-GB') // 'en-GB' formats as dd/MM/yyyy
+            : 'No start date';
+        const endDateFormatted = endDay.value
+            ? endDay.value.toLocaleDateString('en-GB')
+            : 'No end date';
+    
+        console.log('Start Date:', startDateFormatted);
+        console.log('End Date:', endDateFormatted);
     };
+    
 
     return {
         searchQuery,
@@ -47,5 +75,8 @@ export default function CreateTripViewModel() {
         selectedDates,
         activePicker,
         onDateChange,
+        rawSelectedDates,
+        startDay,
+        endDay
     };
 }
