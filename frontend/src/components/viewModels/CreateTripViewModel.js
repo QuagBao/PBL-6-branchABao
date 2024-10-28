@@ -8,6 +8,20 @@ export default function CreateTripViewModel() {
     const suggestedDestinations = ref([]);
     const activePicker = ref('');
     const rawSelectedDates = ref([]);
+    const topics = ref([
+        "Religious Site/ Historic Sites",
+        "Great Food",
+        "Museum",
+        "Theater",
+        "Parks",
+        "Mountain",
+        "Gallery",
+        "Points of interest & Landmark",
+        "Neighborhoods",
+        "Flea & Street Markets",
+        "Scenic Walking Areas"
+    ]);
+    const selectedTopics = ref([]);
 
     onMounted(async () => {
         suggestedDestinations.value = await model.fetchCities();
@@ -48,7 +62,7 @@ export default function CreateTripViewModel() {
         rawSelectedDates.value = dates; // Keep raw dates
     };
 
-    const submitTrip = () => {
+    const gotoTopic = () => {
         console.log('Trip submitted with dates:', selectedDates.value);
     
         // Format startDay and endDay as dd/MM/yyyy
@@ -61,6 +75,15 @@ export default function CreateTripViewModel() {
     
         console.log('Start Date:', startDateFormatted);
         console.log('End Date:', endDateFormatted);
+        currentStep.value = 3;
+    };
+
+    const toggleTopic = (topic) => {
+        if (selectedTopics.value.includes(topic)) {
+            selectedTopics.value = selectedTopics.value.filter(t => t !== topic);
+        } else {
+            selectedTopics.value.push(topic);
+        }
     };
     
 
@@ -70,13 +93,16 @@ export default function CreateTripViewModel() {
         searchDestinations,
         goToCalendar,
         goToDestinationSelection,
-        submitTrip,
+        gotoTopic,
         currentStep,
         selectedDates,
         activePicker,
         onDateChange,
         rawSelectedDates,
         startDay,
-        endDay
+        endDay,
+        topics,
+        selectedTopics,
+        toggleTopic,
     };
 }

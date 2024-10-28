@@ -40,7 +40,30 @@
                 show-current="false"
             />
             <button @click="goToDestinationSelection" class="back-button">Back</button>
-            <button @click="submitTrip" class="submit-button">Next</button>
+            <button @click="gotoTopic" class="submit-button">Next</button>
+        </div>
+        <div v-else-if="currentStep === 3">
+            <h2 class="title">Tell us what you’re interested in</h2>
+            <h3 class="title-detail">Select all that apply</h3>
+            <div class="topics">
+                <button
+                    v-for="(topic, index) in topics"
+                    :key="index"
+                    :class="['topic-button', { selected: selectedTopics.includes(topic) }]"
+                    @click="toggleTopic(topic)"
+                >
+                    {{ topic }}
+                </button>
+            </div>
+            <button @click="goToCalendar" class="back-button">Back</button>
+            <button @click="gotoTopic" class="submit-button">Next</button>
+        </div>
+        <div v-else-if="currentStep === 4">
+            <h2 class="cities">Danang</h2>
+            <h3 class="title-detail">Select all that apply</h3>
+            
+            <button @click="goToCalendar" class="back-button">Back</button>
+            <button @click="gotoTopic" class="submit-button">Next</button>
         </div>
     </div>
 </template>
@@ -56,14 +79,18 @@ const {
         searchDestinations,
         goToCalendar,
         goToDestinationSelection,
-        submitTrip,
+        gotoTopic,
         currentStep,
         selectedDates,
         activePicker,
         onDateChange,
         rawSelectedDates,
         startDay,
-        endDay
+        endDay,
+        topics,
+        selectedTopics,
+        toggleTopic,
+        
 } = CreateTripViewModel();
 </script>
 
@@ -313,7 +340,40 @@ const {
 .submit-button:hover {
     background-color: #0088a9;
 }
+.title-detail{
+    font-size: 2vw; /* Scale font-size with viewport width */
+    color: #1a237e;
+    margin-bottom: 1.5vh; /* Scale margin with viewport height */
+    text-align: center;
+    margin-top: 20px;
+}
 
+.topics {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-auto-rows: auto;
+    width: 45%;
+    margin: 0 auto; /* Center horizontally */
+    gap: 10px;
+    justify-content: center;
+}
+
+.topic-button {
+    padding: 10px 20px;
+    border: 5px solid #2a4f8d;
+    border-radius: 40px;
+    background-color: #f5faff;
+    color: #2a4f8d;
+    font-weight: 700;
+    font-size: 1.2vw;
+    cursor: pointer;
+    text-align: center;
+}
+
+.topic-button.selected {
+    background-color: #2a4f8d;
+    color: #fff;
+}
 
   </style>
   
