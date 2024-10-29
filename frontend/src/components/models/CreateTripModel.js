@@ -37,6 +37,7 @@ export default function () {
         rating: entertainment.rating,
         description: entertainment.description,
         imageUrl: entertainment.imageUrl,
+        destinationType: entertainment.destinationType,
       }));
     } catch (error) {
       console.error('Error fetching entertainments:', error);
