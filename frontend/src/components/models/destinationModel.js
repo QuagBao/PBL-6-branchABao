@@ -5,23 +5,30 @@ export default function () {
   const heartFull = new URL('@/assets/heart-full.svg', import.meta.url).href;
   const heartEmpty = new URL('@/assets/heart-none.svg', import.meta.url).href;
   
-  const fullDescription = `Hanoi, the capital city of Vietnam, is a vibrant blend of tradition and modernity. 
-Nestled along the banks of the Red River, Hanoi is known for its centuries-old architecture, rich history, and deep-rooted culture. 
-The city's Old Quarter, with its narrow streets and colonial buildings, offers a glimpse into its French colonial past, 
-while iconic landmarks like the Ho Chi Minh Mausoleum, the Temple of Literature, and the One Pillar Pagoda reflect its ancient heritage. 
-Hanoi is also famous for its lively street markets, traditional cuisine, and serene lakes, such as Hoan Kiem Lake and West Lake, 
-where locals gather to exercise and socialize. The city's unique charm lies in its ability to blend the bustling energy 
-of a modern metropolis with the peaceful, timeless beauty of its historical sites. Whether you're exploring its vibrant neighborhoods 
-or tasting its world-renowned street food, Hanoi offers an authentic and captivating experience for visitors.`;
-
   
 
-  const getTruncatedDescription = () => {
-    return fullDescription.split(' ').slice(0, 40).join(' ') + '...';
-  };
-
-  const getDescription = (isReadMore) => {
-    return isReadMore.value ? fullDescription : getTruncatedDescription();
+  const fetchCityDetails = async (cityId) => {
+    try {
+      const response = await fetch(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/city/${cityId}`);
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      const data = await response.json();
+  
+      // Chuyển đổi dữ liệu thành định dạng có thể sử dụng trong Vue
+      return {
+        id: data.id,
+        name: data.name,
+        description: data.description,
+        images: data.images.map(image => ({
+          id: image.id,
+          url: image.url,
+        })),
+      };
+    } catch (error) {
+      console.error("Có lỗi xảy ra khi lấy dữ liệu chi tiết thành phố:", error);
+      return null; // Return null or handle as needed
+    }
   };
 
   const buttons = ['Drink', 'Museum', 'Outdoor', 'Adventure', 'Beach', 'Hotel', 'Food', 'F&B', 'Movie'];
@@ -79,11 +86,9 @@ or tasting its world-renowned street food, Hanoi offers an authentic and captiva
     fetchImages,
     heartFull,
     heartEmpty,
-    fullDescription,
-    getTruncatedDescription,
-    getDescription,
     buttons,
     fetchEntertainments,
-    generateStars
+    generateStars,
+    fetchCityDetails
   };
 }

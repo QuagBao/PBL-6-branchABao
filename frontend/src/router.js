@@ -43,9 +43,9 @@ const routes = [
     component: DashBoardView_Test,  // Lazy load DashBoardView
   },
   {
-    path: '/destination',
+    path: '/destination/:id',
     name: 'Destination',
-    component: destinationView,  // Lazy load destinationView
+    component: destinationView,
   },
   {
     path: '/city/thingtodo',
@@ -128,6 +128,8 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 });
+
+
 
 export default router;
 

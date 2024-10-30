@@ -3,8 +3,8 @@
 </script>
 
 <template>
-  <main>
-    <!-- router-view sẽ tự động thay đổi component dựa vào route hiện tại -->
-    <router-view />
-  </main>
+  <div id="app">
+    <router-view :key="$route.fullPath" />
+  </div>
 </template>
+
