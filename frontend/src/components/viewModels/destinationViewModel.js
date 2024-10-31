@@ -8,10 +8,12 @@ export default function (cityId) {
   const isReadMore = ref(false);
   const currentIndex = ref(0);
   const cityDetails = ref(null);
+  const destinations = ref([]);
   const entertainments = ref([]);
   const liked = ref({});
   const isHeartFilled = ref(false);
   const isLoading = ref(true);
+  const hotels = ref([]);
 
 
   const toggleMenu = () => {
@@ -52,12 +54,16 @@ export default function (cityId) {
 
   // Fetch city details and populate relevant data
   onMounted(async () => {
-    cityDetails.value = await model.fetchCityDetails(cityId);
-    entertainments.value = await model.fetchEntertainments();
+    isLoading.value = true; // Bắt đầu trạng thái tải
 
-    isLoading.value = false;
+    cityDetails.value = await model.fetchCityDetails(cityId);
+    destinations.value = await model.fetchDestinations(cityId);
+    entertainments.value = await model.fetchEntertainments();
+    console.log(destinations.value);
     
-  });
+
+    isLoading.value = false; // Kết thúc trạng thái tải
+});
 
   // Function to get truncated description
   const getTruncatedDescription = computed(() => {
@@ -119,5 +125,7 @@ export default function (cityId) {
     heartEmpty: model.heartEmpty,
     cityDetails,
     isLoading,
+    destinations,
+    hotels
   };
 }

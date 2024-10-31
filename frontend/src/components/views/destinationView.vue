@@ -78,9 +78,9 @@
       
       <span class="thing-to-do-1">Things to do</span>
       <div class="flex-row-cff">
-        <div v-for="(item, index) in entertainments" :key="index" class="picture">
+        <div v-for="(item, index) in destinations" :key="index" class="picture">
           
-          <img :src="getImageUrl(item.imageUrl)" alt="Entertainment Image" class="entertainment-img" />
+          <img :src="getImageUrl(item.images[0])" alt="Destination Image" class="entertainment-img" />
 
         
           <div class="heart-button" @click="toggleLikeStatus(item.id)">
@@ -125,9 +125,9 @@
 
       <span class="hotel-1">Resort & Hotel</span>
       <div class="flex-row-cff2">
-        <div v-for="(item, index) in entertainments" :key="index" class="picture">
+        <div v-for="(item, index) in hotels" :key="index" class="picture">
           
-          <img :src="getImageUrl(item.imageUrl)" alt="Entertainment Image" class="entertainment-img" />
+          <img :src="getImageUrl(item.imgUrl[0])" alt="Entertainment Image" class="entertainment-img" />
 
         
           <div class="heart-button" @click="toggleLikeStatus(item.id)">
@@ -181,6 +181,8 @@ const {
   heartEmpty,
   cityDetails,
   isLoading,
+  destinations,
+  hotels
 } = destinationViewModel(cityId);
 
 </script>
