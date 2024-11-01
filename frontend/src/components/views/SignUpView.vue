@@ -47,12 +47,7 @@
           password: this.password,
           password_confirm: this.password_confirm
         });
-        const result = signUpVM.validate();
-        if (result.success) {
-          alert('Sign up successfully');
-        } else {
-          alert(result.message);
-        }
+        signUpVM.validate();
       },
     },
   };
