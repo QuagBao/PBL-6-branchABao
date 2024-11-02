@@ -15,24 +15,35 @@
 <script>
 import { login } from "@/controllers/AuthController";
 import { useRouter } from "vue-router";
-import { ref } from "vue"; // Import ref from Vue
+import { ref } from "vue";
 
 export default {
   name: "UserLogin",
   setup() {
     const router = useRouter();
-
     const username = ref("");
     const password = ref("");
 
-    const handleLogin = () => {
-      if (login(username.value, password.value)) {
+    const handleLogin = async () => {
+      const response = await login(username.value, password.value);
+
+      if (response.success) {
+        const userData = response.user;
+        console.log("User data:", userData); // Log or use user data as needed
+
+        if (userData.role !== "admin") {
+          sessionStorage.removeItem("token");
+          sessionStorage.removeItem("user");
+          alert("You do not have permission to access this system."); // Thông báo nếu không phải admin
+          return; // Dừng lại nếu không phải admin
+        }
+
         setTimeout(() => {
-          location.reload(); // Reload the app to reflect the state
-        }, 100);
-        router.push("/dashboard");
+          location.reload();
+        }, 0);
+        router.push("/dashboard"); // Redirect to dashboard only after fetching user data
       } else {
-        alert("Invalid credentials");
+        alert(response.message || "Invalid credentials");
       }
     };
 

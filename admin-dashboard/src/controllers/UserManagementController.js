@@ -1,12 +1,7 @@
 // src/controllers/UserManagementController.js
-import {
-  getUsers,
-  addUser,
-  updateUser,
-  deleteUser,
-} from "@/models/UserManagementModel";
+import { getUsers as fetchUsersAPI } from "@/models/UserManagementModel";
 
-export const fetchUsers = () => getUsers();
-export const createUser = (user) => addUser(user);
-export const modifyUser = (user) => updateUser(user);
-export const removeUser = (id) => deleteUser(id);
+export const fetchUsers = async () => {
+  const users = await fetchUsersAPI();
+  return users;
+};

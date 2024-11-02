@@ -7,12 +7,17 @@
           <router-link
             to="/dashboard"
             :class="{ active: isActive('/dashboard') }"
+            @click="handleNavigation"
           >
             <i class="icon-dashboard"></i> Dashboard
           </router-link>
         </li>
         <li>
-          <router-link to="/users" :class="{ active: isActive('/users') }">
+          <router-link
+            to="/users"
+            :class="{ active: isActive('/users') }"
+            @click="handleNavigation"
+          >
             <i class="icon-user-management"></i> User Management
           </router-link>
         </li>
@@ -28,7 +33,9 @@
           >
         </template>
         <template v-else>
-          <span class="welcome-message">Welcome, {{ loggedInUser.name }}</span>
+          <span class="welcome-message">
+            Welcome, {{ loggedInUser.username }}
+          </span>
           <button @click="handleLogout" class="auth-button logout-button">
             Logout
           </button>
@@ -38,13 +45,13 @@
 
     <!-- Main Content -->
     <main class="main-content">
-      <router-view />
+      <router-view :key="viewKey"></router-view>
     </main>
   </div>
 </template>
 
 <script>
-import { getLoggedInUser, logout } from "./controllers/AuthController";
+import { logout } from "./controllers/AuthController";
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 
@@ -53,11 +60,23 @@ export default {
   setup() {
     const router = useRouter();
     const loggedInUser = ref(null);
+    const viewKey = ref(Date.now()); // Khóa duy nhất cho router-view
+
+    const refreshView = () => {
+      viewKey.value = Date.now(); // Thay đổi khóa để ép buộc làm mới router-view
+    };
 
     const handleLogout = () => {
       logout();
       loggedInUser.value = null;
+      sessionStorage.removeItem("user");
+      sessionStorage.removeItem("token");
       router.push("/login");
+      refreshView(); // Gọi hàm refreshView để làm mới giao diện sau khi đăng xuất
+    };
+
+    const handleNavigation = () => {
+      refreshView(); // Gọi hàm refreshView khi điều hướng
     };
 
     const isActive = (route) => {
@@ -65,10 +84,14 @@ export default {
     };
 
     onMounted(() => {
-      loggedInUser.value = getLoggedInUser();
+      const storedUser = JSON.parse(sessionStorage.getItem("user"));
+      if (storedUser) {
+        loggedInUser.value = storedUser;
+        console.log("Log data:", loggedInUser.value);
+      }
     });
 
-    return { loggedInUser, handleLogout, isActive };
+    return { loggedInUser, handleLogout, handleNavigation, isActive, viewKey };
   },
 };
 </script>

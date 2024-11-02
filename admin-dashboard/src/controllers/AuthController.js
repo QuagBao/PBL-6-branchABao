@@ -1,19 +1,30 @@
 // src/controllers/AuthController.js
-import { authenticateUser } from "@/models/UserModel";
+import { authenticateUser, fetchCurrentUser } from "@/models/UserModel";
 
-export const login = (username, password) => {
-  const user = authenticateUser(username, password);
-  if (user) {
-    localStorage.setItem("loggedInUser", JSON.stringify(user)); // Lưu thông tin người dùng
-    return true; // Đăng nhập thành công
+export const login = async (username, password) => {
+  const authResponse = await authenticateUser(username, password);
+
+  if (authResponse.success) {
+    const userResponse = await fetchCurrentUser(); // Fetch user info
+    if (userResponse.success) {
+      sessionStorage.setItem("user", JSON.stringify(userResponse.user));
+      return {
+        success: true,
+        token: authResponse.token,
+        user: userResponse.user,
+      };
+    } else {
+      console.error(userResponse.message);
+      return {
+        success: false,
+        message: "Failed to fetch user info after login",
+      };
+    }
+  } else {
+    return authResponse; // Return the original error message from authenticateUser
   }
-  return false; // Đăng nhập thất bại
 };
 
 export const logout = () => {
-  localStorage.removeItem("loggedInUser"); // Xóa thông tin người dùng
-};
-
-export const getLoggedInUser = () => {
-  return JSON.parse(localStorage.getItem("loggedInUser")); // Trả về thông tin người dùng đã đăng nhập
+  sessionStorage.removeItem("token"); // Clear the token from sessionStorage
 };

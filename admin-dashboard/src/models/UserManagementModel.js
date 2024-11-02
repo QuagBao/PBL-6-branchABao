@@ -1,36 +1,30 @@
 // src/models/UserManagementModel.js
+import axios from "axios";
 
-// Khởi tạo danh sách người dùng mẫu
-const users = [
-  { id: 1, name: "John Doe", email: "john@example.com" },
-  { id: 2, name: "Jane Smith", email: "jane@example.com" },
-  { id: 3, name: "Alice Brown", email: "alice@example.com" },
-  { id: 4, name: "Bob Johnson", email: "bob@example.com" },
-  { id: 5, name: "Charlie Lee", email: "charlie@example.com" },
-];
+// Hàm lấy tất cả người dùng từ API
+export async function getUsers() {
+  try {
+    const token = sessionStorage.getItem("token");
+    if (!token) throw new Error("No token found");
 
-// Hàm lấy tất cả người dùng
-export function getUsers() {
-  return users;
-}
+    const response = await axios.get(
+      "https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/user/",
+      {
+        headers: {
+          accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-// Hàm thêm người dùng mới
-export function addUser(newUser) {
-  users.push(newUser);
-}
-
-// Hàm chỉnh sửa thông tin người dùng theo ID
-export function updateUser(id, updatedUser) {
-  const index = users.findIndex((user) => user.id === id);
-  if (index !== -1) {
-    users[index] = { ...users[index], ...updatedUser };
-  }
-}
-
-// Hàm xóa người dùng theo ID
-export function deleteUser(id) {
-  const index = users.findIndex((user) => user.id === id);
-  if (index !== -1) {
-    users.splice(index, 1);
+    return response.data.map((user) => ({
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      role: user.role,
+    }));
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    return []; // Hoặc bạn có thể xử lý theo cách khác
   }
 }
