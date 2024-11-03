@@ -9,6 +9,8 @@
             <th>Id</th>
             <th>Username</th>
             <th>Email</th>
+            <th>Business Description</th>
+            <th>Phone Number</th>
             <th>Role</th>
             <th>Actions</th>
           </tr>
@@ -18,16 +20,29 @@
             <td>{{ user.id }}</td>
             <td>{{ user.username }}</td>
             <td>{{ user.email }}</td>
+            <td>{{ user.business_description }}</td>
+            <td>{{ user.phone_number }}</td>
             <td>{{ user.role }}</td>
             <td>
-              <button class="action-button edit-button" @click="editUser(user)">
-                Edit
+              <button
+                v-if="user.isCreate"
+                class="action-button edit-button"
+                @click="editUser(user)"
+              >
+                Edit user info
+              </button>
+              <button
+                v-else
+                class="action-button create-button"
+                @click="createUserInfo(user)"
+              >
+                Create user info
               </button>
               <button
                 class="action-button delete-button"
                 @click="removeUser(user.id)"
               >
-                Delete
+                Delete user info
               </button>
             </td>
           </tr>
@@ -173,7 +188,8 @@ h2 {
 }
 
 .edit-button,
-.delete-button {
+.delete-button,
+.create-button {
   padding: 12px 24px; /* Tăng padding để nút dài hơn */
   color: white; /* Màu chữ */
   font-weight: bold; /* Chữ đậm */
@@ -192,6 +208,15 @@ h2 {
 
 .edit-button:hover {
   background-color: #0056b3; /* Màu nền khi hover */
+  transform: scale(1.05); /* Tăng kích thước khi hover */
+}
+
+.create-button {
+  background-color: #28a745; /* Màu nền cho nút chỉnh sửa */
+}
+
+.edit-button:hover {
+  background-color: #02270b; /* Màu nền khi hover */
   transform: scale(1.05); /* Tăng kích thước khi hover */
 }
 
