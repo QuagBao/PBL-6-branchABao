@@ -1,8 +1,8 @@
 <template>
   <div class="user-management">
     <h2>User Management</h2>
-    <button class="add-user-button">Add User</button>
-    <div class="table-container">
+    <div v-if="actionStep === 'read'" class="table-container">
+      <button class="add-user-button" @click="showAddUserForm">Add User</button>
       <table class="user-table">
         <thead>
           <tr>
@@ -27,20 +27,20 @@
               <button
                 v-if="user.isCreate"
                 class="action-button edit-button"
-                @click="editUser(user)"
+                @click="showUpdateForm(user.id)"
               >
                 Edit user info
               </button>
               <button
                 v-else
-                class="action-button create-button"
-                @click="createUserInfo(user)"
+                class="action-button add-button"
+                @click="showCreateForm(user.id)"
               >
                 Create user info
               </button>
               <button
                 class="action-button delete-button"
-                @click="removeUser(user.id)"
+                @click="deleteInfo(user.id)"
               >
                 Delete user info
               </button>
@@ -49,16 +49,104 @@
         </tbody>
       </table>
     </div>
+
+    <div v-if="actionStep === 'addUser'" class="form-container">
+      <h3>Create User</h3>
+      <form @submit.prevent="submitAddUser" class="form-style">
+        <div class="form-group">
+          <label>Username:</label>
+          <input type="text" v-model="newUser.username" />
+        </div>
+        <div class="form-group">
+          <label>Email:</label>
+          <input type="email" v-model="newUser.email" />
+        </div>
+        <div class="form-group">
+          <label>Password:</label>
+          <input type="password" v-model="newUser.password" />
+        </div>
+        <div class="form-group">
+          <label>Confirm Password:</label>
+          <input type="password" v-model="newUser.confirmPassword" />
+        </div>
+        <div class="button-group">
+          <button type="submit" class="create-button">Create</button>
+          <button type="button" @click="cancelAction" class="cancel-button">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+    <!-- Create User info Form -->
+    <div v-if="actionStep === 'create'" class="form-container">
+      <h3>Create User Info</h3>
+      <form @submit.prevent="submitCreateUser" class="form-style">
+        <div class="form-group">
+          <label>Username:</label>
+          <input type="text" v-model="currentUser.username" disabled />
+        </div>
+        <div class="form-group">
+          <label>Email:</label>
+          <input type="email" v-model="currentUser.email" disabled />
+        </div>
+        <div class="form-group">
+          <label>Role:</label>
+          <input type="text" v-model="currentUser.role" disabled />
+        </div>
+        <div class="form-group">
+          <label>Business Description:</label>
+          <textarea v-model="currentUser.business_description"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Phone Number:</label>
+          <input type="text" v-model="currentUser.phone_number" />
+        </div>
+        <div class="button-group">
+          <button type="submit" class="create-button">Create</button>
+          <button type="button" @click="cancelAction" class="cancel-button">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Update User info Form -->
+    <div v-if="actionStep === 'update'" class="form-container">
+      <h3>Update User Info</h3>
+      <form @submit.prevent="submitUpdateUser" class="form-style">
+        <div class="form-group">
+          <label>Username:</label>
+          <input type="text" v-model="currentUser.username" disabled />
+        </div>
+        <div class="form-group">
+          <label>Email:</label>
+          <input type="email" v-model="currentUser.email" disabled />
+        </div>
+        <div class="form-group">
+          <label>Role:</label>
+          <input type="text" v-model="currentUser.role" disabled />
+        </div>
+        <div class="form-group">
+          <label>Business Description:</label>
+          <textarea v-model="currentUser.business_description"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Phone Number:</label>
+          <input type="text" v-model="currentUser.phone_number" />
+        </div>
+        <div class="button-group">
+          <button type="submit" class="update-button">Update</button>
+          <button type="button" @click="cancelAction" class="cancel-button">
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
 <script>
-import {
-  fetchUsers,
-  createUser,
-  modifyUser,
-  removeUser,
-} from "@/controllers/UserManagementController";
+import UserManagementController from "@/controllers/UserManagementController";
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 
@@ -66,6 +154,34 @@ export default {
   setup() {
     const users = ref([]);
     const router = useRouter();
+
+    const {
+      fetchUsers,
+      actionStep,
+      createInfo,
+      updateInfo,
+      confirmCreateInfo,
+      confirmUpdateInfo,
+      deleteInfo,
+      addUser,
+      confirmAddUser,
+    } = UserManagementController();
+
+    const currentUser = ref({
+      id: "",
+      username: "",
+      email: "",
+      role: "",
+      business_description: "",
+      phone_number: "",
+    });
+
+    const newUser = ref({
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    });
 
     const loadUsers = async () => {
       users.value = await fetchUsers();
@@ -77,20 +193,61 @@ export default {
 
     onMounted(loadUsers);
 
-    const removeUser = (id) => {
-      // Logic to remove user
+    const showAddUserForm = () => {
+      addUser();
     };
 
-    const editUser = (user) => {
-      // Logic to edit user
+    const submitAddUser = async () => {
+      confirmAddUser(newUser.value);
     };
 
-    return { users, removeUser, editUser };
+    const showCreateForm = async (userID) => {
+      const user = await createInfo(userID);
+      currentUser.value = user;
+    };
+
+    const showUpdateForm = async (userID) => {
+      const user = await updateInfo(userID);
+      currentUser.value = user;
+    };
+
+    const submitCreateUser = () => {
+      // Logic to handle user creation
+      confirmCreateInfo(currentUser.value);
+    };
+
+    const submitUpdateUser = () => {
+      // Logic to handle user update
+      confirmUpdateInfo(currentUser.value);
+    };
+
+    const cancelAction = () => {
+      actionStep.value = "read"; // Cancel action and return to list view
+    };
+
+    return {
+      users,
+      actionStep,
+      currentUser,
+      newUser,
+      showCreateForm,
+      showUpdateForm,
+      submitCreateUser,
+      submitUpdateUser,
+      cancelAction,
+      deleteInfo,
+      showAddUserForm,
+      submitAddUser,
+    };
   },
 };
 </script>
 
 <style scoped>
+* {
+  font-family: Arial, sans-serif;
+}
+
 .user-management {
   padding: 20px;
   font-family: Arial, sans-serif;
@@ -132,6 +289,7 @@ h2 {
 
 .user-table {
   width: 100%;
+  margin-top: 30px;
   border-collapse: collapse;
   margin-bottom: 20px; /* Khoảng cách giữa bảng và nút */
   border: 1px solid #d1d1d1; /* Đường viền bảng */
@@ -189,7 +347,7 @@ h2 {
 
 .edit-button,
 .delete-button,
-.create-button {
+.add-button {
   padding: 12px 24px; /* Tăng padding để nút dài hơn */
   color: white; /* Màu chữ */
   font-weight: bold; /* Chữ đậm */
@@ -211,11 +369,11 @@ h2 {
   transform: scale(1.05); /* Tăng kích thước khi hover */
 }
 
-.create-button {
+.add-button {
   background-color: #28a745; /* Màu nền cho nút chỉnh sửa */
 }
 
-.edit-button:hover {
+.add-button:hover {
   background-color: #02270b; /* Màu nền khi hover */
   transform: scale(1.05); /* Tăng kích thước khi hover */
 }
@@ -247,5 +405,121 @@ h2 {
   background-color: #218838; /* Màu nền khi hover */
   transform: scale(1.05); /* Tăng kích thước khi hover */
   box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Đổ bóng rõ hơn khi hover */
+}
+
+/* Center form container */
+.form-container {
+  width: 80%;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+/* Form layout */
+.form-style {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Form groups for label and input alignment */
+.form-group {
+  display: flex;
+  margin-right: 10px;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+
+/* Labels */
+.form-group label {
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+/* Input fields and textarea styling */
+input[type="text"],
+input[type="email"],
+input[type="password"],
+textarea {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
+  color: #333;
+  border: 1px solid #d1d5db; /* Light border */
+  border-radius: 6px; /* Rounded corners */
+  background-color: #f3f4f6; /* Light background for inputs */
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+/* Placeholder color for inputs */
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+input[type="password"]::placeholder,
+textarea::placeholder {
+  color: #9ca3af;
+}
+
+/* Focus effect for input fields */
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+  border-color: #0078d4; /* Microsoft blue color on focus */
+  background-color: #ffffff; /* White background on focus */
+}
+
+/* Textarea resizing */
+textarea {
+  resize: vertical;
+  height: 80px;
+  padding: 12px;
+  font-size: 14px;
+}
+
+/* Button styling */
+button {
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  width: 40%;
+}
+
+/* Button container */
+.button-group {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 1rem;
+}
+
+/* Button colors */
+.create-button {
+  background-color: #28a745; /* Green for create */
+  color: white;
+}
+
+.update-button {
+  background-color: #0078d4; /* Microsoft blue for update */
+  color: white;
+}
+
+.cancel-button {
+  background-color: #dc3545; /* Red for cancel */
+  color: white;
+}
+
+/* Hover effect for buttons */
+button:hover {
+  transform: scale(1.05);
+  filter: brightness(90%);
 }
 </style>

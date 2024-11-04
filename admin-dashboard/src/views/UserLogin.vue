@@ -1,14 +1,22 @@
 <template>
   <div class="login-container">
     <h2 class="login-title">Login to the system</h2>
-    <input v-model="username" placeholder="Username" class="login-input" />
+    <input
+      v-model="username"
+      type="email"
+      placeholder="Email"
+      class="login-input"
+      required
+    />
     <input
       v-model="password"
       type="password"
       placeholder="Password"
       class="login-input"
+      required
     />
     <button @click="handleLogin" class="login-button">Login</button>
+    <p v-if="errorMessage" class="error-message">{{ errorMessage }}</p>
   </div>
 </template>
 
@@ -23,31 +31,42 @@ export default {
     const router = useRouter();
     const username = ref("");
     const password = ref("");
+    const errorMessage = ref("");
 
     const handleLogin = async () => {
+      // Validate input fields
+      if (!username.value || !password.value) {
+        errorMessage.value = "Please enter both email and password.";
+        return;
+      }
+
+      // Clear error message before API call
+      errorMessage.value = "";
+
+      // Call API
       const response = await login(username.value, password.value);
 
       if (response.success) {
         const userData = response.user;
-        console.log("User data:", userData); // Log or use user data as needed
+        console.log("User data:", userData);
 
         if (userData.role !== "admin") {
           sessionStorage.removeItem("token");
           sessionStorage.removeItem("user");
-          alert("You do not have permission to access this system."); // Thông báo nếu không phải admin
-          return; // Dừng lại nếu không phải admin
+          alert("You do not have permission to access this system.");
+          return;
         }
 
         setTimeout(() => {
           location.reload();
         }, 0);
-        router.push("/dashboard"); // Redirect to dashboard only after fetching user data
+        router.push("/dashboard");
       } else {
-        alert(response.message || "Invalid credentials");
+        errorMessage.value = response.message || "Invalid credentials";
       }
     };
 
-    return { username, password, handleLogin };
+    return { username, password, handleLogin, errorMessage };
   },
 };
 </script>
@@ -73,7 +92,7 @@ export default {
 
 .login-input {
   width: 100%;
-  max-width: 400px; /* Set a maximum width for inputs */
+  max-width: 400px;
   padding: 10px;
   margin: 10px 0;
   border: none;
@@ -84,11 +103,11 @@ export default {
 }
 
 .login-input::placeholder {
-  color: #cfd8dc; /* Placeholder color */
+  color: #cfd8dc;
 }
 
 .login-input:focus {
-  background-color: rgba(255, 255, 255, 0.1); /* Change background on focus */
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
 .login-button {
@@ -105,5 +124,11 @@ export default {
 .login-button:hover {
   background-color: #0056b3;
   transform: scale(1.05);
+}
+
+.error-message {
+  color: #ff4d4d;
+  margin-top: 10px;
+  font-size: 0.9rem;
 }
 </style>
