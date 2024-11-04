@@ -18,12 +18,36 @@ const city_Hotel_list = () => import('./components/views/city_Hotel_List.vue');
 const ThingToDo_list = () => import('./components/views/ThingToDo_List.vue');
 const Restaurant_list = () => import('./components/views/Restaurant_List.vue');
 const Hotel_list = () => import('./components/views/Hotel_List.vue');
-
+const Profile_Page = () => import('./components/views/Profile_Page/Profile_Page.vue');
+const Destination_Final = () => import('./components/views/Destination/destinationView_Test.vue');
+// const test = () => import('./components/views/Destination/destinationView_Test.vue');
+const test1 = () => import('./components/views/Destination/Cards.vue');
+const test2 = () => import('./components/views/Profile_Page/Favourite_Profile.vue');
 const routes = [
   {
     path: '/login',
     name: 'Login to Account',
     component: SignInView,  // Lazy load SignInView
+  },
+  {
+    path: '/Destination_Final',
+    name: 'Destination_Final',
+    component: Destination_Final,  // Lazy load SignInView
+  },
+  {
+    path: '/test',
+    name: 'test',
+    component: test,  // Lazy load SignInView
+  },
+  {
+    path: '/test1',
+    name: 'test1',
+    component: test1,  // Lazy load SignInView
+  },
+  {
+    path: '/test2',
+    name: 'test2',
+    component: test2,  // Lazy load SignInView
   },
   {
     path: '/sign-up',
@@ -36,9 +60,14 @@ const routes = [
     component: DashBoardView,  // Lazy load DashBoardView
   },
   {
-    path: '/test',
-    name: 'Dashboard_Test',
+    path: '/DashBoardView_Test',
+    name: 'DashBoardView_Test',
     component: DashBoardView_Test,  // Lazy load DashBoardView
+  },
+  {
+    path: '/Profile_Page',
+    name: 'Profile_Page',
+    component: Profile_Page,  // Lazy load DashBoardView
   },
   {
     path: '/destination',

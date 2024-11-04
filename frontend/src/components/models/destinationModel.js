@@ -2,8 +2,8 @@ import axios from 'axios';
 import { ref, computed, onMounted } from 'vue';
 export default function () {
   
-  const heartFull = new URL('@/assets/heart-full.svg', import.meta.url).href;
-  const heartEmpty = new URL('@/assets/heart-none.svg', import.meta.url).href;
+  const heartFull = new URL('@/assets/svg/heart-full.svg', import.meta.url).href;
+  const heartEmpty = new URL('@/assets/svg/heart-none.svg', import.meta.url).href;
   
   const fullDescription = `Hanoi, the capital city of Vietnam, is a vibrant blend of tradition and modernity. 
 Nestled along the banks of the Red River, Hanoi is known for its centuries-old architecture, rich history, and deep-rooted culture. 
@@ -58,9 +58,9 @@ or tasting its world-renowned street food, Hanoi offers an authentic and captiva
 
 
   const generateStars = (rating) => {
-    const fullStar = new URL('@/assets/star_full.svg', import.meta.url).href;
-    const halfStar = new URL('@/assets/star_half.svg', import.meta.url).href;
-    const emptyStar = new URL('@/assets/star_none.svg', import.meta.url).href;
+    const fullStar = new URL('@/assets/svg/star_full.svg', import.meta.url).href;
+    const halfStar = new URL('@/assets/svg/star_half.svg', import.meta.url).href;
+    const emptyStar = new URL('@/assets/svg/star_none.svg', import.meta.url).href;
 
     let stars = [];
     for (let i = 1; i <= 5; i++) {

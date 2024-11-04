@@ -1,8 +1,12 @@
 <template>
+
+    <!-- <div class="header-container">
+        <Header/>
+    </div>  -->
     <!-- Top Site Start -->
     <div class="container-fluid top_website">
         <!-- Navbar Start -->
-        <div class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 ">
+        <div class=" navbar navbar-expand-lg navbar-light ">
             <!-- Phần 1: Logo và tên -->
             <div class="navbar-section logo-section">
                 <img src="@/assets/images/company_image.png" alt="Logo" class="logo" />
@@ -47,21 +51,21 @@
     <!--Top Site End  -->
 
     <!-- Destination Start -->
-    <div class="container-fluid destination py-5" style="width: 1210px;">
+    <div class="container-fluid destination py-5 " style="padding-left: 90px;">
         <div class="container py-5">
-            <div class="mx-auto text-center mb-5" style="max-width: 1000px;">
+            <div class="mx-auto text-center mb-5">
                 <h5 class="section-title px-3 ">Destination</h5>
                 <h1 class="mb-0">Popular Destination</h1>
             </div>
             <div class="tab-class text-center">
                 <div class="owl-nav">
                     <button class="owl-prev" @click="prevSlide">
-                        <svg class="bi bi-arrow-left" width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
+                        <svg class="bi bi-arrow-left" width="30" height="30" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M7.68473 7.33186C8.07526 6.94134 8.07526 6.30817 7.68473 5.91765C7.29421 5.52712 6.66105 5.52712 6.27052 5.91765L1.60492 10.5832C0.823873 11.3643 0.823872 12.6306 1.60492 13.4117L6.27336 18.0801C6.66388 18.4706 7.29705 18.4706 7.68757 18.0801C8.0781 17.6896 8.0781 17.0564 7.68757 16.6659L4.02154 12.9998L22 12.9998C22.5523 12.9998 23 12.5521 23 11.9998C23 11.4476 22.5523 10.9998 22 10.9998L4.01675 10.9998L7.68473 7.33186Z"/>
                         </svg>
                     </button>
                     <button class="owl-next" @click="nextSlide">
-                        <svg class="bi bi-arrow-right" width="40px" height="40px" viewBox="0 0 24 24" fill="currentColor">
+                        <svg class="bi bi-arrow-right" width="30px" height="30px" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M16.3153 16.6681C15.9247 17.0587 15.9247 17.6918 16.3153 18.0824C16.7058 18.4729 17.339 18.4729 17.7295 18.0824L22.3951 13.4168C23.1761 12.6357 23.1761 11.3694 22.3951 10.5883L17.7266 5.9199C17.3361 5.52938 16.703 5.52938 16.3124 5.91991C15.9219 6.31043 15.9219 6.9436 16.3124 7.33412L19.9785 11.0002L2 11.0002C1.44772 11.0002 1 11.4479 1 12.0002C1 12.5524 1.44772 13.0002 2 13.0002L19.9832 13.0002L16.3153 16.6681Z"/>
                         </svg>
                     </button>
@@ -136,7 +140,7 @@
     <!-- Destination End -->
     
     <!-- Topic Start -->
-    <div class="container-fluid topic py-0" style="width: 1210px;">
+    <div class="container-fluid topic py-0" style="padding-left: 90px;">
         <div class="container">
             <div class="mx-auto text-center mb-5" style="max-width: 1000px;">
                 <h5 class="section-title px-3">WANNA TRY ?</h5>
@@ -177,7 +181,7 @@
     <!-- Topic End -->
 
     <!-- Tour Start -->
-    <div class="container-fluid tour py-0" style="width: 1210px;">
+    <div class="container-fluid tour py-0" style="padding-left: 90px;">
         <div class="container">
             <div class="mx-auto text-center mb-5" style="max-width: 1000px;">
                 <h5 class="section-title px-3">Tour proposal</h5>
@@ -188,20 +192,21 @@
                 <!-- Button side of the carousel -->
                 <div class="owl-nav">
                     <button class="owl-prev" @click="prevTour">
-                        <svg class="bi bi-arrow-left" width="40" height="40" viewBox="0 0 24 24" fill="currentColor">
+                        <svg class="bi bi-arrow-left" width="30" height="30" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M7.68473 7.33186C8.07526 6.94134 8.07526 6.30817 7.68473 5.91765C7.29421 5.52712 6.66105 5.52712 6.27052 5.91765L1.60492 10.5832C0.823873 11.3643 0.823872 12.6306 1.60492 13.4117L6.27336 18.0801C6.66388 18.4706 7.29705 18.4706 7.68757 18.0801C8.0781 17.6896 8.0781 17.0564 7.68757 16.6659L4.02154 12.9998L22 12.9998C22.5523 12.9998 23 12.5521 23 11.9998C23 11.4476 22.5523 10.9998 22 10.9998L4.01675 10.9998L7.68473 7.33186Z"/>
                         </svg>
                     </button>
                     <button class="owl-next" @click="nextTour">
-                        <svg class="bi bi-arrow-right" width="40px" height="40px" viewBox="0 0 24 24" fill="currentColor">
+                        <svg class="bi bi-arrow-right" width="30px" height="30px" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M16.3153 16.6681C15.9247 17.0587 15.9247 17.6918 16.3153 18.0824C16.7058 18.4729 17.339 18.4729 17.7295 18.0824L22.3951 13.4168C23.1761 12.6357 23.1761 11.3694 22.3951 10.5883L17.7266 5.9199C17.3361 5.52938 16.703 5.52938 16.3124 5.91991C15.9219 6.31043 15.9219 6.9436 16.3124 7.33412L19.9785 11.0002L2 11.0002C1.44772 11.0002 1 11.4479 1 12.0002C1 12.5524 1.44772 13.0002 2 13.0002L19.9832 13.0002L16.3153 16.6681Z"/>
                         </svg>
                     </button>
                 </div>  
                 <Swiper :slidesPerView="3"
                         :spaceBetween="30"
+                        autoplay="true"
                         :pagination="{
-                        clickable: true,
+                            clickable: true,
                         }"
                         :modules="modules"
                         class="mySwiper">
@@ -268,50 +273,50 @@
 <script setup>
     import dashboardViewModel from '../viewModels/dashboardViewModel.js';
     const {
-        activeButton,
-        setActive,
-        cities,
-        visibleCities,
-        prevSlide,
-        nextSlide,
-        topics,
-        visibleTopics,
-        prevTopic,
-        nextTopic,
-        tours,
-        visibleTours,
-        prevTour,
-        nextTour,
-        isMenuVisible,
-        toggleMenu,
+        activeButton, setActive, cities, visibleCities,
+        prevSlide, nextSlide,
+        topics, visibleTopics, prevTopic, nextTopic,
+        tours, visibleTours, prevTour, nextTour,
+        isMenuVisible, toggleMenu,
         generateStars,
     } = dashboardViewModel;
 </script>
   
 <script>
-  // Import Swiper Vue.js components
-  import { Swiper, SwiperSlide } from 'swiper/vue';
+    // Import Swiper Vue.js components
+    import { Swiper, SwiperSlide } from 'swiper/vue';
+    import Header from './Header.vue';
 
-  // Import Swiper styles
-  import 'swiper/css';
+    // Import Swiper styles
+    import 'swiper/css';
 
-  import 'swiper/css/pagination';
+    import 'swiper/css/pagination';
 
 
-  // import required modules
-  import { Pagination } from 'swiper/modules';
+    // import required modules
+    import { Pagination } from 'swiper/modules';
 
-  export default {
-    components: {
-      Swiper,
-      SwiperSlide,
-    },
-    setup() {
-      return {
-        modules: [Pagination],
-      };
-    },
-  };
+    import { onMounted } from 'vue';
+
+    export default {
+        components: {
+            Swiper, SwiperSlide, Header
+        },
+        setup() {    
+            onMounted(() => {
+                $(window).scroll(function () {
+                    if ($(this).scrollTop() > 45) {
+                        $('.navbar').addClass('sticky-top');
+                    } else {
+                        $('.navbar').removeClass('sticky-top');
+                    }
+                });
+            });
+            return {
+                modules: [Pagination],
+            };
+        },
+    };
 </script>
 
 <style>
@@ -350,17 +355,18 @@
     left: 0;
     width :100%;
     height: 20%;
-    display: flex;
-    flex: 0 1 auto; /* Chiều cao tự động */
     justify-content: space-between; /* Chia đều không gian giữa các phần */
     align-items: center;
+    align-content: center;
     border-bottom: 1px solid #13357B;
-    padding: 0px 20px ; /* Đệm bên trong thanh điều hướng */
-    z-index: 1;
+    z-index: 10000;
 }
+
+
 .logo-section {
     display: flex;
     width :100%;
+    height: 100%;
     align-items: center;
 }
 .logo {
@@ -370,29 +376,26 @@
     z-index: 8;
 }
 .logo-text {
+    color: #caf0f8;
     font-size: 20px;
-    color: #EDF6F9;
     font-weight: bold;
-    font-family: 'Roboto';
 
 }
 /* Phần các nút điều hướng */
 .navbar-buttons {
     display: flex;
     align-items: center;
-    height: 100%;
     width: 100%;
+    height: 100%;
 }
 .navbar-button {
+    color: #caf0f8;
     position: relative;
-    background: none;
-    border: none;
-    color: #EDF6F9;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 14px;
     cursor: pointer;
     font-family: 'Roboto';
-    padding: 60px 30px;
+    padding: 0px 30px;
     height: 100%;
 }
 .navbar-button::before {
@@ -407,18 +410,19 @@
     z-index: -1;
 }
 .navbar-button:hover::before {
-    height: calc(100% + 10px);
-    left: 1px;
+    height: calc(100% + 15px);
 }
 .navbar .user-icon {
     display: flex;
     align-items: center;
 }
+
 /* Phần biểu tượng người dùng */
 .user-icon {
     display: flex;
     align-items: center;
     padding-right: 20px;
+    height: 100%
 }
 .user-image {
     background: url('@/assets/svg/user_icon_1.svg') no-repeat center;
@@ -436,8 +440,6 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    color: #EDF6F9;
-    font-family: 'Roboto';
     bottom: 1.25rem;
     padding-top: 5.25rem;
 }
@@ -496,6 +498,11 @@ div {
     margin-left: auto;
     width: 100%;
 }
+.form-control::placeholder,
+.form-control:focus{
+    color: #13357B;
+}
+
 .form-control {
     display: block;
     width: 100%;
@@ -508,7 +515,7 @@ div {
     font-size: 1rem;
     font-weight: 400;
     line-height: 1.5;
-    color: #212529;
+    color: #13357B;
     background-color: #EDF6F9;
     background-clip: padding-box;
     border: 2px solid #EDF6F9;
@@ -552,8 +559,6 @@ button {
     border-radius: 10px;
     text-transform: none;
     background-color: transparent;
-    font-family: 'Roboto';
-    color: #caf0f8;
 }
 .tour button:hover{
     color: #13357B !important; 
@@ -1106,7 +1111,7 @@ a {
 }
 .destination .tab-class .owl-nav {
     position: relative;
-    top: 7px;
+    top: -100px;
 }
 .destination .tab-class .owl-nav .owl-prev {
     position: absolute;
@@ -1135,11 +1140,6 @@ a {
     fill: #EDF6F9;
 }
 
-
-
-
-
-
 /* Tour */
 .container-fluid .tour {
     display: flex;
@@ -1151,13 +1151,13 @@ a {
     margin-left: auto;
     margin-right: auto;
 }
-.tour .tour-carousel .owl-nav button{
+.tour .tour-carousel .owl-nav{
     position: relative;
-    top: 3480px;
+    top: -100px;
 }
 .tour .tour-carousel .owl-nav .owl-prev{
     position: absolute;
-    left: 370px;
+    left: 0px;
     padding: 5px 30px;
     border: 2px solid #13357B;
     border-radius: 30px;
@@ -1166,8 +1166,8 @@ a {
 
 .tour .tour-carousel .owl-nav .owl-next{
     position: absolute;
+    right: 0px;
     padding: 5px 30px;
-    right: 370px;
     border: 2px solid #13357B;
     border-radius: 30px;
     transition: .5s;
@@ -1307,12 +1307,24 @@ a {
     width: 50%;
 }
 .px-4{
-    padding: 1rem 1.5rem !important;
+    padding: 0rem 1.5rem !important;
 }
 .tour .mySwiper {
     padding-bottom: 100px;
 }
 .tour .tours-item .tour-content small {
     padding-top: 100px;
+}
+
+.sticky-top .navbar-buttons .navbar-button {
+    padding: 20px 15px;
+    color: #13357B !important;
+}
+
+.header-container {
+    display: flex;
+    flex-direction: column; /* Sắp xếp theo chiều dọc */
+    z-index: 1;
+    width: 100%;
 }
 </style>

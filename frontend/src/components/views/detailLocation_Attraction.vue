@@ -54,7 +54,7 @@
                 </div>
             </div>
             <div class="duration-line">
-                <img src="@/assets/clock.svg" alt="Clock Icon" class="clock-icon" />
+                <img src="@/assets/svg/clock.svg" alt="Clock Icon" class="clock-icon" />
                 <span class="duration">Duration: 5 days</span>
             </div>
             <div class="price-line">
@@ -90,7 +90,7 @@
 
           <!-- Nút tìm kiếm với icon -->
             <button class="search-button">
-              <img src="@/assets/search.svg" alt="Search" />
+              <img src="@/assets/svg/search.svg" alt="Search" />
             </button>
           </div>
         </div>        

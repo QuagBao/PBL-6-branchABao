@@ -11,6 +11,7 @@ export default function () {
   const toggleMenu = () => {
     isMenuVisible.value = !isMenuVisible.value;
   };
+  
   const currentIndex = ref(0);
 
   const currentImage = computed(() => {
@@ -70,6 +71,7 @@ export default function () {
 
   onMounted(async () => {
     images.value = await model.fetchImages();
+    console.log("Current images data:", images.value);
   });
 
   const generateStars = (rating) => {

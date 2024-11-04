@@ -54,8 +54,7 @@
       <span class="destination">Ha Noi</span>
       <span class="description">{{ truncatedDescription }}</span>
       <div class="read-more" @click="toggleReadMore">
-        <span class="line-9">{{ isReadMore ? 'Read less ▲' : 'Read more ▼' }}</span>
-        
+        <button class="line-9">{{ isReadMore ? 'Read less ▲' : 'Read more ▼' }}</button>
       </div>
       <span class="filter-suggestion">Characteristic of Ha Noi</span>
       <span class="option-category">Select a category to filter suggestion</span>
@@ -790,7 +789,6 @@ button {
     overflow-x: auto; 
     white-space: nowrap; 
     padding: 10px; 
-    
     border-radius: 15px; 
     max-width: 100%; 
 }

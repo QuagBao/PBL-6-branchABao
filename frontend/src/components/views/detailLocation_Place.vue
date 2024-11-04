@@ -85,7 +85,7 @@
 
           <!-- Nút tìm kiếm với icon -->
             <button class="search-button">
-              <img src="@/assets/search.svg" alt="Search" />
+              <img src="@/assets/svg/search.svg" alt="Search" />
             </button>
           </div>
         </div>        
@@ -152,7 +152,8 @@
 </template>
   
 <script setup>
-import { circles,rating, ratings, commentList, generateCircle, images, currentImage, nextImage, prevImage,totalRating, isDropdownVisible, toggleDropdown, isMenuVisible, toggleMenu } from '../viewModels/detailLocation_PlaceViewModel.js';
+import { circles,rating, ratings, commentList,
+   generateCircle, images, currentImage, nextImage, prevImage,totalRating, isDropdownVisible, toggleDropdown, isMenuVisible, toggleMenu } from '../viewModels/detailLocation_PlaceViewModel.js';
 
 </script>
 
@@ -237,7 +238,7 @@ button {
   right: 5%;
   width: 4%; /* Đặt kích thước logo phù hợp */
   height: 34%; /* Đặt kích thước logo phù hợp */
-  background: url('@/assets/personal.svg') no-repeat center;
+  background: url('@/assets/svg/personal.svg') no-repeat center;
   background-size: contain; /* Hoặc cover nếu muốn ảnh bao phủ */
   z-index: 13;
   border: none; /* Đảm bảo không có viền bao quanh logo */
@@ -735,7 +736,7 @@ button {
   top: 50%; 
   transform: translateY(-50%);
   left: 38%; 
-  background: url('@/assets/back.svg') center; /* Hình nền cho nút back */
+  background: url('@/assets/svg/back.svg') center; /* Hình nền cho nút back */
   z-index: 99;
 }
 
@@ -744,7 +745,7 @@ button {
   top: 50%; 
   transform: translateY(-50%);
   right: 0%; 
-  background: url('@/assets/forward.svg') center; /* Hình nền cho nút forward */
+  background: url('@/assets/svg/forward.svg') center; /* Hình nền cho nút forward */
   z-index: 99;
 }
 
