@@ -24,11 +24,13 @@
 import { login } from "@/controllers/AuthController";
 import { useRouter } from "vue-router";
 import { ref } from "vue";
+import { useToast } from "vue-toastification";
 
 export default {
   name: "UserLogin",
   setup() {
     const router = useRouter();
+    const toast = useToast(); // Sử dụng hook useToast
     const username = ref("");
     const password = ref("");
     const errorMessage = ref("");
@@ -37,6 +39,7 @@ export default {
       // Validate input fields
       if (!username.value || !password.value) {
         errorMessage.value = "Please enter both email and password.";
+        toast.error("Please enter both email and password."); // Thông báo lỗi nếu chưa điền đầy đủ thông tin
         return;
       }
 
@@ -53,16 +56,17 @@ export default {
         if (userData.role !== "admin") {
           sessionStorage.removeItem("token");
           sessionStorage.removeItem("user");
-          alert("You do not have permission to access this system.");
+          toast.error("You do not have permission to access this system."); // Thông báo lỗi nếu không có quyền truy cập
           return;
         }
-
+        toast.success("Login successful! Redirecting to dashboard...");
         setTimeout(() => {
           location.reload();
-        }, 0);
+        }, 2000);
         router.push("/dashboard");
       } else {
         errorMessage.value = response.message || "Invalid credentials";
+        toast.error(errorMessage.value); // Thông báo lỗi khi đăng nhập thất bại
       }
     };
 
