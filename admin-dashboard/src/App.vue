@@ -28,9 +28,9 @@
     <header class="top-nav">
       <div class="auth-section">
         <template v-if="!loggedInUser">
-          <router-link to="/login" class="auth-button login-button"
-            >Login</router-link
-          >
+          <router-link to="/login" class="auth-button login-button">
+            Login
+          </router-link>
         </template>
         <template v-else>
           <span class="welcome-message">
@@ -51,45 +51,55 @@
 </template>
 
 <script>
-import { logout } from "./controllers/AuthController";
-import { ref, onMounted } from "vue";
+import AuthController from "./controllers/AuthController";
+import { ref, onMounted, onBeforeUnmount } from "vue";
 import { useRouter } from "vue-router";
 
 export default {
   name: "App",
   setup() {
     const router = useRouter();
-    const loggedInUser = ref(null);
-    const viewKey = ref(Date.now()); // Khóa duy nhất cho router-view
+    const viewKey = ref(Date.now()); // Unique key for router-view to refresh
+    const { logout, loggedInUser } = AuthController();
+    let checkUserInterval = null;
+
+    // Function to load user from sessionStorage if available
+    const loadUserFromSession = () => {
+      const savedUser = sessionStorage.getItem("user");
+      if (savedUser) {
+        loggedInUser.value = JSON.parse(savedUser);
+      }
+    };
+
+    // Set up a 5-second interval to recheck loggedInUser
+    onMounted(() => {
+      loadUserFromSession(); // Initial load
+      checkUserInterval = setInterval(() => {
+        loadUserFromSession();
+      }, 5000); // Repeat every 5 seconds
+    });
+
+    onBeforeUnmount(() => {
+      clearInterval(checkUserInterval); // Clear interval on component unmount
+    });
 
     const refreshView = () => {
-      viewKey.value = Date.now(); // Thay đổi khóa để ép buộc làm mới router-view
+      viewKey.value = Date.now(); // Update key to force router-view refresh
     };
 
     const handleLogout = () => {
       logout();
-      loggedInUser.value = null;
-      sessionStorage.removeItem("user");
-      sessionStorage.removeItem("token");
       router.push("/login");
-      refreshView(); // Gọi hàm refreshView để làm mới giao diện sau khi đăng xuất
+      refreshView(); // Refresh view after logout
     };
 
     const handleNavigation = () => {
-      refreshView(); // Gọi hàm refreshView khi điều hướng
+      refreshView(); // Refresh view on navigation
     };
 
     const isActive = (route) => {
       return router.currentRoute.value.path === route;
     };
-
-    onMounted(() => {
-      const storedUser = JSON.parse(sessionStorage.getItem("user"));
-      if (storedUser) {
-        loggedInUser.value = storedUser;
-        console.log("Log data:", loggedInUser.value);
-      }
-    });
 
     return { loggedInUser, handleLogout, handleNavigation, isActive, viewKey };
   },

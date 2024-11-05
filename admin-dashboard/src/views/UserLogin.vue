@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { login } from "@/controllers/AuthController";
+import AuthController from "@/controllers/AuthController";
 import { useRouter } from "vue-router";
 import { ref } from "vue";
 import { useToast } from "vue-toastification";
@@ -34,6 +34,8 @@ export default {
     const username = ref("");
     const password = ref("");
     const errorMessage = ref("");
+
+    const { login } = AuthController();
 
     const handleLogin = async () => {
       // Validate input fields
@@ -50,19 +52,6 @@ export default {
       const response = await login(username.value, password.value);
 
       if (response.success) {
-        const userData = response.user;
-        console.log("User data:", userData);
-
-        if (userData.role !== "admin") {
-          sessionStorage.removeItem("token");
-          sessionStorage.removeItem("user");
-          toast.error("You do not have permission to access this system."); // Thông báo lỗi nếu không có quyền truy cập
-          return;
-        }
-        toast.success("Login successful! Redirecting to dashboard...");
-        setTimeout(() => {
-          location.reload();
-        }, 2000);
         router.push("/dashboard");
       } else {
         errorMessage.value = response.message || "Invalid credentials";

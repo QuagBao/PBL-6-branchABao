@@ -1,13 +1,12 @@
 // src/models/UserManagementModel.js
 import axios from "axios";
 
-// Hàm lấy tất cả người dùng từ API
 export async function getUsers() {
   try {
     const token = sessionStorage.getItem("token");
     if (!token) throw new Error("No token found");
 
-    // Lấy danh sách người dùng
+    // Gửi yêu cầu để lấy danh sách người dùng
     const response = await axios.get(
       "https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/user/",
       {
@@ -18,59 +17,17 @@ export async function getUsers() {
       }
     );
 
-    // Duyệt qua từng user để lấy thông tin chi tiết
-    const usersWithDetails = await Promise.all(
-      response.data.map(async (user) => {
-        // Mặc định thông tin business_description và phone_number là trống
-        let businessDescription = "";
-        let phoneNumber = "";
-        let isCreate = false;
-
-        try {
-          // Lấy thông tin chi tiết của từng user dựa trên user_id
-          const userInfoResponse = await axios.get(
-            `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/userInfo/${user.id}`,
-            {
-              headers: {
-                accept: "application/json",
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-
-          // Nếu thành công, gán giá trị business_description và phone_number
-          businessDescription = userInfoResponse.data.business_description;
-          phoneNumber = userInfoResponse.data.phone_number;
-          isCreate = true;
-        } catch (error) {
-          if (error.response && error.response.status === 500) {
-            // console.warn(
-            //   `User info not found for user ID ${user.id}, defaulting to empty values.`
-            // );
-          } else {
-            console.error(
-              `Error fetching user info for user ID ${user.id}:`,
-              error
-            );
-          }
-        }
-
-        return {
-          id: user.id,
-          username: user.username,
-          email: user.email,
-          business_description: businessDescription,
-          phone_number: phoneNumber,
-          role: user.role,
-          isCreate: isCreate,
-        };
-      })
-    );
-
-    return usersWithDetails;
+    return response.data.map((user) => ({
+      id: user.id,
+      username: user.username,
+      email: user.email,
+      userInfo: user.user_info,
+      role: user.role,
+      status: user.status,
+    }));
   } catch (error) {
     console.error("Error fetching users:", error);
-    return []; // Hoặc bạn có thể xử lý theo cách khác
+    return []; // Hoặc bạn có thể xử lý khác tùy ý
   }
 }
 
@@ -92,46 +49,13 @@ export async function getUserById(userId) {
 
     const user = response.data;
 
-    // Default empty values for business_description and phone_number
-    let businessDescription = "";
-    let phoneNumber = "";
-    let isCreate = false;
-
-    try {
-      // Fetch additional user information if available
-      const userInfoResponse = await axios.get(
-        `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/userInfo/${userId}`,
-        {
-          headers: {
-            accept: "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      // Assign values if user info is found
-      businessDescription = userInfoResponse.data.business_description;
-      phoneNumber = userInfoResponse.data.phone_number;
-      isCreate = true;
-    } catch (error) {
-      if (error.response && error.response.status === 500) {
-        // console.warn(
-        //   `User info not found for user ID ${userId}, defaulting to empty values.`
-        // );
-      } else {
-        console.error(`Error fetching user info for user ID ${userId}:`, error);
-      }
-    }
-
-    // Return the user details with additional information
     return {
       id: user.id,
       username: user.username,
       email: user.email,
-      business_description: businessDescription,
-      phone_number: phoneNumber,
+      userInfo: user.user_info,
       role: user.role,
-      isCreate: isCreate,
+      status: user.status,
     };
   } catch (error) {
     console.error(`Error fetching user with ID ${userId}:`, error);
@@ -147,7 +71,7 @@ export async function createUserInfo(user) {
     const response = await axios.post(
       `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/userInfo/${user.id}`,
       {
-        business_description: user.business_description,
+        description: user.description,
         phone_number: user.phone_number,
       },
       {
@@ -177,7 +101,7 @@ export async function updateUserInfo(user) {
     const response = await axios.put(
       `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/userInfo/${user.id}`, // sử dụng user.id làm userId
       {
-        business_description: user.business_description,
+        description: user.description,
         phone_number: user.phone_number,
       },
       {

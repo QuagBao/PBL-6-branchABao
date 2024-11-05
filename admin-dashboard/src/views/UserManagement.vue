@@ -9,9 +9,11 @@
             <th>Id</th>
             <th>Username</th>
             <th>Email</th>
-            <th>Business Description</th>
+            <th>Description</th>
             <th>Phone Number</th>
+            <th>Address</th>
             <th>Role</th>
+            <th>Status</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -20,12 +22,25 @@
             <td>{{ user.id }}</td>
             <td>{{ user.username }}</td>
             <td>{{ user.email }}</td>
-            <td>{{ user.business_description }}</td>
-            <td>{{ user.phone_number }}</td>
+            <td v-if="user.userInfo && user.userInfo.description">
+              {{ user.userInfo.description }}
+            </td>
+            <td v-else>N/A</td>
+            <td v-if="user.userInfo && user.userInfo.phone_number">
+              {{ user.userInfo.phone_number }}
+            </td>
+            <td v-else>N/A</td>
+            <td v-if="user.userInfo && user.userInfo.address">
+              {{ user.userInfo.address.street }},
+              {{ user.userInfo.address.ward }},
+              {{ user.userInfo.address.district }}
+            </td>
+            <td v-else>N/A</td>
             <td>{{ user.role }}</td>
+            <td>{{ user.status }}</td>
             <td>
               <button
-                v-if="user.isCreate"
+                v-if="user.userInfo"
                 class="action-button edit-button"
                 @click="showUpdateForm(user.id)"
               >
@@ -93,14 +108,56 @@
           <label>Role:</label>
           <input type="text" v-model="currentUser.role" disabled />
         </div>
+
+        <!-- User Info Section -->
         <div class="form-group">
-          <label>Business Description:</label>
-          <textarea v-model="currentUser.business_description"></textarea>
+          <label>Description:</label>
+          <textarea v-model="currentUser.userInfo.description"></textarea>
         </div>
         <div class="form-group">
           <label>Phone Number:</label>
-          <input type="text" v-model="currentUser.phone_number" />
+          <input type="text" v-model="currentUser.userInfo.phone_number" />
         </div>
+
+        <!-- Image Section -->
+        <div class="form-group">
+          <label>Current Image:</label>
+          <!-- Display current image if available -->
+          <div v-if="currentUser.userInfo.image.url">
+            <img
+              :src="currentUser.userInfo.image.url"
+              alt="Current Image"
+              style="width: 150px; height: auto; margin-bottom: 10px"
+            />
+          </div>
+          <label for="imageUpload">Upload New Image:</label>
+          <input
+            type="file"
+            @change="handleImageUpload"
+            accept="image/*"
+            id="imageUpload"
+          />
+        </div>
+
+        <!-- Address Section -->
+        <div class="form-group">
+          <label>Street:</label>
+          <input type="text" v-model="currentUser.userInfo.address.street" />
+        </div>
+        <div class="form-group">
+          <label>Ward:</label>
+          <input type="text" v-model="currentUser.userInfo.address.ward" />
+        </div>
+        <div class="form-group">
+          <label>District:</label>
+          <input type="text" v-model="currentUser.userInfo.address.district" />
+        </div>
+        <div class="form-group">
+          <label>City ID:</label>
+          <input type="number" v-model="currentUser.userInfo.address.city_id" />
+        </div>
+
+        <!-- Form Buttons -->
         <div class="button-group">
           <button type="submit" class="create-button">Create</button>
           <button type="button" @click="cancelAction" class="cancel-button">
@@ -127,8 +184,8 @@
           <input type="text" v-model="currentUser.role" disabled />
         </div>
         <div class="form-group">
-          <label>Business Description:</label>
-          <textarea v-model="currentUser.business_description"></textarea>
+          <label>Description:</label>
+          <textarea v-model="currentUser.description"></textarea>
         </div>
         <div class="form-group">
           <label>Phone Number:</label>
@@ -149,11 +206,13 @@
 import UserManagementController from "@/controllers/UserManagementController";
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
+import { useToast } from "vue-toastification";
 
 export default {
   setup() {
     const users = ref([]);
     const router = useRouter();
+    const toast = useToast();
 
     const {
       fetchUsers,
@@ -172,8 +231,22 @@ export default {
       username: "",
       email: "",
       role: "",
-      business_description: "",
-      phone_number: "",
+      userInfo: {
+        description: "",
+        phone_number: "",
+        image: {
+          id: 0,
+          url: "",
+        },
+        address: {
+          district: "",
+          street: "",
+          ward: "",
+          city_id: 0,
+          id: 0,
+        },
+      },
+      status: "",
     });
 
     const newUser = ref({
@@ -186,7 +259,7 @@ export default {
     const loadUsers = async () => {
       users.value = await fetchUsers();
       if (users.value.length === 0) {
-        alert("No users found, redirecting to login...");
+        toast.error("No users found, redirecting to login...");
         router.push("/login");
       }
     };
