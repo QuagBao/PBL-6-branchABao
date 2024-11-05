@@ -34,11 +34,11 @@ const routes = [
     name: 'Destination_Final',
     component: Destination_Final,  // Lazy load SignInView
   },
-  {
-    path: '/test',
-    name: 'test',
-    component: test,  // Lazy load SignInView
-  },
+  // {
+  //   path: '/test',
+  //   name: 'test',
+  //   component: test,  // Lazy load SignInView
+  // },
   {
     path: '/test1',
     name: 'test1',
