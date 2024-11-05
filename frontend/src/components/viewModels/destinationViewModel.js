@@ -1,78 +1,93 @@
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import DestinationModel from '../models/destinationModel';
 
-export default function () {
+export default function (cityId) {
   const model = DestinationModel();
   const images = ref([]);
-
   const isMenuVisible = ref(false);
   const isReadMore = ref(false);
+  const currentIndex = ref(0);
+  const cityDetails = ref(null);
+  const destinations = ref([]);
+  const entertainments = ref([]);
+  const liked = ref({});
+  const isHeartFilled = ref(false);
+  const isLoading = ref(true);
+  const hotels = ref([]);
+
 
   const toggleMenu = () => {
     isMenuVisible.value = !isMenuVisible.value;
+  };
+
+  const toggleHeart = () => {
+    isHeartFilled.value = !isHeartFilled.value;
   };
   
   const currentIndex = ref(0);
 
   const currentImage = computed(() => {
-    // Kiểm tra xem images có rỗng hay currentIndex nằm ngoài giới hạn không
-    if (!images.value.length || currentIndex.value < 0 || currentIndex.value >= images.value.length) {
-      return null; // Hoặc một giá trị mặc định, ví dụ: '/cities/default.jpg'
+    const images = cityDetails.value?.images || [];
+    if (!images.length || currentIndex.value < 0 || currentIndex.value >= images.length) {
+      return null;
     }
-    return images.value[currentIndex.value].imageUrl;
+    return images[currentIndex.value].url;
   });
 
+  // Chuyển đến ảnh tiếp theo
   const nextImage = () => {
-    if (images.value.length) {  // Kiểm tra images không rỗng
-      currentIndex.value = (currentIndex.value + 1) % images.value.length;
+    const images = cityDetails.value?.images || [];
+    if (images.length) {
+      currentIndex.value = (currentIndex.value + 1) % images.length;
     }
   };
-  
+
+  // Chuyển đến ảnh trước đó
   const prevImage = () => {
-    if (images.value.length) { // Kiểm tra images không rỗng
-      currentIndex.value = (currentIndex.value - 1 + images.value.length) % images.value.length;
+    const images = cityDetails.value?.images || [];
+    if (images.length) {
+      currentIndex.value = (currentIndex.value - 1 + images.length) % images.length;
     }
   };
-
-  const isHeartFilled = ref(false);
-
-  const toggleHeart = () => {
-    isHeartFilled.value = !isHeartFilled.value;
-  };
-
-  const truncatedDescription = ref(model.getTruncatedDescription());
 
   const toggleReadMore = () => {
     isReadMore.value = !isReadMore.value;
-    truncatedDescription.value = model.getDescription(isReadMore);
   };
 
+  // Fetch city details and populate relevant data
+  onMounted(async () => {
+    isLoading.value = true; // Bắt đầu trạng thái tải
 
+    cityDetails.value = await model.fetchCityDetails(cityId);
+    destinations.value = await model.fetchDestinations(cityId);
+    entertainments.value = await model.fetchEntertainments();
+    console.log(destinations.value);
+    
+
+    isLoading.value = false; // Kết thúc trạng thái tải
+});
+
+  // Function to get truncated description
+  const getTruncatedDescription = computed(() => {
+    return cityDetails.value
+      ? cityDetails.value.description.split(' ').slice(0, 40).join(' ') + '...'
+      : '';
+  });
+
+  const fullDescription = computed(() => cityDetails.value?.description || '');
+
+  // Button selection logic
   const buttons = ref(model.buttons);
   const selectedIndices = ref([]);
 
   const selectButton = (index) => {
     const currentIndex = selectedIndices.value.indexOf(index);
-
     if (currentIndex === -1) {
       selectedIndices.value.push(index);
     } else {
       selectedIndices.value.splice(currentIndex, 1);
     }
   };
-
-  const entertainments = ref([]);
-  
-  const liked = ref({});
-
-  onMounted(async () => {
-    entertainments.value = await model.fetchEntertainments();
-  });
-
-  onMounted(async () => {
-    images.value = await model.fetchImages();
-    console.log("Current images data:", images.value);
-  });
 
   const generateStars = (rating) => {
     return model.generateStars(rating);
@@ -95,9 +110,10 @@ export default function () {
     prevImage,
     isHeartFilled,
     toggleHeart,
-    truncatedDescription,
+    getTruncatedDescription,
     toggleReadMore,
     isReadMore,
+    fullDescription,
     buttons,
     selectedIndices,
     selectButton,
@@ -109,5 +125,9 @@ export default function () {
     toggleLikeStatus,
     heartFull: model.heartFull,
     heartEmpty: model.heartEmpty,
+    cityDetails,
+    isLoading,
+    destinations,
+    hotels
   };
 }

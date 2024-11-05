@@ -48,6 +48,12 @@ export default function () {
     liked.value[id] = !liked.value[id];
     console.log(`Item ID: ${id}, Liked: ${liked.value[id]}`);
   };
+  const truncatedDescription = (description) => {
+    if (description.length > 200) {
+      return description.slice(0, 200) + '...';
+    }
+    return description;
+  };
 
   return {
     isMenuVisible,
@@ -64,5 +70,6 @@ export default function () {
     toggleLikeStatus,
     heartFull: model.heartFull,
     heartEmpty: model.heartEmpty,
+    truncatedDescription,
   };
 }

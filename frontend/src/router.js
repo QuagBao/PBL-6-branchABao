@@ -18,6 +18,8 @@ const city_Hotel_list = () => import('./components/views/city_Hotel_List.vue');
 const ThingToDo_list = () => import('./components/views/ThingToDo_List.vue');
 const Restaurant_list = () => import('./components/views/Restaurant_List.vue');
 const Hotel_list = () => import('./components/views/Hotel_List.vue');
+const Topic_list = () => import('./components/views/Topic_List.vue');
+const Create_Trip = () => import('./components/views/Create_Trip.vue');
 const Profile_Page = () => import('./components/views/Profile_Page/Profile_Page.vue');
 const Destination_Final = () => import('./components/views/Destination/destinationView_Test.vue');
 // const test = () => import('./components/views/Destination/destinationView_Test.vue');
@@ -70,9 +72,14 @@ const routes = [
     component: Profile_Page,  // Lazy load DashBoardView
   },
   {
-    path: '/destination',
+    path: '/Profile_Page',
+    name: 'Profile_Page',
+    component: Profile_Page,  // Lazy load DashBoardView
+  },
+  {
+    path: '/destination/:id',
     name: 'Destination',
-    component: destinationView,  // Lazy load destinationView
+    component: destinationView,
   },
   {
     path: '/city/thingtodo',
@@ -105,6 +112,11 @@ const routes = [
     component: Hotel_list,  // Lazy load destinationView
   },
   {
+    path: '/topic',
+    name: 'Topic',
+    component: Topic_list,  // Lazy load destinationView
+  },
+  {
     path: '/detailLocation/Place',
     name: 'DetailLocation_Place',
     component: detailLocation_Place,  // Lazy load detailLocation_Place
@@ -132,7 +144,12 @@ const routes = [
   {
     path: '/uploadPicture',
     name: 'UploadPicture',
-    component: uploadPictureView,  // Lazy load detailLocation_Hotel
+    component: uploadPictureView,  
+  },
+  {
+    path: '/createTrip',
+    name: 'CreateTrip',
+    component: Create_Trip,  
   },
   // Đường dẫn mặc định nếu không có URL cụ thể
   {
@@ -145,6 +162,8 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 });
+
+
 
 export default router;
 
