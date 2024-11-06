@@ -141,20 +141,20 @@
 
         <!-- Address Section -->
         <div class="form-group">
-          <label>Street:</label>
-          <input type="text" v-model="currentUser.userInfo.address.street" />
-        </div>
-        <div class="form-group">
-          <label>Ward:</label>
-          <input type="text" v-model="currentUser.userInfo.address.ward" />
+          <label>City ID:</label>
+          <input type="number" v-model="currentUser.userInfo.address.city_id" />
         </div>
         <div class="form-group">
           <label>District:</label>
           <input type="text" v-model="currentUser.userInfo.address.district" />
         </div>
         <div class="form-group">
-          <label>City ID:</label>
-          <input type="number" v-model="currentUser.userInfo.address.city_id" />
+          <label>Ward:</label>
+          <input type="text" v-model="currentUser.userInfo.address.ward" />
+        </div>
+        <div class="form-group">
+          <label>Street:</label>
+          <input type="text" v-model="currentUser.userInfo.address.street" />
         </div>
 
         <!-- Form Buttons -->
@@ -216,22 +216,21 @@
 
         <!-- Address Section -->
         <div class="form-group">
-          <label>Street:</label>
-          <input type="text" v-model="currentUser.userInfo.address.street" />
-        </div>
-        <div class="form-group">
-          <label>Ward:</label>
-          <input type="text" v-model="currentUser.userInfo.address.ward" />
+          <label>City ID:</label>
+          <input type="number" v-model="currentUser.userInfo.address.city_id" />
         </div>
         <div class="form-group">
           <label>District:</label>
           <input type="text" v-model="currentUser.userInfo.address.district" />
         </div>
         <div class="form-group">
-          <label>City ID:</label>
-          <input type="number" v-model="currentUser.userInfo.address.city_id" />
+          <label>Ward:</label>
+          <input type="text" v-model="currentUser.userInfo.address.ward" />
         </div>
-
+        <div class="form-group">
+          <label>Street:</label>
+          <input type="text" v-model="currentUser.userInfo.address.street" />
+        </div>
         <!-- Form Buttons -->
         <div class="button-group">
           <button type="submit" class="create-button">Create</button>
@@ -595,6 +594,7 @@ h2 {
 input[type="text"],
 input[type="email"],
 input[type="password"],
+input[type="number"],
 textarea {
   width: 100%;
   padding: 12px;
@@ -611,6 +611,7 @@ textarea {
 input[type="text"]::placeholder,
 input[type="email"]::placeholder,
 input[type="password"]::placeholder,
+input[type="number"]::placeholder,
 textarea::placeholder {
   color: #9ca3af;
 }
@@ -619,6 +620,7 @@ textarea::placeholder {
 input[type="text"]:focus,
 input[type="email"]:focus,
 input[type="password"]:focus,
+input[type="number"]:focus,
 textarea:focus {
   border-color: #0078d4; /* Microsoft blue color on focus */
   background-color: #ffffff; /* White background on focus */
