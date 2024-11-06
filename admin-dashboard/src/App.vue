@@ -21,6 +21,15 @@
             <i class="icon-user-management"></i> User Management
           </router-link>
         </li>
+        <li>
+          <router-link
+            to="/cities"
+            :class="{ active: isActive('/cities') }"
+            @click="handleNavigation"
+          >
+            <i class="icon-city-management"></i> City Management
+          </router-link>
+        </li>
       </ul>
     </aside>
 

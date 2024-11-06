@@ -21,6 +21,11 @@ const routes = [
     name: "UserManagement",
     component: () => import("@/views/UserManagement.vue"),
   },
+  {
+    path: "/cities",
+    name: "CityManagement",
+    component: () => import("@/views/CityManagement.vue"),
+  },
 ];
 
 const router = createRouter({
