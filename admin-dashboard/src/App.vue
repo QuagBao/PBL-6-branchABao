@@ -30,6 +30,15 @@
             <i class="icon-city-management"></i> City Management
           </router-link>
         </li>
+        <li>
+          <router-link
+            to="/destinations"
+            :class="{ active: isActive('/destinations') }"
+            @click="handleNavigation"
+          >
+            <i class="icon-destination-management"></i> Destination Management
+          </router-link>
+        </li>
       </ul>
     </aside>
 

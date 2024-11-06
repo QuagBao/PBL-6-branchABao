@@ -26,6 +26,11 @@ const routes = [
     name: "CityManagement",
     component: () => import("@/views/CityManagement.vue"),
   },
+  {
+    path: "/destinations",
+    name: "DestinationManagement",
+    component: () => import("@/views/DestinationManagement.vue"),
+  },
 ];
 
 const router = createRouter({
