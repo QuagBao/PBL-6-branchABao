@@ -5,8 +5,8 @@ import {
   getCities as fetchCitiesAPI,
   getCityById,
   addCity,
-  updateCity,
-  deleteCity,
+  updateCity as updateCityAPI,
+  deleteCity as deleteCityAPI,
 } from "@/models/CityManagementModel";
 
 export default function () {
@@ -22,53 +22,38 @@ export default function () {
   };
 
   const getCity = async (cityID) => {
-    try {
-      const city = await getCityById(cityID);
-      return city;
-    } catch (error) {
-      console.error("Error fetching city:", error);
-    }
+    const city = await getCityById(cityID);
+    return city;
   };
 
-  const createCity = async (cityData) => {
+  const createCity = () => {
     actionStep.value = "create";
-    try {
-      const response = await addCity(cityData);
-      actionStep.value = "read";
-      if (response.success) {
-        console.log(response.message);
-        // Trigger a data refresh instead of a page reload if possible
-      } else {
-        console.error("Failed to add city:", response.message);
-      }
-    } catch (error) {
-      console.error("Error adding city:", error);
-    }
   };
 
-  const updateCityInfo = async (cityData) => {
+  const updateCity = async (cityID) => {
+    const city = getCity(cityID);
     actionStep.value = "update";
-    try {
-      const response = await updateCity(cityData);
-      actionStep.value = "read";
-      if (response.success) {
-        console.log(response.message);
-        // Trigger a data refresh instead of a page reload if possible
-      } else {
-        console.error("Failed to update city:", response.message);
-      }
-    } catch (error) {
-      console.error("Error updating city:", error);
-    }
+    return city;
   };
 
-  const deleteCityInfo = async (cityID) => {
+  const confirmCreate = async (city) => {
+    await addCity(city);
+    actionStep.value = "read";
+    window.location.reload();
+  };
+  const confirmUpdate = async (city) => {
+    await updateCityAPI(city);
+    actionStep.value = "read";
+    window.location.reload();
+  };
+
+  const deleteCity = async (cityID) => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this city?"
     );
     if (confirmDelete) {
       try {
-        const response = await deleteCity(cityID);
+        const response = await deleteCityAPI(cityID);
         if (response.success) {
           console.log(response.message);
           // Trigger a data refresh instead of a page reload if possible
@@ -85,8 +70,10 @@ export default function () {
     fetchCities,
     actionStep,
     createCity,
-    updateCityInfo,
-    deleteCityInfo,
+    updateCity,
+    confirmCreate,
+    confirmUpdate,
+    deleteCity,
     getCity,
   };
 }

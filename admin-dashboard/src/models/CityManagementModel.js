@@ -21,14 +21,14 @@ export async function getCities() {
   }
 }
 
-export async function getCityById() {
+export async function getCityById(cityID) {
   try {
     const token = sessionStorage.getItem("token");
     if (!token) throw new Error("No token found");
 
     // Gửi yêu cầu để lấy danh sách người dùng
     const response = await axios.get(
-      "https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/city/"
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/city/${cityID}`
     );
 
     const city = response.data;

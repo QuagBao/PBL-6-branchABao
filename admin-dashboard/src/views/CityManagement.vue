@@ -97,9 +97,10 @@ export default {
     const {
       fetchCities,
       actionStep,
+      createCity,
       updateCity,
-      confirmAddCity,
-      confirmUpdateCity,
+      confirmCreate,
+      confirmUpdate,
       deleteCity,
     } = CityManagementController();
 
@@ -113,11 +114,11 @@ export default {
     onMounted(loadCities);
 
     const showCreateForm = () => {
-      actionStep.value = "create";
+      createCity();
     };
 
     const submitAddCity = async () => {
-      await confirmAddCity(city.value);
+      await confirmCreate(city.value);
       city.value = { name: "", description: "" };
       actionStep.value = "read";
       loadCities();
@@ -130,7 +131,7 @@ export default {
     };
 
     const submitUpdateCity = async () => {
-      await confirmUpdateCity(currentCity.value);
+      await confirmUpdate(currentCity.value);
       actionStep.value = "read";
       loadCities();
     };
@@ -299,24 +300,24 @@ h2 {
   transform: scale(1.05); /* Tăng kích thước khi hover */
 }
 
-.add-user-button {
+.add-city-button {
   padding: 10px 20px;
   background-color: #28a745; /* Màu nền */
   width: 30%;
   color: white; /* Màu chữ */
   border: none; /* Không có viền */
-  border-radius: 5px; /* Bo góc */
+  border-radius: 8px; /* Bo góc nhẹ */
   cursor: pointer; /* Con trỏ khi hover */
-  transition: background-color 0.3s, transform 0.2s, box-shadow 0.2s; /* Smooth transition for hover effects */
+  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s; /* Smooth transition for hover effects */
   font-weight: bold; /* Chữ đậm */
   font-size: 16px; /* Kích thước chữ */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ */
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06); /* Đổ bóng thêm tầng */
 }
 
-.add-user-button:hover {
+.add-city-button:hover {
   background-color: #218838; /* Màu nền khi hover */
-  transform: scale(1.05); /* Tăng kích thước khi hover */
-  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2); /* Đổ bóng rõ hơn khi hover */
+  transform: scale(1.07); /* Tăng kích thước khi hover */
+  box-shadow: 0 12px 18px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.08); /* Đổ bóng rõ hơn khi hover */
 }
 
 /* Center form container */

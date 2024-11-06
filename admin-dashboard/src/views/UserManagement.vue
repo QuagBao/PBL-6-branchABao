@@ -233,7 +233,7 @@
         </div>
         <!-- Form Buttons -->
         <div class="button-group">
-          <button type="submit" class="create-button">Create</button>
+          <button type="submit" class="update-button">Update</button>
           <button type="button" @click="cancelAction" class="cancel-button">
             Cancel
           </button>
