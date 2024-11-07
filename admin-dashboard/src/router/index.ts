@@ -31,6 +31,11 @@ const routes = [
     name: "DestinationManagement",
     component: () => import("@/views/DestinationManagement.vue"),
   },
+  {
+    path: "/hotels",
+    name: "HotelManagement",
+    component: () => import("@/views/HotelManagement.vue"),
+  },
 ];
 
 const router = createRouter({

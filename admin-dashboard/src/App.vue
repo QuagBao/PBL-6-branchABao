@@ -39,6 +39,15 @@
             <i class="icon-destination-management"></i> Destination Management
           </router-link>
         </li>
+        <li>
+          <router-link
+            to="/hotels"
+            :class="{ active: isActive('/hotels') }"
+            @click="handleNavigation"
+          >
+            <i class="icon-hotel-management"></i> Hotel Management
+          </router-link>
+        </li>
       </ul>
     </aside>
 

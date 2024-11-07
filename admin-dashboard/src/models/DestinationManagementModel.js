@@ -62,7 +62,7 @@ export async function updateDestination(destination) {
     if (!token) throw new Error("No token found");
 
     const response = await axios.put(
-      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/city/${destination.id}`, // sử dụng user.id làm userId
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/${destination.id}`, // sử dụng user.id làm userId
       {
         name: destination.name,
         price_bottom: destination.price_bottom,
