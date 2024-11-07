@@ -93,6 +93,10 @@ export default {
     onMounted(() => {
       loadUserFromSession(); // Initial load
       checkUserInterval = setInterval(() => {
+        const token = sessionStorage.getItem("token");
+        if (!token) {
+          logout();
+        }
         loadUserFromSession();
       }, 5000); // Repeat every 5 seconds
     });
@@ -107,8 +111,6 @@ export default {
 
     const handleLogout = () => {
       logout();
-      router.push("/login");
-      refreshView(); // Refresh view after logout
     };
 
     const handleNavigation = () => {

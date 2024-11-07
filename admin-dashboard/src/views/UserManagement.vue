@@ -310,7 +310,14 @@ export default {
       }
     };
 
-    onMounted(loadUsers);
+    onMounted(async () => {
+      await loadUsers();
+      if (currentUser.value.userInfo.image.url) {
+        uploadedImageFile.value = currentUser.value.userInfo.image.url; // Load actual image URL initially
+      } else {
+        uploadedImageFile.value = ""; // Replace with actual placeholder URL if needed
+      }
+    });
 
     const showAddUserForm = () => {
       addUser();
@@ -327,6 +334,7 @@ export default {
       currentUser.value = {
         ...user,
         userInfo: {
+          id: user.userInfo?.id || 0,
           description: user.userInfo?.description || "",
           phone_number: user.userInfo?.phone_number || "",
           image: {
@@ -365,6 +373,7 @@ export default {
         },
         status: user.status || "",
       };
+      console.log(currentUser.value);
     };
 
     const submitCreateUser = () => {
@@ -384,8 +393,7 @@ export default {
       const file = event.target.files[0];
       if (file) {
         uploadedImageFile.value = file;
-        // Hiển thị URL tạm thời để xem trước ảnh
-        currentUser.value.userInfo.image.url = URL.createObjectURL(file);
+        currentUser.value.userInfo.image.url = URL.createObjectURL(file); // Temporary URL for preview
       }
     };
 

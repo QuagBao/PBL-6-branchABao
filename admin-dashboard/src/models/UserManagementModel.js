@@ -114,23 +114,24 @@ export async function updateUserInfo(user, uploadedImageFile) {
 
     // Construct query parameters from user data
     const params = new URLSearchParams();
-    params.append("id", user.userInfo.id);
     params.append("user_id", user.id);
-    params.append("description", user.userInfo.description);
-    params.append("phone_number", user.userInfo.phone_number);
-    params.append("district", user.userInfo.address.district);
-    params.append("street", user.userInfo.address.street);
-    params.append("ward", user.userInfo.address.ward);
-    params.append("city_id", user.userInfo.address.city_id);
+    params.append("description", user.userInfo.description || "");
+    params.append("phone_number", user.userInfo.phone_number || "");
+    params.append("district", user.userInfo.address.district || "");
+    params.append("street", user.userInfo.address.street || "");
+    params.append("ward", user.userInfo.address.ward || "");
+    params.append("city_id", user.userInfo.address.city_id || "");
 
-    // Create FormData and add the image if provided
+    // Only include the image in FormData if it is provided
     const formData = new FormData();
     if (uploadedImageFile) {
       formData.append("image", uploadedImageFile);
     }
 
     const response = await axios.put(
-      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/userInfo/?${params.toString()}`,
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/userInfo/${
+        user.userInfo.id
+      }?${params.toString()}`,
       formData,
       {
         headers: {
