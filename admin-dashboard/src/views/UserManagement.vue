@@ -254,7 +254,6 @@ export default {
     const users = ref([]);
     const router = useRouter();
     const toast = useToast();
-
     const {
       fetchUsers,
       actionStep,
@@ -273,6 +272,7 @@ export default {
       email: "",
       role: "",
       userInfo: {
+        id: 0,
         description: "",
         phone_number: "",
         image: {
@@ -296,6 +296,11 @@ export default {
       password: "",
       confirmPassword: "",
     });
+    const uploadedImageFile = ref(
+      currentUser.value.userInfo.image.url
+        ? currentUser.value.userInfo.image.url
+        : null
+    );
 
     const loadUsers = async () => {
       users.value = await fetchUsers();
@@ -345,6 +350,7 @@ export default {
       currentUser.value = {
         ...user,
         userInfo: {
+          id: user.userInfo?.id || 0,
           description: user.userInfo?.description || "",
           phone_number: user.userInfo?.phone_number || "",
           image: {
@@ -363,16 +369,24 @@ export default {
 
     const submitCreateUser = () => {
       // Logic to handle user creation
-      confirmCreateInfo(currentUser.value);
+      confirmCreateInfo(currentUser.value, uploadedImageFile.value);
     };
 
     const submitUpdateUser = () => {
       // Logic to handle user update
-      confirmUpdateInfo(currentUser.value);
+      confirmUpdateInfo(currentUser.value, uploadedImageFile.value);
     };
 
     const cancelAction = () => {
       actionStep.value = "read"; // Cancel action and return to list view
+    };
+    const handleImageUpload = (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        uploadedImageFile.value = file;
+        // Hiển thị URL tạm thời để xem trước ảnh
+        currentUser.value.userInfo.image.url = URL.createObjectURL(file);
+      }
     };
 
     return {
@@ -388,6 +402,7 @@ export default {
       deleteInfo,
       showAddUserForm,
       submitAddUser,
+      handleImageUpload,
     };
   },
 };

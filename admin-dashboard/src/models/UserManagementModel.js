@@ -63,20 +63,34 @@ export async function getUserById(userId) {
   }
 }
 
-export async function createUserInfo(user) {
+export async function createUserInfo(user, uploadedImageFile) {
   try {
     const token = sessionStorage.getItem("token");
     if (!token) throw new Error("No token found");
 
+    // Construct query parameters from user data
+    const params = new URLSearchParams();
+    params.append("user_id", user.id);
+    params.append("description", user.userInfo.description);
+    params.append("phone_number", user.userInfo.phone_number);
+    params.append("district", user.userInfo.address.district);
+    params.append("street", user.userInfo.address.street);
+    params.append("ward", user.userInfo.address.ward);
+    params.append("city_id", user.userInfo.address.city_id);
+
+    // Create FormData and add the image if provided
+    const formData = new FormData();
+    if (uploadedImageFile) {
+      formData.append("image", uploadedImageFile);
+    }
+
     const response = await axios.post(
-      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/userInfo/${user.id}`,
-      {
-        description: user.description,
-        phone_number: user.phone_number,
-      },
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/userInfo/?${params.toString()}`,
+      formData,
       {
         headers: {
           accept: "application/json",
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
         },
       }
@@ -93,20 +107,35 @@ export async function createUserInfo(user) {
 }
 
 // Cập nhật thông tin người dùng
-export async function updateUserInfo(user) {
+export async function updateUserInfo(user, uploadedImageFile) {
   try {
     const token = sessionStorage.getItem("token");
     if (!token) throw new Error("No token found");
 
+    // Construct query parameters from user data
+    const params = new URLSearchParams();
+    params.append("id", user.userInfo.id);
+    params.append("user_id", user.id);
+    params.append("description", user.userInfo.description);
+    params.append("phone_number", user.userInfo.phone_number);
+    params.append("district", user.userInfo.address.district);
+    params.append("street", user.userInfo.address.street);
+    params.append("ward", user.userInfo.address.ward);
+    params.append("city_id", user.userInfo.address.city_id);
+
+    // Create FormData and add the image if provided
+    const formData = new FormData();
+    if (uploadedImageFile) {
+      formData.append("image", uploadedImageFile);
+    }
+
     const response = await axios.put(
-      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/userInfo/${user.id}`, // sử dụng user.id làm userId
-      {
-        description: user.description,
-        phone_number: user.phone_number,
-      },
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/userInfo/?${params.toString()}`,
+      formData,
       {
         headers: {
           accept: "application/json",
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
         },
       }

@@ -33,15 +33,15 @@ export default function () {
     return user;
   };
 
-  const confirmCreateInfo = async (user) => {
-    await createUserInfo(user);
+  const confirmCreateInfo = async (user, uploadedImageFile) => {
+    await createUserInfo(user, uploadedImageFile);
     actionStep.value = "read";
-    window.location.reload();
+    //window.location.reload();
   };
-  const confirmUpdateInfo = async (user) => {
-    await updateUserInfo(user);
+  const confirmUpdateInfo = async (user, uploadedImageFile) => {
+    await updateUserInfo(user, uploadedImageFile);
     actionStep.value = "read";
-    window.location.reload();
+    //window.location.reload();
   };
 
   const deleteInfo = async (userID) => {
