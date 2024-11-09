@@ -20,7 +20,7 @@
             <td>{{ destination.id }}</td>
             <td>{{ destination.name }}</td>
             <td>{{ destination.description }}</td>
-            <td>
+            <td v-if="destination.address">
               {{ destination.address.street }}, {{ destination.address.ward }},
               {{ destination.address.district }}
             </td>
@@ -76,7 +76,7 @@
         </div>
         <div class="form-group">
           <label>Date Create:</label>
-          <input type="datetime-local" v-model="destination.date_create" />
+          <input type="date" v-model="destination.date_create" />
         </div>
         <div class="form-group">
           <label>City ID:</label>
@@ -93,6 +93,10 @@
         <div class="form-group">
           <label>Street:</label>
           <input type="text" v-model="destination.address.street" />
+        </div>
+        <div class="form-group">
+          <label>Image:</label>
+          <input type="file" @change="handleImageUpload" multiple />
         </div>
         <div class="button-group">
           <button type="submit" class="create-button">Create</button>
@@ -140,10 +144,7 @@
         </div>
         <div class="form-group">
           <label>Date Create:</label>
-          <input
-            type="datetime-local"
-            v-model="currentDestination.date_create"
-          />
+          <input type="date" v-model="currentDestination.date_create" />
         </div>
         <div class="form-group">
           <label>City ID:</label>
@@ -160,6 +161,11 @@
         <div class="form-group">
           <label>Street:</label>
           <input type="text" v-model="currentDestination.address.street" />
+        </div>
+
+        <div class="form-group">
+          <label>Image:</label>
+          <input type="file" @change="handleImageUpload" multiple />
         </div>
         <div class="button-group">
           <button type="submit" class="update-button">Update</button>
@@ -181,6 +187,7 @@ export default {
   setup() {
     const destinations = ref([]);
     const toast = useToast();
+    const images = ref([]);
 
     const {
       fetchDestinations,
@@ -237,7 +244,7 @@ export default {
     };
 
     const submitAddDestination = async () => {
-      await confirmCreate(destination.value);
+      await confirmCreate(destination.value, images.value);
       destination.value = { name: "", description: "" };
       actionStep.value = "read";
       loadDestinations();
@@ -249,8 +256,15 @@ export default {
       actionStep.value = "update";
     };
 
+    const handleImageUpload = (event) => {
+      const files = event.target.files; // Lấy tất cả các tệp đã chọn
+      if (files.length > 0) {
+        images.value = Array.from(files); // Chuyển đổi mảng tệp thành mảng và lưu vào images
+      }
+    };
+
     const submitUpdateDestination = async () => {
-      await confirmUpdate(currentDestination.value);
+      await confirmUpdate(currentDestination.value, images.value);
       actionStep.value = "read";
       loadDestinations;
     };
@@ -270,6 +284,8 @@ export default {
       submitUpdateDestination,
       cancelAction,
       deleteDestination,
+      handleImageUpload,
+      images,
     };
   },
 };
@@ -478,7 +494,7 @@ input[type="email"],
 input[type="password"],
 input[type="number"],
 input[type="time"],
-input[type="datetime-local"],
+input[type="date"],
 textarea {
   width: 100%;
   padding: 12px;
@@ -497,7 +513,7 @@ input[type="email"]::placeholder,
 input[type="password"]::placeholder,
 input[type="number"]::placeholder,
 input[type="time"]::placeholder,
-input[type="datetime-local"]::placeholder,
+input[type="date"]::placeholder,
 textarea::placeholder {
   color: #9ca3af;
 }
@@ -508,7 +524,7 @@ input[type="email"]:focus,
 input[type="password"]:focus,
 input[type="number"]:focus,
 input[type="time"]::placeholder,
-input[type="datetime-local"]::placeholder,
+input[type="date"]::placeholder,
 textarea:focus {
   border-color: #0078d4; /* Microsoft blue color on focus */
   background-color: #ffffff; /* White background on focus */

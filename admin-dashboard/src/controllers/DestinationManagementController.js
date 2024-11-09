@@ -36,15 +36,16 @@ export default function () {
     return destination;
   };
 
-  const confirmCreate = async (destination) => {
-    await addDestination(destination);
+  const confirmCreate = async (destination, images) => {
+    await addDestination(destination, images);
     actionStep.value = "read";
-    window.location.reload();
+    fetchDestinations();
   };
-  const confirmUpdate = async (destination) => {
-    await updateDestinationAPI(destination);
+  const confirmUpdate = async (destination, images) => {
+    await updateDestinationAPI(destination, images);
+    console.log(destination);
     actionStep.value = "read";
-    window.location.reload();
+    fetchDestinations();
   };
 
   const deleteDestination = async (destinationID) => {

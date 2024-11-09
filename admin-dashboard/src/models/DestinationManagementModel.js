@@ -56,69 +56,106 @@ export async function getDestinationById(destinationID) {
   }
 }
 
-export async function updateDestination(destination) {
+export async function updateDestination(destination, images) {
   try {
     const token = sessionStorage.getItem("token");
     if (!token) throw new Error("No token found");
 
-    const response = await axios.put(
-      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/${destination.id}`, // sử dụng user.id làm userId
-      {
-        name: destination.name,
-        price_bottom: destination.price_bottom,
-        price_top: destination.price_top,
-        age: destination.age,
-        opentime: destination.opentime,
-        duration: destination.duration,
-        description: destination.description,
-        date_create: destination.date_create,
-        city_id: destination.address.city_id,
-        district: destination.address.district,
-        ward: destination.address.ward,
-        street: destination.address.street,
-      }
+    // Tạo URL với các query parameters
+    const url = new URL(
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/${destination.id}`
     );
+    url.searchParams.append("name", destination.name);
+    url.searchParams.append("price_bottom", destination.price_bottom);
+    url.searchParams.append("price_top", destination.price_top);
+    url.searchParams.append("age", destination.age);
+    url.searchParams.append("opentime", destination.opentime);
+    url.searchParams.append("duration", destination.duration);
+    url.searchParams.append("description", destination.description);
+    url.searchParams.append("date_create", destination.date_create);
+    url.searchParams.append("city_id", destination.address.city_id);
+    url.searchParams.append("district", destination.address.district);
+    url.searchParams.append("ward", destination.address.ward);
+    url.searchParams.append("street", destination.address.street);
+
+    // Kiểm tra và console.log danh sách hình ảnh trước khi gửi
+    console.log("Images to upload:", images);
+
+    // Tạo FormData cho body và thêm ảnh vào mảng 'images'
+    const formData = new FormData();
+
+    images.forEach((file) => {
+      formData.append(`images`, file);
+    });
+
+    // Gửi PUT request với dữ liệu từ FormData
+    const response = await axios.put(url.toString(), formData, {
+      headers: {
+        "Content-Type": "multipart/form-data", // Đảm bảo gửi đúng content type
+      },
+    });
 
     if (response.status === 200) {
-      console.log("City updated successfully");
-      return { success: true, message: "City updated successfully" };
+      console.log("Destination updated successfully");
+      return { success: true, message: "Destination updated successfully" };
     }
   } catch (error) {
-    console.error("Error updating city:", error);
-    return { success: false, message: "Failed to update city" };
+    console.error(
+      "Error details:",
+      error.response ? error.response.data : error.message
+    );
+    return { success: false, message: "Failed to update destination" };
   }
 }
 
-export async function addDestination(destination) {
+export async function addDestination(destination, images) {
   try {
     const token = sessionStorage.getItem("token");
     if (!token) throw new Error("No token found");
 
-    const response = await axios.post(
-      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/`, // sử dụng user.id làm userId
-      {
-        name: destination.name,
-        price_bottom: destination.price_bottom,
-        price_top: destination.price_top,
-        age: destination.age,
-        opentime: destination.opentime,
-        duration: destination.duration,
-        description: destination.description,
-        date_create: destination.date_create,
-        city_id: destination.address.city_id,
-        district: destination.address.district,
-        ward: destination.address.ward,
-        street: destination.address.street,
-      }
+    const url = new URL(
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/`
     );
+    url.searchParams.append("name", destination.name);
+    url.searchParams.append("price_bottom", destination.price_bottom);
+    url.searchParams.append("price_top", destination.price_top);
+    url.searchParams.append("age", destination.age);
+    url.searchParams.append("opentime", destination.opentime);
+    url.searchParams.append("duration", destination.duration);
+    url.searchParams.append("description", destination.description);
+    url.searchParams.append("date_create", destination.date_create);
+    url.searchParams.append("city_id", destination.address.city_id);
+    url.searchParams.append("district", destination.address.district);
+    url.searchParams.append("ward", destination.address.ward);
+    url.searchParams.append("street", destination.address.street);
+
+    // Kiểm tra và console.log danh sách hình ảnh trước khi gửi
+    console.log("Images to upload:", images);
+
+    // Tạo FormData cho body và thêm ảnh vào mảng 'images'
+    const formData = new FormData();
+
+    images.forEach((file) => {
+      formData.append(`images`, file);
+    });
+
+    // Gửi PUT request với dữ liệu từ FormData
+    const response = await axios.post(url.toString(), formData, {
+      headers: {
+        "Content-Type": "multipart/form-data", // Đảm bảo gửi đúng content type
+      },
+    });
 
     if (response.status === 200) {
-      console.log("Destination add successfully");
-      return { success: true, message: "Destination added successfully" };
+      console.log("Destination updated successfully");
+      return { success: true, message: "Destination updated successfully" };
     }
   } catch (error) {
-    console.error("Error add destination:", error);
-    return { success: false, message: "Failed to added destination" };
+    console.error(
+      "Error details:",
+      error.response ? error.response.data : error.message
+    );
+    return { success: false, message: "Failed to update destination" };
   }
 }
 
