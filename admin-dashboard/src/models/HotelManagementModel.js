@@ -7,110 +7,109 @@ export async function getHotels() {
 
     // Gửi yêu cầu để lấy danh sách người dùng
     const response = await axios.get(
-      "https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/"
+      "https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/hotel/"
     );
 
-    return response.data
-      .filter((destination) => destination.hotel_id !== null)
-      .map((destination) => ({
-        id: destination.id,
-        name: destination.name,
-        price_bottom: destination.price_bottom,
-        price_top: destination.price_top,
-        age: destination.age,
-        opentime: destination.opentime,
-        duration: destination.duration,
-        description: destination.description,
-        date_create: destination.date_create,
-        address: {
-          city_id: destination.address.city_id,
-          district: destination.address.district,
-          ward: destination.address.ward,
-          street: destination.address.street,
-        },
-        hotel_id: destination.hotel_id,
-        hotel: {
-          property_amenities: destination.hotel.property_amenities,
-          room_features: destination.hotel.room_features,
-          room_types: destination.hotel.room_types,
-          hotel_class: destination.hotel.hotel_class,
-          hotel_styles: destination.hotel.hotel_styles,
-          Languages: destination.hotel.Languages,
-          phone: destination.hotel.phone,
-          email: destination.hotel.email,
-          website: destination.hotel.website,
-          id: destination.hotel.id,
-        },
-      }));
+    return response.data.map((hotel) => ({
+      id: hotel.id,
+      name: hotel.name,
+      price_bottom: hotel.price_bottom,
+      price_top: hotel.price_top,
+      age: hotel.age,
+      opentime: hotel.opentime,
+      duration: hotel.duration,
+      description: hotel.description,
+      date_create: hotel.date_create,
+      address: {
+        city_id: hotel.address.city_id,
+        district: hotel.address.district,
+        ward: hotel.address.ward,
+        street: hotel.address.street,
+      },
+      hotel_id: hotel.hotel_id,
+      hotel: {
+        property_amenities: hotel.hotel.property_amenities,
+        room_features: hotel.hotel.room_features,
+        room_types: hotel.hotel.room_types,
+        hotel_class: hotel.hotel.hotel_class,
+        hotel_styles: hotel.hotel.hotel_styles,
+        Languages: hotel.hotel.Languages,
+        phone: hotel.hotel.phone,
+        email: hotel.hotel.email,
+        website: hotel.hotel.website,
+        id: hotel.hotel.id,
+      },
+    }));
   } catch (error) {
     console.error("Error fetching hotel:", error);
     return []; // Hoặc bạn có thể xử lý khác tùy ý
   }
 }
 
-export async function getHotelById(destinationID) {
+export async function getHotelById(hotelID) {
   try {
     const token = sessionStorage.getItem("token");
     if (!token) throw new Error("No token found");
 
     // Gửi yêu cầu để lấy danh sách người dùng
     const response = await axios.get(
-      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/?id=${destinationID}`
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/hotel/${hotelID}`
     );
 
-    const destination = response.data;
+    const hotel = response.data;
     return {
-      id: destination[0].id,
-      name: destination[0].name,
-      price_bottom: destination[0].price_bottom,
-      price_top: destination[0].price_top,
-      age: destination[0].age,
-      opentime: destination[0].opentime,
-      duration: destination[0].duration,
-      description: destination[0].description,
-      date_create: destination[0].date_create,
+      id: hotel.id,
+      name: hotel.name,
+      price_bottom: hotel.price_bottom,
+      price_top: hotel.price_top,
+      age: hotel.age,
+      opentime: hotel.opentime,
+      duration: hotel.duration,
+      description: hotel.description,
+      date_create: hotel.date_create,
       address: {
-        city_id: destination[0].address.city_id,
-        district: destination[0].address.district,
-        ward: destination[0].address.ward,
-        street: destination[0].address.street,
+        city_id: hotel.address.city_id,
+        district: hotel.address.district,
+        ward: hotel.address.ward,
+        street: hotel.address.street,
       },
+      hotel_id: hotel.hotel_id,
       hotel: {
-        property_amenities: destination[0].hotel.property_amenities,
-        room_features: destination[0].hotel.room_features,
-        room_types: destination[0].hotel.room_types,
-        hotel_class: destination[0].hotel.hotel_class,
-        hotel_styles: destination[0].hotel.hotel_styles,
-        Languages: destination[0].hotel.Languages,
-        phone: destination[0].hotel.phone,
-        email: destination[0].hotel.email,
-        website: destination[0].hotel.website,
-        id: destination[0].hotel.id,
+        property_amenities: hotel.hotel.property_amenities,
+        room_features: hotel.hotel.room_features,
+        room_types: hotel.hotel.room_types,
+        hotel_class: hotel.hotel.hotel_class,
+        hotel_styles: hotel.hotel.hotel_styles,
+        Languages: hotel.hotel.Languages,
+        phone: hotel.hotel.phone,
+        email: hotel.hotel.email,
+        website: hotel.hotel.website,
+        id: hotel.hotel.id,
       },
     };
   } catch (error) {
-    console.error("Error fetching destination:", error);
+    console.error("Error fetching hotel:", error);
     return []; // Hoặc bạn có thể xử lý khác tùy ý
   }
 }
 
-export async function updateHotel(destination) {
+export async function updateHotel(hotel) {
   try {
     const token = sessionStorage.getItem("token");
     if (!token) throw new Error("No token found");
 
     const response = await axios.put(
-      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/hotel/hotel/${destination.hotel_id}`, // sử dụng user.id làm userId
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/hotel/${hotel.hotel_id}`, // sử dụng user.id làm userId
       {
-        property_amenities: destination.hotel.property_amenities,
-        room_features: destination.hotel.room_features,
-        room_types: destination.hotel.room_types,
-        hotel_class: destination.hotel.hotel_class,
-        hotel_styles: destination.hotel.hotel_styles,
-        Languages: destination.hotel.Languages,
-        phone: destination.hotel.phone,
-        email: destination.hotel.email,
-        website: destination.hotel.website,
+        property_amenities: hotel.hotel.property_amenities,
+        room_features: hotel.hotel.room_features,
+        room_types: hotel.hotel.room_types,
+        hotel_class: hotel.hotel.hotel_class,
+        hotel_styles: hotel.hotel.hotel_styles,
+        Languages: hotel.hotel.Languages,
+        phone: hotel.hotel.phone,
+        email: hotel.hotel.email,
+        website: hotel.hotel.website,
       }
     );
 
@@ -124,23 +123,23 @@ export async function updateHotel(destination) {
   }
 }
 
-export async function addHotel(destination) {
+export async function addHotel(hotel) {
   try {
     const token = sessionStorage.getItem("token");
     if (!token) throw new Error("No token found");
 
     const response = await axios.post(
-      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/hotel/hotel/${destination.id}`, // sử dụng user.id làm userId
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/hotel/${hotel.id}`, // sử dụng user.id làm userId
       {
-        property_amenities: destination.hotel.property_amenities,
-        room_features: destination.hotel.room_features,
-        room_types: destination.hotel.room_types,
-        hotel_class: destination.hotel.hotel_class,
-        hotel_styles: destination.hotel.hotel_styles,
-        Languages: destination.hotel.Languages,
-        phone: destination.hotel.phone,
-        email: destination.hotel.email,
-        website: destination.hotel.website,
+        property_amenities: hotel.hotel.property_amenities,
+        room_features: hotel.hotel.room_features,
+        room_types: hotel.hotel.room_types,
+        hotel_class: hotel.hotel.hotel_class,
+        hotel_styles: hotel.hotel.hotel_styles,
+        Languages: hotel.hotel.Languages,
+        phone: hotel.hotel.phone,
+        email: hotel.hotel.email,
+        website: hotel.hotel.website,
       }
     );
 
@@ -170,5 +169,26 @@ export async function deleteDestination(hotelID) {
   } catch (error) {
     console.error("Error deleting hotel:", error);
     return { success: false, message: "Failed to deleting hotel" };
+  }
+}
+
+export async function getDestinationName(destinationID) {
+  try {
+    const token = sessionStorage.getItem("token");
+    if (!token) throw new Error("No token found");
+
+    // Gửi yêu cầu để lấy danh sách người dùng
+    const response = await axios.get(
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/${destinationID}`
+    );
+
+    const destination = response.data;
+    return {
+      id: destination.id,
+      name: destination.name,
+    };
+  } catch (error) {
+    console.error("Error fetching destination:", error);
+    return []; // Hoặc bạn có thể xử lý khác tùy ý
   }
 }

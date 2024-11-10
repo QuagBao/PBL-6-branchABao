@@ -29,25 +29,25 @@ export async function getDestinationById(destinationID) {
 
     // Gửi yêu cầu để lấy danh sách người dùng
     const response = await axios.get(
-      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/?id=${destinationID}`
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/${destinationID}`
     );
 
     const destination = response.data;
     return {
-      id: destination[0].id,
-      name: destination[0].name,
-      price_bottom: destination[0].price_bottom,
-      price_top: destination[0].price_top,
-      age: destination[0].age,
-      opentime: destination[0].opentime,
-      duration: destination[0].duration,
-      description: destination[0].description,
-      date_create: destination[0].date_create,
+      id: destination.id,
+      name: destination.name,
+      price_bottom: destination.price_bottom,
+      price_top: destination.price_top,
+      age: destination.age,
+      opentime: destination.opentime,
+      duration: destination.duration,
+      description: destination.description,
+      date_create: destination.date_create,
       address: {
-        city_id: destination[0].address.city_id,
-        district: destination[0].address.district,
-        ward: destination[0].address.ward,
-        street: destination[0].address.street,
+        city_id: destination.address.city_id,
+        district: destination.address.district,
+        ward: destination.address.ward,
+        street: destination.address.street,
       },
     };
   } catch (error) {

@@ -7,6 +7,7 @@ import {
   addHotel,
   updateHotel as updateHotelAPI,
   deleteHotel as deleteHotelAPI,
+  getDestinationName,
 } from "@/models/HotelManagementModel";
 
 export default function () {
@@ -21,6 +22,13 @@ export default function () {
     }
   };
 
+  const getDestination = async (destinationID) => {
+    console.log("Calling API with ID:", destinationID);
+    const destination = await getDestinationName(destinationID);
+    console.log(destination);
+    return destination;
+  };
+
   const getHotel = async (hotelID) => {
     const hotel = await getHotelById(hotelID);
     return hotel;
@@ -32,6 +40,7 @@ export default function () {
 
   const updateHotel = async (HotelID) => {
     const hotel = getHotel(HotelID);
+    console.log(hotel);
     actionStep.value = "update";
     return hotel;
   };
@@ -75,5 +84,6 @@ export default function () {
     confirmUpdate,
     deleteHotel,
     getHotel,
+    getDestination,
   };
 }

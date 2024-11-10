@@ -18,7 +18,7 @@
         </thead>
         <tbody>
           <tr v-for="hotel in hotels" :key="hotel.id">
-            <td>{{ hotel.id }}</td>
+            <td>{{ hotel.hotel.id }}</td>
             <td>{{ hotel.name }}</td>
             <td>{{ hotel.description }}</td>
             <td>
@@ -77,13 +77,13 @@
             <td>
               <button
                 class="action-button edit-button"
-                @click="showUpdateForm(hotel.id)"
+                @click="showUpdateForm(hotel.hotel.id)"
               >
                 Update Hotel
               </button>
               <button
                 class="action-button delete-button"
-                @click="deleteHotel(hotel.id)"
+                @click="deleteHotel(hotel.hotel.id)"
               >
                 Delete Hotel
               </button>
@@ -98,7 +98,12 @@
       <form @submit.prevent="submitAddHotel" class="form-style">
         <div class="form-group">
           <label>Destination ID:</label>
-          <input type="text" v-model="hotel.id" required />
+          <input
+            type="text"
+            v-model="hotel.id"
+            @blur="fetchDestinationName"
+            required
+          />
         </div>
         <div class="form-group">
           <label>Destination Name:</label>
@@ -114,7 +119,7 @@
         </div>
         <div class="form-group">
           <label>Room Type:</label>
-          <input type="text" v-model="hotel.hotel.room_features" />
+          <input type="text" v-model="hotel.hotel.room_types" />
         </div>
         <div class="form-group">
           <label>Hotel class:</label>
@@ -225,6 +230,7 @@ export default {
       confirmCreate,
       confirmUpdate,
       deleteHotel,
+      getDestination,
     } = HotelManagementController();
 
     const hotel = ref({
@@ -260,6 +266,17 @@ export default {
         id: "",
       },
     });
+
+    const fetchDestinationName = async () => {
+      try {
+        const destination = await getDestination(hotel.value.id);
+        if (destination && destination.name) {
+          hotel.value.name = destination.name;
+        }
+      } catch (error) {
+        hotel.value.name = "Destination not found";
+      }
+    };
 
     const loadHotels = async () => {
       hotels.value = await fetchHotels();
@@ -305,6 +322,7 @@ export default {
       submitUpdateHotel,
       cancelAction,
       deleteHotel,
+      fetchDestinationName,
     };
   },
 };
