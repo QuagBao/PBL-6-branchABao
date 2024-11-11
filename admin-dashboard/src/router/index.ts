@@ -41,6 +41,11 @@ const routes = [
     name: "RestaurantManagement",
     component: () => import("@/views/RestaurantManagement.vue"),
   },
+  {
+    path: "/tours",
+    name: "TourManagement",
+    component: () => import("@/views/TourManagement.vue"),
+  },
 ];
 
 const router = createRouter({

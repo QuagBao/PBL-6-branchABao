@@ -57,6 +57,15 @@
             <i class="icon-restaurant-management"></i> Restaurant Management
           </router-link>
         </li>
+        <li>
+          <router-link
+            to="/tours"
+            :class="{ active: isActive('/tours') }"
+            @click="handleNavigation"
+          >
+            <i class="icon-tour-management"></i> Tour Management
+          </router-link>
+        </li>
       </ul>
     </aside>
 
