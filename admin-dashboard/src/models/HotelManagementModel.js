@@ -153,13 +153,13 @@ export async function addHotel(hotel) {
   }
 }
 
-export async function deleteDestination(hotelID) {
+export async function deleteHotel(hotelID) {
   try {
     const token = sessionStorage.getItem("token");
     if (!token) throw new Error("No token found");
 
     const response = await axios.delete(
-      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/hotel/hotel/${hotelID}`
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/hotel/${hotelID}`
     );
 
     if (response.status === 200) {

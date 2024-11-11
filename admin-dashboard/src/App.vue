@@ -48,6 +48,15 @@
             <i class="icon-hotel-management"></i> Hotel Management
           </router-link>
         </li>
+        <li>
+          <router-link
+            to="/restaurants"
+            :class="{ active: isActive('/restaurants') }"
+            @click="handleNavigation"
+          >
+            <i class="icon-restaurant-management"></i> Restaurant Management
+          </router-link>
+        </li>
       </ul>
     </aside>
 
