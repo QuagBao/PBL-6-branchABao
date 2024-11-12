@@ -19,18 +19,26 @@ export default function () {
       const tours = await fetchToursAPI();
       return tours;
     } catch (error) {
-      console.error("Error fetching hotel:", error);
+      toast.error("Error fetching hotel:", error);
     }
   };
 
   const getDestination = async () => {
-    const destination = await getDestinationAPI();
-    return destination;
+    try {
+      const destination = await getDestinationAPI();
+      return destination;
+    } catch (error) {
+      toast.error("Error fetching destination");
+    }
   };
 
   const getTour = async (tourID) => {
-    const tour = await getTourById(tourID);
-    return tour;
+    try {
+      const tour = await getTourById(tourID);
+      return tour;
+    } catch (error) {
+      toast.error("Error fetching tour");
+    }
   };
 
   const createTour = () => {
@@ -38,22 +46,34 @@ export default function () {
   };
 
   const updateTour = async (TourID) => {
-    const tour = getTour(TourID);
-    actionStep.value = "update";
-    return tour;
+    try {
+      const tour = getTour(TourID);
+      actionStep.value = "update";
+      return tour;
+    } catch (error) {
+      toast.error("Error fetching tour");
+    }
   };
 
   const confirmCreate = async (tour) => {
-    await addTour(tour);
-    actionStep.value = "read";
-    fetchTours();
-    toast.success("Create a tour success");
+    try {
+      await addTour(tour);
+      actionStep.value = "read";
+      fetchTours();
+      toast.success("Create a tour success");
+    } catch (error) {
+      toast.error("Error add tour");
+    }
   };
   const confirmUpdate = async (tour) => {
-    await updateTourAPI(tour);
-    actionStep.value = "read";
-    fetchTours();
-    toast.success("Update a tour success");
+    try {
+      await updateTourAPI(tour);
+      actionStep.value = "read";
+      fetchTours();
+      toast.success("Update a tour success");
+    } catch (error) {
+      toast.error("Error update tour");
+    }
   };
 
   const deleteTour = async (tourID) => {

@@ -181,12 +181,10 @@
 <script>
 import DestinationManagementController from "@/controllers/DestinationManagementController";
 import { ref, onMounted } from "vue";
-import { useToast } from "vue-toastification";
 
 export default {
   setup() {
     const destinations = ref([]);
-    const toast = useToast();
     const images = ref([]);
 
     const {

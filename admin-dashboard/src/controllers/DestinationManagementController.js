@@ -1,6 +1,7 @@
 // src/controllers/DestinationManagementController.js
 
 import { ref } from "vue";
+import { useToast } from "vue-toastification";
 import {
   getDestinations as fetchDestinationsAPI,
   getDestinationById,
@@ -11,19 +12,24 @@ import {
 
 export default function () {
   const actionStep = ref("read");
+  const toast = useToast();
 
   const fetchDestinations = async () => {
     try {
       const destinations = await fetchDestinationsAPI();
       return destinations;
     } catch (error) {
-      console.error("Error fetching cities:", error);
+      toast.error("Error fetching destination:", error);
     }
   };
 
   const getDestination = async (destinationID) => {
-    const destination = await getDestinationById(destinationID);
-    return destination;
+    try {
+      const destination = await getDestinationById(destinationID);
+      return destination;
+    } catch (error) {
+      toast.error("Error fetching destination:", error);
+    }
   };
 
   const createDestination = () => {
@@ -31,21 +37,34 @@ export default function () {
   };
 
   const updateDestination = async (destinationID) => {
-    const destination = getDestination(destinationID);
-    actionStep.value = "update";
-    return destination;
+    try {
+      const destination = getDestination(destinationID);
+      actionStep.value = "update";
+      return destination;
+    } catch (error) {
+      toast.error("Error fetching destination");
+    }
   };
 
   const confirmCreate = async (destination, images) => {
-    await addDestination(destination, images);
-    actionStep.value = "read";
-    fetchDestinations();
+    try {
+      await addDestination(destination, images);
+      actionStep.value = "read";
+      fetchDestinations();
+      toast.success("Add Destination successfull");
+    } catch (error) {
+      toast.error("Error add destination");
+    }
   };
   const confirmUpdate = async (destination, images) => {
-    await updateDestinationAPI(destination, images);
-    console.log(destination);
-    actionStep.value = "read";
-    fetchDestinations();
+    try {
+      await updateDestinationAPI(destination, images);
+      actionStep.value = "read";
+      fetchDestinations();
+      toast.success("Update Destination successfull");
+    } catch (error) {
+      toast.error("Error update destination");
+    }
   };
 
   const deleteDestination = async (destinationID) => {
@@ -56,13 +75,13 @@ export default function () {
       try {
         const response = await deleteDestinationAPI(destinationID);
         if (response.success) {
-          console.log(response.message);
+          toast.success(response.message);
           // Trigger a data refresh instead of a page reload if possible
         } else {
-          console.error("Failed to delete destination:", response.message);
+          toast.error("Failed to delete destination:", response.message);
         }
       } catch (error) {
-        console.error("Error deleting destination:", error);
+        toast.error("Error deleting destination:", error);
       }
     }
   };

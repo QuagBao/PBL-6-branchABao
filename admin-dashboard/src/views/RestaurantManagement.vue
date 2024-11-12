@@ -130,12 +130,10 @@
 <script>
 import RestaurantManagementController from "@/controllers/RestaurantManagementController";
 import { ref, onMounted } from "vue";
-import { useToast } from "vue-toastification";
 
 export default {
   setup() {
     const restaurants = ref([]);
-    const toast = useToast();
 
     const {
       fetchRestaurants,

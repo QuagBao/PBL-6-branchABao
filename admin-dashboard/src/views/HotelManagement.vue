@@ -215,12 +215,10 @@
 <script>
 import HotelManagementController from "@/controllers/HotelManagementController";
 import { ref, onMounted } from "vue";
-import { useToast } from "vue-toastification";
 
 export default {
   setup() {
     const hotels = ref([]);
-    const toast = useToast();
 
     const {
       fetchHotels,

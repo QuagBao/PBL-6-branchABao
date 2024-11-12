@@ -54,8 +54,14 @@
                 Create user info
               </button>
               <button
+                class="action-button change-button"
+                @click="changeStatus(user.id)"
+              >
+                Change user status
+              </button>
+              <button
                 class="action-button delete-button"
-                @click="deleteInfo(user.id)"
+                @click="deleteInfo(user.userInfo.id)"
               >
                 Delete user info
               </button>
@@ -264,6 +270,7 @@ export default {
       deleteInfo,
       addUser,
       confirmAddUser,
+      changeStatus,
     } = UserManagementController();
 
     const currentUser = ref({
@@ -411,6 +418,7 @@ export default {
       showAddUserForm,
       submitAddUser,
       handleImageUpload,
+      changeStatus,
     };
   },
 };
@@ -520,7 +528,8 @@ h2 {
 
 .edit-button,
 .delete-button,
-.add-button {
+.add-button,
+.change-button {
   padding: 12px 24px; /* Tăng padding để nút dài hơn */
   color: white; /* Màu chữ */
   font-weight: bold; /* Chữ đậm */
@@ -557,6 +566,15 @@ h2 {
 
 .delete-button:hover {
   background-color: #c82333; /* Màu nền khi hover */
+  transform: scale(1.05); /* Tăng kích thước khi hover */
+}
+
+.change-button {
+  background-color: #0d5bec; /* Màu nền cho nút xóa */
+}
+
+.change-button:hover {
+  background-color: #13ebeb; /* Màu nền khi hover */
   transform: scale(1.05); /* Tăng kích thước khi hover */
 }
 

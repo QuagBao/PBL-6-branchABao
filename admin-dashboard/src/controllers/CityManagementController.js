@@ -1,6 +1,7 @@
 // src/controllers/CityManagementController.js
 
 import { ref } from "vue";
+import { useToast } from "vue-toastification";
 import {
   getCities as fetchCitiesAPI,
   getCityById,
@@ -11,19 +12,24 @@ import {
 
 export default function () {
   const actionStep = ref("read");
+  const toast = useToast();
 
   const fetchCities = async () => {
     try {
       const cities = await fetchCitiesAPI();
       return cities;
     } catch (error) {
-      console.error("Error fetching cities:", error);
+      toast.error("Error fetching cities:", error);
     }
   };
 
   const getCity = async (cityID) => {
-    const city = await getCityById(cityID);
-    return city;
+    try {
+      const city = await getCityById(cityID);
+      return city;
+    } catch (error) {
+      toast.error("Error fetching cities:", error);
+    }
   };
 
   const createCity = () => {
@@ -31,20 +37,34 @@ export default function () {
   };
 
   const updateCity = async (cityID) => {
-    const city = getCity(cityID);
-    actionStep.value = "update";
-    return city;
+    try {
+      const city = getCity(cityID);
+      actionStep.value = "update";
+      return city;
+    } catch (error) {
+      toast.error("Error fetching cities:", error);
+    }
   };
 
   const confirmCreate = async (city) => {
-    await addCity(city);
-    actionStep.value = "read";
-    window.location.reload();
+    try {
+      await addCity(city);
+      fetchCities();
+      actionStep.value = "read";
+      toast.success("Add City successfull");
+    } catch (error) {
+      toast.error("Error add city:", error);
+    }
   };
   const confirmUpdate = async (city) => {
-    await updateCityAPI(city);
-    actionStep.value = "read";
-    window.location.reload();
+    try {
+      await updateCityAPI(city);
+      fetchCities();
+      actionStep.value = "read";
+      toast.success("Update City successfull");
+    } catch (error) {
+      toast.error("Error update city:", error);
+    }
   };
 
   const deleteCity = async (cityID) => {
@@ -55,13 +75,13 @@ export default function () {
       try {
         const response = await deleteCityAPI(cityID);
         if (response.success) {
-          console.log(response.message);
+          toast.success(response.message);
           // Trigger a data refresh instead of a page reload if possible
         } else {
-          console.error("Failed to delete city:", response.message);
+          toast.error("Failed to delete city:", response.message);
         }
       } catch (error) {
-        console.error("Error deleting city:", error);
+        toast.error("Error deleting city:", error);
       }
     }
   };

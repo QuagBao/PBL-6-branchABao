@@ -1,6 +1,7 @@
 // src/controllers/HotelManagementController.js
 
 import { ref } from "vue";
+import { useToast } from "vue-toastification";
 import {
   getRestaurants as fetchRestaurantsAPI,
   getRestaurantById,
@@ -12,6 +13,7 @@ import {
 
 export default function () {
   const actionStep = ref("read");
+  const toast = useToast();
 
   const fetchRestaurants = async () => {
     try {
@@ -19,19 +21,26 @@ export default function () {
       return restaurants;
     } catch (error) {
       console.error("Error fetching restaurant:", error);
+      toast.error("Error fetching restaurant");
     }
   };
 
   const getDestination = async (destinationID) => {
-    console.log("Calling API with ID:", destinationID);
-    const destination = await getDestinationName(destinationID);
-    console.log(destination);
-    return destination;
+    try {
+      const destination = await getDestinationName(destinationID);
+      return destination;
+    } catch (error) {
+      toast.error("Error to get Destination");
+    }
   };
 
   const getRestaurant = async (restaurantID) => {
-    const restaurant = await getRestaurantById(restaurantID);
-    return restaurant;
+    try {
+      const restaurant = await getRestaurantById(restaurantID);
+      return restaurant;
+    } catch (error) {
+      toast.error("Error to get Restaurant");
+    }
   };
 
   const createRestaurant = () => {
@@ -39,21 +48,34 @@ export default function () {
   };
 
   const updateRestaurant = async (RestaurantID) => {
-    const restaurant = getRestaurant(RestaurantID);
-    console.log(restaurant);
-    actionStep.value = "update";
-    return restaurant;
+    try {
+      const restaurant = getRestaurant(RestaurantID);
+      actionStep.value = "update";
+      return restaurant;
+    } catch (error) {
+      console.error("Error to get Restaurant");
+    }
   };
 
   const confirmCreate = async (Restaurant) => {
-    await addRestaurant(Restaurant);
-    fetchRestaurants();
-    actionStep.value = "read";
+    try {
+      await addRestaurant(Restaurant);
+      fetchRestaurants();
+      actionStep.value = "read";
+      toast.success("Add Restaurant successfull");
+    } catch (error) {
+      toast.error("Error to add Restaurant");
+    }
   };
   const confirmUpdate = async (Restaurant) => {
-    await updateRestaurantAPI(Restaurant);
-    fetchRestaurants();
-    actionStep.value = "read";
+    try {
+      await updateRestaurantAPI(Restaurant);
+      fetchRestaurants();
+      actionStep.value = "read";
+      toast.success("Update Restaurant successfull");
+    } catch (error) {
+      toast.error("Error to update Restaurant");
+    }
   };
 
   const deleteRestaurant = async (RestaurantID) => {
@@ -64,13 +86,13 @@ export default function () {
       try {
         const response = await deleteRestaurantAPI(RestaurantID);
         if (response.success) {
-          console.log(response.message);
+          toast.success(response.message);
           // Trigger a data refresh instead of a page reload if possible
         } else {
-          console.error("Failed to delete Restaurant:", response.message);
+          toast.error("Failed to delete Restaurant:", response.message);
         }
       } catch (error) {
-        console.error("Error deleting Restaurant:", error);
+        toast.error("Error deleting Restaurant:", error);
       }
     }
   };

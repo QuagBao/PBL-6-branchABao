@@ -207,3 +207,28 @@ export async function addNewUser(user) {
     }
   }
 }
+
+export async function changeUserStatus(userID) {
+  try {
+    const token = sessionStorage.getItem("token");
+    if (!token) throw new Error("No token found");
+
+    const response = await axios.post(
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net//user/status_change/${userID}`, // sử dụng user.id làm userId
+      {
+        headers: {
+          accept: "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.status === 200) {
+      console.log("User change status successfully");
+      return { success: true, message: "User change status successfully" };
+    }
+  } catch (error) {
+    console.error("Error User change status:", error);
+    return { success: false, message: "Failed to User change status" };
+  }
+}

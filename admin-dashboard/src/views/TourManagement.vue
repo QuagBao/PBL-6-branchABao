@@ -183,13 +183,11 @@
 <script>
 import TourManagementController from "@/controllers/TourManagementController";
 import { ref, onMounted } from "vue";
-import { useToast } from "vue-toastification";
 
 export default {
   setup() {
     const tours = ref([]);
     const destinations = ref([]);
-    const toast = useToast();
 
     const {
       fetchTours,

@@ -87,12 +87,10 @@
 <script>
 import CityManagementController from "@/controllers/CityManagementController";
 import { ref, onMounted } from "vue";
-import { useToast } from "vue-toastification";
 
 export default {
   setup() {
     const cities = ref([]);
-    const toast = useToast();
 
     const {
       fetchCities,

@@ -1,6 +1,7 @@
 // src/controllers/HotelManagementController.js
 
 import { ref } from "vue";
+import { useToast } from "vue-toastification";
 import {
   getHotels as fetchHotelsAPI,
   getHotelById,
@@ -12,26 +13,33 @@ import {
 
 export default function () {
   const actionStep = ref("read");
+  const toast = useToast();
 
   const fetchHotels = async () => {
     try {
       const hotels = await fetchHotelsAPI();
       return hotels;
     } catch (error) {
-      console.error("Error fetching hotel:", error);
+      toast.error("Error fetching hotel:", error);
     }
   };
 
   const getDestination = async (destinationID) => {
-    console.log("Calling API with ID:", destinationID);
-    const destination = await getDestinationName(destinationID);
-    console.log(destination);
-    return destination;
+    try {
+      const destination = await getDestinationName(destinationID);
+      return destination;
+    } catch (error) {
+      toast.error("Error fetching Destination");
+    }
   };
 
   const getHotel = async (hotelID) => {
-    const hotel = await getHotelById(hotelID);
-    return hotel;
+    try {
+      const hotel = await getHotelById(hotelID);
+      return hotel;
+    } catch (error) {
+      toast.error("Error fetching Hotel");
+    }
   };
 
   const createHotel = () => {
@@ -39,21 +47,34 @@ export default function () {
   };
 
   const updateHotel = async (HotelID) => {
-    const hotel = getHotel(HotelID);
-    console.log(hotel);
-    actionStep.value = "update";
-    return hotel;
+    try {
+      const hotel = getHotel(HotelID);
+      actionStep.value = "update";
+      return hotel;
+    } catch (error) {
+      toast.error("Error fetching Hotel");
+    }
   };
 
   const confirmCreate = async (hotel) => {
-    await addHotel(hotel);
-    actionStep.value = "read";
-    fetchHotels();
+    try {
+      await addHotel(hotel);
+      actionStep.value = "read";
+      fetchHotels();
+      toast.success("Add Hotel successfull");
+    } catch (error) {
+      toast.error("Error add Hotel");
+    }
   };
   const confirmUpdate = async (hotel) => {
-    await updateHotelAPI(hotel);
-    actionStep.value = "read";
-    fetchHotels();
+    try {
+      await updateHotelAPI(hotel);
+      actionStep.value = "read";
+      fetchHotels();
+      toast.success("Update Hotel successfull");
+    } catch (error) {
+      toast.error("Error update Hotel");
+    }
   };
 
   const deleteHotel = async (hotelID) => {
@@ -64,13 +85,13 @@ export default function () {
       try {
         const response = await deleteHotelAPI(hotelID);
         if (response.success) {
-          console.log(response.message);
+          toast.success(response.message);
           // Trigger a data refresh instead of a page reload if possible
         } else {
-          console.error("Failed to delete destination:", response.message);
+          toast.error("Failed to delete hotel:", response.message);
         }
       } catch (error) {
-        console.error("Error deleting destination:", error);
+        toast.error("Error deleting hotel:", error);
       }
     }
   };

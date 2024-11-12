@@ -6,42 +6,71 @@ import {
   updateUserInfo,
   deleteUserInfo,
   addNewUser,
+  changeUserStatus,
 } from "@/models/UserManagementModel";
+import { useToast } from "vue-toastification";
 import { ref } from "vue";
 
 export default function () {
   const actionStep = ref("read");
+  const toast = useToast();
   const fetchUsers = async () => {
-    const users = await fetchUsersAPI();
-    return users;
+    try {
+      const users = await fetchUsersAPI();
+      return users;
+    } catch (error) {
+      toast.error("Error to get User");
+    }
   };
 
   const getUser = async (userID) => {
-    const user = await getUserById(userID);
-    return user;
+    try {
+      const user = await getUserById(userID);
+      return user;
+    } catch (error) {
+      toast.error("Error to get User");
+    }
   };
 
   const createInfo = async (userID) => {
-    const user = getUser(userID);
-    actionStep.value = "create";
-    return user;
+    try {
+      const user = getUser(userID);
+      actionStep.value = "create";
+      return user;
+    } catch (error) {
+      toast.error("Error to get User");
+    }
   };
 
   const updateInfo = async (userID) => {
-    const user = getUser(userID);
-    actionStep.value = "update";
-    return user;
+    try {
+      const user = getUser(userID);
+      actionStep.value = "update";
+      return user;
+    } catch (error) {
+      toast.error("Error to get User");
+    }
   };
 
   const confirmCreateInfo = async (user, uploadedImageFile) => {
-    await createUserInfo(user, uploadedImageFile);
-    actionStep.value = "read";
-    //window.location.reload();
+    try {
+      await createUserInfo(user, uploadedImageFile);
+      fetchUsers();
+      actionStep.value = "read";
+      toast.success("Create user info sucessfully");
+    } catch (error) {
+      toast.error("Error to create user info");
+    }
   };
   const confirmUpdateInfo = async (user, uploadedImageFile) => {
-    await updateUserInfo(user, uploadedImageFile);
-    actionStep.value = "read";
-    //window.location.reload();
+    try {
+      await updateUserInfo(user, uploadedImageFile);
+      fetchUsers();
+      actionStep.value = "read";
+      toast.success("Update user info sucessfully");
+    } catch (error) {
+      toast.error("Error to update user info");
+    }
   };
 
   const deleteInfo = async (userID) => {
@@ -49,8 +78,13 @@ export default function () {
       "Are you sure you want to delete this user information?"
     );
     if (confirmDelete) {
-      await deleteUserInfo(userID);
-      window.location.reload();
+      try {
+        await deleteUserInfo(userID);
+        fetchUsers();
+        toast.success("Delete user info sucessfully");
+      } catch (error) {
+        toast.error("Error to delete user info");
+      }
     }
   };
 
@@ -60,11 +94,33 @@ export default function () {
 
   const confirmAddUser = async (user) => {
     if (user.confirmPassword === user.password) {
-      await addNewUser(user);
-      actionStep.value = "read";
-      window.location.reload();
+      try {
+        await addNewUser(user);
+        actionStep.value = "read";
+        fetchUsers();
+        toast.success("Add user sucessfully");
+      } catch (error) {
+        toast.error("Error to add user");
+      }
     } else {
-      alert("Password and confirm password do not match. Please check again.");
+      toast.error(
+        "Password and confirm password do not match. Please check again."
+      );
+    }
+  };
+
+  const changeStatus = async (userID) => {
+    const confirmChange = window.confirm(
+      "Are you sure you want to change this user status?"
+    );
+    if (confirmChange) {
+      try {
+        await changeUserStatus(userID);
+        fetchUsers();
+        toast.success("Change user status sucessfully");
+      } catch (error) {
+        toast.error("Error to Change user status");
+      }
     }
   };
   return {
@@ -77,5 +133,6 @@ export default function () {
     deleteInfo,
     addUser,
     confirmAddUser,
+    changeStatus,
   };
 }
