@@ -9,10 +9,20 @@ import {
   updateDestination as updateDestinationAPI,
   deleteDestination as deleteDestinationAPI,
 } from "@/models/DestinationManagementModel";
+import { getCities as fetchCitiesAPI } from "@/models/CityManagementModel";
 
 export default function () {
   const actionStep = ref("read");
   const toast = useToast();
+
+  const fetchCities = async () => {
+    try {
+      const cities = await fetchCitiesAPI();
+      return cities;
+    } catch (error) {
+      toast.error("Error fetching cities:", error);
+    }
+  };
 
   const fetchDestinations = async () => {
     try {
@@ -95,5 +105,6 @@ export default function () {
     confirmUpdate,
     deleteDestination,
     getDestination,
+    fetchCities,
   };
 }

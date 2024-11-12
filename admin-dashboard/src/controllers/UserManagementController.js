@@ -8,6 +8,8 @@ import {
   addNewUser,
   changeUserStatus,
 } from "@/models/UserManagementModel";
+
+import { getCities as fetchCitiesAPI } from "@/models/CityManagementModel";
 import { useToast } from "vue-toastification";
 import { ref } from "vue";
 
@@ -20,6 +22,15 @@ export default function () {
       return users;
     } catch (error) {
       toast.error("Error to get User");
+    }
+  };
+
+  const fetchCities = async () => {
+    try {
+      const cities = await fetchCitiesAPI();
+      return cities;
+    } catch (error) {
+      toast.error("Error fetching cities:", error);
     }
   };
 
@@ -134,5 +145,6 @@ export default function () {
     addUser,
     confirmAddUser,
     changeStatus,
+    fetchCities,
   };
 }

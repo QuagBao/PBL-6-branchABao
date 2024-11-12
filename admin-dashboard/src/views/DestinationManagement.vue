@@ -22,7 +22,8 @@
             <td>{{ destination.description }}</td>
             <td v-if="destination.address">
               {{ destination.address.street }}, {{ destination.address.ward }},
-              {{ destination.address.district }}
+              {{ destination.address.district }},
+              {{ getCityName(destination.address.city_id) }}
             </td>
             <td>
               <button
@@ -79,8 +80,15 @@
           <input type="date" v-model="destination.date_create" />
         </div>
         <div class="form-group">
-          <label>City ID:</label>
-          <input type="number" v-model="destination.address.city_id" />
+          <label>City:</label>
+          <select
+            v-model="currentDestination.address.city_id"
+            class="form-control"
+          >
+            <option v-for="city in cities" :key="city.id" :value="city.id">
+              {{ city.name }}
+            </option>
+          </select>
         </div>
         <div class="form-group">
           <label>District:</label>
@@ -147,8 +155,15 @@
           <input type="date" v-model="currentDestination.date_create" />
         </div>
         <div class="form-group">
-          <label>City ID:</label>
-          <input type="number" v-model="currentDestination.address.city_id" />
+          <label>City:</label>
+          <select
+            v-model="currentDestination.address.city_id"
+            class="form-control"
+          >
+            <option v-for="city in cities" :key="city.id" :value="city.id">
+              {{ city.name }}
+            </option>
+          </select>
         </div>
         <div class="form-group">
           <label>District:</label>
@@ -186,6 +201,7 @@ export default {
   setup() {
     const destinations = ref([]);
     const images = ref([]);
+    const cities = ref([]);
 
     const {
       fetchDestinations,
@@ -195,6 +211,7 @@ export default {
       confirmCreate,
       confirmUpdate,
       deleteDestination,
+      fetchCities,
     } = DestinationManagementController();
 
     const destination = ref({
@@ -235,7 +252,16 @@ export default {
       destinations.value = await fetchDestinations();
     };
 
+    const loadCity = async () => {
+      cities.value = await fetchCities();
+    };
+    onMounted(loadCity);
     onMounted(loadDestinations);
+
+    const getCityName = (city_id) => {
+      const city = cities.value.find((c) => c.id === city_id);
+      return city ? city.name : "Unknown City";
+    };
 
     const showCreateForm = () => {
       createDestination();
@@ -284,6 +310,8 @@ export default {
       deleteDestination,
       handleImageUpload,
       images,
+      cities,
+      getCityName,
     };
   },
 };
@@ -576,5 +604,58 @@ button {
 button:hover {
   transform: scale(1.05);
   filter: brightness(90%);
+}
+.form-group {
+  position: relative;
+  width: 100%;
+}
+
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  padding-right: 35px; /* Thêm khoảng trống để chứa mũi tên */
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  background-color: #f5f6f7; /* Màu nền nhẹ giống Facebook */
+  font-size: 14px;
+  color: #333;
+  appearance: none;
+  -webkit-appearance: none; /* Đồng nhất trên các trình duyệt */
+  transition: border-color 0.3s, box-shadow 0.3s;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%239ca3af' d='M0 0l5 5 5-5H0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 10px 6px;
+}
+
+.form-group select:focus {
+  border-color: #1877f2; /* Màu xanh đậm Facebook khi focus */
+  box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+  outline: none;
+}
+
+/* CSS cho thanh cuộn màu xanh đậm */
+.form-group select::-webkit-scrollbar {
+  width: 10px;
+}
+
+.form-group select::-webkit-scrollbar-thumb {
+  background-color: #1877f2; /* Màu xanh dương đậm */
+  border-radius: 10px;
+}
+
+.form-group select::-webkit-scrollbar-track {
+  background: #e0e0e0; /* Màu nền cho track thanh cuộn */
+}
+
+/* Style cho các options bên trong select */
+.form-group select option {
+  padding: 10px;
+  color: #333;
+  background-color: #fff;
+}
+
+.form-group select option:hover {
+  background-color: #e4e6eb; /* Màu nền khi hover */
 }
 </style>
