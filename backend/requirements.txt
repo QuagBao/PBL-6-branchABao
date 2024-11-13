@@ -1,0 +1,9 @@
+passlib
+motor
+requests
+selenium
+python-jose
+PyJWT
+fastapi
+uvicorn
+python-multipart
