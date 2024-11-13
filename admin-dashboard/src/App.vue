@@ -277,4 +277,48 @@ export default {
   background-color: #f0f2f5;
   overflow-y: auto;
 }
+
+/* Đặt chung cho các icon */
+li i {
+  margin-right: 8px;
+  font-size: 16px;
+  display: inline-block;
+  font-weight: 900; /* Chọn độ dày phù hợp với loại icon */
+  font-family: "Font Awesome 5 Free";
+}
+
+/* Icon cho Dashboard */
+.icon-dashboard:before {
+  content: "\f015"; /* Unicode cho icon Home */
+}
+
+/* Icon cho User Management */
+.icon-user-management:before {
+  content: "\f007"; /* Unicode cho icon User */
+}
+
+/* Icon cho City Management */
+.icon-city-management:before {
+  content: "\f1ad"; /* Unicode cho icon Building */
+}
+
+/* Icon cho Destination Management */
+.icon-destination-management:before {
+  content: "\f5a0"; /* Unicode cho icon Map */
+}
+
+/* Icon cho Hotel Management */
+.icon-hotel-management:before {
+  content: "\f594"; /* Unicode cho icon Hotel */
+}
+
+/* Icon cho Restaurant Management */
+.icon-restaurant-management:before {
+  content: "\f2e7"; /* Unicode cho icon Utensils */
+}
+
+/* Icon cho Tour Management */
+.icon-tour-management:before {
+  content: "\f5b1"; /* Unicode cho icon Route */
+}
 </style>

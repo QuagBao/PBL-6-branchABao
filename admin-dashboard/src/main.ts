@@ -4,6 +4,7 @@ import router from "./router";
 import store from "./store";
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
+import "@fortawesome/fontawesome-free/css/all.css";
 
 const app = createApp(App);
 
