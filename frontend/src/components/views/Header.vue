@@ -231,5 +231,4 @@ body{
         text-align: right !important;
     }
 }
-
 </style>

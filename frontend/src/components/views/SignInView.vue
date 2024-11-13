@@ -10,8 +10,8 @@
       <p>Have an account?</p>
       
       <!-- Sign in form -->
-      <input type="text" v-model="username"
-        placeholder="Username" required />
+      <input type="email" v-model="username"
+        placeholder="Email" required />
       <input type="password" v-model="password"
         placeholder="Password" required />
 
@@ -60,12 +60,7 @@ export default {
         password: this.password,
         rememberMe: this.rememberMe,
       });
-      const result = signInVM.validate();
-      if (result.success) {
-        alert('Sign in successfully');
-      } else {
-        alert(result.message);
-      }
+      signInVM.validate();
     },
   },
 };

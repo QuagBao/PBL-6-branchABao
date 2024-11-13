@@ -1,8 +1,8 @@
 import axios from 'axios';
 export default function () {
   
-  const heartFull = new URL('@/assets/heart-full.svg', import.meta.url).href;
-  const heartEmpty = new URL('@/assets/heart-none.svg', import.meta.url).href;
+  const heartFull = new URL('@/assets/svg/heart-full.svg', import.meta.url).href;
+  const heartEmpty = new URL('@/assets/svg/heart-none.svg', import.meta.url).href;
   
   
 
