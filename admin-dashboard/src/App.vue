@@ -164,15 +164,15 @@ export default {
 .sidebar {
   position: fixed;
   left: 0;
-  top: 100px; /* Below the top navigation */
+  top: 50px; /* Below the top navigation */
   width: 15%;
-  height: calc(100vh - 100px);
-  background-color: #2e3b4e;
-  color: #fff;
+  height: calc(100vh - 50px);
+  background-color: #34495e; /* Darker background for contrast */
+  color: #ecf0f1; /* Lighter text color */
   display: flex;
   flex-direction: column;
   padding-top: 20px;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Shadow effect */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2); /* Enhanced shadow for depth */
 }
 
 .sidebar ul {
@@ -183,26 +183,32 @@ export default {
 
 .sidebar li {
   margin-bottom: 20px;
+  transition: transform 0.2s, color 0.2s;
+}
+
+.sidebar li:hover {
+  transform: translateX(5px);
+  color: #00acee; /* Twitter blue for a fresh look */
 }
 
 .sidebar a {
-  color: #cfd8dc; /* Default link color */
+  color: #bdc3c7; /* Subtle link color for improved readability */
   text-decoration: none;
   font-size: 18px;
   display: flex;
   align-items: center;
-  padding: 10px 15px; /* Added padding for better touch targets */
+  padding: 10px 15px;
   transition: background-color 0.3s, color 0.3s;
 }
 
 .active {
-  background-color: #ffffff; /* White background */
-  color: #007bff !important; /* Blue text color with !important to ensure it overrides default */
+  background-color: #1abc9c; /* Distinctive active color */
+  color: #ffffff !important; /* Ensure active text is fully visible */
 }
 
 .sidebar a:hover {
-  background-color: rgba(255, 255, 255, 0.1); /* Light hover effect */
-  color: #2215d4; /* Hover text color */
+  background-color: rgba(255, 255, 255, 0.2); /* Softer hover effect */
+  color: #1abc9c; /* Hover text color */
 }
 
 .icon-dashboard,
@@ -217,13 +223,13 @@ export default {
   top: 0;
   left: 0;
   right: 0;
-  height: 100px;
-  background-color: #f5f5f5;
+  height: 50px;
+  background: linear-gradient(90deg, #023b61, #025040); /* Gradient effect */
   display: flex;
   align-items: center;
   justify-content: flex-end;
   padding-right: 20px;
-  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2);
   z-index: 10;
 }
 
@@ -234,7 +240,7 @@ export default {
 }
 
 .welcome-message {
-  color: #007bff; /* Blue color for the welcome message */
+  color: #ecf0f3;
   font-weight: bold;
   margin-right: 10px;
 }
@@ -245,7 +251,10 @@ export default {
   border-radius: 5px;
   color: #fff;
   font-weight: bold;
-  transition: background-color 0.3s, transform 0.2s; /* Added transform for scaling */
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(3px);
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  transition: background-color 0.3s, transform 0.2s;
   cursor: pointer;
 }
 
@@ -255,7 +264,7 @@ export default {
 
 .login-button:hover {
   background-color: #379970;
-  transform: scale(1.05); /* Scale effect on hover */
+  transform: scale(1.05);
 }
 
 .logout-button {
@@ -264,61 +273,58 @@ export default {
 
 .logout-button:hover {
   background-color: #c82333;
-  transform: scale(1.05); /* Scale effect on hover */
+  transform: scale(1.05);
 }
 
+/* Main content area styling */
 .main-content {
   position: fixed;
-  top: 100px; /* Below the top navigation */
-  left: 15%; /* Aligned to the right of the sidebar */
-  width: 85%; /* Occupies the remaining 85% of the viewport width */
-  height: calc(100vh - 100px); /* Full height minus the top navigation */
-  padding: 20px;
-  background-color: #f0f2f5;
+  top: 50px;
+  left: 15%;
+  width: 85%;
+  height: calc(100vh - 50px);
+  padding: 0px;
+  background: linear-gradient(145deg, #f8f9fb, #e6e8eb);
+  border-radius: 0px;
   overflow-y: auto;
 }
 
-/* Đặt chung cho các icon */
+/* General icon styling */
 li i {
   margin-right: 8px;
   font-size: 16px;
   display: inline-block;
-  font-weight: 900; /* Chọn độ dày phù hợp với loại icon */
+  font-weight: 900;
   font-family: "Font Awesome 5 Free";
 }
 
-/* Icon cho Dashboard */
+/* Icons for different management sections */
 .icon-dashboard:before {
-  content: "\f015"; /* Unicode cho icon Home */
+  content: "\f015";
+  color: #007bff;
 }
-
-/* Icon cho User Management */
 .icon-user-management:before {
-  content: "\f007"; /* Unicode cho icon User */
+  content: "\f007";
+  color: #007bff;
 }
-
-/* Icon cho City Management */
 .icon-city-management:before {
-  content: "\f1ad"; /* Unicode cho icon Building */
+  content: "\f1ad";
+  color: #007bff;
 }
-
-/* Icon cho Destination Management */
 .icon-destination-management:before {
-  content: "\f5a0"; /* Unicode cho icon Map */
+  content: "\f5a0";
+  color: #007bff;
 }
-
-/* Icon cho Hotel Management */
 .icon-hotel-management:before {
-  content: "\f594"; /* Unicode cho icon Hotel */
+  content: "\f594";
+  color: #007bff;
 }
-
-/* Icon cho Restaurant Management */
 .icon-restaurant-management:before {
-  content: "\f2e7"; /* Unicode cho icon Utensils */
+  content: "\f2e7";
+  color: #007bff;
 }
-
-/* Icon cho Tour Management */
 .icon-tour-management:before {
-  content: "\f5b1"; /* Unicode cho icon Route */
+  content: "\f5b1";
+  color: #007bff;
 }
 </style>

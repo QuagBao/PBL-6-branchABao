@@ -1,11 +1,11 @@
 <template>
-  <div class="destination-management">
+  <div class="tour-management">
     <h2>Tour Management</h2>
     <div v-if="actionStep === 'read'" class="table-container">
-      <button class="add-destination-button" @click="showCreateForm">
+      <button class="action-button add-button" @click="showCreateForm">
         Add New Tour
       </button>
-      <table class="destination-table">
+      <table class="tour-table">
         <thead>
           <tr>
             <th>Id</th>
@@ -104,7 +104,11 @@
               -
             </button>
           </div>
-          <button type="button" @click="addDestination" class="add-button">
+          <button
+            type="button"
+            @click="addDestination"
+            class="action-button add-button"
+          >
             + Add Destination
           </button>
         </div>
@@ -164,7 +168,7 @@
           <button
             type="button"
             @click="addDestination_update"
-            class="add-button"
+            class="action-button add-button"
           >
             + Add Destination
           </button>
@@ -315,256 +319,95 @@ export default {
   font-family: Arial, sans-serif;
 }
 
-.destination-management {
+.tour-management {
   padding: 20px;
-  font-family: Arial, sans-serif;
-  background-color: #f9f9f9; /* Light background for the entire section */
-  border-radius: 8px; /* Rounded corners for the container */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+  min-height: 100vh;
+  overflow: auto;
+  background: linear-gradient(135deg, #0a015a, #03e6b8);
+  color: #ffffff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 h2 {
   margin-bottom: 20px;
-  color: #333; /* Darker color for better readability */
+  color: #ffffff; /* Màu chữ sáng hơn cho tiêu đề */
 }
 
+/* Bảng thông tin */
 .table-container {
   max-height: 60vh; /* Đặt chiều cao tối đa cho vùng chứa bảng */
   overflow-y: auto; /* Thêm thanh cuộn dọc */
-  background-color: #f9f9f9; /* Màu nền cho vùng chứa bảng */
+  background-color: rgba(255, 255, 255, 0.1);
   border-radius: 5px; /* Bo góc cho vùng chứa */
   padding: 10px; /* Khoảng cách bên trong */
 }
 
 /* Tùy chỉnh thanh cuộn */
 .table-container::-webkit-scrollbar {
-  width: 12px; /* Chiều rộng của thanh cuộn */
+  width: 12px;
 }
 
 .table-container::-webkit-scrollbar-track {
-  background: #f1f1f1; /* Màu nền của thanh cuộn */
+  background: #f1f1f1;
 }
 
 .table-container::-webkit-scrollbar-thumb {
-  background-color: #003366; /* Màu của thanh cuộn */
-  border-radius: 10px; /* Bo góc cho thanh cuộn */
+  background-color: #005b8c;
+  border-radius: 10px;
 }
 
 .table-container::-webkit-scrollbar-thumb:hover {
-  background-color: #005b8c; /* Màu khi hover lên thanh cuộn */
+  background-color: #0078d4;
 }
 
-.destination-table {
+.tour-table {
   width: 100%;
   margin-top: 30px;
   border-collapse: collapse;
-  margin-bottom: 20px; /* Khoảng cách giữa bảng và nút */
-  border: 1px solid #d1d1d1; /* Đường viền bảng */
-  border-radius: 8px; /* Bo góc cho bảng */
-  overflow: hidden; /* Ẩn các góc viền bên trong */
-}
-
-.destination-table th,
-.destination-table td {
-  padding: 12px 16px; /* Điều chỉnh khoảng cách bên trong */
-  text-align: left;
-  border-bottom: 1px solid #d1d1d1; /* Đường viền giữa các hàng */
-}
-
-.destination-table th {
-  background-color: #e8f0fe; /* Màu nền cho tiêu đề */
-  font-weight: bold;
-  color: #333; /* Màu chữ tối */
-  font-size: 14px; /* Kích thước chữ tiêu đề */
-}
-
-.destination-table tr {
-  transition: background-color 0.3s; /* Hiệu ứng chuyển màu nền khi hover */
-}
-
-.destination-table tr:hover {
-  background-color: #d1e1f5; /* Màu nền sáng khi hover */
-}
-
-.destination-table tr:nth-child(even) {
-  background-color: #f9f9f9; /* Màu nền cho hàng chẵn */
-}
-
-.destination-table tr:nth-child(odd) {
-  background-color: #ffffff; /* Màu nền cho hàng lẻ */
-}
-
-.destination-table td {
-  color: #444; /* Màu chữ tối cho dữ liệu */
-  font-size: 14px; /* Kích thước chữ dữ liệu */
-}
-
-.destination-table td:last-child {
-  border-bottom: none; /* Xóa đường viền cho ô cuối cùng */
-}
-
-.action-button {
-  border: none;
-  padding: 8px 12px;
-  margin: 0 5px;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.3s, transform 0.2s; /* Smooth transition for hover effects */
-}
-
-.edit-button,
-.delete-button,
-.add-button {
-  padding: 12px 24px; /* Tăng padding để nút dài hơn */
-  color: white; /* Màu chữ */
-  font-weight: bold; /* Chữ đậm */
-  font-size: 16px; /* Kích thước chữ lớn hơn */
-  border: none; /* Không có viền */
-  border-radius: 5px; /* Bo góc */
-  cursor: pointer; /* Con trỏ khi hover */
-  transition: background-color 0.3s, transform 0.2s; /* Smooth transition for hover effects */
-  width: 100%; /* Đặt chiều rộng nút 100% */
-  margin-bottom: 10px; /* Khoảng cách giữa các nút */
-}
-
-.edit-button {
-  background-color: #007bff; /* Màu nền cho nút chỉnh sửa */
-}
-
-.edit-button:hover {
-  background-color: #0056b3; /* Màu nền khi hover */
-  transform: scale(1.05); /* Tăng kích thước khi hover */
-}
-
-.add-button {
-  background-color: #28a745; /* Màu nền cho nút chỉnh sửa */
-}
-
-.add-button:hover {
-  background-color: #02270b; /* Màu nền khi hover */
-  transform: scale(1.05); /* Tăng kích thước khi hover */
-}
-
-.delete-button {
-  background-color: #dc3545; /* Màu nền cho nút xóa */
-}
-
-.delete-button:hover {
-  background-color: #c82333; /* Màu nền khi hover */
-  transform: scale(1.05); /* Tăng kích thước khi hover */
-}
-
-.add-destination-button {
-  padding: 10px 20px;
-  background-color: #28a745; /* Màu nền */
-  width: 30%;
-  color: white; /* Màu chữ */
-  border: none; /* Không có viền */
-  border-radius: 8px; /* Bo góc nhẹ */
-  cursor: pointer; /* Con trỏ khi hover */
-  transition: background-color 0.3s, transform 0.3s, box-shadow 0.3s; /* Smooth transition for hover effects */
-  font-weight: bold; /* Chữ đậm */
-  font-size: 16px; /* Kích thước chữ */
-  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1), 0 2px 4px rgba(0, 0, 0, 0.06); /* Đổ bóng thêm tầng */
-}
-
-.add-destination-button:hover {
-  background-color: #218838; /* Màu nền khi hover */
-  transform: scale(1.07); /* Tăng kích thước khi hover */
-  box-shadow: 0 12px 18px rgba(0, 0, 0, 0.15), 0 4px 8px rgba(0, 0, 0, 0.08); /* Đổ bóng rõ hơn khi hover */
-}
-
-/* Center form container */
-.form-container {
-  width: 80%;
-  margin: 20px auto;
-  padding: 20px;
-  background-color: #f9f9f9;
+  margin-bottom: 20px;
+  border: 1px solid #d1d1d1;
   border-radius: 8px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
-  font-family: Arial, sans-serif;
+  overflow: hidden;
 }
 
-/* Form layout */
-.form-style {
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
+.tour-table th,
+.tour-table td {
+  padding: 12px 16px;
+  text-align: left;
+  border-bottom: 1px solid #d1d1d1;
 }
 
-/* Form groups for label and input alignment */
-.form-group {
-  display: flex;
-  margin-right: 10px;
-  flex-direction: column;
-  margin-bottom: 10px;
-}
-
-/* Labels */
-.form-group label {
-  font-weight: 700;
-  color: #333;
-  margin-bottom: 5px;
-}
-
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="number"],
-input[type="time"],
-input[type="datetime-local"],
-textarea,
-select {
-  width: 100%;
-  padding: 12px;
+.tour-table th {
+  background-color: rgba(255, 255, 255, 0.15);
+  font-weight: bold;
+  color: #ffffff;
   font-size: 14px;
-  color: #333;
-  border: 1px solid #d1d5db; /* Light border */
-  border-radius: 6px; /* Rounded corners */
-  background-color: #f3f4f6; /* Light background for inputs */
-  outline: none;
-  transition: border-color 0.2s ease;
 }
 
-/* Placeholder color for inputs */
-input[type="text"]::placeholder,
-input[type="email"]::placeholder,
-input[type="password"]::placeholder,
-input[type="number"]::placeholder,
-input[type="time"]::placeholder,
-input[type="datetime-local"]::placeholder,
-textarea::placeholder {
-  color: #9ca3af;
+.tour-table tr:hover {
+  background-color: rgba(255, 255, 255, 0.15);
 }
 
-/* Focus effect for input fields */
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="password"]:focus,
-input[type="number"]:focus,
-input[type="time"]:focus,
-input[type="datetime-local"]:focus,
-textarea:focus,
-select:focus {
-  border-color: #0078d4; /* Microsoft blue color on focus */
-  background-color: #ffffff; /* White background on focus */
+.tour-table tr:nth-child(even) {
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
-/* Dropdown appearance */
-select {
-  appearance: none; /* Remove default dropdown icon */
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%239ca3af' d='M0 0l5 5 5-5H0z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  background-size: 10px 6px;
+.tour-table tr:nth-child(odd) {
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
-/* Style for the container of each destination selection */
+.tour-table td {
+  color: #ffffff;
+  font-size: 14px;
+}
+
+/* Ensure the form container takes up 100% width */
 .destination-group {
   display: flex;
   align-items: center;
   gap: 10px;
   margin-bottom: 10px;
+  width: 100%; /* Ensure it takes full width of the parent */
 }
 
 /* Style for dropdown with custom scroll and font size */
@@ -599,7 +442,7 @@ select {
   background: #f3f4f6;
 }
 
-/* Limit dropdown to display maximum 10 items before scrolling */
+/* Limit dropdown to display a maximum of 10 items before scrolling */
 .destination-group select option {
   max-height: 3.5vh; /* Approximate height per item for visibility */
 }
@@ -625,53 +468,187 @@ select {
   background-color: #c9302c; /* Darker red on hover */
 }
 
-/* Textarea resizing */
-textarea {
-  resize: vertical;
-  height: 80px;
-  padding: 12px;
-  font-size: 14px;
+/* Nút hành động */
+.action-button {
+  padding: 8px 12px;
+  margin: 0 5px;
+  border-radius: 5px;
+  color: #ffffff;
+  font-weight: bold;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
-/* Button styling */
+.edit-button {
+  background-color: #0078d4;
+}
+
+.edit-button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.add-button {
+  background-color: #28a745;
+}
+
+.add-button:hover {
+  background-color: #218838;
+  transform: scale(1.05);
+}
+
+.delete-button {
+  background-color: #dc3545;
+}
+
+.delete-button:hover {
+  background-color: #c82333;
+  transform: scale(1.05);
+}
+
+/* Form */
+.form-container {
+  width: 60%;
+  margin: 20px auto;
+  padding: 20px;
+  background: linear-gradient(135deg, #0a015a, #03e6b8);
+  border-radius: 6px;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: #eef1f5;
+  margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="time"],
+input[type="date"],
+input[type="file"],
+textarea {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
+  color: #333;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background-color: #f3f4f6;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+input[type="text"]::placeholder,
+input[type="email"]::placeholder,
+input[type="password"]::placeholder,
+input[type="number"]::placeholder,
+input[type="time"]::placeholder,
+input[type="date"]::placeholder,
+input[type="file"]::placeholder,
+textarea::placeholder {
+  color: #9ca3af;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+input[type="file"]:focus,
+textarea:focus {
+  border-color: #1877f2;
+}
+
+/* Nút trong form */
 button {
   padding: 10px 16px;
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   border: none;
-  border-radius: 6px;
+  border-radius: 4px;
   cursor: pointer;
-  transition: transform 0.2s ease, filter 0.2s ease;
-  width: 40%;
+  transition: background-color 0.2s ease;
+  width: 48%;
 }
 
-/* Button container */
-.button-group {
-  display: flex;
-  gap: 10px;
-  justify-content: flex-end;
-  margin-top: 1rem;
-}
-
-/* Button colors */
 .create-button {
-  background-color: #28a745; /* Green for create */
-  color: white;
+  background-color: #42b72a;
+  color: #ffffff;
 }
 
 .update-button {
-  background-color: #0078d4; /* Microsoft blue for update */
-  color: white;
+  background-color: #1877f2;
+  color: #ffffff;
 }
 
 .cancel-button {
-  background-color: #dc3545; /* Red for cancel */
-  color: white;
+  background-color: #e41e1e;
+  color: #ffffff;
 }
 
-/* Hover effect for buttons */
 button:hover {
-  transform: scale(1.05);
-  filter: brightness(90%);
+  background-color: #333333;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.form-group select {
+  width: 100%;
+  padding: 10px;
+  padding-right: 35px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  background-color: #f5f6f7;
+  font-size: 14px;
+  color: #333;
+  appearance: none;
+  -webkit-appearance: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%239ca3af' d='M0 0l5 5 5-5H0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 10px 6px;
+}
+
+.form-group select:focus {
+  border-color: #1877f2;
+  box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+  outline: none;
+}
+
+.form-group select::-webkit-scrollbar {
+  width: 10px;
+}
+
+.form-group select::-webkit-scrollbar-thumb {
+  background-color: #1877f2;
+  border-radius: 10px;
+}
+
+.form-group select::-webkit-scrollbar-track {
+  background: #e0e0e0;
+}
+
+.form-group select option {
+  padding: 10px;
+  color: #333;
+  background-color: #fff;
+}
+
+.form-group select option:hover {
+  background-color: #e4e6eb;
 }
 </style>
