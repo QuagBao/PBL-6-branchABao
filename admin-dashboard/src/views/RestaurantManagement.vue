@@ -23,7 +23,8 @@
             <td>{{ restaurant.description }}</td>
             <td>
               {{ restaurant.address.street }}, {{ restaurant.address.ward }},
-              {{ restaurant.address.district }}
+              {{ restaurant.address.district }},
+              {{ getCityName(restaurant.address.city_id) }}
             </td>
             <td>
               <div>
@@ -75,7 +76,7 @@
         </div>
         <div class="form-group">
           <label>Destination Name:</label>
-          <input type="text" v-model="restaurant.name" required />
+          <input type="text" v-model="restaurant.name" required disabled />
         </div>
         <div class="form-group">
           <label>Cuisine:</label>
@@ -99,11 +100,16 @@
       <form @submit.prevent="submitUpdateRestaurant" class="form-style">
         <div class="form-group">
           <label>Destination ID:</label>
-          <input type="text" v-model="currentRestaurant.id" required />
+          <input type="text" v-model="currentRestaurant.id" required disabled />
         </div>
         <div class="form-group">
           <label>Destination Name:</label>
-          <input type="text" v-model="currentRestaurant.name" required />
+          <input
+            type="text"
+            v-model="currentRestaurant.name"
+            required
+            disabled
+          />
         </div>
         <div class="form-group">
           <label>Cuisine:</label>
@@ -134,6 +140,7 @@ import { ref, onMounted } from "vue";
 export default {
   setup() {
     const restaurants = ref([]);
+    const cities = ref([]);
 
     const {
       fetchRestaurants,
@@ -144,6 +151,7 @@ export default {
       confirmUpdate,
       deleteRestaurant,
       getDestination,
+      fetchCities,
     } = RestaurantManagementController();
 
     const restaurant = ref({
@@ -177,11 +185,21 @@ export default {
       }
     };
 
+    const loadCity = async () => {
+      cities.value = await fetchCities();
+    };
+    onMounted(loadCity);
+
     const loadRestaurants = async () => {
       restaurants.value = await fetchRestaurants();
     };
 
     onMounted(loadRestaurants);
+
+    const getCityName = (city_id) => {
+      const city = cities.value.find((c) => c.id === city_id);
+      return city ? city.name : "Unknown City";
+    };
 
     const showCreateForm = () => {
       createRestaurant();
@@ -222,6 +240,8 @@ export default {
       cancelAction,
       deleteRestaurant,
       fetchDestinationName,
+      cities,
+      getCityName,
     };
   },
 };

@@ -23,7 +23,8 @@
             <td>{{ hotel.description }}</td>
             <td>
               {{ hotel.address.street }}, {{ hotel.address.ward }},
-              {{ hotel.address.district }}
+              {{ hotel.address.district }},
+              {{ getCityName(hotel.address.city_id) }}
             </td>
             <td>
               <div>
@@ -107,7 +108,7 @@
         </div>
         <div class="form-group">
           <label>Destination Name:</label>
-          <input type="text" v-model="hotel.name" required />
+          <input type="text" v-model="hotel.name" required disabled />
         </div>
         <div class="form-group">
           <label>Property Amenities:</label>
@@ -159,11 +160,11 @@
       <form @submit.prevent="submitUpdateHotel" class="form-style">
         <div class="form-group">
           <label>Destination ID:</label>
-          <input type="text" v-model="currentHotel.id" required />
+          <input type="text" v-model="currentHotel.id" required disabled />
         </div>
         <div class="form-group">
           <label>Destination Name:</label>
-          <input type="text" v-model="currentHotel.name" required />
+          <input type="text" v-model="currentHotel.name" required disabled />
         </div>
         <div class="form-group">
           <label>Property Amenities:</label>
@@ -219,6 +220,7 @@ import { ref, onMounted } from "vue";
 export default {
   setup() {
     const hotels = ref([]);
+    const cities = ref([]);
 
     const {
       fetchHotels,
@@ -229,6 +231,7 @@ export default {
       confirmUpdate,
       deleteHotel,
       getDestination,
+      fetchCities,
     } = HotelManagementController();
 
     const hotel = ref({
@@ -276,11 +279,21 @@ export default {
       }
     };
 
+    const loadCity = async () => {
+      cities.value = await fetchCities();
+    };
+    onMounted(loadCity);
+
     const loadHotels = async () => {
       hotels.value = await fetchHotels();
     };
 
     onMounted(loadHotels);
+
+    const getCityName = (city_id) => {
+      const city = cities.value.find((c) => c.id === city_id);
+      return city ? city.name : "Unknown City";
+    };
 
     const showCreateForm = () => {
       createHotel();
@@ -321,6 +334,8 @@ export default {
       cancelAction,
       deleteHotel,
       fetchDestinationName,
+      cities,
+      getCityName,
     };
   },
 };

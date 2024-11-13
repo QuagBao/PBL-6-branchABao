@@ -10,10 +10,20 @@ import {
   deleteRestaurant as deleteRestaurantAPI,
   getDestinationName,
 } from "@/models/RestaurantManagementModel";
+import { getCities as fetchCitiesAPI } from "@/models/CityManagementModel";
 
 export default function () {
   const actionStep = ref("read");
   const toast = useToast();
+
+  const fetchCities = async () => {
+    try {
+      const cities = await fetchCitiesAPI();
+      return cities;
+    } catch (error) {
+      toast.error("Error fetching cities:", error);
+    }
+  };
 
   const fetchRestaurants = async () => {
     try {
@@ -107,5 +117,6 @@ export default function () {
     deleteRestaurant,
     getRestaurant,
     getDestination,
+    fetchCities,
   };
 }
