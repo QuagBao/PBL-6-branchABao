@@ -292,11 +292,6 @@ button {
   pointer-events: auto; /* Đảm bảo có thể tương tác với menu */
 }
 
-
-
-
-
-
 .menu-options {
   display: flex;
   flex-direction: column;

@@ -51,7 +51,7 @@
       </div>
   
       <div class="container">
-        <div class="left-panel">
+        <div class="left-panel"> 
           <div class="filter-section">
             <div
               class="filter-item"

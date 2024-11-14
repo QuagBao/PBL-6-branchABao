@@ -22,7 +22,7 @@
       </div>
       <div class="line-1"></div>
       <div class="flex-row-bf">
-        <button class="name-of-destination">{{ cityDetails?.name }}</button>
+        <button class="name-of-destination">HaNoi</button>
         <button class="thing-to-do">Things to do</button>
         <button class="restaurant">Restaurant</button>
         <button class="hotel">Resort & Hotel</button>
@@ -34,8 +34,8 @@
         <div class="line-4"></div>
       </div>
       <div class="flex-row">
-        <div class="image-list">
-          <img :src="currentImage" alt="Current City Image" class="city-image" />
+        <div class="image-list" v-for="image in images" :key="image.id">
+          <img :src="currentImage" :alt="`City ${image.id}`" class="city-image">
         </div>
         <button class="back" @click="prevImage"></button>
         <button class="forward" @click="nextImage"></button>
@@ -50,19 +50,13 @@
         </div>
         <span class="discover">Discover</span>
       </div>
-      <div v-if="isLoading">
-        <p>Data is loading</p>
+
+      <span class="destination">Ha Noi</span>
+      <span class="description">{{ truncatedDescription }}</span>
+      <div class="read-more" @click="toggleReadMore">
+        <button class="line-9">{{ isReadMore ? 'Read less ▲' : 'Read more ▼' }}</button>
       </div>
-      <div v-else>
-        <span class="destination">{{ cityDetails.name }}</span>
-        <span class="description">{{ isReadMore ? fullDescription : getTruncatedDescription }}</span>
-        <div class="read-more" @click="toggleReadMore">
-          <span class="line-9">{{ isReadMore ? 'Read less ▲' : 'Read more ▼' }}</span>
-        
-        </div>
-      </div>
-      
-      <span class="filter-suggestion">Characteristic of {{ cityDetails?.name }}</span>
+      <span class="filter-suggestion">Characteristic of Ha Noi</span>
       <span class="option-category">Select a category to filter suggestion</span>
       <div class="slider">
         <button 
@@ -78,9 +72,9 @@
       
       <span class="thing-to-do-1">Things to do</span>
       <div class="flex-row-cff">
-        <div v-for="(item, index) in destinations" :key="index" class="picture">
+        <div v-for="(item, index) in entertainments" :key="index" class="picture">
           
-          <img :src="getImageUrl(item.images[0])" alt="Destination Image" class="entertainment-img" />
+          <img :src="getImageUrl(item.imageUrl)" alt="Entertainment Image" class="entertainment-img" />
 
         
           <div class="heart-button" @click="toggleLikeStatus(item.id)">
@@ -125,9 +119,9 @@
 
       <span class="hotel-1">Resort & Hotel</span>
       <div class="flex-row-cff2">
-        <div v-for="(item, index) in hotels" :key="index" class="picture">
+        <div v-for="(item, index) in entertainments" :key="index" class="picture">
           
-          <img :src="getImageUrl(item.imgUrl[0])" alt="Entertainment Image" class="entertainment-img" />
+          <img :src="getImageUrl(item.imageUrl)" alt="Entertainment Image" class="entertainment-img" />
 
         
           <div class="heart-button" @click="toggleLikeStatus(item.id)">
@@ -150,40 +144,19 @@
   </template>
 
 <script setup>
-import { useRoute } from 'vue-router';
+import { ref, computed, onMounted } from 'vue';
 import destinationViewModel from '../viewModels/destinationViewModel';
 
-const route = useRoute();
-const cityId = route.params.id; // Lấy cityId từ route params
-
 const {
-  isMenuVisible,
-  toggleMenu,
-  currentImage,
-  nextImage,
-  prevImage,
-  isHeartFilled,
-  toggleHeart,
-  getTruncatedDescription,
-  toggleReadMore,
-  isReadMore,
-  fullDescription,
-  buttons,
-  selectedIndices,
-  selectButton,
-  images,
-  entertainments,
-  generateStars,
-  getImageUrl,
-  liked,
-  toggleLikeStatus,
-  heartFull,
-  heartEmpty,
-  cityDetails,
-  isLoading,
-  destinations,
-  hotels
-} = destinationViewModel(cityId);
+  images, currentImage, nextImage, prevImage,
+  isMenuVisible, toggleMenu,
+  isHeartFilled, toggleHeart,
+  truncatedDescription, toggleReadMore, isReadMore,
+  buttons, selectedIndices, selectButton,
+  entertainments, generateStars, getImageUrl,
+  liked, toggleLikeStatus,
+  heartFull, heartEmpty,
+} = destinationViewModel();
 
 </script>
 
@@ -542,23 +515,60 @@ button {
 
 .image-list {
   position: absolute;
+  width: 95%;
+  height: 100%;
+  top: 0;
+  left: 2.4%;
+  background: black no-repeat center;
+  background-size: cover;
+  z-index: 19;
+  border-radius: 20px;
+}
+
+.frame {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: nowrap;
+  gap: 8px;
+  position: relative;
+  width: 5.6%;
+  margin: 92% 0 0 39%;
+  padding: 8px 12px 8px 12px;
+  z-index: 24;
+  border-radius: 50px;
+  backdrop-filter: blur(20px);
+}
+
+.platter {
+  flex-shrink: 0;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 25;
+  overflow: hidden;
+  border-radius: 100px;
+}
+
+.ultrathin {
+  position: absolute;
   width: 100%;
   height: 100%;
   top: 0;
   left: 0;
-  background: black center / cover no-repeat;
-  z-index: 19;
-  border-radius: 20px;
-  overflow: hidden;
+  background: rgba(189, 224, 254, 0.75);
+  z-index: 26;
+  backdrop-filter: blur(25px);
 }
 
 .city-image {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* Maintains aspect ratio and fills container */
-  image-rendering: high-quality; /* Enhances image quality */
+  object-fit: cover;
+  border-radius: 20px;
 }
-
 
 /* Điều chỉnh nút back và forward */
 .back, .forward {
@@ -573,7 +583,7 @@ button {
   position: absolute;
   top: 50%; 
   transform: translateY(-50%);
-  left: 0%; 
+  left: 2%; 
   background: url('@/assets/back.svg') center; /* Hình nền cho nút back */
   z-index: 21;
 }
@@ -582,7 +592,7 @@ button {
   position: absolute;
   top: 50%; 
   transform: translateY(-50%);
-  right: 0%; 
+  right: 2%; 
   background: url('@/assets/forward.svg') center; /* Hình nền cho nút forward */
   z-index: 22;
 }
@@ -766,7 +776,6 @@ button {
     overflow-x: auto; 
     white-space: nowrap; 
     padding: 10px; 
-    
     border-radius: 15px; 
     max-width: 100%; 
 }

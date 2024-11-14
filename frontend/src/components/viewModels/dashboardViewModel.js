@@ -30,7 +30,7 @@ const filteredCities = computed(() => {
 });
 
 const visibleCities = computed(() => {
-  return filteredCities.value.slice(currentIndex.value, currentIndex.value + 8);
+  return filteredCities.value.slice(currentIndex.value, currentIndex.value + 6);
 });
 
 const prevSlide = () => {
@@ -81,7 +81,7 @@ const loadTours = async () => {
 const currentIndex_tour = ref(0);
 
 const visibleTours = computed(() => {
-  return tours.value.slice(currentIndex_tour.value, currentIndex_tour.value + 3);
+  return tours.value.slice(currentIndex_tour.value, currentIndex_tour.value + 12);
 });
 
 const prevTour = () => {
@@ -96,9 +96,9 @@ const nextTour = () => {
 
 // Hàm tạo sao dựa trên rating
 const generateStars = (rating) => {
-  const fullStar = new URL('@/assets/star_full.svg', import.meta.url).href;
-  const halfStar = new URL('@/assets/star_half.svg', import.meta.url).href;
-  const emptyStar = new URL('@/assets/star_none.svg', import.meta.url).href;
+  const fullStar = new URL('@/assets/svg/star_full.svg', import.meta.url).href;
+  const halfStar = new URL('@/assets/svg/star_half.svg', import.meta.url).href;
+  const emptyStar = new URL('@/assets/svg/star_none.svg', import.meta.url).href;
 
   let stars = [];
   for (let i = 1; i <= 5; i++) {

@@ -122,7 +122,7 @@
 
           <!-- Nút tìm kiếm với icon -->
             <button class="search-button">
-              <img src="@/assets/search.svg" alt="Search" />
+              <img src="@/assets/svg/search.svg" alt="Search" />
             </button>
           </div>
         </div>        

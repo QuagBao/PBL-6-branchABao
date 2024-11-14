@@ -81,12 +81,10 @@
               <span v-for="tag in item.tag" :key="tag" class="tag">{{ tag }}</span>
             </div>
             <div class="line-10"></div>
-            <span class="item-description">{{ truncatedDescription(item.description) }}</span>
+            <span class="item-description">{{ item.description }}</span>
           </div>
         </div>
-      </div>
-      
-      
+      </div> 
     </div>
   </template>
 
@@ -107,7 +105,6 @@ const {
   toggleLikeStatus,
   heartFull,
   heartEmpty,
-  truncatedDescription,
 } = destinationViewModel();
 
 
@@ -590,7 +587,7 @@ button.selected {
 .picture {
   position: relative;
   width: 25%;
-  height: 500px;
+  height: calc(3 * 25%);
   margin: 0 6% 12% 0;
   border-radius: 20px;
   overflow: hidden;
@@ -636,7 +633,7 @@ button.selected {
 /* Styling for the entertainment image */
 .entertainment-img {
   width: 100%;
-  height: 50%;
+  height: 70%;
   object-fit: cover;
   border-radius: 20px 20px 0 0;
   flex-shrink: 0;
@@ -703,7 +700,7 @@ button.selected {
   color: #003366;
   padding: 5px 5px;
   margin: 2px 0;
-  font-size: 14px;
+  font-size: 1vw;
   border-radius: 5px;
 }
 

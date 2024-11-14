@@ -63,7 +63,7 @@ export class RatingModel {
   
   export const mockComments = [
     new Comment(
-        new URL('@/assets/personal.svg', import.meta.url).href,
+        new URL('@/assets/svg/personal.svg', import.meta.url).href,
       'Linh L',
       3,
       'Chuyến đi chơi siêu đáng iu',
@@ -72,7 +72,7 @@ export class RatingModel {
       ''
     ),
     new Comment(
-      new URL('@/assets/personal.svg', import.meta.url).href,
+      new URL('@/assets/images/ava.png', import.meta.url).href,
       'Dương L',
       5,
       'Chuyến đi chơi hấp dẫn',

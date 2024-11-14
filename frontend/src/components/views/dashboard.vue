@@ -82,12 +82,7 @@
             :key="city.id"
             class="grid-item"
           >
-            <img 
-              v-if="city.images && city.images.length > 0" 
-              :src="city.images[0]" 
-              :alt="city.name"
-              @click="navigateToDestination(goToDestination(city.id))" 
-            />
+            <img v-if="city.imageUrl" :src="city.imageUrl" :alt="city.name" />
             <p class="city-name">{{ city.name }}</p>
           </div>
         </div>
@@ -166,11 +161,7 @@
 </template>
 
 <script setup>
-import { useRouter } from 'vue-router';
 import dashboardViewModel from '../viewModels/dashboardViewModel.js';
-
-// Sử dụng useRouter để lấy đối tượng router trong component
-const router = useRouter();
 
 const {
   activeButton,
@@ -190,12 +181,8 @@ const {
   isMenuVisible,
   toggleMenu,
   generateStars,
-  goToDestination, // vẫn import để lấy id
 } = dashboardViewModel;
 
-const navigateToDestination = (id) => {
-  window.location.assign(`/destination/${id}`);
-};
 </script>
 
 

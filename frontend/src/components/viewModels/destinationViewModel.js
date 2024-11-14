@@ -16,6 +16,10 @@ export default function (cityId) {
   const hotels = ref([]);
 
 
+  watch(images, (newImages) => {
+    console.log('Images updated:', images);
+  });
+
   const toggleMenu = () => {
     isMenuVisible.value = !isMenuVisible.value;
   };
@@ -23,7 +27,10 @@ export default function (cityId) {
   const toggleHeart = () => {
     isHeartFilled.value = !isHeartFilled.value;
   };
-
+  const imageList = computed(() => {
+    // Get the images array from cityDetails, or return an empty array if not present
+      return cityDetails.value?.images?.map(image => image.url) || [];
+  });
   const currentImage = computed(() => {
     const images = cityDetails.value?.images || [];
     if (!images.length || currentIndex.value < 0 || currentIndex.value >= images.length) {
@@ -60,8 +67,10 @@ export default function (cityId) {
     destinations.value = await model.fetchDestinations(cityId);
     entertainments.value = await model.fetchEntertainments();
     console.log(destinations.value);
-    
-
+    console.log(cityDetails.value);
+    console.log(entertainments.value);
+    console.log("Images: ", images.value);
+    console.log("List Images: ",imageList.value);
     isLoading.value = false; // Kết thúc trạng thái tải
 });
 
@@ -116,6 +125,7 @@ export default function (cityId) {
     selectedIndices,
     selectButton,
     images,
+    imageList,
     entertainments,
     generateStars,
     getImageUrl,
