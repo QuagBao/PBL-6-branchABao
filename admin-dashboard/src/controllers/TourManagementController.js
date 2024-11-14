@@ -59,7 +59,6 @@ export default function () {
     try {
       await addTour(tour);
       actionStep.value = "read";
-      fetchTours();
       toast.success("Create a tour success");
     } catch (error) {
       toast.error("Error add tour");
@@ -69,7 +68,6 @@ export default function () {
     try {
       await updateTourAPI(tour);
       actionStep.value = "read";
-      fetchTours();
       toast.success("Update a tour success");
     } catch (error) {
       toast.error("Error update tour");

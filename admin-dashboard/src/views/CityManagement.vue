@@ -118,7 +118,6 @@ export default {
     const submitAddCity = async () => {
       await confirmCreate(city.value);
       city.value = { name: "", description: "" };
-      actionStep.value = "read";
       loadCities();
     };
 
@@ -130,7 +129,6 @@ export default {
 
     const submitUpdateCity = async () => {
       await confirmUpdate(currentCity.value);
-      actionStep.value = "read";
       loadCities();
     };
 

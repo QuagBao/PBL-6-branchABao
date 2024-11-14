@@ -361,7 +361,8 @@ export default {
     };
 
     const submitAddUser = async () => {
-      confirmAddUser(newUser.value);
+      await confirmAddUser(newUser.value);
+      loadUsers();
     };
 
     const showCreateForm = async (userID) => {
@@ -413,14 +414,16 @@ export default {
       console.log(currentUser.value);
     };
 
-    const submitCreateUser = () => {
+    const submitCreateUser = async () => {
       // Logic to handle user creation
-      confirmCreateInfo(currentUser.value, uploadedImageFile.value);
+      await confirmCreateInfo(currentUser.value, uploadedImageFile.value);
+      loadUsers();
     };
 
-    const submitUpdateUser = () => {
+    const submitUpdateUser = async () => {
       // Logic to handle user update
-      confirmUpdateInfo(currentUser.value, uploadedImageFile.value);
+      await confirmUpdateInfo(currentUser.value, uploadedImageFile.value);
+      loadUsers();
     };
 
     const cancelAction = () => {

@@ -49,7 +49,6 @@ export default function () {
   const confirmCreate = async (city) => {
     try {
       await addCity(city);
-      fetchCities();
       actionStep.value = "read";
       toast.success("Add City successfull");
     } catch (error) {
@@ -59,7 +58,6 @@ export default function () {
   const confirmUpdate = async (city) => {
     try {
       await updateCityAPI(city);
-      fetchCities();
       actionStep.value = "read";
       toast.success("Update City successfull");
     } catch (error) {

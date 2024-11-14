@@ -73,6 +73,7 @@ export async function getHotelById(hotelID) {
         ward: hotel.address.ward,
         street: hotel.address.street,
       },
+      images: hotel.images,
       hotel_id: hotel.hotel_id,
       hotel: {
         property_amenities: hotel.hotel.property_amenities,

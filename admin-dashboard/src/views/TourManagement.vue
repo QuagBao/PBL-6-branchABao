@@ -261,7 +261,6 @@ export default {
 
     const submitAddTour = async () => {
       await confirmCreate(tour.value);
-      actionStep.value = "read";
       loadTours();
     };
 
@@ -277,14 +276,11 @@ export default {
         currentTourDetail.value.destinations.map(
           (destination) => destination.id
         );
-      console.log(currentTourDetail.value);
-      console.log(currentTour.value);
       actionStep.value = "update";
     };
 
     const submitUpdateTour = async () => {
       await confirmUpdate(currentTour.value);
-      actionStep.value = "read";
       loadTours();
     };
 
@@ -335,7 +331,7 @@ h2 {
 
 /* Bảng thông tin */
 .table-container {
-  max-height: 60vh; /* Đặt chiều cao tối đa cho vùng chứa bảng */
+  max-height: 85vh; /* Đặt chiều cao tối đa cho vùng chứa bảng */
   overflow-y: auto; /* Thêm thanh cuộn dọc */
   background-color: rgba(255, 255, 255, 0.1);
   border-radius: 5px; /* Bo góc cho vùng chứa */

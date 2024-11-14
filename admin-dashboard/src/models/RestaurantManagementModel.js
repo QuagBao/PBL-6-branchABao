@@ -66,6 +66,7 @@ export async function getRestaurantById(restaurantID) {
         ward: restaurant.address.ward,
         street: restaurant.address.street,
       },
+      images: restaurant.images,
       restaurant_id: restaurant.restaurant_id,
       restaurant: {
         cuisine: restaurant.restaurant.cuisine,

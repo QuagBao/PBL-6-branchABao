@@ -10,6 +10,10 @@ import {
   deleteHotel as deleteHotelAPI,
   getDestinationName,
 } from "@/models/HotelManagementModel";
+import {
+  addDestination,
+  updateDestination as updateDestinationAPI,
+} from "@/models/DestinationManagementModel";
 import { getCities as fetchCitiesAPI } from "@/models/CityManagementModel";
 
 export default function () {
@@ -43,6 +47,27 @@ export default function () {
     }
   };
 
+  const confirmCreate_destination = async (destination, images) => {
+    try {
+      const result = await addDestination(destination, images);
+      return result.id;
+    } catch (error) {
+      toast.error("Error add destination");
+    }
+  };
+
+  const confirmUpdate_destination = async (
+    destination,
+    new_images,
+    image_ids_to_remove
+  ) => {
+    try {
+      await updateDestinationAPI(destination, new_images, image_ids_to_remove);
+    } catch (error) {
+      toast.error("Error update destination");
+    }
+  };
+
   const getHotel = async (hotelID) => {
     try {
       const hotel = await getHotelById(hotelID);
@@ -66,21 +91,22 @@ export default function () {
     }
   };
 
-  const confirmCreate = async (hotel) => {
+  const confirmCreate = async (hotel, destination, images) => {
     try {
+      const id = await confirmCreate_destination(destination, images);
+      hotel.id = id;
       await addHotel(hotel);
       actionStep.value = "read";
-      fetchHotels();
       toast.success("Add Hotel successfull");
     } catch (error) {
       toast.error("Error add Hotel");
     }
   };
-  const confirmUpdate = async (hotel) => {
+  const confirmUpdate = async (hotel, new_images, image_ids_to_remove) => {
     try {
+      confirmUpdate_destination(hotel, new_images, image_ids_to_remove);
       await updateHotelAPI(hotel);
       actionStep.value = "read";
-      fetchHotels();
       toast.success("Update Hotel successfull");
     } catch (error) {
       toast.error("Error update Hotel");

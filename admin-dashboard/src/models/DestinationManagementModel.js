@@ -162,8 +162,9 @@ export async function addDestination(destination, images) {
     });
 
     if (response.status === 200) {
-      console.log("Destination updated successfully");
-      return { success: true, message: "Destination updated successfully" };
+      const { id, name } = response.data;
+      console.log("Destination created successfully", { id, name });
+      return { id, name };
     }
   } catch (error) {
     console.error(

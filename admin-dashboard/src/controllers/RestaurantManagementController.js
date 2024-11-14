@@ -10,6 +10,10 @@ import {
   deleteRestaurant as deleteRestaurantAPI,
   getDestinationName,
 } from "@/models/RestaurantManagementModel";
+import {
+  addDestination,
+  updateDestination as updateDestinationAPI,
+} from "@/models/DestinationManagementModel";
 import { getCities as fetchCitiesAPI } from "@/models/CityManagementModel";
 
 export default function () {
@@ -32,6 +36,27 @@ export default function () {
     } catch (error) {
       console.error("Error fetching restaurant:", error);
       toast.error("Error fetching restaurant");
+    }
+  };
+
+  const confirmCreate_destination = async (destination, images) => {
+    try {
+      const result = await addDestination(destination, images);
+      return result.id;
+    } catch (error) {
+      toast.error("Error add destination");
+    }
+  };
+
+  const confirmUpdate_destination = async (
+    destination,
+    new_images,
+    image_ids_to_remove
+  ) => {
+    try {
+      await updateDestinationAPI(destination, new_images, image_ids_to_remove);
+    } catch (error) {
+      toast.error("Error update destination");
     }
   };
 
@@ -67,20 +92,21 @@ export default function () {
     }
   };
 
-  const confirmCreate = async (Restaurant) => {
+  const confirmCreate = async (Restaurant, destination, images) => {
     try {
+      const id = await confirmCreate_destination(destination, images);
+      Restaurant.id = id;
       await addRestaurant(Restaurant);
-      fetchRestaurants();
       actionStep.value = "read";
       toast.success("Add Restaurant successfull");
     } catch (error) {
       toast.error("Error to add Restaurant");
     }
   };
-  const confirmUpdate = async (Restaurant) => {
+  const confirmUpdate = async (Restaurant, new_images, image_ids_to_remove) => {
     try {
+      confirmUpdate_destination(Restaurant, new_images, image_ids_to_remove);
       await updateRestaurantAPI(Restaurant);
-      fetchRestaurants();
       actionStep.value = "read";
       toast.success("Update Restaurant successfull");
     } catch (error) {

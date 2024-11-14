@@ -98,18 +98,74 @@
       <h3>Create Hotel</h3>
       <form @submit.prevent="submitAddHotel" class="form-style">
         <div class="form-group">
-          <label>Destination ID:</label>
-          <input
-            type="text"
-            v-model="hotel.id"
-            @blur="fetchDestinationName"
-            required
-          />
+          <label>Destination Name:</label>
+          <input type="text" v-model="destination.name" required />
         </div>
         <div class="form-group">
-          <label>Destination Name:</label>
-          <input type="text" v-model="hotel.name" required disabled />
+          <label>Description:</label>
+          <input type="text" v-model="destination.description" />
         </div>
+        <div class="form-group">
+          <label>Price bottom:</label>
+          <input type="number" v-model="destination.price_bottom" />
+        </div>
+        <div class="form-group">
+          <label>Price top:</label>
+          <input type="number" v-model="destination.price_top" />
+        </div>
+        <div class="form-group">
+          <label>Age:</label>
+          <input type="number" v-model="destination.age" />
+        </div>
+        <div class="form-group">
+          <label>Open time:</label>
+          <input type="time" v-model="destination.opentime" />
+        </div>
+        <div class="form-group">
+          <label>Duration:</label>
+          <input type="number" v-model="destination.duration" />
+        </div>
+        <div class="form-group">
+          <label>Date Create:</label>
+          <input type="date" v-model="destination.date_create" />
+        </div>
+        <div class="form-group">
+          <label>City:</label>
+          <select v-model="destination.address.city_id" class="form-control">
+            <option v-for="city in cities" :key="city.id" :value="city.id">
+              {{ city.name }}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>District:</label>
+          <input type="text" v-model="destination.address.district" />
+        </div>
+        <div class="form-group">
+          <label>Ward:</label>
+          <input type="text" v-model="destination.address.ward" />
+        </div>
+        <div class="form-group">
+          <label>Street:</label>
+          <input type="text" v-model="destination.address.street" />
+        </div>
+        <div class="form-group">
+          <label>Images:</label>
+          <input type="file" @change="handleImageUpload" multiple />
+          <div class="image-list">
+            <div
+              v-for="(img, index) in previewImages"
+              :key="index"
+              class="image-item"
+            >
+              <img :src="img" alt="Image Preview" />
+              <button @click.prevent="removeImage(index)">-</button>
+            </div>
+          </div>
+        </div>
+
+        <h2>Hotel Detail:</h2>
+
         <div class="form-group">
           <label>Property Amenities:</label>
           <input type="text" v-model="hotel.hotel.property_amenities" />
@@ -159,12 +215,82 @@
       <h3>Update Hotel Info</h3>
       <form @submit.prevent="submitUpdateHotel" class="form-style">
         <div class="form-group">
-          <label>Destination ID:</label>
-          <input type="text" v-model="currentHotel.id" required disabled />
+          <label>Destination Name:</label>
+          <input type="text" v-model="currentHotel.name" required />
         </div>
         <div class="form-group">
-          <label>Destination Name:</label>
-          <input type="text" v-model="currentHotel.name" required disabled />
+          <label>Description:</label>
+          <input type="text" v-model="currentHotel.description" />
+        </div>
+        <div class="form-group">
+          <label>Price bottom:</label>
+          <input type="number" v-model="currentHotel.price_bottom" />
+        </div>
+        <div class="form-group">
+          <label>Price top:</label>
+          <input type="number" v-model="currentHotel.price_top" />
+        </div>
+        <div class="form-group">
+          <label>Age:</label>
+          <input type="number" v-model="currentHotel.age" />
+        </div>
+        <div class="form-group">
+          <label>Open time:</label>
+          <input type="time" v-model="currentHotel.opentime" />
+        </div>
+        <div class="form-group">
+          <label>Duration:</label>
+          <input type="number" v-model="currentHotel.duration" />
+        </div>
+        <div class="form-group">
+          <label>Date Create:</label>
+          <input type="date" v-model="currentHotel.date_create" />
+        </div>
+        <div class="form-group">
+          <label>City:</label>
+          <select v-model="currentHotel.address.city_id" class="form-control">
+            <option v-for="city in cities" :key="city.id" :value="city.id">
+              {{ city.name }}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>District:</label>
+          <input type="text" v-model="currentHotel.address.district" />
+        </div>
+        <div class="form-group">
+          <label>Ward:</label>
+          <input type="text" v-model="currentHotel.address.ward" />
+        </div>
+        <div class="form-group">
+          <label>Street:</label>
+          <input type="text" v-model="currentHotel.address.street" />
+        </div>
+
+        <div class="form-group">
+          <label>Current Images:</label>
+          <div class="image-list">
+            <div
+              v-for="img in currentHotel.images"
+              :key="img.id"
+              class="image-item"
+            >
+              <img :src="img.url" alt="Existing Image" />
+              <button @click.prevent="removeExistingImage(img.id)">-</button>
+            </div>
+          </div>
+          <label>Upload New Images:</label>
+          <input type="file" @change="handleNewImageUpload" multiple />
+          <div class="image-list">
+            <div
+              v-for="(img, index) in previewNewImages"
+              :key="index"
+              class="image-item"
+            >
+              <img :src="img" alt="Image Preview" />
+              <button @click.prevent="removeNewImage(index)">-</button>
+            </div>
+          </div>
         </div>
         <div class="form-group">
           <label>Property Amenities:</label>
@@ -221,6 +347,11 @@ export default {
   setup() {
     const hotels = ref([]);
     const cities = ref([]);
+    const images = ref([]);
+    const new_images = ref([]);
+    const image_ids_to_remove = ref([]);
+    const previewImages = ref([]);
+    const previewNewImages = ref([]);
 
     const {
       fetchHotels,
@@ -253,6 +384,20 @@ export default {
     const currentHotel = ref({
       id: 0,
       name: "",
+      price_bottom: 0,
+      price_top: 0,
+      age: 0,
+      opentime: "",
+      duration: 0,
+      description: "",
+      date_create: "",
+      address: {
+        city_id: 0,
+        district: "",
+        ward: "",
+        street: "",
+      },
+      images: [],
       hotel_id: 0,
       hotel: {
         property_amenities: "",
@@ -266,6 +411,24 @@ export default {
         website: "",
         id: "",
       },
+    });
+
+    const destination = ref({
+      name: "",
+      price_bottom: 0,
+      price_top: 0,
+      age: 0,
+      opentime: "",
+      duration: 0,
+      description: "",
+      date_create: "",
+      address: {
+        city_id: 0,
+        district: "",
+        ward: "",
+        street: "",
+      },
+      images: [],
     });
 
     const fetchDestinationName = async () => {
@@ -300,9 +463,9 @@ export default {
     };
 
     const submitAddHotel = async () => {
-      await confirmCreate(hotel.value);
+      await confirmCreate(hotel.value, destination.value, images.value);
       hotel.value = { name: "", description: "" };
-      actionStep.value = "read";
+      previewImages.value = [];
       loadHotels();
     };
 
@@ -313,13 +476,53 @@ export default {
     };
 
     const submitUpdateHotel = async () => {
-      await confirmUpdate(currentHotel.value);
-      actionStep.value = "read";
+      await confirmUpdate(
+        currentHotel.value,
+        new_images.value,
+        image_ids_to_remove.value
+      );
+      previewNewImages.value = [];
+      image_ids_to_remove.value = [];
       loadHotels();
     };
 
     const cancelAction = () => {
       actionStep.value = "read";
+    };
+
+    const handleImageUpload = (event) => {
+      const files = event.target.files;
+      Array.from(files).forEach((file) => {
+        images.value.push(file);
+        previewImages.value.push(URL.createObjectURL(file)); // Thêm URL preview vào mảng
+      });
+    };
+
+    const removeImage = (index) => {
+      images.value.splice(index, 1); // Xoá file ảnh khỏi mảng
+      URL.revokeObjectURL(previewImages.value[index]); // Giải phóng bộ nhớ của URL preview
+      previewImages.value.splice(index, 1); // Xoá URL preview khỏi mảng
+    };
+
+    const handleNewImageUpload = (event) => {
+      const files = event.target.files;
+      Array.from(files).forEach((file) => {
+        new_images.value.push(file);
+        previewNewImages.value.push(URL.createObjectURL(file)); // Thêm URL preview vào mảng
+      });
+    };
+
+    const removeNewImage = (index) => {
+      new_images.value.splice(index, 1); // Remove new image by index
+      URL.revokeObjectURL(previewNewImages.value[index]); // Giải phóng bộ nhớ của URL preview
+      previewNewImages.value.splice(index, 1); // Xoá URL preview khỏi mảng
+    };
+
+    const removeExistingImage = (id) => {
+      image_ids_to_remove.value.push(id); // Add image id to removal list
+      currentHotel.value.images = currentHotel.value.images.filter(
+        (img) => img.id !== id
+      );
     };
 
     return {
@@ -336,6 +539,14 @@ export default {
       fetchDestinationName,
       cities,
       getCityName,
+      handleImageUpload,
+      destination,
+      removeImage,
+      handleNewImageUpload,
+      removeNewImage,
+      removeExistingImage,
+      previewImages,
+      previewNewImages,
     };
   },
 };
@@ -605,5 +816,31 @@ button:hover {
 
 .form-group select option:hover {
   background-color: #e4e6eb;
+}
+.image-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.image-item {
+  margin: 5px;
+  position: relative;
+}
+
+.image-item img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+.image-item button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: rgb(0, 4, 255);
+  color: white;
+  border: none;
+  border-radius: 20%;
+  cursor: pointer;
 }
 </style>

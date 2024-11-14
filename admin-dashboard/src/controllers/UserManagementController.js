@@ -66,7 +66,6 @@ export default function () {
   const confirmCreateInfo = async (user, uploadedImageFile) => {
     try {
       await createUserInfo(user, uploadedImageFile);
-      fetchUsers();
       actionStep.value = "read";
       toast.success("Create user info sucessfully");
     } catch (error) {
@@ -76,7 +75,6 @@ export default function () {
   const confirmUpdateInfo = async (user, uploadedImageFile) => {
     try {
       await updateUserInfo(user, uploadedImageFile);
-      fetchUsers();
       actionStep.value = "read";
       toast.success("Update user info sucessfully");
     } catch (error) {
@@ -108,7 +106,6 @@ export default function () {
       try {
         await addNewUser(user);
         actionStep.value = "read";
-        fetchUsers();
         toast.success("Add user sucessfully");
       } catch (error) {
         toast.error("Error to add user");

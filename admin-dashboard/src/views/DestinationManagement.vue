@@ -305,7 +305,7 @@ export default {
     const submitAddDestination = async () => {
       await confirmCreate(destination.value, images.value);
       destination.value = { name: "", description: "" };
-      actionStep.value = "read";
+      previewImages.value = [];
       loadDestinations();
     };
 
@@ -356,7 +356,8 @@ export default {
         new_images.value,
         image_ids_to_remove.value
       );
-      actionStep.value = "read";
+      previewNewImages.value = [];
+      image_ids_to_remove.value = [];
       loadDestinations();
     };
 

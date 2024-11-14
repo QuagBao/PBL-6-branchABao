@@ -58,10 +58,9 @@ export default function () {
 
   const confirmCreate = async (destination, images) => {
     try {
-      await addDestination(destination, images);
+      const result = await addDestination(destination, images);
       actionStep.value = "read";
-      fetchDestinations();
-      toast.success("Add Destination successfull");
+      toast.success(`Add Destination successful: ${result.name}`);
     } catch (error) {
       toast.error("Error add destination");
     }
@@ -74,7 +73,6 @@ export default function () {
     try {
       await updateDestinationAPI(destination, new_images, image_ids_to_remove);
       actionStep.value = "read";
-      fetchDestinations();
       toast.success("Update Destination successfull");
     } catch (error) {
       toast.error("Error update destination");
