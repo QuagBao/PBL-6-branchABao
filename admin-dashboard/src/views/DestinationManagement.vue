@@ -81,10 +81,7 @@
         </div>
         <div class="form-group">
           <label>City:</label>
-          <select
-            v-model="currentDestination.address.city_id"
-            class="form-control"
-          >
+          <select v-model="destination.address.city_id" class="form-control">
             <option v-for="city in cities" :key="city.id" :value="city.id">
               {{ city.name }}
             </option>
@@ -103,8 +100,18 @@
           <input type="text" v-model="destination.address.street" />
         </div>
         <div class="form-group">
-          <label>Image:</label>
+          <label>Images:</label>
           <input type="file" @change="handleImageUpload" multiple />
+          <div class="image-list">
+            <div
+              v-for="(img, index) in previewImages"
+              :key="index"
+              class="image-item"
+            >
+              <img :src="img" alt="Image Preview" />
+              <button @click.prevent="removeImage(index)">-</button>
+            </div>
+          </div>
         </div>
         <div class="button-group">
           <button type="submit" class="create-button">Create</button>
@@ -179,8 +186,29 @@
         </div>
 
         <div class="form-group">
-          <label>Image:</label>
-          <input type="file" @change="handleImageUpload" multiple />
+          <label>Current Images:</label>
+          <div class="image-list">
+            <div
+              v-for="img in currentDestination.images"
+              :key="img.id"
+              class="image-item"
+            >
+              <img :src="img.url" alt="Existing Image" />
+              <button @click.prevent="removeExistingImage(img.id)">-</button>
+            </div>
+          </div>
+          <label>Upload New Images:</label>
+          <input type="file" @change="handleNewImageUpload" multiple />
+          <div class="image-list">
+            <div
+              v-for="(img, index) in previewNewImages"
+              :key="index"
+              class="image-item"
+            >
+              <img :src="img" alt="Image Preview" />
+              <button @click.prevent="removeNewImage(index)">-</button>
+            </div>
+          </div>
         </div>
         <div class="button-group">
           <button type="submit" class="update-button">Update</button>
@@ -202,6 +230,10 @@ export default {
     const destinations = ref([]);
     const images = ref([]);
     const cities = ref([]);
+    const new_images = ref([]);
+    const image_ids_to_remove = ref([]);
+    const previewImages = ref([]);
+    const previewNewImages = ref([]);
 
     const {
       fetchDestinations,
@@ -229,6 +261,7 @@ export default {
         ward: "",
         street: "",
       },
+      images: [],
     });
     const currentDestination = ref({
       id: 0,
@@ -246,6 +279,7 @@ export default {
         ward: "",
         street: "",
       },
+      images: [],
     });
 
     const loadDestinations = async () => {
@@ -255,6 +289,7 @@ export default {
     const loadCity = async () => {
       cities.value = await fetchCities();
     };
+
     onMounted(loadCity);
     onMounted(loadDestinations);
 
@@ -281,16 +316,48 @@ export default {
     };
 
     const handleImageUpload = (event) => {
-      const files = event.target.files; // Lấy tất cả các tệp đã chọn
-      if (files.length > 0) {
-        images.value = Array.from(files); // Chuyển đổi mảng tệp thành mảng và lưu vào images
-      }
+      const files = event.target.files;
+      Array.from(files).forEach((file) => {
+        images.value.push(file);
+        previewImages.value.push(URL.createObjectURL(file)); // Thêm URL preview vào mảng
+      });
+    };
+
+    const removeImage = (index) => {
+      images.value.splice(index, 1); // Xoá file ảnh khỏi mảng
+      URL.revokeObjectURL(previewImages.value[index]); // Giải phóng bộ nhớ của URL preview
+      previewImages.value.splice(index, 1); // Xoá URL preview khỏi mảng
+    };
+
+    const handleNewImageUpload = (event) => {
+      const files = event.target.files;
+      Array.from(files).forEach((file) => {
+        new_images.value.push(file);
+        previewNewImages.value.push(URL.createObjectURL(file)); // Thêm URL preview vào mảng
+      });
+    };
+
+    const removeNewImage = (index) => {
+      new_images.value.splice(index, 1); // Remove new image by index
+      URL.revokeObjectURL(previewNewImages.value[index]); // Giải phóng bộ nhớ của URL preview
+      previewNewImages.value.splice(index, 1); // Xoá URL preview khỏi mảng
+    };
+
+    const removeExistingImage = (id) => {
+      image_ids_to_remove.value.push(id); // Add image id to removal list
+      currentDestination.value.images = currentDestination.value.images.filter(
+        (img) => img.id !== id
+      );
     };
 
     const submitUpdateDestination = async () => {
-      await confirmUpdate(currentDestination.value, images.value);
+      await confirmUpdate(
+        currentDestination.value,
+        new_images.value,
+        image_ids_to_remove.value
+      );
       actionStep.value = "read";
-      loadDestinations;
+      loadDestinations();
     };
 
     const cancelAction = () => {
@@ -309,9 +376,17 @@ export default {
       cancelAction,
       deleteDestination,
       handleImageUpload,
+      handleNewImageUpload,
+      removeImage,
+      removeNewImage,
+      removeExistingImage,
       images,
+      new_images,
+      image_ids_to_remove,
       cities,
       getCityName,
+      previewImages,
+      previewNewImages,
     };
   },
 };
@@ -597,5 +672,32 @@ button:hover {
 
 .form-group select option:hover {
   background-color: #e4e6eb; /* Màu nền khi hover */
+}
+
+.image-list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.image-item {
+  margin: 5px;
+  position: relative;
+}
+
+.image-item img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+}
+
+.image-item button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: red;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
 }
 </style>

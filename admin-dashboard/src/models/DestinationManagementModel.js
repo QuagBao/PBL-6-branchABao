@@ -49,6 +49,7 @@ export async function getDestinationById(destinationID) {
         ward: destination.address.ward,
         street: destination.address.street,
       },
+      images: destination.images,
     };
   } catch (error) {
     console.error("Error fetching destination:", error);
@@ -56,7 +57,11 @@ export async function getDestinationById(destinationID) {
   }
 }
 
-export async function updateDestination(destination, images) {
+export async function updateDestination(
+  destination,
+  new_images,
+  image_ids_to_remove
+) {
   try {
     const token = sessionStorage.getItem("token");
     if (!token) throw new Error("No token found");
@@ -78,20 +83,32 @@ export async function updateDestination(destination, images) {
     url.searchParams.append("ward", destination.address.ward);
     url.searchParams.append("street", destination.address.street);
 
-    // Kiểm tra và console.log danh sách hình ảnh trước khi gửi
-    console.log("Images to upload:", images);
+    let formData = null;
+    if (
+      (new_images && new_images.length > 0) ||
+      (image_ids_to_remove && image_ids_to_remove.length > 0)
+    ) {
+      formData = new FormData();
 
-    // Tạo FormData cho body và thêm ảnh vào mảng 'images'
-    const formData = new FormData();
+      // Thêm new_images nếu có dữ liệu
+      if (new_images && new_images.length > 0) {
+        new_images.forEach((file) => {
+          formData.append("new_images", file);
+        });
+      }
 
-    images.forEach((file) => {
-      formData.append(`images`, file);
-    });
+      // Thêm image_ids_to_remove nếu có dữ liệu
+      if (image_ids_to_remove && image_ids_to_remove.length > 0) {
+        image_ids_to_remove.forEach((id) => {
+          formData.append("image_ids_to_remove", id);
+        });
+      }
+    }
 
     // Gửi PUT request với dữ liệu từ FormData
-    const response = await axios.put(url.toString(), formData, {
+    const response = await axios.put(url.toString(), formData || undefined, {
       headers: {
-        "Content-Type": "multipart/form-data", // Đảm bảo gửi đúng content type
+        "Content-Type": "multipart/form-data",
       },
     });
 
@@ -129,18 +146,16 @@ export async function addDestination(destination, images) {
     url.searchParams.append("ward", destination.address.ward);
     url.searchParams.append("street", destination.address.street);
 
-    // Kiểm tra và console.log danh sách hình ảnh trước khi gửi
-    console.log("Images to upload:", images);
-
-    // Tạo FormData cho body và thêm ảnh vào mảng 'images'
-    const formData = new FormData();
-
-    images.forEach((file) => {
-      formData.append(`images`, file);
-    });
+    let formData = null;
+    if (images && images.length > 0) {
+      formData = new FormData();
+      images.forEach((file) => {
+        formData.append("images", file);
+      });
+    }
 
     // Gửi PUT request với dữ liệu từ FormData
-    const response = await axios.post(url.toString(), formData, {
+    const response = await axios.post(url.toString(), formData || undefined, {
       headers: {
         "Content-Type": "multipart/form-data", // Đảm bảo gửi đúng content type
       },

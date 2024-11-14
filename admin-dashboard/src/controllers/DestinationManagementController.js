@@ -66,9 +66,13 @@ export default function () {
       toast.error("Error add destination");
     }
   };
-  const confirmUpdate = async (destination, images) => {
+  const confirmUpdate = async (
+    destination,
+    new_images,
+    image_ids_to_remove
+  ) => {
     try {
-      await updateDestinationAPI(destination, images);
+      await updateDestinationAPI(destination, new_images, image_ids_to_remove);
       actionStep.value = "read";
       fetchDestinations();
       toast.success("Update Destination successfull");
