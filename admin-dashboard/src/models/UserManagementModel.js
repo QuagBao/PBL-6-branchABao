@@ -114,7 +114,6 @@ export async function updateUserInfo(user, uploadedImageFile) {
 
     // Construct query parameters from user data
     const params = new URLSearchParams();
-    params.append("user_id", user.id);
     params.append("description", user.userInfo.description || "");
     params.append("phone_number", user.userInfo.phone_number || "");
     params.append("district", user.userInfo.address.district || "");

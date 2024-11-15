@@ -20,7 +20,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="user in users" :key="user.id">
+          <tr v-for="user in paginatedUsers" :key="user.id">
             <td>{{ user.id }}</td>
             <td>{{ user.username }}</td>
             <td>{{ user.email }}</td>
@@ -72,6 +72,15 @@
           </tr>
         </tbody>
       </table>
+      <div class="pagination">
+        <button :disabled="currentPage === 1" @click="prevPage">
+          Previous
+        </button>
+        <span>Page {{ currentPage }} of {{ totalPages }}</span>
+        <button :disabled="currentPage === totalPages" @click="nextPage">
+          Next
+        </button>
+      </div>
     </div>
 
     <div v-if="actionStep === 'addUser'" class="form-container">
@@ -268,7 +277,7 @@
 
 <script>
 import UserManagementController from "@/controllers/UserManagementController";
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 
@@ -278,6 +287,10 @@ export default {
     const router = useRouter();
     const toast = useToast();
     const cities = ref([]);
+
+    const itemsPerPage = 5;
+    const currentPage = ref(1);
+
     const {
       fetchUsers,
       actionStep,
@@ -322,6 +335,7 @@ export default {
       password: "",
       confirmPassword: "",
     });
+
     const uploadedImageFile = ref(
       currentUser.value.userInfo.image.url
         ? currentUser.value.userInfo.image.url
@@ -345,11 +359,28 @@ export default {
     onMounted(async () => {
       await loadUsers();
       if (currentUser.value.userInfo.image.url) {
-        uploadedImageFile.value = currentUser.value.userInfo.image.url; // Load actual image URL initially
+        uploadedImageFile.value = currentUser.value.userInfo.image.url;
       } else {
-        uploadedImageFile.value = ""; // Replace with actual placeholder URL if needed
+        uploadedImageFile.value = "";
       }
     });
+
+    const paginatedUsers = computed(() => {
+      const startIndex = (currentPage.value - 1) * itemsPerPage;
+      return users.value.slice(startIndex, startIndex + itemsPerPage);
+    });
+
+    const totalPages = computed(() =>
+      Math.ceil(users.value.length / itemsPerPage)
+    );
+
+    const prevPage = () => {
+      if (currentPage.value > 1) currentPage.value--;
+    };
+
+    const nextPage = () => {
+      if (currentPage.value < totalPages.value) currentPage.value++;
+    };
 
     const showAddUserForm = () => {
       addUser();
@@ -368,7 +399,6 @@ export default {
     const showCreateForm = async (userID) => {
       const user = await createInfo(userID);
 
-      // Kiểm tra và khởi tạo userInfo nếu null
       currentUser.value = {
         ...user,
         userInfo: {
@@ -392,7 +422,6 @@ export default {
     const showUpdateForm = async (userID) => {
       const user = await updateInfo(userID);
 
-      // Kiểm tra và khởi tạo userInfo nếu null
       currentUser.value = {
         ...user,
         userInfo: {
@@ -415,25 +444,24 @@ export default {
     };
 
     const submitCreateUser = async () => {
-      // Logic to handle user creation
       await confirmCreateInfo(currentUser.value, uploadedImageFile.value);
       loadUsers();
     };
 
     const submitUpdateUser = async () => {
-      // Logic to handle user update
       await confirmUpdateInfo(currentUser.value, uploadedImageFile.value);
       loadUsers();
     };
 
     const cancelAction = () => {
-      actionStep.value = "read"; // Cancel action and return to list view
+      actionStep.value = "read";
     };
+
     const handleImageUpload = (event) => {
       const file = event.target.files[0];
       if (file) {
         uploadedImageFile.value = file;
-        currentUser.value.userInfo.image.url = URL.createObjectURL(file); // Temporary URL for preview
+        currentUser.value.userInfo.image.url = URL.createObjectURL(file);
       }
     };
 
@@ -454,6 +482,11 @@ export default {
       changeStatus,
       cities,
       getCityName,
+      paginatedUsers,
+      currentPage,
+      totalPages,
+      prevPage,
+      nextPage,
     };
   },
 };
@@ -462,91 +495,88 @@ export default {
 <style scoped>
 * {
   font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: #ffffff; /* Nền trắng */
+  color: #333333; /* Chữ đen */
+  line-height: 1.6;
 }
 
 .user-management {
   padding: 20px;
-  font-family: Arial, sans-serif;
-  min-height: 100vh;
-  overflow: auto; /* Thêm cuộn nếu nội dung vượt quá chiều cao tối đa */
-  background: linear-gradient(
-    135deg,
-    #0a015a,
-    #03e6b8
-  ); /* Gradient background */
-  color: #ffffff; /* Light color for text contrast */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  min-height: 80vh;
 }
 
 h2 {
   margin-bottom: 20px;
-  color: #ffffff; /* White text for title */
+  font-size: 24px;
+  color: #333333;
+  text-align: center;
 }
 
 .table-container {
-  max-height: 82vh;
+  max-height: 70vh;
   overflow-y: auto;
-  background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
-  border-radius: 5px;
-  padding: 10px;
 }
 
 .table-container::-webkit-scrollbar {
-  width: 12px;
+  width: 8px;
 }
 
 .table-container::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  background: #f0f0f0;
 }
 
 .table-container::-webkit-scrollbar-thumb {
-  background-color: #005b8c;
-  border-radius: 10px;
-}
-
-.table-container::-webkit-scrollbar-thumb:hover {
-  background-color: #0078d4;
+  background-color: #888888;
+  border-radius: 4px;
 }
 
 .user-table {
   width: 100%;
-  margin-top: 30px;
+  margin: 20px 0;
   border-collapse: collapse;
-  margin-bottom: 20px;
-  border: 1px solid #d1d1d1;
-  border-radius: 8px;
-  overflow: hidden;
+  border: 1px solid #dddddd;
+  font-size: 14px;
 }
 
 .user-table th,
 .user-table td {
-  padding: 12px 16px;
+  padding: 12px;
   text-align: left;
-  border-bottom: 1px solid #d1d1d1;
+  border-bottom: 1px solid #dddddd;
 }
 
 .user-table th {
-  background-color: rgba(255, 255, 255, 0.15); /* Light overlay on gradient */
+  background-color: #f8f9fa;
+  color: #333333;
   font-weight: bold;
-  color: #ffffff;
-  font-size: 14px;
-}
-
-.user-table tr:hover {
-  background-color: rgba(255, 255, 255, 0.15); /* Light overlay when hovering */
-}
-
-.user-table tr:nth-child(even) {
-  background-color: rgba(255, 255, 255, 0.05);
 }
 
 .user-table tr:nth-child(odd) {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: #f7f7f7;
 }
 
-.user-table td {
-  color: #ffffff;
+.user-table tr:nth-child(even) {
+  background-color: #ffffff;
+}
+
+.user-table tr:hover {
+  background-color: #e9ecef;
+}
+
+button {
+  padding: 8px 12px;
+  border: none;
+  border-radius: 4px;
   font-size: 14px;
+  cursor: pointer;
+  color: #ffffff;
+  transition: background-color 0.2s;
 }
 
 .action-button {
@@ -556,10 +586,11 @@ h2 {
   color: #ffffff;
   font-weight: bold;
   transition: background-color 0.3s, transform 0.2s;
+  margin: 10px;
 }
 
 .edit-button {
-  background-color: #0078d4;
+  background-color: #007bff;
 }
 
 .edit-button:hover {
@@ -595,98 +626,73 @@ h2 {
 }
 
 .form-container {
-  width: 60%;
+  width: 100%;
+  max-width: 600px;
   margin: 20px auto;
   padding: 20px;
-  background: linear-gradient(
-    135deg,
-    #0a015a,
-    #03e6b8
-  ); /* Gradient for consistency */
+  border: 1px solid #dddddd;
   border-radius: 6px;
-  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.15);
+  background-color: #ffffff;
 }
 
 .form-group {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
   margin-bottom: 15px;
 }
 
 .form-group label {
-  font-weight: 600;
-  color: #eef1f5;
+  display: block;
   margin-bottom: 5px;
+  font-weight: bold;
+  color: #333333;
 }
 
 input[type="text"],
 input[type="email"],
 input[type="password"],
-input[type="number"],
-input[type="time"],
-input[type="date"],
-input[type="file"],
-textarea {
+textarea,
+select {
   width: 100%;
-  padding: 12px;
+  padding: 10px;
+  border: 1px solid #dddddd;
+  border-radius: 4px;
+  background-color: #f9f9f9;
   font-size: 14px;
-  color: #333;
-  border: 1px solid #d1d5db; /* Light border */
-  border-radius: 6px; /* Rounded corners */
-  background-color: #f3f4f6; /* Light background for inputs */
-  outline: none;
-  transition: border-color 0.2s ease;
-}
-
-input[type="text"]::placeholder,
-input[type="email"]::placeholder,
-input[type="password"]::placeholder,
-input[type="number"]::placeholder,
-input[type="time"]::placeholder,
-input[type="date"]::placeholder,
-input[type="file"]::placeholder,
-textarea::placeholder {
-  color: #9ca3af;
+  color: #333333;
 }
 
 input[type="text"]:focus,
 input[type="email"]:focus,
 input[type="password"]:focus,
-input[type="number"]:focus,
-input[type="file"]:focus,
-textarea:focus {
-  border-color: #1877f2;
+textarea:focus,
+select:focus {
+  border-color: #007bff;
+  outline: none;
 }
 
-button {
-  padding: 10px 16px;
-  font-size: 14px;
-  font-weight: 500;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  width: 48%;
-}
-
-.create-button {
-  background-color: #42b72a;
-  color: #ffffff;
-}
-
-.update-button {
-  background-color: #1877f2;
-  color: #ffffff;
-}
-
-.cancel-button {
-  background-color: #e41e1e;
-  color: #ffffff;
+.button-group {
+  display: flex;
+  gap: 10px;
+  margin-top: 15px;
 }
 
 button:hover {
-  background-color: #333333;
+  background-color: #0056b3;
+}
+
+.create-button {
+  background-color: #28a745;
+}
+
+.update-button {
+  background-color: #007bff;
+}
+
+.cancel-button {
+  background-color: #dc3545;
+}
+
+.cancel-button:hover {
+  background-color: #c82333;
 }
 
 .button-group {
@@ -748,5 +754,30 @@ button:hover {
 
 .form-group select option:hover {
   background-color: #e4e6eb; /* Màu nền khi hover */
+}
+
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.pagination button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  font-weight: bold;
 }
 </style>

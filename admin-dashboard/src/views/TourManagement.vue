@@ -61,7 +61,6 @@
     </div>
 
     <div v-if="actionStep === 'create'" class="form-container">
-      <h3>Create Tour</h3>
       <form @submit.prevent="submitAddTour" class="form-style">
         <div class="form-group">
           <label>Tour Name:</label>
@@ -113,8 +112,12 @@
           </button>
         </div>
         <div class="button-group">
-          <button type="submit" class="create-button">Create</button>
-          <button type="button" @click="cancelAction" class="cancel-button">
+          <button type="submit" class="action-button add-button">Create</button>
+          <button
+            type="button"
+            @click="cancelAction"
+            class="action-button delete-button"
+          >
             Cancel
           </button>
         </div>
@@ -122,7 +125,6 @@
     </div>
 
     <div v-if="actionStep === 'update'" class="form-container">
-      <h3>Update Hotel Info</h3>
       <form @submit.prevent="submitUpdateTour" class="form-style">
         <div class="form-group">
           <label>Tour Name:</label>
@@ -174,8 +176,14 @@
           </button>
         </div>
         <div class="button-group">
-          <button type="submit" class="update-button">Update</button>
-          <button type="button" @click="cancelAction" class="cancel-button">
+          <button type="submit" class="action-button edit-button">
+            Update
+          </button>
+          <button
+            type="button"
+            @click="cancelAction"
+            class="action-button delete-button"
+          >
             Cancel
           </button>
         </div>
@@ -311,90 +319,252 @@ export default {
 </script>
 
 <style scoped>
+/* Global styles */
 * {
   font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
+body {
+  background-color: #ffffff;
+  color: #333333;
+  line-height: 1.6;
+  font-size: 16px;
+}
+
+/* Tour Management Section */
 .tour-management {
   padding: 20px;
   min-height: 100vh;
-  overflow: auto;
-  background: linear-gradient(135deg, #0a015a, #03e6b8);
-  color: #ffffff;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
 }
 
 h2 {
   margin-bottom: 20px;
-  color: #ffffff; /* Màu chữ sáng hơn cho tiêu đề */
+  color: #222222;
+  font-size: 24px;
+  font-weight: bold;
+  border-bottom: 2px solid #eaeaea;
+  padding-bottom: 10px;
+  text-align: center;
 }
 
-/* Bảng thông tin */
+/* Table Container */
 .table-container {
-  max-height: 85vh; /* Đặt chiều cao tối đa cho vùng chứa bảng */
-  overflow-y: auto; /* Thêm thanh cuộn dọc */
-  background-color: rgba(255, 255, 255, 0.1);
-  border-radius: 5px; /* Bo góc cho vùng chứa */
-  padding: 10px; /* Khoảng cách bên trong */
+  max-height: 85vh;
+  overflow-y: auto;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  padding: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-/* Tùy chỉnh thanh cuộn */
+/* Custom Scrollbar */
 .table-container::-webkit-scrollbar {
-  width: 12px;
-}
-
-.table-container::-webkit-scrollbar-track {
-  background: #f1f1f1;
+  width: 8px;
 }
 
 .table-container::-webkit-scrollbar-thumb {
-  background-color: #005b8c;
+  background-color: #cccccc;
   border-radius: 10px;
 }
 
-.table-container::-webkit-scrollbar-thumb:hover {
-  background-color: #0078d4;
+.table-container::-webkit-scrollbar-track {
+  background: #f0f0f0;
 }
 
+/* Modern Table Styling */
 .tour-table {
   width: 100%;
-  margin-top: 30px;
+  margin-top: 20px;
   border-collapse: collapse;
-  margin-bottom: 20px;
-  border: 1px solid #d1d1d1;
-  border-radius: 8px;
-  overflow: hidden;
+  border: 1px solid #dddddd;
 }
 
 .tour-table th,
 .tour-table td {
   padding: 12px 16px;
   text-align: left;
-  border-bottom: 1px solid #d1d1d1;
 }
 
 .tour-table th {
-  background-color: rgba(255, 255, 255, 0.15);
+  background-color: #f0f0f0;
   font-weight: bold;
-  color: #ffffff;
-  font-size: 14px;
-}
-
-.tour-table tr:hover {
-  background-color: rgba(255, 255, 255, 0.15);
+  color: #222222;
 }
 
 .tour-table tr:nth-child(even) {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: #fafafa;
 }
 
 .tour-table tr:nth-child(odd) {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: #ffffff;
+}
+
+.tour-table tr:hover {
+  background-color: #e9f4ff;
 }
 
 .tour-table td {
-  color: #ffffff;
+  color: #555555;
   font-size: 14px;
+}
+
+/* Form Styles */
+.form-container {
+  max-width: 600px;
+  margin: 20px auto;
+  padding: 20px;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: block;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+input[type="time"],
+input[type="date"],
+textarea,
+select {
+  width: 100%;
+  padding: 12px;
+  font-size: 14px;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  background-color: #ffffff;
+  color: #333333;
+  transition: border-color 0.2s ease-in-out;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus,
+input[type="number"]:focus,
+textarea:focus,
+select:focus {
+  border-color: #1877f2;
+  box-shadow: 0 0 4px rgba(24, 119, 242, 0.2);
+  outline: none;
+}
+
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+
+/* Action Buttons */
+button {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #ffffff;
+  background-color: #0078d4;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+  transform: scale(1.05);
+}
+
+.action-button {
+  padding: 8px 12px;
+  margin: 0 5px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 10px;
+  font-weight: 700;
+}
+
+.action-button:hover {
+  filter: brightness(0.9);
+}
+
+.edit-button {
+  background-color: #1877f2;
+  color: #ffffff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.add-button {
+  background-color: #28a745;
+  color: #ffffff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.delete-button {
+  background-color: #dc3545;
+  color: #ffffff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.edit-button:hover,
+.add-button:hover,
+.delete-button:hover {
+  transform: scale(1.1); /* Phóng to 1.1 lần */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Tạo hiệu ứng nổi */
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+/* Dropdown Styling */
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%239ca3af' d='M0 0l5 5 5-5H0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 10px 6px;
+}
+
+select::-webkit-scrollbar {
+  width: 8px;
+}
+
+select::-webkit-scrollbar-thumb {
+  background-color: #1877f2;
+  border-radius: 4px;
+}
+
+select::-webkit-scrollbar-track {
+  background: #f5f5f5;
 }
 
 /* Ensure the form container takes up 100% width */
@@ -462,189 +632,5 @@ h2 {
 /* Hover and focus effect for the remove button */
 .destination-group .remove-button:hover {
   background-color: #c9302c; /* Darker red on hover */
-}
-
-/* Nút hành động */
-.action-button {
-  padding: 8px 12px;
-  margin: 0 5px;
-  border-radius: 5px;
-  color: #ffffff;
-  font-weight: bold;
-  transition: background-color 0.3s, transform 0.2s;
-}
-
-.edit-button {
-  background-color: #0078d4;
-}
-
-.edit-button:hover {
-  background-color: #0056b3;
-  transform: scale(1.05);
-}
-
-.add-button {
-  background-color: #28a745;
-}
-
-.add-button:hover {
-  background-color: #218838;
-  transform: scale(1.05);
-}
-
-.delete-button {
-  background-color: #dc3545;
-}
-
-.delete-button:hover {
-  background-color: #c82333;
-  transform: scale(1.05);
-}
-
-/* Form */
-.form-container {
-  width: 60%;
-  margin: 20px auto;
-  padding: 20px;
-  background: linear-gradient(135deg, #0a015a, #03e6b8);
-  border-radius: 6px;
-  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.15);
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-bottom: 15px;
-}
-
-.form-group label {
-  font-weight: 600;
-  color: #eef1f5;
-  margin-bottom: 5px;
-}
-
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="number"],
-input[type="time"],
-input[type="date"],
-input[type="file"],
-textarea {
-  width: 100%;
-  padding: 12px;
-  font-size: 14px;
-  color: #333;
-  border: 1px solid #d1d5db;
-  border-radius: 6px;
-  background-color: #f3f4f6;
-  outline: none;
-  transition: border-color 0.2s ease;
-}
-
-input[type="text"]::placeholder,
-input[type="email"]::placeholder,
-input[type="password"]::placeholder,
-input[type="number"]::placeholder,
-input[type="time"]::placeholder,
-input[type="date"]::placeholder,
-input[type="file"]::placeholder,
-textarea::placeholder {
-  color: #9ca3af;
-}
-
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="password"]:focus,
-input[type="number"]:focus,
-input[type="file"]:focus,
-textarea:focus {
-  border-color: #1877f2;
-}
-
-/* Nút trong form */
-button {
-  padding: 10px 16px;
-  font-size: 14px;
-  font-weight: 500;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  width: 48%;
-}
-
-.create-button {
-  background-color: #42b72a;
-  color: #ffffff;
-}
-
-.update-button {
-  background-color: #1877f2;
-  color: #ffffff;
-}
-
-.cancel-button {
-  background-color: #e41e1e;
-  color: #ffffff;
-}
-
-button:hover {
-  background-color: #333333;
-}
-
-.button-group {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 20px;
-}
-
-.form-group select {
-  width: 100%;
-  padding: 10px;
-  padding-right: 35px;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
-  background-color: #f5f6f7;
-  font-size: 14px;
-  color: #333;
-  appearance: none;
-  -webkit-appearance: none;
-  transition: border-color 0.3s, box-shadow 0.3s;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='%239ca3af' d='M0 0l5 5 5-5H0z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  background-size: 10px 6px;
-}
-
-.form-group select:focus {
-  border-color: #1877f2;
-  box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
-  outline: none;
-}
-
-.form-group select::-webkit-scrollbar {
-  width: 10px;
-}
-
-.form-group select::-webkit-scrollbar-thumb {
-  background-color: #1877f2;
-  border-radius: 10px;
-}
-
-.form-group select::-webkit-scrollbar-track {
-  background: #e0e0e0;
-}
-
-.form-group select option {
-  padding: 10px;
-  color: #333;
-  background-color: #fff;
-}
-
-.form-group select option:hover {
-  background-color: #e4e6eb;
 }
 </style>

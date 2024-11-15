@@ -15,7 +15,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="city in cities" :key="city.id">
+          <tr v-for="city in paginatedCities" :key="city.id">
             <td>{{ city.id }}</td>
             <td>{{ city.name }}</td>
             <td>{{ city.description }}</td>
@@ -36,6 +36,15 @@
           </tr>
         </tbody>
       </table>
+      <div class="pagination">
+        <button :disabled="currentPage === 1" @click="prevPage">
+          Previous
+        </button>
+        <span>Page {{ currentPage }} of {{ totalPages }}</span>
+        <button :disabled="currentPage === totalPages" @click="nextPage">
+          Next
+        </button>
+      </div>
     </div>
 
     <div v-if="actionStep === 'create'" class="form-container">
@@ -50,8 +59,12 @@
           <input type="text" v-model="city.description" required />
         </div>
         <div class="button-group">
-          <button type="submit" class="create-button">Create</button>
-          <button type="button" @click="cancelAction" class="cancel-button">
+          <button type="submit" class="action-button add-button">Create</button>
+          <button
+            type="button"
+            @click="cancelAction"
+            class="action-button delete-button"
+          >
             Cancel
           </button>
         </div>
@@ -74,8 +87,14 @@
           <input type="text" v-model="currentCity.description" required />
         </div>
         <div class="button-group">
-          <button type="submit" class="update-button">Update</button>
-          <button type="button" @click="cancelAction" class="cancel-button">
+          <button type="submit" class="action-button edit-button">
+            Update
+          </button>
+          <button
+            type="button"
+            @click="cancelAction"
+            class="action-button delete-button"
+          >
             Cancel
           </button>
         </div>
@@ -86,11 +105,13 @@
 
 <script>
 import CityManagementController from "@/controllers/CityManagementController";
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted } from "vue";
 
 export default {
   setup() {
     const cities = ref([]);
+    const itemsPerPage = 5;
+    const currentPage = ref(1);
 
     const {
       fetchCities,
@@ -136,6 +157,23 @@ export default {
       actionStep.value = "read";
     };
 
+    const paginatedCities = computed(() => {
+      const startIndex = (currentPage.value - 1) * itemsPerPage;
+      return cities.value.slice(startIndex, startIndex + itemsPerPage);
+    });
+
+    const totalPages = computed(() =>
+      Math.ceil(cities.value.length / itemsPerPage)
+    );
+
+    const prevPage = () => {
+      if (currentPage.value > 1) currentPage.value--;
+    };
+
+    const nextPage = () => {
+      if (currentPage.value < totalPages.value) currentPage.value++;
+    };
+
     return {
       cities,
       actionStep,
@@ -147,98 +185,92 @@ export default {
       submitUpdateCity,
       cancelAction,
       deleteCity,
+      paginatedCities,
+      currentPage,
+      totalPages,
+      prevPage,
+      nextPage,
     };
   },
 };
 </script>
 
 <style scoped>
+/* Reset CSS */
 * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
   font-family: Arial, sans-serif;
+}
+
+body {
+  background-color: #ffffff; /* White background */
+  color: #333333; /* Black text */
+  line-height: 1.6;
 }
 
 .city-management {
   padding: 20px;
-  font-family: Arial, sans-serif;
-  height: calc(100vh - 90px);
-  background: linear-gradient(
-    135deg,
-    #0a015a,
-    #03e6b8
-  ); /* Gradient background */
-  color: #ffffff; /* Light color for text contrast */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
 h2 {
   margin-bottom: 20px;
-  color: #ffffff; /* White text for title */
+  font-size: 24px;
+  color: #333333;
+  text-align: center;
 }
 
+/* Table Styling */
 .table-container {
-  max-height: 80vh;
-  overflow-y: auto;
-  background-color: rgba(255, 255, 255, 0.1); /* Semi-transparent background */
-  border-radius: 5px;
-  padding: 10px;
-}
-
-.table-container::-webkit-scrollbar {
-  width: 12px;
-}
-
-.table-container::-webkit-scrollbar-track {
-  background: #f1f1f1;
-}
-
-.table-container::-webkit-scrollbar-thumb {
-  background-color: #005b8c;
-  border-radius: 10px;
-}
-
-.table-container::-webkit-scrollbar-thumb:hover {
-  background-color: #0078d4;
+  overflow-x: auto;
 }
 
 .city-table {
   width: 100%;
-  margin-top: 30px;
   border-collapse: collapse;
   margin-bottom: 20px;
-  border: 1px solid #d1d1d1;
-  border-radius: 8px;
-  overflow: hidden;
+  border: 1px solid #ddd; /* Light border */
 }
 
 .city-table th,
 .city-table td {
-  padding: 12px 16px;
+  padding: 12px;
   text-align: left;
-  border-bottom: 1px solid #d1d1d1;
+  border-bottom: 1px solid #ddd; /* Light border between rows */
 }
 
 .city-table th {
-  background-color: rgba(255, 255, 255, 0.15); /* Light overlay on gradient */
+  background-color: #f8f8f8; /* Light gray header */
+  color: #333333;
   font-weight: bold;
-  color: #ffffff;
-  font-size: 14px;
-}
-
-.city-table tr:hover {
-  background-color: rgba(255, 255, 255, 0.15); /* Light overlay when hovering */
 }
 
 .city-table tr:nth-child(even) {
-  background-color: rgba(255, 255, 255, 0.05);
+  background-color: #f9f9f9; /* Alternate row colors */
 }
 
 .city-table tr:nth-child(odd) {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: #ffffff; /* Alternate row colors */
 }
 
-.city-table td {
-  color: #ffffff;
+.city-table tr:hover {
+  background-color: #f1f1f1; /* Row hover effect */
+}
+
+/* Button Styling */
+button {
+  padding: 8px 12px;
   font-size: 14px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+button:hover {
+  background-color: #333333;
+  color: #ffffff;
 }
 
 .action-button {
@@ -248,79 +280,94 @@ h2 {
   color: #ffffff;
   font-weight: bold;
   transition: background-color 0.3s, transform 0.2s;
+  margin: 10px;
 }
 
 .edit-button {
-  background-color: #0078d4;
-}
-
-.edit-button:hover {
-  background-color: #0056b3;
-  transform: scale(1.05);
+  background-color: #1877f2;
+  color: #ffffff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .add-button {
   background-color: #28a745;
-}
-
-.add-button:hover {
-  background-color: #218838;
-  transform: scale(1.05);
+  color: #ffffff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .delete-button {
   background-color: #dc3545;
+  color: #ffffff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 4px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.edit-button:hover,
+.add-button:hover,
 .delete-button:hover {
-  background-color: #c82333;
-  transform: scale(1.05);
+  transform: scale(1.1); /* Phóng to 1.1 lần */
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Tạo hiệu ứng nổi */
+}
+
+.button-group {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+body {
+  background-color: #f9f9f9; /* Light background for entire page */
+  color: #333333; /* Dark text for contrast */
+  line-height: 1.6;
 }
 
 .form-container {
-  width: 60%;
-  margin: 20px auto;
-  padding: 20px;
-  background: linear-gradient(
-    135deg,
-    #0a015a,
-    #03e6b8
-  ); /* Light background for a subtle contrast */
-  border-radius: 6px;
-  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.15); /* Lighter shadow */
+  max-width: 500px; /* Restrict width for better responsiveness */
+  margin: 40px auto; /* Center form */
+  padding: 20px 30px; /* Comfortable padding */
+  background-color: #ffffff; /* White background */
+  border-radius: 8px; /* Smooth rounded corners */
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }
 
+/* Form Group Styling */
 .form-group {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 
 .form-group label {
-  font-weight: 500;
-  color: #eef1f5; /* Facebook-style font color */
+  display: block;
+  font-size: 14px;
+  color: #4a4a4a; /* Dark gray for labels */
+  margin-bottom: 6px; /* Space between label and input */
   font-weight: 600;
-  margin-bottom: 5px;
 }
 
+/* Input and Textarea Styling */
 input[type="text"],
 input[type="email"],
 input[type="password"],
 input[type="number"],
 input[type="time"],
 input[type="date"],
-input[type="file"],
 textarea {
-  width: 100%;
-  padding: 12px;
-  font-size: 14px;
-  color: #333;
+  width: 100%; /* Full width */
+  padding: 12px 14px; /* Comfortable padding */
+  font-size: 14px; /* Readable font size */
   border: 1px solid #d1d5db; /* Light border */
   border-radius: 6px; /* Rounded corners */
-  background-color: #f3f4f6; /* Light background for inputs */
+  background-color: #f7f8fa; /* Slightly lighter background */
+  color: #333333;
   outline: none;
-  transition: border-color 0.2s ease;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 input[type="text"]::placeholder,
@@ -329,53 +376,43 @@ input[type="password"]::placeholder,
 input[type="number"]::placeholder,
 input[type="time"]::placeholder,
 input[type="date"]::placeholder,
-input[type="file"]::placeholder,
 textarea::placeholder {
-  color: #9ca3af;
+  color: #9ca3af; /* Light gray for placeholders */
 }
 
 input[type="text"]:focus,
 input[type="email"]:focus,
 input[type="password"]:focus,
 input[type="number"]:focus,
-input[type="file"]:focus,
+input[type="time"]:focus,
+input[type="date"]:focus,
 textarea:focus {
-  border-color: #1877f2;
+  border-color: #1877f2; /* Blue border on focus */
+  box-shadow: 0 0 3px rgba(24, 119, 242, 0.5); /* Subtle glow */
 }
 
-button {
-  padding: 10px 16px;
-  font-size: 14px;
-  font-weight: 500;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s ease;
-  width: 48%;
-}
-
-.create-button {
-  background-color: #42b72a;
-  color: #ffffff;
-}
-
-.update-button {
-  background-color: #1877f2;
-  color: #ffffff;
-}
-
-.cancel-button {
-  background-color: #e41e1e;
-  color: #ffffff;
-}
-
-button:hover {
-  background-color: #333333; /* Consistent hover for all buttons */
-}
-.button-group {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.pagination {
   margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.pagination button {
+  padding: 5px 10px;
+  background-color: #007bff;
+  border: none;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.pagination button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.pagination span {
+  font-weight: bold;
 }
 </style>
