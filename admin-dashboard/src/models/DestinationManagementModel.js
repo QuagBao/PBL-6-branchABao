@@ -50,6 +50,10 @@ export async function getDestinationById(destinationID) {
         street: destination.address.street,
       },
       images: destination.images,
+      hotel_id: destination.hotel_id,
+      hotel: destination.hotel,
+      restaurant_id: destination.restaurant_id,
+      restaurant: destination.restaurant,
     };
   } catch (error) {
     console.error("Error fetching destination:", error);

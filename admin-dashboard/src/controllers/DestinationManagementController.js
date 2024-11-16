@@ -46,6 +46,16 @@ export default function () {
     actionStep.value = "create";
   };
 
+  const showDetailDestination = (destinationID) => {
+    try {
+      const destination = getDestination(destinationID);
+      actionStep.value = "viewDetail";
+      return destination;
+    } catch (error) {
+      toast.error("Error fetching destination");
+    }
+  };
+
   const updateDestination = async (destinationID) => {
     try {
       const destination = getDestination(destinationID);
@@ -108,5 +118,6 @@ export default function () {
     deleteDestination,
     getDestination,
     fetchCities,
+    showDetailDestination,
   };
 }
