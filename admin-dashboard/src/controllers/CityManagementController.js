@@ -46,18 +46,18 @@ export default function () {
     }
   };
 
-  const confirmCreate = async (city) => {
+  const confirmCreate = async (city, images) => {
     try {
-      await addCity(city);
+      await addCity(city, images);
       actionStep.value = "read";
       toast.success("Add City successfull");
     } catch (error) {
       toast.error("Error add city:", error);
     }
   };
-  const confirmUpdate = async (city) => {
+  const confirmUpdate = async (city, new_images, image_ids_to_remove) => {
     try {
-      await updateCityAPI(city);
+      await updateCityAPI(city, new_images, image_ids_to_remove);
       actionStep.value = "read";
       toast.success("Update City successfull");
     } catch (error) {

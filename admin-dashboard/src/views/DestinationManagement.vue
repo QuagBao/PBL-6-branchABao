@@ -30,22 +30,16 @@
             </td>
             <td>
               <button
-                class="action-button edit-button"
-                @click="showUpdateForm(destination.id)"
+                class="action-button view-button"
+                @click="showDetail(destination.id)"
               >
-                Update Destination
+                <i class="icon-update"></i> Detail
               </button>
               <button
                 class="action-button delete-button"
                 @click="deleteDestination(destination.id)"
               >
-                Delete Destination
-              </button>
-              <button
-                class="action-button view-button"
-                @click="showDetail(destination.id)"
-              >
-                View Detail
+                <i class="icon-delete"></i> Delete
               </button>
             </td>
           </tr>
@@ -130,11 +124,8 @@
             </div>
           </div>
           <div class="action-buttons">
-            <button @click="updateDestination">
+            <button @click="showUpdateForm(destination.id)">
               <i class="icon-update"></i> Update destination
-            </button>
-            <button @click="deleteDestination">
-              <i class="icon-delete"></i> Delete destination
             </button>
           </div>
         </section>
@@ -145,6 +136,27 @@
             <p>Top-rated accommodations for your stay.</p>
           </div>
           <div v-if="currentDestination.hotel" class="info-card">
+            <div class="info-item">
+              <i class="icon-property-amenities"></i>
+              <span
+                ><strong>Property Amenities:</strong>
+                {{ currentDestination.hotel.property_amenities || "N/A" }}</span
+              >
+            </div>
+            <div class="info-item">
+              <i class="icon-room-features"></i>
+              <span
+                ><strong>Room Features:</strong>
+                {{ currentDestination.hotel.room_features || "N/A" }}</span
+              >
+            </div>
+            <div class="info-item">
+              <i class="icon-hotel-style"></i>
+              <span
+                ><strong>Hotel Styles</strong>
+                {{ currentDestination.hotel.hotel_styles || "N/A" }}</span
+              >
+            </div>
             <div class="info-item">
               <i class="icon-hotel"></i>
               <span
@@ -157,6 +169,13 @@
               <span
                 ><strong>Room Types:</strong>
                 {{ currentDestination.hotel.room_types || "N/A" }}</span
+              >
+            </div>
+            <div class="info-item">
+              <i class="icon-language"></i>
+              <span
+                ><strong>Languages</strong>
+                {{ currentDestination.hotel.Languages || "N/A" }}</span
               >
             </div>
             <div class="info-item">
@@ -186,17 +205,17 @@
           <div v-else>
             <p class="no-data">Place does not have hotel information.</p>
             <div class="action-buttons">
-              <button @click="createHotel">
+              <button @click="showCreateForm_hotel">
                 <i class="icon-create"></i> Create hotel
               </button>
             </div>
           </div>
 
           <div v-if="currentDestination.hotel" class="action-buttons">
-            <button @click="updateHotel">
+            <button @click="showUpdateForm_hotel(currentDestination.id)">
               <i class="icon-update"></i> Update hotel
             </button>
-            <button @click="deleteHotel">
+            <button @click="deleteHotel(currentDestination.hotel_id)">
               <i class="icon-delete"></i> Delete hotel
             </button>
           </div>
@@ -227,17 +246,17 @@
           <div v-else>
             <p class="no-data">Place does not have restaurant information.</p>
             <div class="action-buttons">
-              <button @click="createRestaurant">
+              <button @click="showCreateForm_restaurant">
                 <i class="icon-create"></i> Create Restaurant
               </button>
             </div>
           </div>
 
           <div v-if="currentDestination.restaurant" class="action-buttons">
-            <button @click="updateRestaurant">
+            <button @click="showUpdateForm_restaurant(currentDestination.id)">
               <i class="icon-update"></i> Update Restaurant
             </button>
-            <button @click="deleteRestaurant">
+            <button @click="deleteRestaurant(currentDestination.restaurant_id)">
               <i class="icon-delete"></i> Delete Restaurant
             </button>
           </div>
@@ -450,6 +469,164 @@
         </div>
       </form>
     </div>
+    <div v-if="actionStep === 'create-hotel'" class="form-container">
+      <h3>Create Hotel</h3>
+      <form @submit.prevent="submitAddHotel" class="form-style">
+        <div class="form-group">
+          <label>Property Amenities:</label>
+          <input type="text" v-model="hotel.hotel.property_amenities" />
+        </div>
+        <div class="form-group">
+          <label>Room Features:</label>
+          <input type="text" v-model="hotel.hotel.room_features" />
+        </div>
+        <div class="form-group">
+          <label>Room Type:</label>
+          <input type="text" v-model="hotel.hotel.room_types" />
+        </div>
+        <div class="form-group">
+          <label>Hotel class:</label>
+          <input type="number" v-model="hotel.hotel.hotel_class" />
+        </div>
+        <div class="form-group">
+          <label>Hotel Styles:</label>
+          <input type="text" v-model="hotel.hotel.hotel_styles" />
+        </div>
+        <div class="form-group">
+          <label>Languages:</label>
+          <input type="text" v-model="hotel.hotel.Languages" />
+        </div>
+        <div class="form-group">
+          <label>Phone number:</label>
+          <input type="text" v-model="hotel.hotel.phone" />
+        </div>
+        <div class="form-group">
+          <label>Business Email:</label>
+          <input type="text" v-model="hotel.hotel.email" />
+        </div>
+        <div class="form-group">
+          <label>Business website:</label>
+          <input type="text" v-model="hotel.hotel.website" />
+        </div>
+        <div class="button-group">
+          <button type="submit" class="action-button add-button">Create</button>
+          <button
+            type="button"
+            @click="cancelAction"
+            class="action-button delete-button"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+    <div v-if="actionStep === 'update-hotel'" class="form-container">
+      <h3>Update Hotel</h3>
+      <form @submit.prevent="submitUpdateHotel" class="form-style">
+        <div class="form-group">
+          <label>Property Amenities:</label>
+          <input
+            type="text"
+            v-model="currentDestination.hotel.property_amenities"
+          />
+        </div>
+        <div class="form-group">
+          <label>Room Features:</label>
+          <input type="text" v-model="currentDestination.hotel.room_features" />
+        </div>
+        <div class="form-group">
+          <label>Room Type:</label>
+          <input type="text" v-model="currentDestination.hotel.room_types" />
+        </div>
+        <div class="form-group">
+          <label>Hotel class:</label>
+          <input type="number" v-model="currentDestination.hotel.hotel_class" />
+        </div>
+        <div class="form-group">
+          <label>Hotel Styles:</label>
+          <input type="text" v-model="currentDestination.hotel.hotel_styles" />
+        </div>
+        <div class="form-group">
+          <label>Languages:</label>
+          <input type="text" v-model="currentDestination.hotel.Languages" />
+        </div>
+        <div class="form-group">
+          <label>Phone number:</label>
+          <input type="text" v-model="currentDestination.hotel.phone" />
+        </div>
+        <div class="form-group">
+          <label>Business Email:</label>
+          <input type="text" v-model="currentDestination.hotel.email" />
+        </div>
+        <div class="form-group">
+          <label>Business website:</label>
+          <input type="text" v-model="currentDestination.hotel.website" />
+        </div>
+        <div class="button-group">
+          <button type="submit" class="action-button edit-button">
+            Update
+          </button>
+          <button
+            type="button"
+            @click="cancelAction"
+            class="action-button delete-button"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+    <div v-if="actionStep === 'create-restaurant'" class="form-container">
+      <h3>Create Restaurant</h3>
+      <form @submit.prevent="submitAddRestaurant" class="form-style">
+        <div class="form-group">
+          <label>Cuisine:</label>
+          <input type="text" v-model="restaurant.restaurant.cuisine" />
+        </div>
+        <div class="form-group">
+          <label>Special diet:</label>
+          <input type="text" v-model="restaurant.restaurant.special_diet" />
+        </div>
+        <div class="button-group">
+          <button type="submit" class="action-button add-button">Create</button>
+          <button
+            type="button"
+            @click="cancelAction"
+            class="action-button delete-button"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
+    <div v-if="actionStep === 'update-restaurant'" class="form-container">
+      <h3>Update Restaurant</h3>
+      <form @submit.prevent="submitUpdateRestaurant" class="form-style">
+        <div class="form-group">
+          <label>Cuisine:</label>
+          <input type="text" v-model="currentDestination.restaurant.cuisine" />
+        </div>
+        <div class="form-group">
+          <label>Special diet:</label>
+          <input
+            type="text"
+            v-model="currentDestination.restaurant.special_diet"
+          />
+        </div>
+        <div class="button-group">
+          <button type="submit" class="action-button edit-button">
+            Update
+          </button>
+          <button
+            type="button"
+            @click="cancelAction"
+            class="action-button delete-button"
+          >
+            Cancel
+          </button>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -480,6 +657,16 @@ export default {
       deleteDestination,
       fetchCities,
       showDetailDestination,
+      createHotel,
+      updateHotel,
+      confirmCreateHotel,
+      confirmUpdateHotel,
+      deleteHotel,
+      createRestaurant,
+      updateRestaurant,
+      confirmCreateRestaurant,
+      confirmUpdateRestaurant,
+      deleteRestaurant,
     } = DestinationManagementController();
 
     const destination = ref({
@@ -556,6 +743,31 @@ export default {
       },
     });
 
+    const hotel = ref({
+      id: 0,
+      hotel: {
+        property_amenities: "",
+        room_features: "",
+        room_types: "",
+        hotel_class: 0,
+        hotel_styles: "",
+        Languages: "",
+        phone: "",
+        email: "",
+        website: "",
+        id: "",
+      },
+    });
+
+    const restaurant = ref({
+      id: 0,
+      restaurant: {
+        cuisine: "",
+        special_diet: "",
+        id: "",
+      },
+    });
+
     const loadDestinations = async () => {
       destinations.value = await fetchDestinations();
     };
@@ -576,6 +788,16 @@ export default {
       createDestination();
     };
 
+    const showCreateForm_hotel = () => {
+      hotel.value.id = currentDestination.value.id;
+      createHotel();
+    };
+
+    const showCreateForm_restaurant = () => {
+      restaurant.value.id = currentDestination.value.id;
+      createRestaurant();
+    };
+
     const submitAddDestination = async () => {
       await confirmCreate(destination.value, images.value);
       destination.value = { name: "", description: "" };
@@ -583,8 +805,28 @@ export default {
       loadDestinations();
     };
 
+    const submitAddHotel = async () => {
+      await confirmCreateHotel(hotel.value);
+      destination.value = { name: "", description: "" };
+    };
+
+    const submitAddRestaurant = async () => {
+      await confirmCreateRestaurant(restaurant.value);
+      destination.value = { name: "", description: "" };
+    };
+
     const showUpdateForm = async (destinationID) => {
       const destinationData = await updateDestination(destinationID);
+      currentDestination.value = { ...destinationData };
+    };
+
+    const showUpdateForm_hotel = async (destinationID) => {
+      const destinationData = await updateHotel(destinationID);
+      currentDestination.value = { ...destinationData };
+    };
+
+    const showUpdateForm_restaurant = async (destinationID) => {
+      const destinationData = await updateRestaurant(destinationID);
       currentDestination.value = { ...destinationData };
     };
 
@@ -644,8 +886,20 @@ export default {
       loadDestinations();
     };
 
+    const submitUpdateHotel = async () => {
+      await confirmUpdateHotel(currentDestination.value);
+    };
+
+    const submitUpdateRestaurant = async () => {
+      await confirmUpdateRestaurant(currentDestination.value);
+    };
+
     const cancelAction = () => {
-      actionStep.value = "read";
+      if (actionStep.value == "create") {
+        actionStep.value = "read";
+      } else {
+        showDetail(currentDestination.value.id);
+      }
     };
 
     const paginatedDestinations = computed(() => {
@@ -695,6 +949,18 @@ export default {
       nextPage,
       showDetail,
       goBack,
+      restaurant,
+      hotel,
+      showCreateForm_hotel,
+      showCreateForm_restaurant,
+      submitAddHotel,
+      submitAddRestaurant,
+      showUpdateForm_hotel,
+      showUpdateForm_restaurant,
+      deleteHotel,
+      deleteRestaurant,
+      submitUpdateHotel,
+      submitUpdateRestaurant,
     };
   },
 };
@@ -823,7 +1089,7 @@ button:hover {
 }
 
 .delete-button {
-  background-color: #dc3545;
+  background-color: #ec870b;
   color: #ffffff;
   border: none;
   padding: 8px 12px;
@@ -1279,6 +1545,26 @@ i {
 .icon-create:before {
   content: "\f0e7";
   color: #28a745;
+}
+
+.icon-property-amenities:before {
+  content: "\f1ad"; /* Mã Unicode cho 'fa-concierge-bell' */
+  color: #007bff; /* Màu xanh lam */
+}
+
+.icon-room-features:before {
+  content: "\f236"; /* Mã Unicode cho 'fa-bed' */
+  color: #6c757d; /* Màu xám */
+}
+
+.icon-hotel-style:before {
+  content: "\f005"; /* Mã Unicode cho 'fa-star' */
+  color: #ffc107; /* Màu vàng */
+}
+
+.icon-language:before {
+  content: "\f1ab"; /* Mã Unicode cho 'fa-globe' */
+  color: #28a745; /* Màu xanh lá */
 }
 
 /* CSS cho các action button */

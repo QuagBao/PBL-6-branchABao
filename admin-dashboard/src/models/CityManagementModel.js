@@ -36,6 +36,7 @@ export async function getCityById(cityID) {
       id: city.id,
       name: city.name,
       description: city.description,
+      images: city.images,
     };
   } catch (error) {
     console.error("Error fetching city:", error);
@@ -43,18 +44,45 @@ export async function getCityById(cityID) {
   }
 }
 
-export async function updateCity(city) {
+export async function updateCity(city, new_images, image_ids_to_remove) {
   try {
     const token = sessionStorage.getItem("token");
     if (!token) throw new Error("No token found");
 
-    const response = await axios.put(
-      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/city/${city.id}`, // sử dụng user.id làm userId
-      {
-        name: city.name,
-        description: city.description,
-      }
+    const url = new URL(
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/city/${city.id}`
     );
+    url.searchParams.append("name", city.name);
+    url.searchParams.append("description", city.description);
+
+    let formData = null;
+    if (
+      (new_images && new_images.length > 0) ||
+      (image_ids_to_remove && image_ids_to_remove.length > 0)
+    ) {
+      formData = new FormData();
+
+      // Thêm new_images nếu có dữ liệu
+      if (new_images && new_images.length > 0) {
+        new_images.forEach((file) => {
+          formData.append("new_images", file);
+        });
+      }
+
+      // Thêm image_ids_to_remove nếu có dữ liệu
+      if (image_ids_to_remove && image_ids_to_remove.length > 0) {
+        image_ids_to_remove.forEach((id) => {
+          formData.append("image_ids_to_remove", id);
+        });
+      }
+    }
+
+    // Gửi PUT request với dữ liệu từ FormData
+    const response = await axios.put(url.toString(), formData || undefined, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
     if (response.status === 200) {
       console.log("City updated successfully");
@@ -66,18 +94,31 @@ export async function updateCity(city) {
   }
 }
 
-export async function addCity(city) {
+export async function addCity(city, images) {
   try {
     const token = sessionStorage.getItem("token");
     if (!token) throw new Error("No token found");
 
-    const response = await axios.post(
-      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/city/`, // sử dụng user.id làm userId
-      {
-        name: city.name,
-        description: city.description,
-      }
+    const url = new URL(
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/city/`
     );
+    url.searchParams.append("name", city.name);
+    url.searchParams.append("description", city.description);
+
+    let formData = null;
+    if (images && images.length > 0) {
+      formData = new FormData();
+      images.forEach((file) => {
+        formData.append("images", file);
+      });
+    }
+
+    // Gửi PUT request với dữ liệu từ FormData
+    const response = await axios.post(url.toString(), formData || undefined, {
+      headers: {
+        "Content-Type": "multipart/form-data", // Đảm bảo gửi đúng content type
+      },
+    });
 
     if (response.status === 200) {
       console.log("City add successfully");

@@ -58,6 +58,20 @@
           <label>Description:</label>
           <input type="text" v-model="city.description" required />
         </div>
+        <div class="form-group">
+          <label>Images:</label>
+          <input type="file" @change="handleImageUpload" multiple />
+          <div class="image-list">
+            <div
+              v-for="(img, index) in previewImages"
+              :key="index"
+              class="image-item"
+            >
+              <img :src="img" alt="Image Preview" />
+              <button @click.prevent="removeImage(index)">-</button>
+            </div>
+          </div>
+        </div>
         <div class="button-group">
           <button type="submit" class="action-button add-button">Create</button>
           <button
@@ -86,6 +100,31 @@
           <label>Description:</label>
           <input type="text" v-model="currentCity.description" required />
         </div>
+        <div class="form-group">
+          <label>Current Images:</label>
+          <div class="image-list">
+            <div
+              v-for="img in currentCity.images"
+              :key="img.id"
+              class="image-item"
+            >
+              <img :src="img.url" alt="Existing Image" />
+              <button @click.prevent="removeExistingImage(img.id)">-</button>
+            </div>
+          </div>
+          <label>Upload New Images:</label>
+          <input type="file" @change="handleNewImageUpload" multiple />
+          <div class="image-list">
+            <div
+              v-for="(img, index) in previewNewImages"
+              :key="index"
+              class="image-item"
+            >
+              <img :src="img" alt="Image Preview" />
+              <button @click.prevent="removeNewImage(index)">-</button>
+            </div>
+          </div>
+        </div>
         <div class="button-group">
           <button type="submit" class="action-button edit-button">
             Update
@@ -113,6 +152,12 @@ export default {
     const itemsPerPage = 5;
     const currentPage = ref(1);
 
+    const images = ref([]);
+    const new_images = ref([]);
+    const image_ids_to_remove = ref([]);
+    const previewImages = ref([]);
+    const previewNewImages = ref([]);
+
     const {
       fetchCities,
       actionStep,
@@ -123,8 +168,8 @@ export default {
       deleteCity,
     } = CityManagementController();
 
-    const city = ref({ name: "", description: "" });
-    const currentCity = ref({ id: "", name: "", description: "" });
+    const city = ref({ name: "", description: "", images: [] });
+    const currentCity = ref({ id: "", name: "", description: "", images: [] });
 
     const loadCities = async () => {
       cities.value = await fetchCities();
@@ -137,8 +182,9 @@ export default {
     };
 
     const submitAddCity = async () => {
-      await confirmCreate(city.value);
-      city.value = { name: "", description: "" };
+      await confirmCreate(city.value, images.value);
+      city.value = { name: "", description: "", images: [] };
+      previewImages.value = [];
       loadCities();
     };
 
@@ -149,7 +195,13 @@ export default {
     };
 
     const submitUpdateCity = async () => {
-      await confirmUpdate(currentCity.value);
+      await confirmUpdate(
+        currentCity.value,
+        new_images.value,
+        image_ids_to_remove.value
+      );
+      previewNewImages.value = [];
+      image_ids_to_remove.value = [];
       loadCities();
     };
 
@@ -174,6 +226,41 @@ export default {
       if (currentPage.value < totalPages.value) currentPage.value++;
     };
 
+    const handleImageUpload = (event) => {
+      const files = event.target.files;
+      Array.from(files).forEach((file) => {
+        images.value.push(file);
+        previewImages.value.push(URL.createObjectURL(file)); // Thêm URL preview vào mảng
+      });
+    };
+
+    const removeImage = (index) => {
+      images.value.splice(index, 1); // Xoá file ảnh khỏi mảng
+      URL.revokeObjectURL(previewImages.value[index]); // Giải phóng bộ nhớ của URL preview
+      previewImages.value.splice(index, 1); // Xoá URL preview khỏi mảng
+    };
+
+    const handleNewImageUpload = (event) => {
+      const files = event.target.files;
+      Array.from(files).forEach((file) => {
+        new_images.value.push(file);
+        previewNewImages.value.push(URL.createObjectURL(file)); // Thêm URL preview vào mảng
+      });
+    };
+
+    const removeNewImage = (index) => {
+      new_images.value.splice(index, 1); // Remove new image by index
+      URL.revokeObjectURL(previewNewImages.value[index]); // Giải phóng bộ nhớ của URL preview
+      previewNewImages.value.splice(index, 1); // Xoá URL preview khỏi mảng
+    };
+
+    const removeExistingImage = (id) => {
+      image_ids_to_remove.value.push(id); // Add image id to removal list
+      currentCity.value.images = currentCity.value.images.filter(
+        (img) => img.id !== id
+      );
+    };
+
     return {
       cities,
       actionStep,
@@ -190,6 +277,16 @@ export default {
       totalPages,
       prevPage,
       nextPage,
+      handleImageUpload,
+      handleNewImageUpload,
+      removeImage,
+      removeNewImage,
+      removeExistingImage,
+      images,
+      new_images,
+      image_ids_to_remove,
+      previewImages,
+      previewNewImages,
     };
   },
 };
@@ -352,12 +449,7 @@ body {
 }
 
 /* Input and Textarea Styling */
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="number"],
-input[type="time"],
-input[type="date"],
+input,
 textarea {
   width: 100%; /* Full width */
   padding: 12px 14px; /* Comfortable padding */
@@ -370,22 +462,12 @@ textarea {
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
-input[type="text"]::placeholder,
-input[type="email"]::placeholder,
-input[type="password"]::placeholder,
-input[type="number"]::placeholder,
-input[type="time"]::placeholder,
-input[type="date"]::placeholder,
+input::placeholder,
 textarea::placeholder {
   color: #9ca3af; /* Light gray for placeholders */
 }
 
-input[type="text"]:focus,
-input[type="email"]:focus,
-input[type="password"]:focus,
-input[type="number"]:focus,
-input[type="time"]:focus,
-input[type="date"]:focus,
+input:focus,
 textarea:focus {
   border-color: #1877f2; /* Blue border on focus */
   box-shadow: 0 0 3px rgba(24, 119, 242, 0.5); /* Subtle glow */
@@ -414,5 +496,44 @@ textarea:focus {
 
 .pagination span {
   font-weight: bold;
+}
+
+/* Hình ảnh */
+.image-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.image-item {
+  position: relative;
+  width: 100px;
+  height: 100px;
+}
+
+.image-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+}
+
+.image-item button {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background: #dc3545;
+  color: #ffffff;
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  padding: 5px;
+  font-size: 12px;
+  transition: transform 0.2s;
+}
+
+.image-item button:hover {
+  transform: scale(1.1);
 }
 </style>
