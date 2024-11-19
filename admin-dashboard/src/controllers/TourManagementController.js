@@ -41,6 +41,16 @@ export default function () {
     }
   };
 
+  const showDetailTour = (tourID) => {
+    try {
+      const tour = getTour(tourID);
+      actionStep.value = "viewDetail";
+      return tour;
+    } catch (error) {
+      toast.error("Error fetching tour");
+    }
+  };
+
   const createTour = () => {
     actionStep.value = "create";
   };
@@ -105,5 +115,6 @@ export default function () {
     deleteTour,
     getTour,
     getDestination,
+    showDetailTour,
   };
 }

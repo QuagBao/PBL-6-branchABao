@@ -14,7 +14,6 @@
             <th>User ID</th>
             <th>City ID</th>
             <th>Duration</th>
-            <th>Tour Detail</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -27,26 +26,17 @@
             <td>{{ tour.city_id }}</td>
             <td>{{ tour.duration }}</td>
             <td>
-              <div>
-                <table class="tours-details">
-                  <tbody>
-                    <tr
-                      v-for="destination in tour.destinations"
-                      :key="destination.id"
-                    >
-                      <td>{{ destination.id }}</td>
-                      <td>{{ destination.name }}</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </td>
-            <td>
               <button
                 class="action-button edit-button"
                 @click="showUpdateForm(tour.id)"
               >
                 Update Tour
+              </button>
+              <button
+                class="action-button edit-button"
+                @click="showDetail(tour.id)"
+              >
+                Show detail
               </button>
               <button
                 class="action-button delete-button"
@@ -58,6 +48,91 @@
           </tr>
         </tbody>
       </table>
+    </div>
+    <div v-if="actionStep === 'viewDetail'" class="detail-destination">
+      <div class="header-overlay">
+        <button class="back-button" @click="goBack">
+          <i class="icon-back"></i>
+          <!-- Icon Font Awesome -->
+        </button>
+      </div>
+
+      <div v-if="currentTour" class="destination-info">
+        <section class="info-section destination-detail">
+          <div class="section-header">
+            <h2>Tour Detail</h2>
+            <p>Explore key details about the tour.</p>
+          </div>
+          <div class="detail-card">
+            <div class="detail-item">
+              <i class="icon-dashboard"></i>
+              <span><strong>Name:</strong>{{ currentTour.name || "N/A" }}</span>
+            </div>
+            <div class="detail-item">
+              <i class="icon-info"></i>
+              <span
+                ><strong>Description:</strong>
+                {{
+                  currentTour.description || "No description available"
+                }}</span
+              >
+            </div>
+            <div class="detail-item">
+              <i class="icon-user"></i>
+              <span
+                ><strong>User Create:</strong>
+                {{ currentTour.user_id || "N/A" }}</span
+              >
+            </div>
+            <div class="detail-item">
+              <i class="icon-city"></i>
+              <span
+                ><strong>City:</strong> {{ currentTour.city_id || "N/A" }}</span
+              >
+            </div>
+            <div class="detail-item">
+              <i class="icon-duration"></i>
+              <span
+                ><strong>Duration:</strong>
+                {{ currentTour.duration || "N/A" }}</span
+              >
+            </div>
+          </div>
+        </section>
+
+        <section class="info-section">
+          <div class="section-header">
+            <h2>Tour List Detail</h2>
+            <p>List of tour you need to travel.</p>
+          </div>
+          <div v-if="currentTour.destinations" class="info-card">
+            <div
+              class="info-item"
+              v-for="(destination, index) in currentTour.destinations"
+              :key="index"
+            >
+              <i class="icon-info"></i>
+              <span>
+                <strong>Destination Name:</strong>
+                {{ destination.name || "N/A" }}
+              </span>
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <button @click="showUpdateForm(currentTour.id)">
+              <i class="icon-update"></i> Update Tour
+            </button>
+            <button @click="deleteTour(currentTour.id)">
+              <i class="icon-delete"></i> Delete Tour
+            </button>
+          </div>
+        </section>
+      </div>
+
+      <div v-else class="loading">
+        <p>Loading tour details...</p>
+      </div>
     </div>
 
     <div v-if="actionStep === 'create'" class="form-container">
@@ -210,6 +285,7 @@ export default {
       confirmUpdate,
       deleteTour,
       getDestination,
+      showDetailTour,
     } = TourManagementController();
 
     const tour = ref({
@@ -296,6 +372,16 @@ export default {
       actionStep.value = "read";
     };
 
+    const showDetail = async (tourID) => {
+      const tourData = await showDetailTour(tourID);
+      currentTour.value = { ...tourData };
+    };
+
+    const goBack = () => {
+      actionStep.value = "read";
+      loadTours();
+    };
+
     return {
       tours,
       actionStep,
@@ -313,6 +399,8 @@ export default {
       destinations,
       addDestination_update,
       removeDestination_update,
+      showDetail,
+      goBack,
     };
   },
 };
@@ -632,5 +720,393 @@ select::-webkit-scrollbar-track {
 /* Hover and focus effect for the remove button */
 .destination-group .remove-button:hover {
   background-color: #c9302c; /* Darker red on hover */
+}
+
+.back-button {
+  position: absolute;
+  top: 10px; /* Điều chỉnh vị trí top */
+  left: 10px; /* Điều chỉnh vị trí trái */
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px; /* Khoảng cách giữa icon và text */
+}
+
+.back-button i {
+  font-size: 20px; /* Kích thước icon */
+}
+
+.back-button:hover {
+  color: #d4d4d4; /* Hiệu ứng hover */
+}
+
+.admin-header {
+  position: relative;
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 123, 255, 0.7),
+    rgba(0, 123, 255, 0.9)
+  );
+  color: #fff;
+  padding: 20px;
+  text-align: center;
+  border-radius: 8px;
+}
+
+.header-overlay {
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  text-align: center;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.header-overlay h1 {
+  font-size: 2.5rem;
+  font-weight: bold;
+}
+
+.header-overlay p {
+  font-size: 1.2rem;
+}
+
+.info-section {
+  background: #f9f9f9;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+/* Section Header */
+.section-header h2 {
+  font-size: 1.8rem;
+  color: #1e90ff;
+  margin-bottom: 10px;
+}
+
+.section-header p {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* Info Card */
+.info-card {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.info-item:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.info-item i {
+  font-size: 1.5rem;
+  color: #1e90ff;
+  margin-right: 15px;
+}
+
+.info-item span {
+  font-size: 1rem;
+  color: #333;
+}
+
+.info-item strong {
+  color: #1e90ff;
+}
+
+/* No Data Message */
+.no-data {
+  font-size: 1rem;
+  color: #999;
+  text-align: center;
+  margin-top: 10px;
+}
+
+/* Gallery */
+.image-gallery .gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+}
+
+.gallery-item {
+  position: relative;
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.05);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.gallery-item:hover img {
+  transform: scale(1.5); /* Phóng to 1.5 lần khi hover */
+}
+
+.gallery-item:hover .image-overlay {
+  opacity: 1;
+}
+
+.destination-detail {
+  background: #f9f9f9;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px 0;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.section-header h2 {
+  font-size: 1.8rem;
+  color: #1e90ff;
+  margin-bottom: 10px;
+}
+
+.section-header p {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* Detail Card */
+.detail-card {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 15px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.detail-item:hover {
+  transform: scale(1.02);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.detail-item i {
+  font-size: 1.5rem;
+  color: #1e90ff;
+  margin-right: 15px;
+}
+
+.detail-item span {
+  font-size: 1rem;
+  color: #333;
+}
+
+.detail-item strong {
+  color: #1e90ff;
+}
+
+/* Cấu trúc chung cho icon */
+i {
+  margin-right: 8px;
+  font-size: 16px;
+  display: inline-block;
+  font-weight: 900;
+  font-family: "Font Awesome 5 Free";
+}
+
+/* Icon cho Dashboard */
+.icon-dashboard:before {
+  content: "\f015"; /* Mã Unicode cho icon 'fa-tachometer-alt' */
+  color: #007bff; /* Màu xanh lam */
+}
+
+/* Icon cho Địa điểm */
+.icon-location:before {
+  content: "\f3c5"; /* Mã Unicode cho icon 'fa-map-marker-alt' */
+  color: #ff5733; /* Màu cam */
+}
+
+/* Icon cho Mô tả */
+.icon-info:before {
+  content: "\f05a"; /* Mã Unicode cho icon 'fa-info-circle' */
+  color: #17a2b8; /* Màu xanh biển nhạt */
+}
+
+/* Icon cho Địa chỉ */
+.icon-address:before {
+  content: "\f279"; /* Mã Unicode cho icon 'fa-map' */
+  color: #28a745; /* Màu xanh lá cây */
+}
+
+/* Icon cho Giá */
+.icon-price:before {
+  content: "\f155"; /* Mã Unicode cho icon 'fa-dollar-sign' */
+  color: #ffc107; /* Màu vàng */
+}
+
+/* Icon cho Thời gian */
+.icon-duration:before {
+  content: "\f017"; /* Mã Unicode cho icon 'fa-clock' */
+  color: #6c757d; /* Màu xám */
+}
+
+/* Icon cho Khách sạn */
+.icon-hotel:before {
+  content: "\f594"; /* Mã Unicode cho icon 'fa-hotel' */
+  color: #007bff; /* Màu xanh */
+}
+
+/* Icon cho Loại phòng */
+.icon-room:before {
+  content: "\f236"; /* Mã Unicode cho icon 'fa-bed' */
+  color: #6610f2; /* Màu tím đậm */
+}
+
+/* Icon cho Số điện thoại */
+.icon-phone:before {
+  content: "\f095"; /* Mã Unicode cho icon 'fa-phone' */
+  color: #dc3545; /* Màu đỏ */
+}
+
+/* Icon cho Email */
+.icon-email:before {
+  content: "\f0e0"; /* Mã Unicode cho icon 'fa-envelope' */
+  color: #17a2b8; /* Màu xanh biển nhạt */
+}
+
+/* Icon cho Website */
+.icon-website:before {
+  content: "\f0ac"; /* Mã Unicode cho icon 'fa-globe' */
+  color: #28a745; /* Màu xanh lá cây */
+}
+
+/* Icon cho Nhà hàng */
+.icon-utensils:before {
+  content: "\f2e7"; /* Mã Unicode cho icon 'fa-utensils' */
+  color: #ff5733; /* Màu cam */
+}
+
+/* Icon cho Chế độ ăn đặc biệt */
+.icon-diet:before {
+  content: "\f6f0"; /* Mã Unicode cho icon 'fa-leaf' */
+  color: #28a745; /* Màu xanh lá cây */
+}
+
+.icon-back:before {
+  content: "\f104"; /* Mã Unicode cho icon 'fa-leaf' */
+  color: #17a2b8; /* Màu xanh lá cây */
+}
+
+.icon-update:before {
+  content: "\f044";
+  color: #007bff;
+}
+
+.icon-delete:before {
+  content: "\f2ed";
+  color: #dc3545;
+}
+
+.icon-create:before {
+  content: "\f0e7";
+  color: #28a745;
+}
+
+.icon-property-amenities:before {
+  content: "\f1ad"; /* Mã Unicode cho 'fa-concierge-bell' */
+  color: #007bff; /* Màu xanh lam */
+}
+
+.icon-room-features:before {
+  content: "\f236"; /* Mã Unicode cho 'fa-bed' */
+  color: #6c757d; /* Màu xám */
+}
+
+.icon-hotel-style:before {
+  content: "\f005"; /* Mã Unicode cho 'fa-star' */
+  color: #ffc107; /* Màu vàng */
+}
+
+.icon-language:before {
+  content: "\f1ab"; /* Mã Unicode cho 'fa-globe' */
+  color: #28a745; /* Màu xanh lá */
+}
+
+.icon-user:before {
+  content: "\f007";
+  color: #007bff;
+}
+.icon-city:before {
+  content: "\f1ad";
+  color: #007bff;
+}
+
+/* CSS cho các action button */
+.action-buttons {
+  display: flex;
+  justify-content: flex-end; /* Đẩy các nút về phía phải */
+  gap: 10px; /* Khoảng cách giữa các nút */
+  margin-top: 10px; /* Tạo khoảng cách giữa nút và phần phía trên */
+}
+
+.action-buttons button {
+  background-color: transparent;
+  border: 1px solid #007bff; /* Màu viền cho nút */
+  color: #007bff; /* Màu chữ cho nút */
+  padding: 10px 20px;
+  font-size: 14px;
+  border-radius: 5px; /* Bo tròn góc cho nút */
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+}
+
+.action-buttons button i {
+  margin-right: 5px; /* Khoảng cách giữa icon và chữ */
+}
+
+.action-buttons button:hover {
+  background-color: #007bff;
+  color: #fff; /* Màu chữ khi hover */
+}
+
+/* Căn nút ở góc phải trong phần Hotel Information và Restaurant Information */
+.detail-card .action-buttons,
+.info-card .action-buttons {
+  position: absolute; /* Vị trí tuyệt đối so với phần tử cha */
+  right: 0;
+  top: 10px;
+  display: flex;
+  gap: 10px;
+}
+
+/* Điều chỉnh nút khi không có dữ liệu */
+.no-data .action-buttons {
+  justify-content: flex-end;
 }
 </style>
