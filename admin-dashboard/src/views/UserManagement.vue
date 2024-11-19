@@ -336,11 +336,7 @@ export default {
       confirmPassword: "",
     });
 
-    const uploadedImageFile = ref(
-      currentUser.value.userInfo.image.url
-        ? currentUser.value.userInfo.image.url
-        : null
-    );
+    const uploadedImageFile = ref(null);
 
     const loadUsers = async () => {
       users.value = await fetchUsers();

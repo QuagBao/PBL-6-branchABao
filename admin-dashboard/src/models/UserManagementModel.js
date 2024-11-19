@@ -79,14 +79,15 @@ export async function createUserInfo(user, uploadedImageFile) {
     params.append("city_id", user.userInfo.address.city_id);
 
     // Create FormData and add the image if provided
-    const formData = new FormData();
+    let formData = null;
     if (uploadedImageFile) {
-      formData.append("image", uploadedImageFile);
+      formData = new FormData();
+      formData.append("image_inp", uploadedImageFile);
     }
 
     const response = await axios.post(
       `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/userInfo/?${params.toString()}`,
-      formData,
+      formData || undefined,
       {
         headers: {
           accept: "application/json",
@@ -122,16 +123,17 @@ export async function updateUserInfo(user, uploadedImageFile) {
     params.append("city_id", user.userInfo.address.city_id || "");
 
     // Only include the image in FormData if it is provided
-    const formData = new FormData();
+    let formData = null;
     if (uploadedImageFile) {
-      formData.append("image", uploadedImageFile);
+      formData = new FormData();
+      formData.append("image_inp", uploadedImageFile);
     }
 
     const response = await axios.put(
       `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/userInfo/${
         user.userInfo.id
       }?${params.toString()}`,
-      formData,
+      formData || undefined,
       {
         headers: {
           accept: "application/json",
