@@ -10,6 +10,8 @@ import {
   deleteTour as deleteTourAPI,
   getDestination as getDestinationAPI,
 } from "@/models/TourManagementModel";
+import { getCities as fetchCitiesAPI } from "@/models/CityManagementModel";
+import { getUsers as fetchUsersAPI } from "@/models/UserManagementModel";
 
 export default function () {
   const actionStep = ref("read");
@@ -20,6 +22,24 @@ export default function () {
       return tours;
     } catch (error) {
       toast.error("Error fetching hotel:", error);
+    }
+  };
+
+  const fetchUsers = async () => {
+    try {
+      const users = await fetchUsersAPI();
+      return users;
+    } catch (error) {
+      toast.error("Error to get User");
+    }
+  };
+
+  const fetchCities = async () => {
+    try {
+      const cities = await fetchCitiesAPI();
+      return cities;
+    } catch (error) {
+      toast.error("Error fetching cities:", error);
     }
   };
 
@@ -116,5 +136,7 @@ export default function () {
     getTour,
     getDestination,
     showDetailTour,
+    fetchCities,
+    fetchUsers,
   };
 }

@@ -11,8 +11,8 @@
             <th>Id</th>
             <th>Tour Name</th>
             <th>Description</th>
-            <th>User ID</th>
-            <th>City ID</th>
+            <th>User</th>
+            <th>City</th>
             <th>Duration</th>
             <th>Actions</th>
           </tr>
@@ -22,8 +22,8 @@
             <td>{{ tour.id }}</td>
             <td>{{ tour.name }}</td>
             <td>{{ tour.description }}</td>
-            <td>{{ tour.user_id }}</td>
-            <td>{{ tour.city_id }}</td>
+            <td>{{ getUserName(tour.user_id) }}</td>
+            <td>{{ getCityName(tour.city_id) }}</td>
             <td>{{ tour.duration }}</td>
             <td>
               <button
@@ -81,13 +81,14 @@
               <i class="icon-user"></i>
               <span
                 ><strong>User Create:</strong>
-                {{ currentTour.user_id || "N/A" }}</span
+                {{ getUserName(currentTour.user_id) || "N/A" }}</span
               >
             </div>
             <div class="detail-item">
               <i class="icon-city"></i>
               <span
-                ><strong>City:</strong> {{ currentTour.city_id || "N/A" }}</span
+                ><strong>City:</strong>
+                {{ getCityName(currentTour.city_id) || "N/A" }}</span
               >
             </div>
             <div class="detail-item">
@@ -150,8 +151,20 @@
           <input type="text" v-model="tour.user_id" />
         </div>
         <div class="form-group">
-          <label>City id:</label>
-          <input type="text" v-model="tour.city_id" />
+          <label>User:</label>
+          <select v-model="tour.user_id" class="form-control">
+            <option v-for="user in users" :key="user.id" :value="user.id">
+              {{ user.username }}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>City:</label>
+          <select v-model="tour.city_id" class="form-control">
+            <option v-for="city in cities" :key="city.id" :value="city.id">
+              {{ city.name }}
+            </option>
+          </select>
         </div>
         <div class="form-group">
           <label>Destinations:</label>
@@ -210,12 +223,20 @@
           <input type="text" v-model="currentTour.description" />
         </div>
         <div class="form-group">
-          <label>User id:</label>
-          <input type="text" v-model="currentTour.user_id" />
+          <label>User:</label>
+          <select v-model="currentTour.user_id" class="form-control">
+            <option v-for="user in users" :key="user.id" :value="user.id">
+              {{ user.username }}
+            </option>
+          </select>
         </div>
         <div class="form-group">
-          <label>City id:</label>
-          <input type="text" v-model="currentTour.city_id" />
+          <label>City:</label>
+          <select v-model="currentTour.city_id" class="form-control">
+            <option v-for="city in cities" :key="city.id" :value="city.id">
+              {{ city.name }}
+            </option>
+          </select>
         </div>
         <div class="form-group">
           <label>Destinations:</label>
@@ -275,6 +296,8 @@ export default {
   setup() {
     const tours = ref([]);
     const destinations = ref([]);
+    const users = ref([]);
+    const cities = ref([]);
 
     const {
       fetchTours,
@@ -286,6 +309,8 @@ export default {
       deleteTour,
       getDestination,
       showDetailTour,
+      fetchCities,
+      fetchUsers,
     } = TourManagementController();
 
     const tour = ref({
@@ -320,8 +345,29 @@ export default {
       tours.value = await fetchTours();
     };
 
+    const loadUsers = async () => {
+      users.value = await fetchUsers();
+    };
+
+    const loadCity = async () => {
+      cities.value = await fetchCities();
+    };
+
+    onMounted(loadCity);
+    onMounted(loadUsers);
+
     onMounted(loadTours);
     onMounted(fetchDestination);
+
+    const getCityName = (city_id) => {
+      const city = cities.value.find((c) => c.id === city_id);
+      return city ? city.name : "Unknown City";
+    };
+
+    const getUserName = (user_id) => {
+      const user = users.value.find((c) => c.id === user_id);
+      return user ? user.username : "Unknown User";
+    };
 
     const addDestination = () => {
       tour.value.destination_ids.push("");
@@ -401,6 +447,10 @@ export default {
       removeDestination_update,
       showDetail,
       goBack,
+      users,
+      cities,
+      getCityName,
+      getUserName,
     };
   },
 };
