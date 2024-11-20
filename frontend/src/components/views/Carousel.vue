@@ -6,9 +6,10 @@
 
             <!-- The slideshow/carousel -->
             <div class="carousel-inner">
-                <div v-for="(image, index) in images" :key="index" :class="['carousel-item', { active: index === currentIndex }]">
-                    <img :src="image" :alt="`Image ${index + 1}`" class="img-fluid">
-                </div>
+                    <div v-for="(image, index) in images" :key="index" :class="['carousel-item', { active: index === currentIndex }]">
+                        <!-- Ensure image is a URL, otherwise access image.url if it's an object -->
+                        <img :src="image.url || image" :alt="`Image ${index + 1}`" class="img-fluid">
+                    </div>
             </div>
 
             <!-- Left and right controls/icons -->

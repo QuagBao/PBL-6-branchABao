@@ -65,7 +65,8 @@
                         :name="item.name"
                         :rating="item.rating"
                         :stars="generateStars(item.rating)"
-                        :tags="item.tag"/>
+                        :tags="item.tag"
+                        @click="navigateToDetailPlace(item.id)"/>
             </div>
         </div>
 
@@ -121,6 +122,9 @@
         cityDetails, destinations, hotels,
         isLoading, restaurants
     } = destinationViewModel(cityId);
+    const navigateToDetailPlace = (id) => {
+        window.location.assign(`/Detail/Place/${id}`);
+    };
 </script>
 
 <script>

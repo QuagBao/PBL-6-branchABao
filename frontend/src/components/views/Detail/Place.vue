@@ -5,9 +5,9 @@
     </div> 
 
     <div class="container-fluid info-place">
-        <div class="container-fluid row">
+        <div class="container-fluid row" v-if="isLoading">
             <div class="col-4 information">
-                <div class="container name-of-place">Văn Miếu Quốc Tử Giám</div>
+                <div class="container name-of-place">{{ destination.name }}</div>
                 <div class="container rating-review">
                     <div class="rating">
                         <div v-for="(circle, index) in circles" :key="index" class="circle">
@@ -35,14 +35,14 @@
                                 </svg>
                             </div>
                             <div class="duration-info">
-                                Duration: 5 days
+                                Duration: {{ destination.duration }} days
                             </div>
                         </div>
 
                         <div class="container-fluid line-divide"></div>
 
                         <div class="container-fluid price" style="font-size: 25px;">
-                            <p style="font-weight: 700;">Price from: <span style="font-weight: 700;"> $30.00 </span> </p>
+                            <p style="font-weight: 700;">Price from: <span style="font-weight: 700;">$ {{ destination.price_bottom }} - $ {{ destination.price_top }} </span> </p>
                         </div>
                     </div>
                 </div>
@@ -50,7 +50,7 @@
 
             <div class="col-3 carousel">
                 <div class="container carousel-container">
-                    <Carousel :currentImage="currentImage" :images="images_1"/>
+                    <Carousel :currentImage="currentImage" :images="images"/>
                 </div>
             </div>  
         </div>
@@ -67,14 +67,37 @@
 </template>
 
 <script setup>
-import { circles,rating, ratings, commentList, 
-  generateCircle, images, images_1, currentImage, nextImage, 
-  prevImage,totalRating, isDropdownVisible, 
-  toggleDropdown, isMenuVisible, toggleMenu, 
-  truncatedDescription, toggleReadMore, 
-  isReadMore,
-} from '../../viewModels/detailLocation_AttractionViewModel.js';
+  import { useRoute } from 'vue-router';
+  import destinationViewModel from '../../viewModels/detailLocation_AttractionViewModel.js';
 
+  // Lấy thông tin từ route
+  const route = useRoute();
+  const destinationID = route.params.id; // Lấy destinationID từ route params
+
+  // Destructure các giá trị từ destinationViewModel
+  const {
+    circles,
+    rating,
+    ratings,
+    commentList,
+    generateCircle,
+    images,
+    currentImage,
+    nextImage,
+    prevImage,
+    totalRating,
+    isDropdownVisible,
+    toggleDropdown,
+    isMenuVisible,
+    toggleMenu,
+    truncatedDescription,
+    toggleReadMore,
+    isReadMore,
+    destination,
+    isLoading
+  } = destinationViewModel(destinationID);
+
+  // Các hàm hoặc logic bổ sung có thể được thêm vào nếu cần
 </script>
 
 <script>

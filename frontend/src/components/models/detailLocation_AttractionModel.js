@@ -63,26 +63,43 @@ export class ImageModel {
     }
 }
 
-// DescriptionModel mới với hàm getDescription và getTruncatedDescription
-export class DescriptionModel {
-    constructor(fullDescription) {
-        this.fullDescription = fullDescription;
+
+export async function getDestinationById(destinationID) {
+    try {
+      const response = await axios.get(
+        `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/${destinationID}`
+      );
+  
+      const destination = response.data;
+      return {
+        id: destination.id,
+        name: destination.name,
+        price_bottom: destination.price_bottom,
+        price_top: destination.price_top,
+        age: destination.age,
+        opentime: destination.opentime,
+        duration: destination.duration,
+        description: destination.description,
+        date_create: destination.date_create,
+        address: {
+          city_id: destination.address.city_id,
+          district: destination.address.district,
+          ward: destination.address.ward,
+          street: destination.address.street,
+        },
+        images: destination.images,
+        hotel_id: destination.hotel_id,
+        hotel: destination.hotel,
+        restaurant_id: destination.restaurant_id,
+        restaurant: destination.restaurant,
+      };
+    } catch (error) {
+      console.error("Error fetching destination:", error);
+      return []; // Hoặc bạn có thể xử lý khác tùy ý
     }
+  }
 
-    getTruncatedDescription() {
-        return this.fullDescription.split(' ').slice(0, 40).join(' ') + '...';
-    }
-
-    getDescription(isReadMore) {
-        return isReadMore.value ? this.fullDescription : this.getTruncatedDescription();
-    }
-}
-
-// Tạo instance cho DescriptionModel với nội dung chi tiết
-const fullDescription = `The Temple of Literature (Văn Miếu Quốc Tử Giám) in Hanoi is a historic and cultural symbol of Vietnam, founded in 1070 during the reign of Emperor Lý Thánh Tông. Originally dedicated to Confucius, it became Vietnam's first national university, Quốc Tử Giám, in 1076, serving as a prestigious center for scholars and intellectuals. This revered site consists of five courtyards with tranquil gardens, ancient trees, and steles engraved with the names of scholars who passed royal examinations. The traditional Vietnamese architecture, with its red-tiled roofs, stone pillars, and grand entranceways, reflects the nation's deep respect for learning and intellectual achievement. Today, the Temple of Literature is a major tourist attraction, symbolizing Vietnam's educational heritage and its centuries-old commitment to Confucian values. Visitors come to explore its serene beauty and historical significance, making it a must-see destination in Hanoi.`;
-
-export const descriptionModel = new DescriptionModel(fullDescription);
-
+  
 export const mockComments = [
     new Comment(
         new URL('@/assets/svg/personal.svg', import.meta.url).href,

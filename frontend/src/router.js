@@ -113,7 +113,7 @@ const routes = [
     component: Profile_Page,  // Lazy load DashBoardView
   },
   {
-    path: '/Detail/Place',
+    path: '/Detail/Place/:id',
     name: 'Place',
     component: Place,  // Lazy load SignInView
   },
