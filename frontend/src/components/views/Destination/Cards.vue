@@ -15,7 +15,8 @@
             {{ name }}
         </div>
         <div class="col-sm-12 rating p-2">
-            <img v-for="star in rating" :key="star" :src="star" alt="Circle" class="star"/>
+            <img v-for="star in stars" :key="star" :src="star" alt="Circle" class="star"/>
+            <h3>{{ rating }}</h3>
         </div>
         <div class=" row info-location p-2">
             
@@ -41,6 +42,7 @@ export default {
         imageUrl: String,
         name: String,
         rating: Number,
+        stars: Array,
         tags: Array
     },
 }

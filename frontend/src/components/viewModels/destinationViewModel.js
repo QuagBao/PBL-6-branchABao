@@ -9,11 +9,11 @@ export default function (cityId) {
   const currentIndex = ref(0);
   const cityDetails = ref(null);
   const destinations = ref([]);
-  const entertainments = ref([]);
   const liked = ref({});
   const isHeartFilled = ref(false);
   const isLoading = ref(true);
   const hotels = ref([]);
+  const restaurants = ref([]);
 
 
   watch(images, (newImages) => {
@@ -64,15 +64,21 @@ export default function (cityId) {
     isLoading.value = true; // Bắt đầu trạng thái tải
 
     cityDetails.value = await model.fetchCityDetails(cityId);
-    destinations.value = await model.fetchDestinations(cityId);
-    entertainments.value = await model.fetchEntertainments();
-    console.log(destinations.value);
-    console.log(cityDetails.value);
-    console.log(entertainments.value);
-    console.log("Images: ", images.value);
-    console.log("List Images: ",imageList.value);
+    
     isLoading.value = false; // Kết thúc trạng thái tải
 });
+
+onMounted(async () =>{
+  destinations.value = await model.fetchDestinations(cityId);
+})
+
+onMounted(async () =>{
+  restaurants.value = await model.fetchRestaurants(cityId);
+})
+
+onMounted(async () =>{
+  hotels.value = await model.fetchHotels(cityId);
+})
 
   // Function to get truncated description
   const getTruncatedDescription = computed(() => {
@@ -126,7 +132,6 @@ export default function (cityId) {
     selectButton,
     images,
     imageList,
-    entertainments,
     generateStars,
     getImageUrl,
     liked,
@@ -136,6 +141,7 @@ export default function (cityId) {
     cityDetails,
     isLoading,
     destinations,
-    hotels
+    hotels,
+    restaurants,
   };
 }

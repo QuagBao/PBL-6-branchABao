@@ -61,9 +61,10 @@
             <div class="container-fluid context">
                 <Cards v-for="(item, index) in destinations"
                         :key="index"
-                        :imageUrl="getImageUrl(item.images[0])"
+                        :imageUrl="item.images[0]?.url"
                         :name="item.name"
-                        :rating="generateStars(item.rating)"
+                        :rating="item.rating"
+                        :stars="generateStars(item.rating)"
                         :tags="item.tag"/>
             </div>
         </div>
@@ -73,11 +74,12 @@
                 Restaurants
             </p>
             <div class="container-fluid context">
-                <Cards v-for="(item, index) in entertainments"
+                <Cards v-for="(item, index) in restaurants"
                         :key="index"
-                        :imageUrl="getImageUrl(item.imageUrl)"
+                        :imageUrl="item.images[0]?.url"
                         :name="item.name"
-                        :rating="generateStars(item.rating)"
+                        :rating="item.rating"
+                        :stars="generateStars(item.rating)"
                         :tags="item.tag"/>
             </div>
         </div>
@@ -89,9 +91,10 @@
             <div class="container-fluid context">
                 <Cards v-for="(item, index) in hotels"
                         :key="index"
-                        :imageUrl="getImageUrl(item.imgUrl[0])"
+                        :imageUrl="item.images[0]?.url"
                         :name="item.name"
-                        :rating="generateStars(item.rating)"
+                        :rating="item.rating"
+                        :stars="generateStars(item.rating)"
                         :tags="item.tag"/>
             </div>
         </div>
@@ -113,10 +116,10 @@
         isHeartFilled, heartFull, heartEmpty, toggleHeart,
         getTruncatedDescription, toggleReadMore, isReadMore, fullDescription,
         buttons, selectedIndices, selectButton,
-        entertainments, generateStars, getImageUrl,
+        generateStars, getImageUrl,
         liked, toggleLikeStatus,
         cityDetails, destinations, hotels,
-        isLoading,
+        isLoading, restaurants
     } = destinationViewModel(cityId);
 </script>
 
