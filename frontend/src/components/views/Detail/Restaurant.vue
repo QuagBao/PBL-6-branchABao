@@ -7,7 +7,7 @@
     <div class="container-fluid info-place">
         <div class="container-fluid row">
             <div class="col-10 information">
-                <div class="container name-of-place">Văn Miếu Quốc Tử Giám</div>
+                <div class="container name-of-place">{{ restaurant.name }}</div>
                 <div class="container rating-review">
                     <div class="rating">
                         <div v-for="(circle, index) in circles" :key="index" class="circle">
@@ -23,7 +23,7 @@
         </div>
         
         <div class="row">
-            <Carousel :currentImage="currentImage" :images="images_1"/>
+            <Carousel :currentImage="currentImage" :images="images"/>
         </div>
         
         <div class="container-fluid location">
@@ -36,11 +36,11 @@
                                     <div class="map"><p>Map</p></div>
                                     <div class="container frame location">
                                         <i class="icon-location"></i>
-                                        <p>18 Phan Boi Chau Street, Hoan Kiem Dist, Hanoi</p>
+                                        <p v-if="restaurant.address">{{ restaurant.address.street }}, {{ restaurant.address.ward }}, {{ restaurant.address.district }}, {{ restaurant.address.city_id }}</p>
                                     </div>
                                     <div class="container frame phone">
                                         <i class="icon-phone"></i>
-                                        <p>+84 90 324 69 63</p>
+                                        <p></p>
                                     </div>
                                 </div>
                             </div>
@@ -51,24 +51,24 @@
                                     <div class="details-grid">
                                         <div class="detail-item">
                                             <h5>PRICE RANGE</h5>
-                                            <p>0.000 ~ 250.000 VND</p>
+                                            <p>${{ restaurant.price_bottom || 0 }} - ${{ restaurant.price_top || "N/A" }}</p>
                                         </div>
                                         <div class="detail-item">
                                             <h5>SPECIAL DIETS</h5>
-                                            <p>Vegetarian friendly, Vegan options, Gluten free options</p>
+                                            <p>{{ restaurant.restaurant.special_diet || "N/A" }}</p>
                                         </div>
                                         <div class="detail-item">
                                             <h5>CUISINES</h5>
-                                            <p>Vietnamese</p>
+                                            <p>{{ restaurant.restaurant.cuisine || "N/A" }}</p>
                                         </div>
                                         <div class="detail-item">
                                             <h5>MEALS</h5>
-                                            <p>Breakfast, Lunch, Dinner, Brunch, Late Night</p>
+                                            <p></p>
                                         </div>
                                     </div>
                                     <div class="detail-item full-width">
                                         <h5>FEATURES</h5>
-                                        <p>Delivery, Takeout, Reservations, Outdoor Seating, Buffet, Seating, Highchairs Available, Wheelchair Accessible, Serves Alcohol, Full Bar, Wine and Beer, Accepts Mastercard, Accepts Visa, Cash Only, Free Wifi, Accepts Credit Cards, Table Service</p>
+                                        <p></p>
                                     </div>
                                 </div>
                             </div>
@@ -90,14 +90,34 @@
 </template>
 
 <script setup>
-import { circles,rating, ratings, commentList, 
-  generateCircle, images, images_1, currentImage, nextImage, 
-  prevImage,totalRating, isDropdownVisible, 
-  toggleDropdown, isMenuVisible, toggleMenu, 
-  truncatedDescription, toggleReadMore, 
-  isReadMore,
-} from '../../viewModels/detailLocation_AttractionViewModel.js';
+  import { useRoute } from 'vue-router';
+  import restaurantViewModel from '../../viewModels/detailLocation_RestaurantViewModel.js';
 
+  // Lấy thông tin từ route
+  const route = useRoute();
+  const restaurantID = route.params.id; // Lấy destinationID từ route params
+
+  // Destructure các giá trị từ destinationViewModel
+  const {
+    circles,
+    rating,
+    ratings,
+    commentList,
+    generateCircle,
+    images,
+    currentImage,
+    nextImage,
+    prevImage,
+    totalRating,
+    isDropdownVisible,
+    toggleDropdown,
+    isMenuVisible,
+    toggleMenu,
+    restaurant,
+    isLoading
+  } = restaurantViewModel(restaurantID);
+
+  // Các hàm hoặc logic bổ sung có thể được thêm vào nếu cần
 </script>
 
 <script>

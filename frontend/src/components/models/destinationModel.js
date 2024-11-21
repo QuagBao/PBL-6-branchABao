@@ -32,7 +32,7 @@ export default function () {
 
   const fetchDestinations = async (cityId) => {
     try {
-      const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/?city_id=${cityId}&sort_by_reviews=false&get_rating=true`);
+      const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/?city_id=${cityId}&is_popular=true&get_rating=true`);
       const filteredDestinations = response.data.filter(destination => destination.hotel_id === null && destination.restaurant_id === null);
 
     // Chỉ map qua các destination đã lọc
@@ -68,7 +68,7 @@ export default function () {
 const fetchHotels = async (cityId) => {
   try {
     // Gọi API để lấy dữ liệu khách sạn
-    const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/hotel/?city_id=${cityId}`);
+    const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/hotel/?city_id=${cityId}&is_popular=true`);
     
 
     // In ra dữ liệu khách sạn để kiểm tra
@@ -110,7 +110,7 @@ const fetchHotels = async (cityId) => {
 const fetchRestaurants = async (cityId) => {
   try {
     // Gọi API để lấy dữ liệu khách sạn
-    const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/restaurant/?city_id=${cityId}`);
+    const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/restaurant/?city_id=${cityId}&is_popular=true`);
     
 
     // In ra dữ liệu khách sạn để kiểm tra

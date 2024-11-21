@@ -74,6 +74,7 @@ onMounted(async () =>{
 
 onMounted(async () =>{
   restaurants.value = await model.fetchRestaurants(cityId);
+  console.log(restaurants.value);
 })
 
 onMounted(async () =>{

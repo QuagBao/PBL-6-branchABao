@@ -82,7 +82,7 @@
                         :rating="item.rating"
                         :stars="generateStars(item.rating)"
                         :tags="item.tag"
-                        @click="navigateToDetailRestaurant(item.id)"/>
+                        @click="navigateToDetailRestaurant(item.restaurant_id)"/>
             </div>
         </div>
 
@@ -127,11 +127,11 @@
     const navigateToDetailPlace = (id) => {
         window.location.assign(`/Detail/Place/${id}`);
     };
-    const navigateToDetailRestaurant = (id) => {
-        window.location.assign(`/Detail/Restaurant/${id}`);
+    const navigateToDetailRestaurant = (restaurant_id) =>{
+        window.location.assign(`/Detail/Restaurant/${restaurant_id}`);
     };
-    const navigateToDetailHotel = (id) => {
-        window.location.assign(`/Detail/Hotel/${id}`);
+    const navigateToDetailHotel = (hotel_id) => {
+        window.location.assign(`/Detail/Hotel/${hotel_id}`);
     };
 </script>
 
