@@ -50,16 +50,16 @@
                         </div>
                     </div>
 
-                    <div class="container-fluid comment-list">
-                        <div v-for="comment in commentList" :key="comment.user" class="comment"  >
-                            <A_Comment :imageUrl="comment.personalImage"
-                                        :userName="comment.user"
+                    <div v-if="commentList && commentList.length > 0" class="container-fluid comment-list">
+                        <div v-for="comment in commentList" :key="comment.id" class="comment"  >
+                            <A_Comment :imageUrl="comment.user?.userInfo?.image?.url || ''"
+                                        :userName="comment.user?.username || 'Unknown User'"
                                         :circles= "generateCircle(comment.rating)"
                                         :title="comment.title"
-                                        :date_comment="comment.day"
-                                        :comment="comment.comment"
-                                        :condition="comment.picture"
-                                        :URL="comment.picture"/>
+                                        :date_comment="comment.date_create"
+                                        :comment="comment.content"
+                                        :condition="comment.images"
+                                        :URL="comment.images"/>
                         </div>
                     </div>
                 </div>
@@ -68,29 +68,31 @@
     </div>
 </template>
 <script setup>
-import { useRoute } from 'vue-router';
-import destinationViewModel from '../viewModels/detailLocation_AttractionViewModel';
+import { computed } from 'vue';
 import generateViewModel from '../viewModels/generate_ratingViewModel';
-const route = useRoute();
-const destinationID = route.params.id;
-// Lấy thông tin từ route
+// Lấy hàm tạo vòng tròn (circle)
 const { generateCircle } = generateViewModel();
-</script>
-<script>
-
 import A_Comment from './A_Comment.vue';
-export default {
-    name: "Contribute",
-    props: {
-        rating:  Number,
-        circles : Array,
-        ratings : Object,
-        commentList : Array,
-    },
-    components: {
-        A_Comment
-    },
-}
+// Khai báo các props
+defineProps({
+
+  rating: {
+    type: String,
+    required: true,
+  },
+  ratings: {
+    type: Object,
+    required: true,
+  },
+  circles: {
+    type: Array,
+    required: true,
+  },
+  commentList: {
+    type: Array,
+    required: true,
+  },
+});
 </script>
 
 <style scoped>

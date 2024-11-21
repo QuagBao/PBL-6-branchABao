@@ -11,7 +11,7 @@
                         <h3>{{ userName }}</h3>
                     </div>
                     <div class="col rating-stars">
-                        <img v-for="circle in circles" :src="circle" :key="circle" class="circle-icon" />
+                        <img v-for="circle in circles" :src="circle" :key="index" class="circle-icon" />
                     </div>
                 </div>
             </div>
@@ -22,7 +22,12 @@
             <h6>{{ comment }}</h6>
         </div>
         <div class="container img">
-            <img v-if="condition" :src="URL" alt="Review Image" class="review-image" />
+            <img v-if="condition"
+                v-for="(img, index) in URL" 
+                :src="img.url" 
+                :key="index" 
+                alt="Review Image" 
+                class="review-image" />
         </div>
     </div>
 
@@ -40,7 +45,7 @@ export default {
         date_comment: String,
         comment: String,
         condition: String,
-        URL: String
+        URL: Array
     }
 }
 </script>

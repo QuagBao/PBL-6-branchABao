@@ -90,7 +90,7 @@
     toggleReadMore,
     isReadMore,
     destination,
-    isLoading
+    isLoading,
   } = destinationViewModel(destinationID);
 
   const {

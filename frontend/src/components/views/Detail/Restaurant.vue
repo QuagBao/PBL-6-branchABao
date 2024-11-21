@@ -4,7 +4,7 @@
         <Top_Button/>
     </div> 
 
-    <div class="container-fluid info-place">
+    <div class="container-fluid info-place" v-if="isLoading">
         <div class="container-fluid row">
             <div class="col-10 information">
                 <div class="container name-of-place">{{ restaurant.name }}</div>
@@ -110,7 +110,7 @@
     isMenuVisible,
     toggleMenu,
     restaurant,
-    isLoading
+    isLoading,
   } = restaurantViewModel(restaurantID);
 
   const {

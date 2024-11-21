@@ -110,7 +110,7 @@
     isMenuVisible,
     toggleMenu,
     hotel,
-    isLoading
+    isLoading,
   } = hotelViewModel(destinationID);
 
   const {
