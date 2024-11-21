@@ -118,12 +118,12 @@ const routes = [
     component: Place,  // Lazy load SignInView
   },
   {
-    path: '/Detail/Restaurant',
+    path: '/Detail/Restaurant/:id',
     name: 'Res',
     component: Res,  // Lazy load SignInView
   },
   {
-    path: '/Detail/Hotel',
+    path: '/Detail/Hotel/:id',
     name: 'Hot',
     component: Hot,  // Lazy load SignInView
   },

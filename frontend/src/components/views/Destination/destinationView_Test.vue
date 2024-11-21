@@ -81,7 +81,8 @@
                         :name="item.name"
                         :rating="item.rating"
                         :stars="generateStars(item.rating)"
-                        :tags="item.tag"/>
+                        :tags="item.tag"
+                        @click="navigateToDetailRestaurant(item.id)"/>
             </div>
         </div>
 
@@ -96,7 +97,8 @@
                         :name="item.name"
                         :rating="item.rating"
                         :stars="generateStars(item.rating)"
-                        :tags="item.tag"/>
+                        :tags="item.tag"
+                        @click="navigateToDetailHotel(item.hotel_id)"/>
             </div>
         </div>
 
@@ -124,6 +126,12 @@
     } = destinationViewModel(cityId);
     const navigateToDetailPlace = (id) => {
         window.location.assign(`/Detail/Place/${id}`);
+    };
+    const navigateToDetailRestaurant = (id) => {
+        window.location.assign(`/Detail/Restaurant/${id}`);
+    };
+    const navigateToDetailHotel = (id) => {
+        window.location.assign(`/Detail/Hotel/${id}`);
     };
 </script>
 

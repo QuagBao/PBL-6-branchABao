@@ -1,136 +1,163 @@
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import { RatingModel, mockComments, ImageModel, getHotelById } from '../models/detailLocation_HotelModel.js';
 
-import { RatingModel, mockComments, ImageModel } from '../models/detailLocation_HotelModel.js';
+export default function(hotelID) {
 
-// Khởi tạo dữ liệu đánh giá
-const ratingModel = new RatingModel(3422, 2122, 5622, 2100, 300);
+  // Khởi tạo dữ liệu đánh giá
+  const ratingModel = new RatingModel(3422, 2122, 5622, 2100, 300);
+  const isLoading = ref(false);
+  const isDropdownVisible = ref(false);
+  const isMenuVisible = ref(false);
+  const hotel = ref(null);
+  const images = ref([]);
 
-const isDropdownVisible= ref(false)
-const isMenuVisible = ref(false)
 
-const toggleDropdown = () => {
-  isDropdownVisible.value = !isDropdownVisible.value;
-  console.log(isDropdownVisible);
-}
-
-const toggleMenu = () => {
-  isMenuVisible.value = !isMenuVisible.value;
-  console.log(isMenuVisible);
-}
-
-// Tạo danh sách sao
-const generateStars = (rating) => {
-  const fullStar = new URL('@/assets/star_full.svg', import.meta.url).href;
-  const halfStar = new URL('@/assets/star_half.svg', import.meta.url).href;
-  const emptyStar = new URL('@/assets/star_none.svg', import.meta.url).href;
-
-  let stars = [];
-  for (let i = 1; i <= 5; i++) {
-    if (rating >= i) {
-      stars.push(fullStar);
-    } else if ((rating > i - 1 && rating - i + 1 >= 0.5) && rating < i) {
-      stars.push(halfStar);
-    } else {
-      stars.push(emptyStar);
+  const loadHotel = async () => {
+    try {
+      hotel.value = await getHotelById(hotelID);
+      console.log(hotel.value);
+      images.value = hotel.value.images;
+      isLoading.value = true;
+    } catch (error) {
+      console.error("Có lỗi xảy ra khi lấy dữ liệu thành phố:", error);
     }
-  }
-  return stars;
-};
+  };
+  loadHotel();
 
-// Tạo danh sách hình tròn
-const generateCircle = (rating) => {
-  const fullCircle = new URL('@/assets/svg/circle-full.svg', import.meta.url).href;
-  const halfCircle = new URL('@/assets/svg/circle-half.svg', import.meta.url).href;
-  const emptyCircle = new URL('@/assets/svg/circle-none.svg', import.meta.url).href;
 
-  let circles = [];
-  for (let i = 1; i <= 5; i++) {
-    if (rating >= i) {
-      circles.push(fullCircle);
-    } else if ((rating > i - 1 && rating - i + 1 >= 0.5) && rating < i) {
-      circles.push(halfCircle);
-    } else {
-      circles.push(emptyCircle);
+  const toggleDropdown = () => {
+    isDropdownVisible.value = !isDropdownVisible.value;
+    console.log(isDropdownVisible);
+  };
+
+  const toggleMenu = () => {
+    isMenuVisible.value = !isMenuVisible.value;
+    console.log(isMenuVisible);
+  };
+
+  // Tạo danh sách sao
+  const generateStars = (rating) => {
+    const fullStar = new URL('@/assets/svg/star_full.svg', import.meta.url).href;
+    const halfStar = new URL('@/assets/svg/star_half.svg', import.meta.url).href;
+    const emptyStar = new URL('@/assets/svg/star_none.svg', import.meta.url).href;
+
+    let stars = [];
+    for (let i = 1; i <= 5; i++) {
+      if (rating >= i) {
+        stars.push(fullStar);
+      } else if ((rating > i - 1 && rating - i + 1 >= 0.5) && rating < i) {
+        stars.push(halfStar);
+      } else {
+        stars.push(emptyStar);
+      }
     }
-  }
-  return circles;
-};
+    return stars;
+  };
 
-// Tính toán tỷ lệ phần trăm và rating tổng
-const stars = ref(generateStars(ratingModel.getAverageRating()));
-const circles = ref(generateCircle(ratingModel.getAverageRating()));
+  // Tạo danh sách hình tròn
+  const generateCircle = (rating) => {
+    const fullCircle = new URL('@/assets/svg/circle-full.svg', import.meta.url).href;
+    const halfCircle = new URL('@/assets/svg/circle-half.svg', import.meta.url).href;
+    const emptyCircle = new URL('@/assets/svg/circle-none.svg', import.meta.url).href;
 
-// Tính tỷ lệ phần trăm cho mỗi loại đánh giá
-const ratings = {
-  'Excellent': {
-    count: ratingModel.excellent,
-    percentage: ratingModel.getPercentage(ratingModel.excellent),
-  },
-  'Very Good': {
-    count: ratingModel.veryGood,
-    percentage: ratingModel.getPercentage(ratingModel.veryGood),
-  },
-  'Medium': {
-    count: ratingModel.medium,
-    percentage: ratingModel.getPercentage(ratingModel.medium),
-  },
-  'Bad': {
-    count: ratingModel.bad,
-    percentage: ratingModel.getPercentage(ratingModel.bad),
-  },
-  'Terrible': {
-    count: ratingModel.terrible,
-    percentage: ratingModel.getPercentage(ratingModel.terrible),
-  },
-};
-const rating = ref(ratingModel.getAverageRating());
-const totalRating = ref(ratingModel.getTotal());
-// Danh sách bình luận
-const commentList = ref(mockComments);
-const images = ref([]);
-const fetchImages = async () => {
-  images.value = await ImageModel.fetchImages();
-};
+    let circles = [];
+    for (let i = 1; i <= 5; i++) {
+      if (rating >= i) {
+        circles.push(fullCircle);
+      } else if ((rating > i - 1 && rating - i + 1 >= 0.5) && rating < i) {
+        circles.push(halfCircle);
+      } else {
+        circles.push(emptyCircle);
+      }
+    }
+    return circles;
+  };
 
-const currentIndex = ref(0);
+  // Tính toán tỷ lệ phần trăm và rating tổng
+  const stars = ref(generateStars(ratingModel.getAverageRating()));
+  const circles = ref(generateCircle(ratingModel.getAverageRating()));
+
+  // Tính tỷ lệ phần trăm cho mỗi loại đánh giá
+  const ratings = {
+    'Excellent': {
+      count: ratingModel.excellent,
+      percentage: ratingModel.getPercentage(ratingModel.excellent),
+    },
+    'Very Good': {
+      count: ratingModel.veryGood,
+      percentage: ratingModel.getPercentage(ratingModel.veryGood),
+    },
+    'Medium': {
+      count: ratingModel.medium,
+      percentage: ratingModel.getPercentage(ratingModel.medium),
+    },
+    'Bad': {
+      count: ratingModel.bad,
+      percentage: ratingModel.getPercentage(ratingModel.bad),
+    },
+    'Terrible': {
+      count: ratingModel.terrible,
+      percentage: ratingModel.getPercentage(ratingModel.terrible),
+    },
+  };
+
+  const rating = ref(ratingModel.getAverageRating());
+  const totalRating = ref(ratingModel.getTotal());
+
+  // Danh sách bình luận
+  const commentList = ref(mockComments);
+
+
+  // Hàm lấy bình luận
+  const getAllcomments = async () => {
+    console.log("Comment: ", commentList.value);
+  };
+
+  // Chuyển đổi hình ảnh
+  const currentIndex = ref(0);
 
   const currentImage = computed(() => {
-    // Kiểm tra xem images có rỗng hay currentIndex nằm ngoài giới hạn không
     if (!images.value.length || currentIndex.value < 0 || currentIndex.value >= images.value.length) {
-      return null; // Hoặc một giá trị mặc định, ví dụ: '/cities/default.jpg'
+      return null;
     }
-    return images.value[currentIndex.value].imageUrl;
+    console.log("Current image: ", images.value[currentIndex.value].url);
+    return images.value[currentIndex.value].url;
   });
 
   const nextImage = () => {
-    if (images.value.length) {  // Kiểm tra images không rỗng
+    if (images.value.length) {
       currentIndex.value = (currentIndex.value + 1) % images.value.length;
     }
   };
-  
+
   const prevImage = () => {
-    if (images.value.length) { // Kiểm tra images không rỗng
+    if (images.value.length) {
       currentIndex.value = (currentIndex.value - 1 + images.value.length) % images.value.length;
     }
   };
 
-fetchImages();
+  // Fetch dữ liệu ảnh và bình luận
+  getAllcomments();
 
-export {
-  isDropdownVisible,
-  toggleDropdown,
-  totalRating,
-  stars,
-  currentImage,
-  nextImage,
-  prevImage,
-  circles,
-  rating,
-  ratings,
-  commentList,
-  generateStars,
-  generateCircle,
-  images,
-  isMenuVisible,
-  toggleMenu,
-};
+  return {
+    isDropdownVisible,
+    toggleDropdown,
+    totalRating,
+    stars,
+    currentImage,
+    nextImage,
+    prevImage,
+    circles,
+    rating,
+    ratings,
+    commentList,
+    generateStars,
+    generateCircle,
+    images,
+    isMenuVisible,
+    toggleMenu,
+    hotel,
+    isLoading,
+  };
+}
+
