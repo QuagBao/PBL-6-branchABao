@@ -69,6 +69,7 @@
 <script setup>
   import { useRoute } from 'vue-router';
   import destinationViewModel from '../../viewModels/detailLocation_AttractionViewModel.js';
+  import generateViewModel from '../../viewModels/generate_ratingViewModel';
 
   // Lấy thông tin từ route
   const route = useRoute();
@@ -76,16 +77,11 @@
 
   // Destructure các giá trị từ destinationViewModel
   const {
-    circles,
-    rating,
-    ratings,
-    commentList,
-    generateCircle,
     images,
     currentImage,
+    commentList,
     nextImage,
     prevImage,
-    totalRating,
     isDropdownVisible,
     toggleDropdown,
     isMenuVisible,
@@ -96,6 +92,14 @@
     destination,
     isLoading
   } = destinationViewModel(destinationID);
+
+  const {
+    circles,
+    rating,
+    ratings,
+    generateCircle,
+    totalRating,
+  } = generateViewModel();
 
   // Các hàm hoặc logic bổ sung có thể được thêm vào nếu cần
 </script>

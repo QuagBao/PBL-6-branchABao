@@ -70,10 +70,11 @@
 <script setup>
 import { useRoute } from 'vue-router';
 import destinationViewModel from '../viewModels/detailLocation_AttractionViewModel';
+import generateViewModel from '../viewModels/generate_ratingViewModel';
 const route = useRoute();
 const destinationID = route.params.id;
 // Lấy thông tin từ route
-const { generateCircle } = destinationViewModel(destinationID);
+const { generateCircle } = generateViewModel();
 </script>
 <script>
 
