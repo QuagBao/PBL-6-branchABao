@@ -1,5 +1,7 @@
 import { ref, computed } from 'vue';
-import { fetchCities, fetchTopics, fetchTours } from '../models/dashboardModel';
+import { fetchTopics } from '../models/dashboardModel';
+import { fetchCities } from '../models/CityModel'
+import { fetchTours } from '../models/TourModel'
 
 const activeButton = ref('all');
 const cities = ref([]);
@@ -28,6 +30,11 @@ const filteredCities = computed(() => {
   }
   return cities.value.filter(city => city.region.toLowerCase().includes(activeButton.value.replace("-", " ")));
 });
+
+const getCityName = (cityId) => {
+  const city = cities.value.find(city => city.id === cityId); // Tìm thành phố theo `city_id`
+  return city ? city.name : null; // Trả về tên thành phố hoặc `null` nếu không tìm thấy
+};
 
 const visibleCities = computed(() => {
   return filteredCities.value.slice(currentIndex.value, currentIndex.value + 6);
@@ -143,4 +150,5 @@ export default {
   toggleMenu,
   generateStars,
   goToDestination,
+  getCityName,
 };
