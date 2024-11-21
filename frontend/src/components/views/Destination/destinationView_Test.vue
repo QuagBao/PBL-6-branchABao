@@ -5,7 +5,7 @@
     </div>
 
     <!-- Carousel -->
-    <Carousel :currentImage="currentImage" :images="imageList"/>
+    <Carousel :currentImage="currentImage" :images="images"/>
 
     <div class="save">
         <Btn_Save/>
@@ -115,11 +115,11 @@
 
     const {
         isMenuVisible, toggleMenu,
-        currentImage, nextImage, prevImage, images, imageList,
+        currentImage, nextImage, prevImage, images,
         isHeartFilled, heartFull, heartEmpty, toggleHeart,
         getTruncatedDescription, toggleReadMore, isReadMore, fullDescription,
         buttons, selectedIndices, selectButton,
-        generateStars, getImageUrl,
+        generateStars,
         liked, toggleLikeStatus,
         cityDetails, destinations, hotels,
         isLoading, restaurants

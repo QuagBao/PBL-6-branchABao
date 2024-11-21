@@ -27,33 +27,6 @@ export default function (cityId) {
   const toggleHeart = () => {
     isHeartFilled.value = !isHeartFilled.value;
   };
-  const imageList = computed(() => {
-    // Get the images array from cityDetails, or return an empty array if not present
-      return cityDetails.value?.images?.map(image => image.url) || [];
-  });
-  const currentImage = computed(() => {
-    const images = cityDetails.value?.images || [];
-    if (!images.length || currentIndex.value < 0 || currentIndex.value >= images.length) {
-      return null;
-    }
-    return images[currentIndex.value].url;
-  });
-
-  // Chuyển đến ảnh tiếp theo
-  const nextImage = () => {
-    const images = cityDetails.value?.images || [];
-    if (images.length) {
-      currentIndex.value = (currentIndex.value + 1) % images.length;
-    }
-  };
-
-  // Chuyển đến ảnh trước đó
-  const prevImage = () => {
-    const images = cityDetails.value?.images || [];
-    if (images.length) {
-      currentIndex.value = (currentIndex.value - 1 + images.length) % images.length;
-    }
-  };
 
   const toggleReadMore = () => {
     isReadMore.value = !isReadMore.value;
@@ -64,6 +37,12 @@ export default function (cityId) {
     isLoading.value = true; // Bắt đầu trạng thái tải
 
     cityDetails.value = await model.fetchCityDetails(cityId);
+
+    if (cityDetails.value?.images) {
+      images.value = cityDetails.value.images; // Gán mảng hình ảnh
+    } else {
+      console.warn("cityDetails không chứa 'images'");
+    }
     
     isLoading.value = false; // Kết thúc trạng thái tải
 });
@@ -116,6 +95,27 @@ onMounted(async () =>{
     console.log(`Item ID: ${id}, Liked: ${liked.value[id]}`);
   };
 
+  const currentImage = computed(() => {
+    if (!images.value.length || currentIndex.value < 0 || currentIndex.value >= images.value.length) {
+      return null;
+    }
+    return images.value[currentIndex.value]; // Trả về ảnh hiện tại
+  });
+
+  // Chuyển đến ảnh tiếp theo
+  const nextImage = () => {
+    if (images.value.length) {
+      currentIndex.value = (currentIndex.value + 1) % images.value.length;
+    }
+  };
+
+  // Chuyển đến ảnh trước đó
+  const prevImage = () => {
+    if (images.value.length) {
+      currentIndex.value = (currentIndex.value - 1 + images.value.length) % images.value.length;
+    }
+  };
+
   return {
     isMenuVisible,
     toggleMenu,
@@ -132,7 +132,6 @@ onMounted(async () =>{
     selectedIndices,
     selectButton,
     images,
-    imageList,
     generateStars,
     getImageUrl,
     liked,
