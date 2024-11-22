@@ -27,7 +27,8 @@
                 <Img_Card v-for="(city, index) in visibleCities"
                     :key="index"
                     :imageUrl="city.images[0]"
-                    :name="city.name" />
+                    :name="city.name"
+                    @click="navigateToThingsCity(city.id)"/>
 
                 <button @click="nextCity" class="carousel-control-next" type="button">
                     <span class="carousel-control-next-icon"></span>
@@ -68,8 +69,11 @@ const {
 } = destinationViewModel();
 
 const navigateToDetailPlace = (id) => {
-        window.location.assign(`/Detail/Place/${id}`);
-    };
+    window.location.assign(`/Detail/Place/${id}`);
+};
+const navigateToThingsCity = (id) => {
+    window.location.assign(`/City/ThingsToDo_List/${id}`);
+};
 </script>
 
 <script>

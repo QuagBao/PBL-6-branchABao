@@ -8,11 +8,11 @@
     <div class="container-fluid overall">
         <div class="image-container">
             <div class="base"></div>
-            <img src="@/assets/images/thingstodo_2.avif" alt="City 1" class="img-fluid">
+            <img :src="city?.images?.[0]?.url || ''" alt="City 1" class="img-fluid">
         </div>
         <div class="overall-container">
             <div class="text-container">
-                <h1>Things to do in Ha Noi</h1>
+                <h1>Things to do in {{ city?.name || 'Loading...' }}</h1>
                 <p>Check out must-see sights and activities:</p>
             </div>
         </div>
@@ -24,24 +24,29 @@
 
     <div class="container-fluid p-4">
         <div class="container p-2">
-            <h1 class="title">Top Attraction in Ha Noi</h1>
+            <h1 class="title">Top Attraction in {{ city?.name || 'Loading...' }}</h1>
         </div>
     </div>
 
     <div class="container-fluid context list-items-1">
-        <Info_Card v-for="(item, index) in entertainments"
+        <Info_Card v-for="(item, index) in attractions"
                 :key="index"
-                :imageUrl="getImageUrl(item.imageUrl)"
+                :imageUrl="item.images[0].url"
                 :name="item.name"
                 :rating="generateStars(item.rating)"
-                :review-number="item.reviewNumber"
+                :review-number="item.numOfReviews"
                 :tags="item.tag"
-                :description="item.description"/>
+                :description="item.description"
+                @click="navigateToDetailPlace(item.id)"/>
     </div>
  </template>
 
 <script setup>
 import destinationViewModel from '../../viewModels/city_ThingToDo_ListViewModel';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+const cityId = route.params.id; // Lấy cityId từ route params
 
 const {
     images,
@@ -50,14 +55,18 @@ const {
     buttons,
     selectedIndices,
     selectButton,
-    entertainments,
+    attractions,
+    city,
     generateStars,
     getImageUrl,
     liked,
     toggleLikeStatus,
     heartFull,
     heartEmpty,
-} = destinationViewModel();
+} = destinationViewModel(cityId);
+const navigateToDetailPlace = (id) => {
+    window.location.assign(`/Detail/Place/${id}`);
+};
 </script>
 
 <script>

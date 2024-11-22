@@ -93,7 +93,7 @@ const routes = [
     component: Profile_Page,  // Lazy load DashBoardView
   },
   {
-    path: '/City/ThingsToDo_List',
+    path: '/City/ThingsToDo_List/:id',
     name: 'city_ThingsToDo_List',
     component: city_ThingsToDo_List,  // Lazy load DashBoardView
   },

@@ -1,9 +1,10 @@
 import { ref, computed, onMounted } from 'vue';
-import ThingtodoModel from '../models/city_ThingToDo_ListModel';
+import { fetchDestinationsByCity} from '../models/destinationModel';
+import { fetchCityDetails } from '../models/CityModel';
+import generate_ratingViewModel from './generate_ratingViewModel'; 
 
-export default function () {
-  const model = ThingtodoModel();
-  
+export default function (cityId) {
+  const { generateStars } = generate_ratingViewModel();
 
   const isMenuVisible = ref(false);
   
@@ -14,7 +15,7 @@ export default function () {
   
 
 
-  const buttons = ref(model.buttons);
+  const buttons = ref(['Drink', 'Museum', 'Outdoor', 'Adventure', 'Beach', 'Hotel', 'Food', 'F&B', 'Movie']);
   const selectedIndices = ref([]);
 
   const selectButton = (index) => {
@@ -27,22 +28,19 @@ export default function () {
     }
   };
 
-  const entertainments = ref([]);
+  const attractions = ref([]);
+  const city = ref(null);
   
   const liked = ref({});
 
   onMounted(async () => {
-    entertainments.value = await model.fetchEntertainments();
+    attractions.value = await fetchDestinationsByCity(cityId);
+    
   });
 
-
-  const generateStars = (rating) => {
-    return model.generateStars(rating);
-  };
-
-  const getImageUrl = (imageUrl) => {
-    return new URL(imageUrl, import.meta.url).href;
-  };
+  onMounted(async () =>{
+    city.value = await fetchCityDetails(cityId);
+  })
 
   const toggleLikeStatus = (id) => {
     liked.value[id] = !liked.value[id];
@@ -55,6 +53,9 @@ export default function () {
     return description;
   };
 
+  const heartFull = new URL('@/assets/svg/heart-full.svg', import.meta.url).href;
+  const heartEmpty = new URL('@/assets/svg/heart-none.svg', import.meta.url).href;
+
   return {
     isMenuVisible,
     toggleMenu,
@@ -63,13 +64,13 @@ export default function () {
     selectedIndices,
     selectButton,
     
-    entertainments,
+    attractions,
+    city,
     generateStars,
-    getImageUrl,
     liked,
     toggleLikeStatus,
-    heartFull: model.heartFull,
-    heartEmpty: model.heartEmpty,
+    heartFull,
+    heartEmpty,
     truncatedDescription,
   };
 }
