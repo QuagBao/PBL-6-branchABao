@@ -1,11 +1,9 @@
 import { ref, onMounted, watch, nextTick, computed } from 'vue';
-import ThingtodoModel from '../models/ThingToDo_ListModel';
 import { fetchCities } from '../models/CityModel'
 import { fetchAttractions } from '../models/destinationModel';
 import generate_ratingViewModel from './generate_ratingViewModel';
 
 export default function () {
-  const model = ThingtodoModel();
   const { generateStars } = generate_ratingViewModel();
 
   const isMenuVisible = ref(false);
@@ -58,13 +56,8 @@ export default function () {
     console.log(`Item ID: ${id}, Liked: ${liked.value[id]}`);
   };
 
-
-
-  
-
-  
-
-  
+  const heartFull = new URL('@/assets/svg/heart-full.svg', import.meta.url).href;
+  const heartEmpty = new URL('@/assets/svg/heart-none.svg', import.meta.url).href;
 
   return {
     isMenuVisible,
@@ -73,8 +66,6 @@ export default function () {
     getImageUrl,
     liked,
     toggleLikeStatus,
-    heartFull: model.heartFull,
-    heartEmpty: model.heartEmpty,
     searchQuery,
     cities,
     visibleCities,
@@ -84,5 +75,7 @@ export default function () {
     visibleAttraction,
     prevAttraction,
     nextAttraction,
+    heartFull,
+    heartEmpty,
   };
 }
