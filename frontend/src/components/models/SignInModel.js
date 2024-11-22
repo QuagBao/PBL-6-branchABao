@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+
 class SignInModel {
   constructor(username, password) {
     this.username = username;
