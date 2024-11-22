@@ -20,10 +20,18 @@
                 Top destinations in Viet Nam
             </p>
             <div class="container-fluid context list-items">
-                <Img_Card v-for="(item, index) in visibleCities"
-                        :key="index"
-                        :imageUrl="getImageUrl(item.imageUrl)"
-                        :name="item.name"/>
+                <button @click="prevCity" class="carousel-control-prev" type="button">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+
+                <Img_Card v-for="(city, index) in visibleCities"
+                    :key="index"
+                    :imageUrl="city.images[0]"
+                    :name="city.name" />
+
+                <button @click="nextCity" class="carousel-control-next" type="button">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
             </div>
         </div>
 
@@ -32,13 +40,14 @@
                 Top attractions in Viet Nam
             </p>
             <div class="container-fluid context list-items-1">
-                <Card_Item v-for="(item, index) in visibleAttraction"
+                <Card_Item v-for="(item, index) in attractions"
                         :key="index"
-                        :imageUrl="getImageUrl(item.imageUrl)"
+                        :imageUrl="item.images[0]?.url"
                         :name="item.name"
                         :rating="generateStars(item.rating)"
-                        :review-number="item.reviewNumber"
-                        :tags="item.tag"/>
+                        :review-number="item.numOfReviews"
+                        :tags="item.tag"
+                        @click="navigateToDetailPlace(item.id)"/>
             </div>
         </div>
     </div>
@@ -57,6 +66,10 @@ const {
     cities, visibleCities, prevCity, nextCity,
     attractions, visibleAttraction, prevAttraction, nextAttraction,
 } = destinationViewModel();
+
+const navigateToDetailPlace = (id) => {
+        window.location.assign(`/Detail/Place/${id}`);
+    };
 </script>
 
 <script>
@@ -66,6 +79,7 @@ const {
     import Form_Search from '../Form_Search.vue';
     import Img_Card from '../Img_Card.vue';
     import Card_Item from '../Card_Item.vue';
+import { fetchAttractions } from '@/components/models/destinationModel';
     export default {
         name: "ThingsToDo_List",
         components: {
@@ -104,6 +118,7 @@ body {
     margin-top: 15px; 
 }
 .list-items {
+    position: relative;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 30px;
@@ -118,6 +133,53 @@ body {
     align-items: center;
     width: 95%;
     height: 100%;
+}
+
+.container-fluid-carousel { 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+.carousel-control-prev,
+.carousel-control-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background-color: #13357B;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+.carousel-control-prev {
+    left: -40px; /* Canh bên trái */
+}
+
+.carousel-control-next {
+    right: -40px; /* Canh bên phải */
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    display: block;
+    background-size: 20px 20px;
+    width: 20px;
+    height: 20px;
+    filter: invert(1);
+}
+
+.carousel-control-next-icon {
+    background-image: url("data:image/svg+xml;charset=UTF8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23FFF' viewBox='0 0 8 8'%3E%3Cpath d='M4.03 0L3 1.03 5.97 4 3 6.97 4.03 8 8 4 4.03 0z'/%3E%3C/svg%3E");
+}
+
+.carousel-control-prev-icon {
+    background-image: url("data:image/svg+xml;charset=UTF8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23FFF' viewBox='0 0 8 8'%3E%3Cpath d='M3.97 0L4.97 1.03 2 4l2.97 2.97-1 1L0 4l3.97-4z'/%3E%3C/svg%3E");
 }
 </style>
 

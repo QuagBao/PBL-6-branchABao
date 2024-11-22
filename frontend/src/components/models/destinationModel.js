@@ -33,6 +33,38 @@ import axios from 'axios';
     }
   };
 
+  export async function fetchAttractions(cityId) {
+    try {
+      const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/?is_popular=true&get_rating=true`);
+      const filteredDestinations = response.data.filter(destination => destination.hotel_id === null && destination.restaurant_id === null);
+
+    // Chỉ map qua các destination đã lọc
+      return filteredDestinations.map(destination => ({
+        id: destination.id,
+        name: destination.name,
+        price_bottom: destination.price_bottom,
+        price_top: destination.price_top,
+        age: destination.age,
+        opentime: destination.opentime,
+        duration: destination.duration,
+        description: destination.description,
+        date_create: destination.date_create,
+        address: {
+          city_id: destination.address.city_id,
+          district: destination.address.district,
+          ward: destination.address.ward,
+          street: destination.address.street,
+        },
+        images: destination.images,
+        rating: destination.rating,
+        numOfReviews: destination.numOfReviews,
+      }));
+    } catch (error) {
+      console.error('Error fetching destinations:', error);
+      return [];
+    }
+  };
+
   
 
 // Hàm để lấy thông tin khách sạn từ API

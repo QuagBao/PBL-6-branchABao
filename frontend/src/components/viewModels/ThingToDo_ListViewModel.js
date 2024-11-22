@@ -1,8 +1,12 @@
 import { ref, onMounted, watch, nextTick, computed } from 'vue';
 import ThingtodoModel from '../models/ThingToDo_ListModel';
+import { fetchCities } from '../models/CityModel'
+import { fetchAttractions } from '../models/destinationModel';
+import generate_ratingViewModel from './generate_ratingViewModel';
 
 export default function () {
   const model = ThingtodoModel();
+  const { generateStars } = generate_ratingViewModel();
 
   const isMenuVisible = ref(false);
   const toggleMenu = () => {
@@ -15,8 +19,8 @@ export default function () {
   const liked = ref({});
 
   onMounted(async () => {
-    attractions.value = await model.fetchEntertainments();
-    cities.value = await model.fetchCities();
+    attractions.value = await fetchAttractions();
+    cities.value = await fetchCities();
   });
 
   const currentIndexCity = ref(0);
@@ -43,10 +47,6 @@ export default function () {
   
   const nextAttraction = () => {
     if (currentIndexAttraction.value < attractions.value.length - 4) currentIndexAttraction.value++;
-  };
-
-  const generateStars = (rating) => {
-    return model.generateStars(rating);
   };
 
   const getImageUrl = (imageUrl) => {
