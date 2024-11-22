@@ -114,15 +114,11 @@
     const cityId = route.params.id; // Lấy cityId từ route params
 
     const {
-        isMenuVisible, toggleMenu,
-        currentImage, nextImage, prevImage, images,
-        isHeartFilled, heartFull, heartEmpty, toggleHeart,
+        currentImage, images,
         getTruncatedDescription, toggleReadMore, isReadMore, fullDescription,
-        buttons, selectedIndices, selectButton,
         generateStars,
-        liked, toggleLikeStatus,
         cityDetails, destinations, hotels,
-        isLoading, restaurants
+        restaurants
     } = destinationViewModel(cityId);
     const navigateToDetailPlace = (id) => {
         window.location.assign(`/Detail/Place/${id}`);

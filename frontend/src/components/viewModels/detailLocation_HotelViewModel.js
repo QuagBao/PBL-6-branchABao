@@ -1,5 +1,5 @@
 import { ref, computed, onMounted } from 'vue';
-import { RatingModel, mockComments, ImageModel, getHotelById } from '../models/detailLocation_HotelModel.js';
+import { getHotelById } from '../models/destinationModel.js';
 import { getReviewByDestinationId } from '../models/ReviewModel.js';
 import { getUserById } from '../models/UserModel.js';
 

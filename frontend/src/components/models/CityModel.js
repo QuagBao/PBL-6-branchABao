@@ -86,3 +86,25 @@ const vietnamRegions = {
       return []; // Hoặc bạn có thể xử lý khác tùy ý
     }
   }
+  export async function fetchCityDetails(cityId){
+    try {
+      const response = await fetch(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/city/${cityId}`);
+      const data = await response.json();
+
+      
+  
+      // Chuyển đổi dữ liệu thành định dạng có thể sử dụng trong Vue
+      return {
+        id: data.id,
+        name: data.name,
+        description: data.description,
+        images: data.images.map(image => ({
+          id: image.id,
+          url: image.url,
+        })),
+      };
+    } catch (error) {
+      console.error("Có lỗi xảy ra khi lấy dữ liệu chi tiết thành phố:", error);
+      return null; // Return null or handle as needed
+    }
+  };

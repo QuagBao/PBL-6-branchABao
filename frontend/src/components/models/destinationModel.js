@@ -1,36 +1,7 @@
 import axios from 'axios';
-import { ref, computed, onMounted } from 'vue';
-export default function () {
-  
-  const heartFull = new URL('@/assets/svg/heart-full.svg', import.meta.url).href;
-  const heartEmpty = new URL('@/assets/svg/heart-none.svg', import.meta.url).href;
-  
-  
 
-  const fetchCityDetails = async (cityId) => {
-    try {
-      const response = await fetch(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/city/${cityId}`);
-      const data = await response.json();
 
-      
-  
-      // Chuyển đổi dữ liệu thành định dạng có thể sử dụng trong Vue
-      return {
-        id: data.id,
-        name: data.name,
-        description: data.description,
-        images: data.images.map(image => ({
-          id: image.id,
-          url: image.url,
-        })),
-      };
-    } catch (error) {
-      console.error("Có lỗi xảy ra khi lấy dữ liệu chi tiết thành phố:", error);
-      return null; // Return null or handle as needed
-    }
-  };
-
-  const fetchDestinations = async (cityId) => {
+  export async function fetchDestinationsByCity(cityId) {
     try {
       const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/?city_id=${cityId}&is_popular=true&get_rating=true`);
       const filteredDestinations = response.data.filter(destination => destination.hotel_id === null && destination.restaurant_id === null);
@@ -65,7 +36,7 @@ export default function () {
   
 
 // Hàm để lấy thông tin khách sạn từ API
-const fetchHotels = async (cityId) => {
+export async function fetchHotelsByCity (cityId) {
   try {
     // Gọi API để lấy dữ liệu khách sạn
     const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/hotel/?city_id=${cityId}&is_popular=true`);
@@ -104,10 +75,8 @@ const fetchHotels = async (cityId) => {
   }
 };
 
-  const buttons = ['Drink', 'Museum', 'Outdoor', 'Adventure', 'Beach', 'Hotel', 'Food', 'F&B', 'Movie'];
-
   // Hàm để lấy thông tin khách sạn từ API
-const fetchRestaurants = async (cityId) => {
+  export async function fetchRestaurantsByCity(cityId){
   try {
     // Gọi API để lấy dữ liệu khách sạn
     const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/restaurant/?city_id=${cityId}&is_popular=true`);
@@ -146,47 +115,95 @@ const fetchRestaurants = async (cityId) => {
   }
 };
 
-  const fetchImages = async () => {
-    try {
-      const response = await axios.get('http://localhost:3000/images');
-      return response.data.map(image => ({
-        id: image.id,
-        imageUrl: image.imageUrl,
-      }));
-    } catch (error) {
-      console.error('Error fetching entertainments:', error);
-      return [];
-    }
-  };
+export async function getDestinationById(destinationID) {
+  try {
+    const response = await axios.get(
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/${destinationID}`
+    );
 
+    const destination = response.data;
+    return {
+      id: destination.id,
+      name: destination.name,
+      price_bottom: destination.price_bottom,
+      price_top: destination.price_top,
+      age: destination.age,
+      opentime: destination.opentime,
+      duration: destination.duration,
+      description: destination.description,
+      date_create: destination.date_create,
+      address: {
+        city_id: destination.address.city_id,
+        district: destination.address.district,
+        ward: destination.address.ward,
+        street: destination.address.street,
+      },
+      images: destination.images,
+      hotel_id: destination.hotel_id,
+      hotel: destination.hotel,
+      restaurant_id: destination.restaurant_id,
+      restaurant: destination.restaurant,
+    };
+  } catch (error) {
+    console.error("Error fetching destination:", error);
+    return []; // Hoặc bạn có thể xử lý khác tùy ý
+  }
+}
 
-  const generateStars = (rating) => {
-    const fullStar = new URL('@/assets/svg/star_full.svg', import.meta.url).href;
-    const halfStar = new URL('@/assets/svg/star_half.svg', import.meta.url).href;
-    const emptyStar = new URL('@/assets/svg/star_none.svg', import.meta.url).href;
+export async function getHotelById(hotelID) {
+  try {
+    const response = await axios.get(
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/hotel/${hotelID}`
+    );
 
-    let stars = [];
-    for (let i = 1; i <= 5; i++) {
-      if (rating >= i) {
-        stars.push(fullStar);
-      } else if ((rating > i - 1 && rating - i + 1 >= 0.5) && rating < i) {
-        stars.push(halfStar);
-      } else {
-        stars.push(emptyStar);
-      }
-    }
-    return stars;
-  };
+    const hotel = response.data;
+    return {
+      id: hotel.id,
+      name: hotel.name,
+      price_bottom: hotel.price_bottom,
+      price_top: hotel.price_top,
+      age: hotel.age,
+      opentime: hotel.opentime,
+      duration: hotel.duration,
+      description: hotel.description,
+      date_create: hotel.date_create,
+      address: hotel.address,
+      images: hotel.images,
+      hotel_id: hotel.hotel_id,
+      hotel: hotel.hotel,
+      restaurant_id: hotel.restaurant_id,
+      restaurant: hotel.restaurant,
+    };
+  } catch (error) {
+    console.error("Error fetching hotel:", error);
+    return []; // Hoặc bạn có thể xử lý khác tùy ý
+  }
+}
 
-  return {
-    fetchImages,
-    heartFull,
-    heartEmpty,
-    buttons,
-    generateStars,
-    fetchCityDetails,
-    fetchDestinations,
-    fetchHotels,
-    fetchRestaurants,
-  };
+export async function getRestaurantById(restaurantID) {
+  try {
+    const response = await axios.get(
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/restaurant/${restaurantID}`
+    );
+
+    const restaurant = response.data;
+    return {
+      id: restaurant.id,
+      name: restaurant.name,
+      price_bottom: restaurant.price_bottom,
+      price_top: restaurant.price_top,
+      age: restaurant.age,
+      opentime: restaurant.opentime,
+      duration: restaurant.duration,
+      description: restaurant.description,
+      date_create: restaurant.date_create,
+      address: restaurant.address,
+      images: restaurant.images,
+      restaurant_id: restaurant.restaurant_id,
+      restaurant: restaurant.restaurant,
+    };
+  } catch (error) {
+    console.error("Error fetching restaurant:", error);
+    return []; // Hoặc bạn có thể xử lý khác tùy ý
+  }
 }

@@ -1,8 +1,8 @@
 import { ref, computed, onMounted, watch } from 'vue';
-import DestinationModel from '../models/destinationModel';
+import { fetchDestinationsByCity, fetchHotelsByCity, fetchRestaurantsByCity} from '../models/destinationModel';
+import { fetchCityDetails } from '../models/CityModel'; 
 
 export default function (cityId) {
-  const model = DestinationModel();
   const images = ref([]);
   const isMenuVisible = ref(false);
   const isReadMore = ref(false);
@@ -36,7 +36,7 @@ export default function (cityId) {
   onMounted(async () => {
     isLoading.value = true; // Bắt đầu trạng thái tải
 
-    cityDetails.value = await model.fetchCityDetails(cityId);
+    cityDetails.value = await fetchCityDetails(cityId);
 
     if (cityDetails.value?.images) {
       images.value = cityDetails.value.images; // Gán mảng hình ảnh
@@ -48,16 +48,16 @@ export default function (cityId) {
 });
 
 onMounted(async () =>{
-  destinations.value = await model.fetchDestinations(cityId);
+  destinations.value = await fetchDestinationsByCity(cityId);
 })
 
 onMounted(async () =>{
-  restaurants.value = await model.fetchRestaurants(cityId);
+  restaurants.value = await fetchRestaurantsByCity(cityId);
   console.log(restaurants.value);
 })
 
 onMounted(async () =>{
-  hotels.value = await model.fetchHotels(cityId);
+  hotels.value = await fetchHotelsByCity(cityId);
 })
 
   // Function to get truncated description
@@ -70,7 +70,7 @@ onMounted(async () =>{
   const fullDescription = computed(() => cityDetails.value?.description || '');
 
   // Button selection logic
-  const buttons = ref(model.buttons);
+  const buttons = ref(['Drink', 'Museum', 'Outdoor', 'Adventure', 'Beach', 'Hotel', 'Food', 'F&B', 'Movie']);
   const selectedIndices = ref([]);
 
   const selectButton = (index) => {
@@ -83,11 +83,21 @@ onMounted(async () =>{
   };
 
   const generateStars = (rating) => {
-    return model.generateStars(rating);
-  };
+    const fullStar = new URL('@/assets/svg/star_full.svg', import.meta.url).href;
+    const halfStar = new URL('@/assets/svg/star_half.svg', import.meta.url).href;
+    const emptyStar = new URL('@/assets/svg/star_none.svg', import.meta.url).href;
 
-  const getImageUrl = (imageUrl) => {
-    return new URL(imageUrl, import.meta.url).href;
+    let stars = [];
+    for (let i = 1; i <= 5; i++) {
+      if (rating >= i) {
+        stars.push(fullStar);
+      } else if ((rating > i - 1 && rating - i + 1 >= 0.5) && rating < i) {
+        stars.push(halfStar);
+      } else {
+        stars.push(emptyStar);
+      }
+    }
+    return stars;
   };
 
   const toggleLikeStatus = (id) => {
@@ -133,11 +143,8 @@ onMounted(async () =>{
     selectButton,
     images,
     generateStars,
-    getImageUrl,
     liked,
     toggleLikeStatus,
-    heartFull: model.heartFull,
-    heartEmpty: model.heartEmpty,
     cityDetails,
     isLoading,
     destinations,
