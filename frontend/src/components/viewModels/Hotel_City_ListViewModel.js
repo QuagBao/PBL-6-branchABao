@@ -1,10 +1,10 @@
 import { ref, onMounted, watch, nextTick } from 'vue';
-import { fetchHotels } from '../models/destinationModel.js';
+import { fetchHotelsByCity } from '../models/destinationModel.js';
 import generate_ratingViewModel from './generate_ratingViewModel';
 import noUiSlider from 'nouislider';
 import 'nouislider/dist/nouislider.css';
 
-export default function () {
+export default function (cityId) {
   const { generateStars } = generate_ratingViewModel();
 
   const isMenuVisible = ref(false);
@@ -29,7 +29,7 @@ export default function () {
   const liked = ref({});
 
   onMounted(async () => {
-    hotels.value = await fetchHotels();
+    hotels.value = await fetchHotelsByCity(cityId);
     setupSlider(); // Khởi tạo noUiSlider
   });
 

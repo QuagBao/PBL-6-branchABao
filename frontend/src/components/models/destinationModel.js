@@ -107,6 +107,46 @@ export async function fetchHotelsByCity (cityId) {
   }
 };
 
+// Hàm để lấy thông tin khách sạn từ API
+export async function fetchHotels () {
+  try {
+    // Gọi API để lấy dữ liệu khách sạn
+    const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/hotel/?is_popular=true`);
+    
+
+    // In ra dữ liệu khách sạn để kiểm tra
+
+    return response.data.map((destination) => ({
+      id: destination.id,
+      name: destination.name,
+      price_bottom: destination.price_bottom,
+      price_top: destination.price_top,
+      age: destination.age,
+      opentime: destination.opentime,
+      duration: destination.duration,
+      description: destination.description,
+      date_create: destination.date_create,
+      address: {
+        city_id: destination.address.city_id,
+        district: destination.address.district,
+        ward: destination.address.ward,
+        street: destination.address.street,
+      },
+      images: destination.images,
+      hotel_id: destination.hotel_id,
+      hotel: destination.hotel,
+      restaurant_id: destination.restaurant_id,
+      restaurant: destination.restaurant,
+      rating: destination.rating,
+      numOfReviews: destination.numOfReviews,
+    }));
+  } catch (error) {
+    // In ra lỗi nếu có
+    console.error("Có lỗi xảy ra khi lấy dữ liệu chi tiết khách sạn:", error);
+    return null; // Trả về null hoặc xử lý theo cách khác nếu cần
+  }
+};
+
   export async function fetchRestaurantsByCity(cityId){
   try {
     // Gọi API để lấy dữ liệu khách sạn

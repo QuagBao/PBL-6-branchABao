@@ -26,7 +26,8 @@
                             :name="item.name"
                             :rating="generateStars(item.rating)"
                             :reviewNumber="item.numOfReviews"
-                            :tags="item.tag"/>
+                            :tags="item.tag"
+                            @click="navigateToDetailRestaurant(item.restaurant_id)"/>
             </div>
         </div>
     </div>
@@ -52,7 +53,9 @@ const {
     updateSliderFromInput
 } = destinationViewModel(cityId);
 
-
+const navigateToDetailRestaurant = (restaurant_id) =>{
+        window.location.assign(`/Detail/Restaurant/${restaurant_id}`);
+    };
 </script>
 
 <script>

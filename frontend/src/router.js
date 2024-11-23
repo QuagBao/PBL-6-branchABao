@@ -103,7 +103,7 @@ const routes = [
     component: city_Restaurants_List,  // Lazy load DashBoardView
   },
   {
-    path: '/City/Hotels_List',
+    path: '/Hotels_List/:id',
     name: 'city_Hotels_List',
     component: city_Hotels_List,  // Lazy load DashBoardView
   },
