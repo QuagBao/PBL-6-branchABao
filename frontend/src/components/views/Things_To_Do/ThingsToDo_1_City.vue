@@ -8,7 +8,7 @@
     <div class="container-fluid overall">
         <div class="image-container">
             <div class="base"></div>
-            <img :src="city?.images?.[0]?.url || ''" alt="City 1" class="img-fluid">
+            <img :src="city?.images?.[0]?.url || '/blue-image.jpg'" alt="City 1" class="img-fluid">
         </div>
         <div class="overall-container">
             <div class="text-container">
@@ -31,7 +31,7 @@
     <div class="container-fluid context list-items-1">
         <Info_Card v-for="(item, index) in attractions"
                 :key="index"
-                :imageUrl="item.images[0].url"
+                :imageUrl="item.images[0].url||'/blue-image.jpg'"
                 :name="item.name"
                 :rating="generateStars(item.rating)"
                 :review-number="item.numOfReviews"

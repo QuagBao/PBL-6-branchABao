@@ -113,6 +113,11 @@ const navigateToDestination = (id) => {
 </script>
 
 <style scoped>
+.container-fluid {
+    margin: 0 auto;
+    padding: 0;
+    max-width: 100%; /* Đảm bảo kích thước không thay đổi */
+}
 .search-btn {
     margin-top: -65px;
     margin-bottom: 100px;

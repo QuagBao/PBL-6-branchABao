@@ -103,7 +103,7 @@ export default {
     opacity: 0;
 }
 .carousel-header .carousel-inner .carousel-item img {
-    width: 1600px;
+    width: 100%;
     height: 700px;
     object-fit: cover;
 }

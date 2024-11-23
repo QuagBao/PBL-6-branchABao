@@ -61,7 +61,7 @@
             <div class="container-fluid context">
                 <Cards v-for="(item, index) in destinations"
                         :key="index"
-                        :imageUrl="item.images[0]?.url"
+                        :imageUrl="item.images[0]?.url||'/blue-image.jpg'"
                         :name="item.name"
                         :rating="item.rating"
                         :stars="generateStars(item.rating)"
@@ -77,7 +77,7 @@
             <div class="container-fluid context">
                 <Cards v-for="(item, index) in restaurants"
                         :key="index"
-                        :imageUrl="item.images[0]?.url"
+                        :imageUrl="item.images[0]?.url||'/blue-image.jpg'"
                         :name="item.name"
                         :rating="item.rating"
                         :stars="generateStars(item.rating)"
@@ -93,7 +93,7 @@
             <div class="container-fluid context">
                 <Cards v-for="(item, index) in hotels"
                         :key="index"
-                        :imageUrl="item.images[0]?.url"
+                        :imageUrl="item.images[0]?.url||'/blue-image.jpg'"
                         :name="item.name"
                         :rating="item.rating"
                         :stars="generateStars(item.rating)"

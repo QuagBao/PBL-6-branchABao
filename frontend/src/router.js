@@ -73,17 +73,17 @@ const routes = [
     component: Destination_Final,  // Lazy load SignInView
   },
   {
-    path: '/ThingsToDo_List_All',
+    path: '/ThingsToDo_List',
     name: 'ThingsToDo_List_All',
     component: ThingsToDo_List_All,  // Lazy load destinationView
   },
   {
-    path: '/Restaurants_List_All',
+    path: '/Restaurants_List',
     name: 'Restaurants_List_All',
     component: Restaurants_List_All,  // Lazy load SignInView
   },
   {
-    path: '/Hotels_List_All',
+    path: '/Hotels_List',
     name: 'Hotels_List_All',
     component: Hotels_List_All,  // Lazy load SignInView
   },
@@ -93,12 +93,12 @@ const routes = [
     component: Profile_Page,  // Lazy load DashBoardView
   },
   {
-    path: '/City/ThingsToDo_List/:id',
+    path: '/ThingsToDo_List/:id',
     name: 'city_ThingsToDo_List',
     component: city_ThingsToDo_List,  // Lazy load DashBoardView
   },
   {
-    path: '/City/Restaurants_List',
+    path: '/Restaurants_List/:id',
     name: 'city_Restaurants_List',
     component: city_Restaurants_List,  // Lazy load DashBoardView
   },

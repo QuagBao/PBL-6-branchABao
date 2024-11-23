@@ -14,18 +14,18 @@
         </div>
     </div>
 
-    <div class="container-fluid">
+    <div class="content">
         <div class="row">
             <div class="col-5">
                 <Filter_Option class="left-panel"/>
             </div>
             <div class="col-7 list-restaurants">
-                <Card_Item v-for="(item, index) in entertainments"
+                <Card_Item v-for="(item, index) in restaurants"
                             :key="index"
-                            :imageUrl="getImageUrl(item.imageUrl)"
+                            :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
                             :name="item.name"
                             :rating="generateStars(item.rating)"
-                            :reviewNumber="item.reviewNumber"
+                            :reviewNumber="item.numOfReviews"
                             :tags="item.tag"/>
             </div>
         </div>
@@ -35,19 +35,22 @@
  </template>
 
 <script setup>
-import { ref, onMounted, watch, nextTick } from 'vue';
-import destinationViewModel from '../../viewModels/Restaurant_ListViewModel';
+import destinationViewModel from '../../viewModels/Restaurant_City_ListViewModel';
+import { useRoute } from 'vue-router';
+
+const route = useRoute();
+const cityId = route.params.id;
 
 const {
     isMenuVisible, toggleMenu,
     buttons, selectedIndices, selectButton,
-    entertainments, generateStars, getImageUrl,
+    restaurants, generateStars, getImageUrl,
     liked, toggleLikeStatus, heartFull, heartEmpty,
     currency, minPrice, maxPrice, setupSlider, updatePrice, handleCurrencyChange,
     activeOption, toggleOptions,
     searchQuery,
     updateSliderFromInput
-} = destinationViewModel();
+} = destinationViewModel(cityId);
 
 
 </script>
@@ -74,12 +77,13 @@ body {
     background-color: #EDF6F9;
 }
 .img-fluid {
-    margin-top: 200px;
-    width: 1600px;
+    margin-top: 150px;
+    width: 100%;
     padding: 0px;
     height: 600px;
     border-radius: 25px;
     box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);
+    margin-bottom: 50px;
 }
 .search{
     margin-top: -25%;
@@ -90,7 +94,7 @@ body {
     flex-direction: column;
     color: #13357B;
     font-size: 28px;
-    margin-top: 15px;
+    padding-top: 20px;
 }
 .content p{
     font-weight: 900;
@@ -123,6 +127,7 @@ body {
 .left-panel{
     position: sticky;
     top: 160px;
+    width: 70%;
 }
 </style>
 

@@ -1,17 +1,18 @@
 import { ref, onMounted, watch, nextTick } from 'vue';
-import ThingtodoModel from '../models/city_Restaurant_ListModel';
+import { fetchRestaurantsByCity } from '../models/destinationModel.js';
+import generate_ratingViewModel from './generate_ratingViewModel';
 import noUiSlider from 'nouislider';
 import 'nouislider/dist/nouislider.css';
 
-export default function () {
-  const model = ThingtodoModel();
+export default function (cityId) {
+  const { generateStars } = generate_ratingViewModel();
 
   const isMenuVisible = ref(false);
   const toggleMenu = () => {
     isMenuVisible.value = !isMenuVisible.value;
   };
 
-  const buttons = ref(model.buttons);
+  const buttons = ref(['Drink', 'Museum', 'Outdoor', 'Adventure', 'Beach', 'Hotel', 'Food', 'F&B', 'Movie']);
   const selectedIndices = ref([]);
   const searchQuery = ref('');
 
@@ -24,17 +25,14 @@ export default function () {
     }
   };
 
-  const entertainments = ref([]);
+  const restaurants = ref([]);
   const liked = ref({});
 
   onMounted(async () => {
-    entertainments.value = await model.fetchEntertainments();
+    restaurants.value = await fetchRestaurantsByCity(cityId);
     setupSlider(); // Khởi tạo noUiSlider
   });
 
-  const generateStars = (rating) => {
-    return model.generateStars(rating);
-  };
 
   const getImageUrl = (imageUrl) => {
     return new URL(imageUrl, import.meta.url).href;
@@ -162,6 +160,8 @@ const maxPrice = ref(currency.value === 'USD' ? 10000 : 10000000);
     activeOption.value = activeOption.value === option ? null : option;
   };
 
+  const heartFull = new URL('@/assets/svg/heart-full.svg', import.meta.url).href;
+  const heartEmpty = new URL('@/assets/svg/heart-none.svg', import.meta.url).href;
   
 
   return {
@@ -170,13 +170,13 @@ const maxPrice = ref(currency.value === 'USD' ? 10000 : 10000000);
     buttons,
     selectedIndices,
     selectButton,
-    entertainments,
+    restaurants,
     generateStars,
     getImageUrl,
     liked,
     toggleLikeStatus,
-    heartFull: model.heartFull,
-    heartEmpty: model.heartEmpty,
+    heartFull,
+    heartEmpty,
     currency,
     minPrice,
     maxPrice,

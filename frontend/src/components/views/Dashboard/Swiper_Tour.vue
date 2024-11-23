@@ -16,6 +16,7 @@
                             :src="tour.destinations.find(dest => dest.images && dest.images.length)?.images[0].url" 
                             :alt="tour.id" 
                             class="w-100">
+                        <img v-else :src="'/blue-image.jpg'">
                         <div class="tour-info d-flex border-start-0
                                     border-end-0 position-absolute" style="width: 100%;
                                     bottom: 0; left: 0; z-index: 5;">
