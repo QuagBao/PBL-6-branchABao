@@ -8,8 +8,6 @@ const detailLocation_Place = () => import('./components/views/detailLocation_Pla
 const detailLocation_Attraction = () => import('./components/views/detailLocation_Attraction.vue');
 const detailLocation_Restaurant = () => import('./components/views/detailLocation_Restaurant.vue');
 const detailLocation_Hotel = () => import('./components/views/detailLocation_Hotel.vue');
-const writeReviewView = () => import('./components/views/writeReviewView.vue');
-const uploadPictureView = () => import('./components/views/uploadPictureView.vue');
 const city_ThingToDo_list = () => import('./components/views/city_ThingToDo_List.vue');
 const city_Restaurant_list = () => import('./components/views/city_Restaurant_List.vue');
 const city_Hotel_list = () => import('./components/views/city_Hotel_List.vue');
@@ -43,6 +41,11 @@ const city_Hotels_List = () => import('./components/views/Hotel/Hotels_1_City.vu
 const Place = () => import('./components/views/Detail/Place.vue');
 const Res = () => import('./components/views/Detail/Restaurant.vue');
 const Hot = () => import('./components/views/Detail/Hotel.vue');
+
+//Review
+
+const writeReviewView = () => import('./components/views/Review/Review_WriteReview.vue');
+const uploadPictureView = () => import('./components/views/Review/Review_UploadPicture.vue');
 
 // Test UI
 const test   = () => import('./components/views/Detail/Place.vue');
@@ -126,6 +129,16 @@ const routes = [
     path: '/Detail/Hotel/:id',
     name: 'Hot',
     component: Hot,  // Lazy load SignInView
+  },
+  {
+    path: '/writeReview',
+    name: 'WriteReview',
+    component: writeReviewView,  // Lazy load detailLocation_Hotel
+  },
+  {
+    path: '/uploadPicture',
+    name: 'UploadPicture',
+    component: uploadPictureView,  // Lazy load detailLocation_Hotel
   },
 
 
@@ -212,16 +225,7 @@ const routes = [
     name: 'DetailLocation_Hotel',
     component: detailLocation_Hotel,  // Lazy load detailLocation_Hotel
   },
-  {
-    path: '/writeReview',
-    name: 'WriteReview',
-    component: writeReviewView,  // Lazy load detailLocation_Hotel
-  },
-  {
-    path: '/uploadPicture',
-    name: 'UploadPicture',
-    component: uploadPictureView,  // Lazy load detailLocation_Hotel
-  },
+  
   // Đường dẫn mặc định nếu không có URL cụ thể
   {
     path: '/',

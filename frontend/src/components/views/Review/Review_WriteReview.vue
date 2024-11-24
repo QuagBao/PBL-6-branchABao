@@ -138,7 +138,7 @@ import {
   handlePhotoUpload,
   submitReview,
   photoPreviews,
-} from '../viewModels/writeReviewViewModel.js';
+} from '../../viewModels/writeReviewViewModel.js';
 </script>
 
 
