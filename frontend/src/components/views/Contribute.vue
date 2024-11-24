@@ -5,7 +5,8 @@
                 <p>Contribute</p>
             </div>
             <div class="container-fluid">
-                <button class="write-review">Write Review</button>
+                <button class="write-review" @click="writeReview(destination_id)">Write Review</button>
+                <button class="write-review" @click="uploadPicture(destination_id)">Upload Picture</button>
             </div>
         </div>
 
@@ -73,6 +74,13 @@ import generateViewModel from '../viewModels/generate_ratingViewModel';
 // Lấy hàm tạo vòng tròn (circle)
 const { generateCircle } = generateViewModel();
 import A_Comment from './A_Comment.vue';
+
+const writeReview = (id) => {
+        window.location.assign(`/Review/Write/${id}`);
+    };
+const uploadPicture = (id) => {
+    window.location.assign(`/Review/Upload/${id}`);
+};
 // Khai báo các props
 defineProps({
 
@@ -92,6 +100,11 @@ defineProps({
     type: Array,
     required: true,
   },
+  destination_id:{
+    type: Number,
+    required: true,
+  }
+  
 });
 </script>
 

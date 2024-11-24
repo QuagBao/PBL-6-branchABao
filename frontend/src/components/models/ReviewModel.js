@@ -22,3 +22,81 @@ export async function getReviewByDestinationId(destinationID) {
       return []; // Hoặc bạn có thể xử lý khác tùy ý
     }
   }
+
+  export async function addReview(title,content,rating,user_id,destination_id,language,companion,date_create, images) {
+    try {
+  
+      const url = new URL(
+        `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/review/`
+      );
+      url.searchParams.append("title", title);
+      url.searchParams.append("content", content);
+      url.searchParams.append("rating", rating);
+      url.searchParams.append("user_id", user_id);
+      url.searchParams.append("destination_id", destination_id);
+      url.searchParams.append("language", language);
+      url.searchParams.append("companion", companion);
+      url.searchParams.append("date_create", date_create);
+  
+      let formData = null;
+      if (images && images.length > 0) {
+        formData = new FormData();
+        images.forEach((file) => {
+          formData.append("images", file);
+        });
+      }
+  
+      // Gửi PUT request với dữ liệu từ FormData
+      const response = await axios.post(url.toString(), formData || undefined, {
+        headers: {
+          "Content-Type": "multipart/form-data", // Đảm bảo gửi đúng content type
+        },
+      });
+  
+      if (response.status === 200) {
+        const result = response.data;
+        console.log("Review created successfully", result);
+        return result;
+      }
+    } catch (error) {
+      console.error(
+        "Error details:",
+        error.response ? error.response.data : error.message
+      );
+      return { success: false, message: "Failed to add review" };
+    }
+  }
+  export async function addImage(destination_id,image) {
+    try {
+  
+      const url = new URL(
+        `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/image/`
+      );
+      url.searchParams.append('destination_id', destination_id);
+  
+      let formData = null;
+      if (image) {
+        formData = new FormData();
+        formData.append('image_inp', image);
+      }
+  
+      // Gửi PUT request với dữ liệu từ FormData
+      const response = await axios.post(url.toString(), formData || undefined, {
+        headers: {
+          "Content-Type": "multipart/form-data", // Đảm bảo gửi đúng content type
+        },
+      });
+  
+      if (response.status === 200) {
+        const result = response.data;
+        console.log("Review add picture successfully", result);
+        return result;
+      }
+    } catch (error) {
+      console.error(
+        "Error details:",
+        error.response ? error.response.data : error.message
+      );
+      return { success: false, message: "Failed to add review" };
+    }
+  }

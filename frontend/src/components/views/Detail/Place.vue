@@ -59,6 +59,7 @@
                         :circles="circles"
                         :ratings="ratings"
                         :commentList="commentList"
+                        :destination_id="destination.id"
                         :stars = "generateCircle()"/>
         </div>
     </div>
@@ -100,6 +101,8 @@
     generateCircle,
     totalRating,
   } = generateViewModel();
+
+  
 
   // Các hàm hoặc logic bổ sung có thể được thêm vào nếu cần
 </script>

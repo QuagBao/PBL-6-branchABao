@@ -82,6 +82,7 @@
                         :circles="circles"
                         :ratings="ratings"
                         :commentList="commentList"
+                        :destination_id="restaurant.id"
                         :stars = "generateCircle()"/>
         </div>
     </div>

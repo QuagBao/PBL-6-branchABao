@@ -32,11 +32,11 @@ export default function () {
             return (total / this.getTotal()).toFixed(1);
         }
     }
+    const fullStar = new URL('@/assets/svg/star_full.svg', import.meta.url).href;
+    const halfStar = new URL('@/assets/svg/star_half.svg', import.meta.url).href;
+    const emptyStar = new URL('@/assets/svg/star_none.svg', import.meta.url).href;
     const ratingModel = new RatingModel(3422, 2122, 5622, 2100, 300);
     const generateStars = (rating) => {
-        const fullStar = new URL('@/assets/svg/star_full.svg', import.meta.url).href;
-        const halfStar = new URL('@/assets/svg/star_half.svg', import.meta.url).href;
-        const emptyStar = new URL('@/assets/svg/star_none.svg', import.meta.url).href;
     
         let stars = [];
         for (let i = 1; i <= 5; i++) {
@@ -107,5 +107,8 @@ export default function () {
         rating,
         ratings,
         totalRating,
+        fullStar,
+        halfStar,
+        emptyStar,
       }
 }

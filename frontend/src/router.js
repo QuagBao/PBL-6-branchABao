@@ -131,12 +131,12 @@ const routes = [
     component: Hot,  // Lazy load SignInView
   },
   {
-    path: '/writeReview',
+    path: '/Review/Write/:id',
     name: 'WriteReview',
     component: writeReviewView,  // Lazy load detailLocation_Hotel
   },
   {
-    path: '/uploadPicture',
+    path: '/Review/Upload/:id',
     name: 'UploadPicture',
     component: uploadPictureView,  // Lazy load detailLocation_Hotel
   },
