@@ -1,18 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 
 // Sử dụng dynamic import để lazy load các component
-const DashBoardView = () => import('./components/views/dashboard.vue');
-const DashBoardView_Test = () => import('./components/views/Dashboard_Test.vue');
-const destinationView = () => import('./components/views/destinationView.vue');
-const detailLocation_Place = () => import('./components/views/detailLocation_Place.vue');
-const detailLocation_Attraction = () => import('./components/views/detailLocation_Attraction.vue');
-const detailLocation_Restaurant = () => import('./components/views/detailLocation_Restaurant.vue');
-const detailLocation_Hotel = () => import('./components/views/detailLocation_Hotel.vue');
-const city_ThingToDo_list = () => import('./components/views/city_ThingToDo_List.vue');
-const city_Restaurant_list = () => import('./components/views/city_Restaurant_List.vue');
-const city_Hotel_list = () => import('./components/views/city_Hotel_List.vue');
-const Restaurant_list = () => import('./components/views/Restaurant_List.vue');
-const Hotel_list = () => import('./components/views/Hotel_List.vue');
+
 
 // Sign in & Sign up
 const SignInView = () => import('./components/views/SignInView.vue');
@@ -66,27 +55,27 @@ const routes = [
     component: SignUpView,  // Lazy load SignUpView
   },
   {
-    path: '/Dashboard_Final',
+    path: '/home',
     name: 'Dashboard_Final',
     component: Dashboard_Final,  // Lazy load SignUpView
   },
   {
-    path: '/Destination_Final/:id',
+    path: '/Destination/:id',
     name: 'Destination_Final',
     component: Destination_Final,  // Lazy load SignInView
   },
   {
-    path: '/ThingsToDo_List',
+    path: '/ThingsToDo',
     name: 'ThingsToDo_List_All',
     component: ThingsToDo_List_All,  // Lazy load destinationView
   },
   {
-    path: '/Restaurants_List',
+    path: '/Restaurants',
     name: 'Restaurants_List_All',
     component: Restaurants_List_All,  // Lazy load SignInView
   },
   {
-    path: '/Hotels_List',
+    path: '/Hotels',
     name: 'Hotels_List_All',
     component: Hotels_List_All,  // Lazy load SignInView
   },
@@ -96,17 +85,17 @@ const routes = [
     component: Profile_Page,  // Lazy load DashBoardView
   },
   {
-    path: '/ThingsToDo_List/:id',
+    path: '/ThingsToDo/:id',
     name: 'city_ThingsToDo_List',
     component: city_ThingsToDo_List,  // Lazy load DashBoardView
   },
   {
-    path: '/Restaurants_List/:id',
+    path: '/Restaurants/:id',
     name: 'city_Restaurants_List',
     component: city_Restaurants_List,  // Lazy load DashBoardView
   },
   {
-    path: '/Hotels_List/:id',
+    path: '/Hotels/:id',
     name: 'city_Hotels_List',
     component: city_Hotels_List,  // Lazy load DashBoardView
   },
@@ -162,69 +151,7 @@ const routes = [
     name: 'test3',
     component: test3,  // Lazy load SignInView
   },
-
-  {
-    path: '/home',
-    name: 'Dashboard',
-    component: DashBoardView,  // Lazy load DashBoardView
-  },
-  {
-    path: '/DashBoardView_Test',
-    name: 'DashBoardView_Test',
-    component: DashBoardView_Test,  // Lazy load DashBoardView
-  },
   
-  {
-    path: '/destination',
-    name: 'Destination',
-    component: destinationView,  // Lazy load destinationView
-  },
-  {
-    path: '/city/thingtodo',
-    name: 'City_ThingToDo',
-    component: city_ThingToDo_list,  // Lazy load destinationView
-  },
-  {
-    path: '/city/restaurant',
-    name: 'City_Restaurant',
-    component: city_Restaurant_list,  // Lazy load destinationView
-  },
-  {
-    path: '/city/hotel',
-    name: 'City_Hotel',
-    component: city_Hotel_list,  // Lazy load destinationView
-  },
-  
-  {
-    path: '/restaurant',
-    name: 'Restaurant',
-    component: Restaurant_list,  // Lazy load destinationView
-  },
-  {
-    path: '/hotel',
-    name: 'Hotel',
-    component: Hotel_list,  // Lazy load destinationView
-  },
-  {
-    path: '/detailLocation/Place',
-    name: 'DetailLocation_Place',
-    component: detailLocation_Place,  // Lazy load detailLocation_Place
-  },
-  {
-    path: '/detailLocation/Attraction',
-    name: 'DetailLocation_Attraction',
-    component: detailLocation_Attraction,  // Lazy load detailLocation_Attraction
-  },
-  {
-    path: '/detailLocation/Restaurant',
-    name: 'DetailLocation_Restaurant',
-    component: detailLocation_Restaurant,  // Lazy load detailLocation_Restaurant
-  },
-  {
-    path: '/detailLocation/Hotel',
-    name: 'DetailLocation_Hotel',
-    component: detailLocation_Hotel,  // Lazy load detailLocation_Hotel
-  },
   
   // Đường dẫn mặc định nếu không có URL cụ thể
   {

@@ -87,7 +87,7 @@ const {
 } = dashboardViewModel;
 
 const navigateToDestination = (id) => {
-  window.location.assign(`/Destination_Final/${id}`);
+  window.location.assign(`/Destination/${id}`);
 };
 </script>
 

@@ -72,7 +72,7 @@ const navigateToDetailPlace = (id) => {
     window.location.assign(`/Detail/Place/${id}`);
 };
 const navigateToThingsCity = (id) => {
-    window.location.assign(`/City/ThingsToDo_List/${id}`);
+    window.location.assign(`/ThingsToDo/${id}`);
 };
 </script>
 

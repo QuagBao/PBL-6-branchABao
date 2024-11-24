@@ -42,7 +42,7 @@
  </template>
 
 <script setup>
-import destinationViewModel from '../../viewModels/city_ThingToDo_ListViewModel';
+import destinationViewModel from '../../viewModels/city_ThingToDo_listViewModel';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
