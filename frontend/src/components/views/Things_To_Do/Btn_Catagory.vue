@@ -18,7 +18,7 @@
 import { ref } from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
-import city_ThingToDo_ListViewModel from '../../viewModels/city_ThingToDo_ListViewModel.js';
+import city_ThingToDo_ListViewModel from '../../viewModels/city_ThingToDo_listViewModel.js';
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
