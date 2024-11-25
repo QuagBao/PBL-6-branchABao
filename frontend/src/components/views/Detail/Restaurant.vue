@@ -18,9 +18,15 @@
                         {{ totalRating }} Reviews
                     </div>
                 </div>
-                <button class="write-review">Write review </button>
+                <div>
+                    <button class="write-review">Write review </button>
+                    <button v-if="restaurant.user_id == user?.id" class="write-review">Update Restaurant </button>
+                </div>
+                
             </div>
         </div>
+
+        
         
         <div class="row">
             <Carousel :currentImage="currentImage" :images="images"/>
@@ -36,7 +42,7 @@
                                     <div class="map"><p>Map</p></div>
                                     <div class="container frame location">
                                         <i class="icon-location"></i>
-                                        <p v-if="restaurant.address">{{ restaurant.address.street }}, {{ restaurant.address.ward }}, {{ restaurant.address.district }}, {{ restaurant.address.city_id }}</p>
+                                        <p v-if="restaurant.address">{{ restaurant.address.street }}, {{ restaurant.address.ward }}, {{ restaurant.address.district }}, {{ city.name }}</p>
                                     </div>
                                     <div class="container frame phone">
                                         <i class="icon-phone"></i>
@@ -83,6 +89,7 @@
                         :ratings="ratings"
                         :commentList="commentList"
                         :destination_id="restaurant.id"
+                        :user="user?.id||0"
                         :stars = "generateCircle()"/>
         </div>
     </div>
@@ -111,7 +118,9 @@
     isMenuVisible,
     toggleMenu,
     restaurant,
+    city,
     isLoading,
+    user,
   } = restaurantViewModel(restaurantID);
 
   const {

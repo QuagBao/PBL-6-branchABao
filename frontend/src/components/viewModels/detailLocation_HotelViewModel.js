@@ -2,6 +2,8 @@ import { ref, computed, onMounted } from 'vue';
 import { getHotelById } from '../models/destinationModel.js';
 import { getReviewByDestinationId } from '../models/ReviewModel.js';
 import { getUserById } from '../models/UserModel.js';
+import { fetchCityDetails } from '../models/CityModel';
+import SignInModel from '../models/SignInModel'; 
 
 
 export default function(hotelID) {
@@ -13,13 +15,34 @@ export default function(hotelID) {
   const hotel = ref(null);
   const images = ref([]);
   const commentList = ref([]);
+  const city = ref(null);
+
+  const user = ref(null);
+  const token = sessionStorage.getItem('access_token');
+  const loadUser = async () => {
+    const signInModel = new SignInModel("", "");
+    try{
+      const userResult = await signInModel.fetchCurrentUser(token);
+      if(userResult.success){
+        user.value = userResult.user;
+      } else {
+        console.error('Cannot get user:', error);
+      }
+    } catch (error) {
+      console.error('An error occurred during authentication:', error);
+      return { success: false, message: error.message || 'An error occurred' };
+    }
+    
+  }
 
 
   const loadHotel = async () => {
     try {
       hotel.value = await getHotelById(hotelID);
       console.log(hotel.value);
+      city.value = await fetchCityDetails(hotel.value.address.city_id);
       images.value = hotel.value.images;
+
     } catch (error) {
       console.error("Có lỗi xảy ra khi lấy dữ liệu khách sạn:", error);
     }
@@ -89,6 +112,7 @@ export default function(hotelID) {
   };
   
   initializePage();
+  loadUser();
 
 
   const toggleDropdown = () => {
@@ -139,7 +163,9 @@ export default function(hotelID) {
     isMenuVisible,
     toggleMenu,
     hotel,
+    city,
     isLoading,
+    user,
   };
 }
 

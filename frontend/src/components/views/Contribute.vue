@@ -60,6 +60,7 @@
                                         :date_comment="comment.date_create"
                                         :comment="comment.content"
                                         :condition="comment.images"
+                                        :canedit="comment.user_id === user"
                                         :URL="comment.images"/>
                         </div>
                     </div>
@@ -103,7 +104,11 @@ defineProps({
   destination_id:{
     type: Number,
     required: true,
-  }
+  },
+  user:{
+    type: Number,
+    required: true,
+  },
   
 });
 </script>

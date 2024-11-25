@@ -3,6 +3,9 @@ import { getRestaurantById } from '../models/destinationModel.js';
 
 import { getReviewByDestinationId } from '../models/ReviewModel.js';
 import { getUserById } from '../models/UserModel.js';
+import { fetchCityDetails } from '../models/CityModel';
+
+import SignInModel from '../models/SignInModel'; 
 
 export default function(restaurantID) {
 
@@ -12,12 +15,32 @@ export default function(restaurantID) {
   const restaurant = ref(null);
   const images = ref([]);
   const commentList = ref([]);
+  const city = ref(null);
+
+  const user = ref(null);
+  const token = sessionStorage.getItem('access_token');
+  const loadUser = async () => {
+    const signInModel = new SignInModel("", "");
+    try{
+      const userResult = await signInModel.fetchCurrentUser(token);
+      if(userResult.success){
+        user.value = userResult.user;
+      } else {
+        console.error('Cannot get user:', error);
+      }
+    } catch (error) {
+      console.error('An error occurred during authentication:', error);
+      return { success: false, message: error.message || 'An error occurred' };
+    }
+    
+  }
 
 
   const loadRestaurant = async () => {
     try {
       restaurant.value = await getRestaurantById(restaurantID);
       console.log(restaurant.value);
+      city.value = await fetchCityDetails(restaurant.value.address.city_id);
       images.value = restaurant.value.images;
     } catch (error) {
       console.error("Có lỗi xảy ra khi lấy dữ liệu nhà hàng:", error);
@@ -88,6 +111,7 @@ export default function(restaurantID) {
   };
   
   initializePage();
+  loadUser();
   
   
 
@@ -141,7 +165,9 @@ export default function(restaurantID) {
     isMenuVisible,
     toggleMenu,
     restaurant,
+    city,
     isLoading,
+    user,
   };
 }
 

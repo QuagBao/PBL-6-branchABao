@@ -18,6 +18,11 @@
                         {{ totalRating }} Reviews
                     </div>
                 </div>
+
+                <div>
+                    <button class="write-review">Write review </button>
+                    <button v-if="destination.user_id == user?.id" class="write-review">Update Place </button>
+                </div>
                 
                 <div class="container-fluid info-about">
                     <div class="row context">
@@ -60,6 +65,7 @@
                         :ratings="ratings"
                         :commentList="commentList"
                         :destination_id="destination.id"
+                        :user="user?.id||0"
                         :stars = "generateCircle()"/>
         </div>
     </div>
@@ -92,6 +98,7 @@
     isReadMore,
     destination,
     isLoading,
+    user,
   } = destinationViewModel(destinationID);
 
   const {
@@ -194,6 +201,23 @@ export default {
     height: 3px;
     border-radius: 5px;
     background-color: #13357B;
+}
+.write-review{
+    color: #13357B;
+    background: none;
+    border: none;
+    font-size: 18px;
+    font-weight: 700;
+    appearance: none;
+    margin: 15px 0 0 5px;
+    text-decoration: underline;
+    transition: all 0.3s ease-in-out;
+    text-align: left;
+    z-index: 10;
+    position: relative;
+}
+.write-review:hover{
+    color: #729AE9;
 }
 </style>
 

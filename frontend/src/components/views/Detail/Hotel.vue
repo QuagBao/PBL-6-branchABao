@@ -18,7 +18,10 @@
                         {{ totalRating }} Reviews
                     </div>
                 </div>
-                <button class="write-review">Write review </button>
+                <div>
+                    <button class="write-review">Write review </button>
+                    <button v-if="hotel.user_id == user?.id" class="write-review">Update Hotel </button>
+                </div>
             </div>
         </div>
         
@@ -36,7 +39,7 @@
                                     <div class="map"><p>Map</p></div>
                                     <div class="container frame location">
                                         <i class="icon-location"></i>
-                                        <p v-if="hotel.address">{{ hotel.address.street }}, {{ hotel.address.ward }}, {{ hotel.address.district }}, {{ hotel.address.city_id }}</p>
+                                        <p v-if="hotel.address">{{ hotel.address.street }}, {{ hotel.address.ward }}, {{ hotel.address.district }}, {{ city.name }}</p>
                                     </div>
                                     <div class="container frame phone">
                                         <i class="icon-phone"></i>
@@ -83,6 +86,7 @@
                         :ratings="ratings"
                         :commentList="commentList"
                         :destination_id="hotel.id"
+                        :user="user?.id||0"
                         :stars = "generateCircle()"/>
         </div>
     </div>
@@ -111,7 +115,9 @@
     isMenuVisible,
     toggleMenu,
     hotel,
+    city,
     isLoading,
+    user,
   } = hotelViewModel(destinationID);
 
   const {

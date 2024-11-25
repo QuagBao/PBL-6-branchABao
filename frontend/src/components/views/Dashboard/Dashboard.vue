@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid">
-        <Header></Header>
+        <Header />
         <Top_Button v-if="isTopButtonVisible" />
     </div>
 
@@ -92,12 +92,10 @@ const navigateToDestination = (id) => {
   window.location.assign(`/Destination/${id}`);
 };
 
-// Hàm xử lý sự kiện cuộn
 const handleScroll = () => {
-  isTopButtonVisible.value = window.scrollY > 200; // Hiển thị khi cuộn quá 200 pixel
+  isTopButtonVisible.value = window.scrollY > 300;
 };
 
-// Đăng ký và gỡ bỏ sự kiện khi component được mount và unmount
 onMounted(() => {
   window.addEventListener('scroll', handleScroll);
 });
@@ -130,11 +128,7 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-.container-fluid {
-    margin: 0 auto;
-    padding: 0;
-    max-width: 100%; /* Đảm bảo kích thước không thay đổi */
-}
+
 .search-btn {
     margin-top: -65px;
     margin-bottom: 100px;

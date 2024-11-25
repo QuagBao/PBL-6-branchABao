@@ -2,6 +2,8 @@ import { ref, computed, onMounted } from 'vue';
 import { getDestinationById } from '../models/destinationModel.js';
 import { getReviewByDestinationId } from '../models/ReviewModel.js';
 import { getUserById } from '../models/UserModel.js';
+import { fetchCityDetails } from '../models/CityModel'; 
+import SignInModel from '../models/SignInModel';
 
 export default function(destinationID) {
   class DescriptionModel {
@@ -28,7 +30,25 @@ export default function(destinationID) {
   const truncatedDescription = ref('');
   const images = ref([]);
   const commentList = ref([]);
+  const city = ref(null);
 
+  const user = ref(null);
+  const token = sessionStorage.getItem('access_token');
+  const loadUser = async () => {
+    const signInModel = new SignInModel("", "");
+    try{
+      const userResult = await signInModel.fetchCurrentUser(token);
+      if(userResult.success){
+        user.value = userResult.user;
+      } else {
+        console.error('Cannot get user:', error);
+      }
+    } catch (error) {
+      console.error('An error occurred during authentication:', error);
+      return { success: false, message: error.message || 'An error occurred' };
+    }
+    
+  }
 
   const loadDestination = async () => {
     try {
@@ -40,6 +60,7 @@ export default function(destinationID) {
       
       }
       images.value = destination.value.images;
+      city.value = await fetchCityDetails(destination.value.address.city_id);
       isLoading.value = true;
     } catch (error) {
       console.error("Có lỗi xảy ra khi lấy dữ liệu destination:", error);
@@ -109,6 +130,7 @@ export default function(destinationID) {
   };
   
   initializePage();
+  loadUser();
   
 
   const toggleReadMore = () => {
@@ -173,7 +195,9 @@ export default function(destinationID) {
     toggleReadMore,
     isReadMore,
     destination,
+    city,
     isLoading,
+    user,
   };
 }
 
