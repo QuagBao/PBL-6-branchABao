@@ -10,6 +10,7 @@ import axios from 'axios';
       return filteredDestinations.map(destination => ({
         id: destination.id,
         name: destination.name,
+        user_id: destination.user_id,
         price_bottom: destination.price_bottom,
         price_top: destination.price_top,
         age: destination.age,
@@ -42,6 +43,7 @@ import axios from 'axios';
       return filteredDestinations.map(destination => ({
         id: destination.id,
         name: destination.name,
+        user_id: destination.user_id,
         price_bottom: destination.price_bottom,
         price_top: destination.price_top,
         age: destination.age,
@@ -79,6 +81,7 @@ export async function fetchHotelsByCity (cityId) {
     return response.data.map((destination) => ({
       id: destination.id,
       name: destination.name,
+      user_id: destination.user_id,
       price_bottom: destination.price_bottom,
       price_top: destination.price_top,
       age: destination.age,
@@ -119,6 +122,7 @@ export async function fetchHotels () {
     return response.data.map((destination) => ({
       id: destination.id,
       name: destination.name,
+      user_id: destination.user_id,
       price_bottom: destination.price_bottom,
       price_top: destination.price_top,
       age: destination.age,
@@ -158,6 +162,7 @@ export async function fetchHotels () {
     return response.data.map((destination) => ({
       id: destination.id,
       name: destination.name,
+      user_id: destination.user_id,
       price_bottom: destination.price_bottom,
       price_top: destination.price_top,
       age: destination.age,
@@ -197,6 +202,7 @@ export async function fetchRestaurants(){
     return response.data.map((destination) => ({
       id: destination.id,
       name: destination.name,
+      user_id: destination.user_id,
       price_bottom: destination.price_bottom,
       price_top: destination.price_top,
       age: destination.age,
@@ -234,6 +240,7 @@ export async function getDestinationById(destinationID) {
     const destination = response.data;
     return {
       id: destination.id,
+      user_id: destination.user_id,
       name: destination.name,
       price_bottom: destination.price_bottom,
       price_top: destination.price_top,
@@ -270,6 +277,7 @@ export async function getHotelById(hotelID) {
     return {
       id: hotel.id,
       name: hotel.name,
+      user_id: hotel.user_id,
       price_bottom: hotel.price_bottom,
       price_top: hotel.price_top,
       age: hotel.age,
@@ -300,6 +308,7 @@ export async function getRestaurantById(restaurantID) {
     return {
       id: restaurant.id,
       name: restaurant.name,
+      user_id: restaurant.user_id,
       price_bottom: restaurant.price_bottom,
       price_top: restaurant.price_top,
       age: restaurant.age,

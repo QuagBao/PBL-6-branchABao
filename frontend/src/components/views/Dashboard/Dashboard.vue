@@ -1,6 +1,7 @@
 <template>
     <div class="container-fluid">
         <Header></Header>
+        <Top_Button v-if="isTopButtonVisible" />
     </div>
 
     <Carousel_For_Dashboard/>
@@ -72,8 +73,9 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
+import { ref, onMounted, onUnmounted } from 'vue';
 import dashboardViewModel from '../../viewModels/dashboardViewModel.js';
-
+const isTopButtonVisible = ref(false);
 // Sử dụng useRouter để lấy đối tượng router trong component
 const router = useRouter();
 
@@ -89,6 +91,20 @@ const {
 const navigateToDestination = (id) => {
   window.location.assign(`/Destination/${id}`);
 };
+
+// Hàm xử lý sự kiện cuộn
+const handleScroll = () => {
+  isTopButtonVisible.value = window.scrollY > 200; // Hiển thị khi cuộn quá 200 pixel
+};
+
+// Đăng ký và gỡ bỏ sự kiện khi component được mount và unmount
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll);
+});
 </script>
 
 <script>
@@ -101,12 +117,13 @@ const navigateToDestination = (id) => {
     import Img_Card from '../Img_Card.vue';
     import Img_Card_2 from '../Img_Card_2.vue';
     import Swiper_Tour from './Swiper_Tour.vue';
+    import Top_Button from '../Top_Button.vue';
     export default {
         name: "Dashboard",
         components: {
             Header, Scroll_Bar_Component, Search_Btn_Big, Tag_Button,
             Control_Button, Carousel_For_Dashboard, Img_Card,
-            Img_Card_2, Swiper_Tour
+            Img_Card_2, Swiper_Tour, Top_Button
         }
     }
 
