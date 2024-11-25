@@ -12,6 +12,7 @@ export async function getDestinations() {
 
     return response.data.map((destination) => ({
       id: destination.id,
+      user_id: destination.user_id,
       name: destination.name,
       description: destination.description,
       address: destination.address,
@@ -35,6 +36,7 @@ export async function getDestinationById(destinationID) {
     const destination = response.data;
     return {
       id: destination.id,
+      user_id: destination.user_id,
       name: destination.name,
       price_bottom: destination.price_bottom,
       price_top: destination.price_top,
@@ -75,6 +77,7 @@ export async function updateDestination(
       `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/${destination.id}`
     );
     url.searchParams.append("name", destination.name);
+    url.searchParams.append("user_id", destination.user_id);
     url.searchParams.append("price_bottom", destination.price_bottom);
     url.searchParams.append("price_top", destination.price_top);
     url.searchParams.append("age", destination.age);
@@ -138,6 +141,7 @@ export async function addDestination(destination, images) {
       `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/`
     );
     url.searchParams.append("name", destination.name);
+    url.searchParams.append("user_id", destination.user_id);
     url.searchParams.append("price_bottom", destination.price_bottom);
     url.searchParams.append("price_top", destination.price_top);
     url.searchParams.append("age", destination.age);

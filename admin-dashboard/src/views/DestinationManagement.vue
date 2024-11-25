@@ -10,6 +10,7 @@
           <tr>
             <th>Id</th>
             <th>Destination Name</th>
+            <th>User Create</th>
             <th>Description</th>
             <th>Address</th>
             <th>Actions</th>
@@ -22,6 +23,7 @@
           >
             <td>{{ destination.id }}</td>
             <td>{{ destination.name }}</td>
+            <td>{{ getUserName(destination.user_id) }}</td>
             <td>{{ destination.description }}</td>
             <td v-if="destination.address">
               {{ destination.address.street }}, {{ destination.address.ward }},
@@ -90,6 +92,15 @@
               >
             </div>
             <div class="detail-item">
+              <i class="icon-user"></i>
+              <span
+                ><strong>User create:</strong>
+                {{
+                  getUserName(currentDestination.user_id) || "No description available"
+                }}</span
+              >
+            </div>
+            <div class="detail-item">
               <i class="icon-location"></i>
               <span
                 ><strong>Address:</strong>
@@ -124,7 +135,7 @@
             </div>
           </div>
           <div class="action-buttons">
-            <button @click="showUpdateForm(destination.id)">
+            <button @click="showUpdateForm(currentDestination.id)">
               <i class="icon-update"></i> Update destination
             </button>
           </div>
@@ -293,6 +304,14 @@
           <input type="text" v-model="destination.name" required />
         </div>
         <div class="form-group">
+          <label>User create:</label>
+          <select v-model="destination.user_id" class="form-control">
+            <option v-for="user in users" :key="user.id" :value="user.id">
+              {{ user.username }}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
           <label>Description:</label>
           <input type="text" v-model="destination.description" />
         </div>
@@ -379,6 +398,14 @@
           <input type="text" v-model="currentDestination.name" required />
         </div>
         <div class="form-group">
+          <label>User create:</label>
+          <select v-model="currentDestination.user_id" class="form-control">
+            <option v-for="user in users" :key="user.id" :value="user.id">
+              {{ user.username }}
+            </option>
+          </select>
+        </div>
+        <div class="form-group">
           <label>Description:</label>
           <input type="text" v-model="currentDestination.description" />
         </div>
@@ -406,7 +433,7 @@
           <label>Date Create:</label>
           <input type="date" v-model="currentDestination.date_create" />
         </div>
-        <div class="form-group">
+        <div class="form-group" v-if="currentDestination && currentDestination.address">
           <label>City:</label>
           <select
             v-model="currentDestination.address.city_id"
@@ -639,6 +666,7 @@ export default {
     const destinations = ref([]);
     const images = ref([]);
     const cities = ref([]);
+    const users = ref([]);
     const new_images = ref([]);
     const image_ids_to_remove = ref([]);
     const previewImages = ref([]);
@@ -667,10 +695,12 @@ export default {
       confirmCreateRestaurant,
       confirmUpdateRestaurant,
       deleteRestaurant,
+      fetchUsers,
     } = DestinationManagementController();
 
     const destination = ref({
       name: "",
+      user_id: 0,
       price_bottom: 0,
       price_top: 0,
       age: 0,
@@ -708,6 +738,7 @@ export default {
     const currentDestination = ref({
       id: 0,
       name: "",
+      user_id: 0,
       price_bottom: 0,
       price_top: 0,
       age: 0,
@@ -776,12 +807,22 @@ export default {
       cities.value = await fetchCities();
     };
 
+    const loadUsers = async () => {
+      users.value = await fetchUsers();
+    };
+    onMounted(loadUsers);
     onMounted(loadCity);
     onMounted(loadDestinations);
+    
 
     const getCityName = (city_id) => {
       const city = cities.value.find((c) => c.id === city_id);
       return city ? city.name : "Unknown City";
+    };
+
+    const getUserName = (user_id) => {
+      const user = users.value.find((c) => c.id === user_id);
+      return user ? user.username : "Unknown User";
     };
 
     const showCreateForm = () => {
@@ -817,7 +858,10 @@ export default {
 
     const showUpdateForm = async (destinationID) => {
       const destinationData = await updateDestination(destinationID);
-      currentDestination.value = { ...destinationData };
+      currentDestination.value = { 
+            ...destinationData,
+            address: destinationData.address || { city_id: null, district: "", ward: "", street: "" },
+        };
     };
 
     const showUpdateForm_hotel = async (destinationID) => {
@@ -940,6 +984,8 @@ export default {
       image_ids_to_remove,
       cities,
       getCityName,
+      users,
+      getUserName,
       previewImages,
       previewNewImages,
       paginatedDestinations,
@@ -1565,6 +1611,11 @@ i {
 .icon-language:before {
   content: "\f1ab"; /* Mã Unicode cho 'fa-globe' */
   color: #28a745; /* Màu xanh lá */
+}
+
+.icon-user:before {
+  content: "\f007";
+  color: #007bff;
 }
 
 /* CSS cho các action button */
