@@ -56,7 +56,7 @@ export async function getReviewByDestinationId(destinationID) {
       if (response.status === 200) {
         const result = response.data;
         console.log("Review created successfully", result);
-        return result;
+        return { success: true, data: result };
       }
     } catch (error) {
       console.error(
@@ -90,7 +90,7 @@ export async function getReviewByDestinationId(destinationID) {
       if (response.status === 200) {
         const result = response.data;
         console.log("Review add picture successfully", result);
-        return result;
+        return { success: true, data: result };
       }
     } catch (error) {
       console.error(

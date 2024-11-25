@@ -40,6 +40,7 @@ export default function(destinationID) {
       const result = await addImage(destination.value.id, image);
       console.log(result);
     }
+      window.history.back();
   };
 
   return {
