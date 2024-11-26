@@ -135,6 +135,11 @@ const visitDate = ref(formatToday(today));
   const reviewTitle = ref('');
   const language = ref('');
 
+  const removePhoto = (index) => {
+    photoPreviews.value.splice(index, 1); // Xóa ảnh khỏi danh sách xem trước
+    photos.value.splice(index, 1); // Xóa ảnh khỏi danh sách gốc
+  };
+
   // Submit review
   const submitReview = async () => {
     console.log({
@@ -182,5 +187,6 @@ const visitDate = ref(formatToday(today));
     companions,
     selectedCompanion,
     selectCompanion,
+    removePhoto,
   };
 }

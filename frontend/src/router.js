@@ -34,6 +34,7 @@ const Hot = () => import('./components/views/Detail/Hotel.vue');
 //Review
 
 const writeReviewView = () => import('./components/views/Review/Review_WriteReview.vue');
+const updateReviewView = () => import('./components/views/Review/Review_UpdateReview.vue');
 const uploadPictureView = () => import('./components/views/Review/Review_UploadPicture.vue');
 
 // Test UI
@@ -123,6 +124,11 @@ const routes = [
     path: '/Review/Write/:id',
     name: 'WriteReview',
     component: writeReviewView,  // Lazy load detailLocation_Hotel
+  },
+  {
+    path: '/Review/Update/:id',
+    name: 'UpdateReview',
+    component: updateReviewView,  // Lazy load detailLocation_Hotel
   },
   {
     path: '/Review/Upload/:id',

@@ -99,25 +99,24 @@
           <p class="question-title">Add some photos</p>
           <p class="optional-text">Optional</p>
 
-          <!-- Photo upload box with overlapping preview images -->
-          <div class="photo-upload-box">
-            <!-- Upload input -->
-            <input type="file" @change="handlePhotoUpload" multiple class="photo-input" />
-            <!-- Default Text (hidden when photos are uploaded) -->
-            <p class="photo-upload-text" v-if="!photoPreviews.length">
-              Click to add photos <br /> or drag and drop
-            </p>
-
-            <!-- Display image previews directly inside the box -->
-            <div class="photo-preview-wrapper" v-if="photoPreviews.length">
-              <div v-for="(photo, index) in photoPreviews" :key="index" class="photo-preview">
-                <img :src="photo" class="preview-img" />
+        <!-- Display image previews in vertical layout -->
+          <div class="photo-preview-wrapper">
+            <div v-for="(photo, index) in photoPreviews" :key="index" class="photo-preview-row">
+              <img :src="photo" class="preview-img" />
+              <button class="remove-button" @click.stop="removePhoto(index)">-</button>
               </div>
             </div>
-          </div>
-        </div>
 
-        <!-- Submit Review Button -->
+          <!-- Upload input box remains at the bottom -->
+            <div class="photo-upload-box">
+              <input type="file" @change="handlePhotoUpload" multiple class="photo-input" />
+              <p class="photo-upload-text" v-if="!photoPreviews.length">
+                Click to add photos <br /> or drag and drop
+              </p>
+            </div>
+          </div>
+
+            <!-- Submit Review Button -->
         <button class="submit-button" @click="submitReview">Submit Review</button>
       </div>
     </div>
@@ -155,6 +154,7 @@ const {
   companions,
   selectedCompanion,
   selectCompanion,
+  removePhoto
 } =  ReviewViewModel(destinationID)
 
 const statuses = ['Terrible', 'Bad', 'Medium', 'Very Good', 'Excellent']; // Status labels for ratings
@@ -324,69 +324,72 @@ button {
   margin-bottom: 20px;
 }
 
-.photo-upload-section {
-  margin-bottom: 20px;
-}
 
 .optional-text {
   font-size: 0.9em;
   color: #555;
 }
 
-.photo-upload-box {
-    border: 2px dashed #d9d9d9;
-    padding: 10px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-    overflow: hidden; /* Ẩn các phần tràn ra ngoài */
-}
-
-.photo-upload-text {
-    text-align: center;
-    color: #003366;
-    font-size: 1.1em;
-}
-
-.photo-input {
-    position: absolute;
-    opacity: 0;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    cursor: pointer;
+.photo-upload-section {
+  display: flex;
+  flex-direction: column; /* Sắp xếp dọc */
+  gap: 10px; /* Khoảng cách giữa các phần */
 }
 
 .photo-preview-wrapper {
-    display: flex;
-    width: 100%;
-    justify-content: flex-start; /* Căn chỉnh sang bên trái */
-    flex-wrap: nowrap; /* Đảm bảo hình không bị xuống dòng */
-    overflow-x: auto; /* Cho phép kéo ngang nếu có quá nhiều hình */
-    padding: 10px 0; /* Khoảng cách bên trên và dưới */
+  display: flex;
+  flex-direction: column; /* Danh sách ảnh theo hàng dọc */
+  gap: 10px;
 }
 
-.photo-preview {
-    flex: 0 0 auto; /* Không cho phép co giãn và đảm bảo kích thước ổn định */
-    margin: 5px;
-    max-width: 150px; /* Đặt giới hạn kích thước tối đa cho mỗi hình */
-    height: auto;
-    overflow: hidden; /* Ẩn các phần tràn ra ngoài */
+.photo-preview-row {
+  display: flex;
+  align-items: center;
 }
 
 .preview-img {
-    width: 100%;
-    height: auto;
-    border-radius: 5px;
-    object-fit: cover; /* Đảm bảo hình ảnh giữ tỷ lệ khi hiển thị */
-    transition: transform 0.2s; /* Hiệu ứng zoom khi hover */
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-right: 10px;
 }
 
-.preview-img:hover {
-    transform: scale(1.1); /* Zoom khi hover */
+.remove-button {
+  background-color: #ff4d4f;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.remove-button:hover {
+  background-color: #d9363e;
+}
+
+.photo-upload-box {
+  border: 2px dashed #d9d9d9;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  text-align: center;
+  height: 100px;
+}
+
+.photo-input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
 }
 
 .submit-button {
