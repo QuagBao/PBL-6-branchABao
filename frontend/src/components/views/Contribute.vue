@@ -61,6 +61,7 @@
                                         :comment="comment.content"
                                         :condition="comment.images"
                                         :canedit="comment.user_id === user"
+                                        :id="comment.id"
                                         :URL="comment.images"/>
                         </div>
                     </div>
@@ -109,6 +110,7 @@ defineProps({
     type: Number,
     required: true,
   },
+  
   
 });
 </script>

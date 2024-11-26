@@ -138,8 +138,11 @@ export default function (reviewID) {
 
   const submitReview = async () => {
     try{
-        const result = updateReview(review.value, new_images.value, image_ids_to_remove.value);
+        const result = await updateReview(review.value, new_images.value, image_ids_to_remove.value);
         console.log(result.data);
+        if (result.success) {
+            window.history.back();
+          }
 
     } catch(error){
         console.error("Update Failed");

@@ -16,7 +16,7 @@
                 </div>
             </div>
             <div class="col-2 d-flex justify-content-end align-items-center update-container" v-if="canedit">
-                <i class="icon-update"></i>
+                <i class="icon-update" @click="updateReview(id)"></i>
             </div>
         </div>
         <div class="container content-comment">
@@ -36,6 +36,11 @@
 
     <div class="container-fluid line"></div>
 </template>
+<script setup>
+const updateReview = (id) => {
+        window.location.assign(`/Review/Update/${id}`);
+    };
+</script>
 
 <script>
 export default {
@@ -49,7 +54,8 @@ export default {
         comment: String,
         condition: String,
         canedit: Boolean,
-        URL: Array
+        URL: Array,
+        id: Number
     }
 }
 </script>

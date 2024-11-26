@@ -143,7 +143,7 @@ export async function getReviewByDestinationId(destinationID) {
     } catch (error) {
       console.error(
         "Error details:",
-        error.response ? error.response.data : error.message
+        error ? error.detail : error.message
       );
       return { success: false, message: "Failed to add review" };
     }
