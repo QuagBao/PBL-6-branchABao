@@ -48,6 +48,15 @@
             <i class="icon-tour-management"></i> Tour Management
           </router-link>
         </li>
+        <li>
+          <router-link
+            to="/reviews"
+            :class="{ active: isActive('/reviews') }"
+            @click="handleNavigation"
+          >
+            <i class="icon-tour-management"></i> Review Management
+          </router-link>
+        </li>
       </ul>
     </aside>
 
