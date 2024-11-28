@@ -20,8 +20,8 @@
                     <div class="rating">
                         <h2>{{ rating }}</h2>
                         <div class="circle-container">
-                            <div v-for="(circle, index) in circles" :key="index">
-                                <img :src="circle" alt="Circle" class="circle"/>
+                            <div v-for="(star, index) in stars" :key="index">
+                                <img :src="star" alt="Star" class="star"/>
                             </div>
                         </div>
                     </div>
@@ -55,7 +55,7 @@
                         <div v-for="comment in commentList" :key="comment.id" class="comment"  >
                             <A_Comment :imageUrl="comment.user?.userInfo?.image?.url || ''"
                                         :userName="comment.user?.username || 'Unknown User'"
-                                        :circles= "generateCircle(comment.rating)"
+                                        :stars= "generateStars(comment.rating)"
                                         :title="comment.title"
                                         :date_comment="comment.date_create"
                                         :comment="comment.content"
@@ -74,7 +74,7 @@
 import { computed } from 'vue';
 import generateViewModel from '../viewModels/generate_ratingViewModel';
 // Lấy hàm tạo vòng tròn (circle)
-const { generateCircle } = generateViewModel();
+const { generateStars } = generateViewModel();
 import A_Comment from './A_Comment.vue';
 
 const writeReview = (id) => {
@@ -95,6 +95,10 @@ defineProps({
     required: true,
   },
   circles: {
+    type: Array,
+    required: true,
+  },
+  stars: {
     type: Array,
     required: true,
   },

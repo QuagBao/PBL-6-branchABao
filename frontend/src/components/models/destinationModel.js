@@ -25,7 +25,7 @@ import axios from 'axios';
           street: destination.address.street,
         },
         images: destination.images,
-        rating: destination.rating,
+        rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
         numOfReviews: destination.numOfReviews,
       }));
     } catch (error) {
@@ -58,7 +58,7 @@ import axios from 'axios';
           street: destination.address.street,
         },
         images: destination.images,
-        rating: destination.rating,
+        rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
         numOfReviews: destination.numOfReviews,
       }));
     } catch (error) {
@@ -100,7 +100,7 @@ export async function fetchHotelsByCity (cityId) {
       hotel: destination.hotel,
       restaurant_id: destination.restaurant_id,
       restaurant: destination.restaurant,
-      rating: destination.rating,
+      rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
       numOfReviews: destination.numOfReviews,
     }));
   } catch (error) {
@@ -141,7 +141,7 @@ export async function fetchHotels () {
       hotel: destination.hotel,
       restaurant_id: destination.restaurant_id,
       restaurant: destination.restaurant,
-      rating: destination.rating,
+      rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
       numOfReviews: destination.numOfReviews,
     }));
   } catch (error) {
@@ -181,7 +181,7 @@ export async function fetchHotels () {
       hotel: destination.hotel,
       restaurant_id: destination.restaurant_id,
       restaurant: destination.restaurant,
-      rating: destination.rating,
+      rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
       numOfReviews: destination.numOfReviews,
     }));
   } catch (error) {
@@ -221,7 +221,7 @@ export async function fetchRestaurants(){
       hotel: destination.hotel,
       restaurant_id: destination.restaurant_id,
       restaurant: destination.restaurant,
-      rating: destination.rating,
+      rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
       numOfReviews: destination.numOfReviews,
     }));
   } catch (error) {
@@ -260,6 +260,8 @@ export async function getDestinationById(destinationID) {
       hotel: destination.hotel,
       restaurant_id: destination.restaurant_id,
       restaurant: destination.restaurant,
+      rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
+      numOfReviews: destination.numOfReviews,
     };
   } catch (error) {
     console.error("Error fetching destination:", error);
@@ -291,6 +293,8 @@ export async function getHotelById(hotelID) {
       hotel: hotel.hotel,
       restaurant_id: hotel.restaurant_id,
       restaurant: hotel.restaurant,
+      rating: hotel.rating ? parseFloat(hotel.rating.toFixed(1)) : null,
+      numOfReviews: hotel.numOfReviews,
     };
   } catch (error) {
     console.error("Error fetching hotel:", error);
@@ -320,6 +324,8 @@ export async function getRestaurantById(restaurantID) {
       images: restaurant.images,
       restaurant_id: restaurant.restaurant_id,
       restaurant: restaurant.restaurant,
+      rating: restaurant.rating ? parseFloat(restaurant.rating.toFixed(1)) : null,
+      numOfReviews: restaurant.numOfReviews,
     };
   } catch (error) {
     console.error("Error fetching restaurant:", error);

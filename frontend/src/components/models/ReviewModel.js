@@ -182,3 +182,22 @@ export async function getReviewByDestinationId(destinationID) {
       return { success: false, message: "Failed to add review" };
     }
   }
+
+  export async function deleteReview(reviewID) {
+    try {
+      const token = sessionStorage.getItem("token");
+      if (!token) throw new Error("No token found");
+  
+      const response = await axios.delete(
+        `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/review/${reviewID}`
+      );
+  
+      if (response.status === 200) {
+        console.log("Review delete successfully");
+        return { success: true, message: "Review delete successfully" };
+      }
+    } catch (error) {
+      console.error("Review deleting destination:", error);
+      return { success: false, message: "Failed to deleting review" };
+    }
+  }

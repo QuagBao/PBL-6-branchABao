@@ -10,12 +10,12 @@
                 <div class="container name-of-place">{{ hotel.name }}</div>
                 <div class="container rating-review">
                     <div class="rating">
-                        <div v-for="(circle, index) in circles" :key="index" class="circle">
-                            <img :src="circle" alt="Circle" /> 
+                        <div v-for="(star, index) in generateStars(hotel.rating)" :key="index" class="circle">
+                            <img :src="star" alt="Circle" /> 
                         </div>
                     </div>
                     <div class="reviews">
-                        {{ totalRating }} Reviews
+                        {{ hotel.numOfReviews }} Reviews
                     </div>
                 </div>
                 <div>
@@ -81,13 +81,12 @@
             </div>
         </div>
         <div class="container-fluid contribute">
-            <Contribute :rating="rating"
-                        :circles="circles"
+            <Contribute :rating="hotel.rating"
                         :ratings="ratings"
                         :commentList="commentList"
                         :destination_id="hotel.id"
                         :user="user?.id||0"
-                        :stars = "generateCircle()"/>
+                        :stars = "generateStars(hotel.rating)"/>
         </div>
     </div>
 
@@ -124,7 +123,7 @@
     circles,
     rating,
     ratings,
-    generateCircle,
+    generateStars,
     totalRating,
   } = generateViewModel();
 

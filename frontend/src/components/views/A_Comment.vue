@@ -11,12 +11,13 @@
                         <h3>{{ userName }}</h3>
                     </div>
                     <div class="col rating-stars">
-                        <img v-for="circle in circles" :src="circle" :key="index" class="circle-icon" />
+                        <img v-for="star in stars" :src="star" :key="index" class="circle-icon" />
                     </div>
                 </div>
             </div>
             <div class="col-2 d-flex justify-content-end align-items-center update-container" v-if="canedit">
                 <i class="icon-update" @click="updateReview(id)"></i>
+                <i class="icon-delete" @click="deleteReview(id)"></i>
             </div>
         </div>
         <div class="container content-comment">
@@ -37,6 +38,10 @@
     <div class="container-fluid line"></div>
 </template>
 <script setup>
+import DeleteReview from '../viewModels/Review_DeleteViewModel'
+const {
+    deleteReview
+} = DeleteReview();
 const updateReview = (id) => {
         window.location.assign(`/Review/Update/${id}`);
     };
@@ -48,7 +53,7 @@ export default {
     props: {
         imageUrl: String,
         userName: String,
-        circles: Array,
+        stars: Array,
         title: String,
         date_comment: String,
         comment: String,
@@ -130,6 +135,27 @@ i {
 }
 
 .icon-update:active {
+    transform: scale(1); /* Trả về kích thước ban đầu khi nhấn */
+}
+
+.icon-delete:before {
+  content: "\f2ed";
+  color: #dc3545;
+}
+
+.icon-delete {
+    font-size: 18px;
+    color: #f84109;
+    cursor: pointer;
+    transition: transform 0.2s, color 0.2s ease;
+}
+
+.icon-delete:hover {
+    color: #a90d05; /* Màu khi hover */
+    transform: scale(1.2); /* Phóng to nhẹ khi hover */
+}
+
+.icon-delete:active {
     transform: scale(1); /* Trả về kích thước ban đầu khi nhấn */
 }
 </style>
