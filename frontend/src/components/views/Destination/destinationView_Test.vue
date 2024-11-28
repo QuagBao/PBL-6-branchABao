@@ -1,11 +1,13 @@
 <template>
     <div class="header-container">
         <Header/>
-        <Top_Button v-if="cityDetails && cityDetails.name" :name="cityDetails.name"/>
+        <Top_Button v-if="cityDetails" :cityID="cityDetails.id"/>
     </div>
 
     <!-- Carousel -->
-    <Carousel :currentImage="currentImage" :images="images"/>
+    <div class="row">
+        <Carousel :currentImage="currentImage" :images="images"/>
+    </div>
 
     <div class="save">
         <Btn_Save/>
@@ -108,6 +110,7 @@
 <script setup>
     import { ref, computed, onMounted } from 'vue';
     import destinationViewModel from '../../viewModels/destinationViewModel.js';
+    import generate_ratingViewModel from '@/components/viewModels/generate_ratingViewModel.js';
     import { useRoute } from 'vue-router';
 
     const route = useRoute();
@@ -116,10 +119,13 @@
     const {
         currentImage, images,
         getTruncatedDescription, toggleReadMore, isReadMore, fullDescription,
-        generateStars,
         cityDetails, destinations, hotels,
         restaurants
     } = destinationViewModel(cityId);
+
+    const {
+        generateStars,
+    } = generate_ratingViewModel();
     const navigateToDetailPlace = (id) => {
         window.location.assign(`/Detail/Place/${id}`);
     };

@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
         <Header/>
-        <Top_Button/>
+        <Top_Button v-if="destination" :cityID="destination.address.city_id"/>
     </div> 
 
     <div class="container-fluid info-place">

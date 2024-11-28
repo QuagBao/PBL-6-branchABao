@@ -36,6 +36,10 @@
                             </div>
                         </div>
                     </div>
+                    <div class="description-container" v-if="description">
+                        <h3 class="description-title">About the Place</h3>
+                        <span class="description-content">{{ description }}</span>
+                    </div>
                 </div>
 
                 <!-- Review -->
@@ -113,6 +117,10 @@ defineProps({
   user:{
     type: Number,
     required: true,
+  },
+  description: {
+    type: String,
+    required: false,
   },
   
   
@@ -231,5 +239,26 @@ input:focus{
 }
 .comment-list{
     margin-top: 50px;
+}
+.description-container {
+    margin-top: 30px;
+    background-color: #EDF6F9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.15);
+}
+
+/* Tiêu đề của phần mô tả */
+.description-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #13357B;
+    margin-bottom: 10px;
+}
+
+/* Nội dung mô tả */
+.description-content {
+    font-size: 18px;
+    color: #24478f;
 }
 </style>

@@ -15,7 +15,7 @@
             <button
               class="nav-item nav-link"
               :class="{ active: state.activeButton === 'home' }"
-              @click="handleButtonClick('home', '/Dashboard_Final')"
+              @click="handleButtonClick('home', '/home')"
             >
               Home
             </button>

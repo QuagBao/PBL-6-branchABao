@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
         <Header/>
-        <Top_Button/>
+        <Top_Button v-if="restaurant" :cityID="restaurant.address.city_id"/>
     </div> 
 
     <div class="container-fluid info-place" v-if="isLoading">
@@ -89,6 +89,7 @@
                         :commentList="commentList"
                         :destination_id="restaurant.id"
                         :user="user?.id||0"
+                        :description="restaurant.description"
                         :stars = "generateStars(restaurant.rating)"/>
         </div>
     </div>
@@ -223,6 +224,30 @@ export default {
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
 }
+.restaurant-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.section-title {
+    color: #13357B;
+    font-weight: 800;
+    font-size: 25px;
+    margin-bottom: 10px;
+}
+
+.detail-item h5 {
+    color: #13357B;
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+.detail-item p {
+    color: #13357B;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
 .detail-item {
   width: calc(100%);
   background-color: #EDF6F9;
@@ -241,10 +266,6 @@ export default {
     display: flex;
     gap: 20px;
 }
-.restaurant-detail {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
+
 </style>
 

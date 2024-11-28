@@ -1,6 +1,6 @@
 import { ref, computed, onMounted, watch } from 'vue';
-import { fetchDestinationsByCity, fetchHotelsByCity, fetchRestaurantsByCity} from '../models/destinationModel';
-import { fetchCityDetails } from '../models/CityModel'; 
+import { fetchDestinationsByCity, fetchHotelsByCity, fetchRestaurantsByCity } from '../models/destinationModel';
+import { fetchCityDetails } from '../models/CityModel';
 
 export default function (cityId) {
   const images = ref([]);
@@ -15,9 +15,77 @@ export default function (cityId) {
   const hotels = ref([]);
   const restaurants = ref([]);
 
+  const isDestinationsLoading = ref(false);
+  const isHotelsLoading = ref(false);
+  const isRestaurantsLoading = ref(false);
 
-  watch(images, (newImages) => {
-    console.log('Images updated:', images);
+  // Fetch data functions
+  const fetchCityDetailsData = async () => {
+    try {
+      const data = await fetchCityDetails(cityId);
+      cityDetails.value = data || null;
+      images.value = data?.images || [];
+    } catch (error) {
+      console.error('Error fetching city details:', error);
+    }
+  };
+
+  const fetchDestinationsData = async () => {
+    isDestinationsLoading.value = true;
+    try {
+      destinations.value = await fetchDestinationsByCity(cityId);
+    } catch (error) {
+      console.error('Error fetching destinations:', error);
+    } finally {
+      isDestinationsLoading.value = false;
+    }
+  };
+
+  const fetchHotelsData = async () => {
+    isHotelsLoading.value = true;
+    try {
+      hotels.value = await fetchHotelsByCity(cityId);
+    } catch (error) {
+      console.error('Error fetching hotels:', error);
+    } finally {
+      isHotelsLoading.value = false;
+    }
+  };
+
+  const fetchRestaurantsData = async () => {
+    isRestaurantsLoading.value = true;
+    try {
+      restaurants.value = await fetchRestaurantsByCity(cityId);
+    } catch (error) {
+      console.error('Error fetching restaurants:', error);
+    } finally {
+      isRestaurantsLoading.value = false;
+    }
+  };
+
+  // Trigger data loading on mount
+  onMounted(() => {
+    fetchCityDetailsData();
+    fetchDestinationsData();
+    fetchHotelsData();
+    fetchRestaurantsData();
+  });
+
+  // Watchers for updating UI immediately when data is loaded
+  watch(destinations, (newDestinations) => {
+    console.log('Destinations updated:', newDestinations);
+  });
+
+  watch(hotels, (newHotels) => {
+    console.log('Hotels updated:', newHotels);
+  });
+
+  watch(restaurants, (newRestaurants) => {
+    console.log('Restaurants updated:', newRestaurants);
+  });
+
+  watch(cityDetails, (newCityDetails) => {
+    console.log('City details updated:', newCityDetails);
   });
 
   const toggleMenu = () => {
@@ -32,35 +100,6 @@ export default function (cityId) {
     isReadMore.value = !isReadMore.value;
   };
 
-  // Fetch city details and populate relevant data
-  onMounted(async () => {
-    isLoading.value = true; // Bắt đầu trạng thái tải
-
-    cityDetails.value = await fetchCityDetails(cityId);
-
-    if (cityDetails.value?.images) {
-      images.value = cityDetails.value.images; // Gán mảng hình ảnh
-    } else {
-      console.warn("cityDetails không chứa 'images'");
-    }
-    
-    isLoading.value = false; // Kết thúc trạng thái tải
-});
-
-onMounted(async () =>{
-  destinations.value = await fetchDestinationsByCity(cityId);
-})
-
-onMounted(async () =>{
-  restaurants.value = await fetchRestaurantsByCity(cityId);
-  console.log(restaurants.value);
-})
-
-onMounted(async () =>{
-  hotels.value = await fetchHotelsByCity(cityId);
-})
-
-  // Function to get truncated description
   const getTruncatedDescription = computed(() => {
     return cityDetails.value
       ? cityDetails.value.description.split(' ').slice(0, 40).join(' ') + '...'
@@ -69,7 +108,6 @@ onMounted(async () =>{
 
   const fullDescription = computed(() => cityDetails.value?.description || '');
 
-  // Button selection logic
   const buttons = ref(['Drink', 'Museum', 'Outdoor', 'Adventure', 'Beach', 'Hotel', 'Food', 'F&B', 'Movie']);
   const selectedIndices = ref([]);
 
@@ -82,23 +120,6 @@ onMounted(async () =>{
     }
   };
 
-  const generateStars = (rating) => {
-    const fullStar = new URL('@/assets/svg/star_full.svg', import.meta.url).href;
-    const halfStar = new URL('@/assets/svg/star_half.svg', import.meta.url).href;
-    const emptyStar = new URL('@/assets/svg/star_none.svg', import.meta.url).href;
-
-    let stars = [];
-    for (let i = 1; i <= 5; i++) {
-      if (rating >= i) {
-        stars.push(fullStar);
-      } else if ((rating > i - 1 && rating - i + 1 >= 0.5) && rating < i) {
-        stars.push(halfStar);
-      } else {
-        stars.push(emptyStar);
-      }
-    }
-    return stars;
-  };
 
   const toggleLikeStatus = (id) => {
     liked.value[id] = !liked.value[id];
@@ -109,17 +130,15 @@ onMounted(async () =>{
     if (!images.value.length || currentIndex.value < 0 || currentIndex.value >= images.value.length) {
       return null;
     }
-    return images.value[currentIndex.value]; // Trả về ảnh hiện tại
+    return images.value[currentIndex.value];
   });
 
-  // Chuyển đến ảnh tiếp theo
   const nextImage = () => {
     if (images.value.length) {
       currentIndex.value = (currentIndex.value + 1) % images.value.length;
     }
   };
 
-  // Chuyển đến ảnh trước đó
   const prevImage = () => {
     if (images.value.length) {
       currentIndex.value = (currentIndex.value - 1 + images.value.length) % images.value.length;
@@ -142,7 +161,6 @@ onMounted(async () =>{
     selectedIndices,
     selectButton,
     images,
-    generateStars,
     liked,
     toggleLikeStatus,
     cityDetails,
@@ -150,5 +168,8 @@ onMounted(async () =>{
     destinations,
     hotels,
     restaurants,
+    isDestinationsLoading,
+    isHotelsLoading,
+    isRestaurantsLoading,
   };
 }

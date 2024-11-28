@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
         <Header/>
-        <Top_Button/>
+        <Top_Button v-if="hotel" :cityID="hotel.address.city_id"/>
     </div> 
 
     <div class="container-fluid info-place">
@@ -86,6 +86,7 @@
                         :commentList="commentList"
                         :destination_id="hotel.id"
                         :user="user?.id||0"
+                        :description="hotel.description"
                         :stars = "generateStars(hotel.rating)"/>
         </div>
     </div>

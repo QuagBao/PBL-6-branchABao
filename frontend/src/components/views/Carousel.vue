@@ -8,7 +8,12 @@
             <div class="carousel-inner">
                     <div v-for="(image, index) in images" :key="index" :class="['carousel-item', { active: index === currentIndex }]">
                         <!-- Ensure image is a URL, otherwise access image.url if it's an object -->
-                        <img :src="image.url || image" :alt="`Image ${index + 1}`" class="img-fluid">
+                        <img 
+                            :src="image.url || image" 
+                            :alt="`Image ${index + 1}`" 
+                            class="img-fluid" 
+                            loading="lazy"
+                        >
                     </div>
             </div>
 
