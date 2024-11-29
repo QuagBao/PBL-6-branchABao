@@ -153,8 +153,8 @@ const maxPrice = ref(currency.value === 'USD' ? 10000 : 10000000);
     activeOption.value = activeOption.value === option ? null : option;
   };
 
-  const heartFull = new URL('@/assets/heart-full.svg', import.meta.url).href;
-  const heartEmpty = new URL('@/assets/heart-none.svg', import.meta.url).href;
+  const heartFull = new URL('@/assets/svg/heart-full.svg', import.meta.url).href;
+  const heartEmpty = new URL('@/assets/svg/heart-none.svg', import.meta.url).href;
   
 
   return {

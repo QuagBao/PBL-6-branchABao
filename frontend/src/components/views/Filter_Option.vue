@@ -372,20 +372,20 @@ export default {
     margin-bottom: -20px;
 }
 
-::v-deep .noUi-target {
+:deep(.noUi-target) {
     background-color: #CAF0F8;
     border-radius: 8px;
     border: 1px solid #00b4d8;
     height: 10px;
 }
 
-::v-deep .noUi-connect {
+:deep(.noUi-connect) {
     background-color: #13357B !important; /* Màu sắc nền của đoạn đã chọn */
     box-shadow: none !important; /* Loại bỏ box-shadow */
     border: none !important; /* Loại bỏ đường viền nếu có */
 }
 
-::v-deep .noUi-handle {
+:deep(.noUi-handle) {
     background-color: #CAF0F8;
     border: 2px solid #13357B;
     width: 20px;
@@ -394,7 +394,7 @@ export default {
     box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);
 }
 
-::v-deep .noUi-tooltip {
+:deep(.noUi-tooltip) {
     background-color: #EDF6F9;
     color: #13357B;
     padding: 5px;
@@ -402,12 +402,12 @@ export default {
     font-size: 12px;
     box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);
 }
-::v-deep .noUi-handle .icon-class {
+:deep(.noUi-handle .icon-class) {
     opacity: 0 !important;  
     visibility: hidden !important;
 }
-::v-deep .noUi-handle::before,
-::v-deep .noUi-handle::after {
+:deep(.noUi-handle)::before,
+:deep(.noUi-handle)::after {
     content: '' !important;
     background: none !important;
     display: none !important;

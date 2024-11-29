@@ -2,7 +2,6 @@ import { createRouter, createWebHistory } from 'vue-router';
 
 // Sử dụng dynamic import để lazy load các component
 
-
 // Sign in & Sign up
 const SignInView = () => import('./components/views/SignInView.vue');
 const SignUpView = () => import('./components/views/SignUpView.vue');
@@ -26,150 +25,56 @@ const city_ThingsToDo_List = () => import('./components/views/Things_To_Do/Thing
 const city_Restaurants_List = () => import('./components/views/Restaurants/Restaurants_1_City.vue');
 const city_Hotels_List = () => import('./components/views/Hotel/Hotels_1_City.vue');
 
-// Detail place/restaurant/hotel 
+// Detail place/restaurant/hotel
 const Place = () => import('./components/views/Detail/Place.vue');
 const Res = () => import('./components/views/Detail/Restaurant.vue');
 const Hot = () => import('./components/views/Detail/Hotel.vue');
 
-//Review
-
+// Review
 const writeReviewView = () => import('./components/views/Review/Review_WriteReview.vue');
 const updateReviewView = () => import('./components/views/Review/Review_UpdateReview.vue');
 const uploadPictureView = () => import('./components/views/Review/Review_UploadPicture.vue');
 
 // Test UI
-const test   = () => import('./components/views/Detail/Place.vue');
+const test = () => import('./components/views/Detail/Place.vue');
 const test1 = () => import('./components/views/Detail/Restaurant.vue');
 const test2 = () => import('./components/views/Detail/Hotel.vue');
 const test3 = () => import('./components/views/Filter_Option.vue');
 
+// 404 Not Found
 
+
+// Routes configuration
 const routes = [
-  {
-    path: '/login',
-    name: 'Login to Account',
-    component: SignInView,  // Lazy load SignInView
-  },
-  {
-    path: '/sign-up',
-    name: 'Create a new account',
-    component: SignUpView,  // Lazy load SignUpView
-  },
-  {
-    path: '/home',
-    name: 'Dashboard_Final',
-    component: Dashboard_Final,  // Lazy load SignUpView
-  },
-  {
-    path: '/Destination/:id',
-    name: 'Destination_Final',
-    component: Destination_Final,  // Lazy load SignInView
-  },
-  {
-    path: '/ThingsToDo',
-    name: 'ThingsToDo_List_All',
-    component: ThingsToDo_List_All,  // Lazy load destinationView
-  },
-  {
-    path: '/Restaurants',
-    name: 'Restaurants_List_All',
-    component: Restaurants_List_All,  // Lazy load SignInView
-  },
-  {
-    path: '/Hotels',
-    name: 'Hotels_List_All',
-    component: Hotels_List_All,  // Lazy load SignInView
-  },
-  {
-    path: '/Profile_Page',
-    name: 'Profile_Page',
-    component: Profile_Page,  // Lazy load DashBoardView
-  },
-  {
-    path: '/ThingsToDo/:id',
-    name: 'city_ThingsToDo_List',
-    component: city_ThingsToDo_List,  // Lazy load DashBoardView
-  },
-  {
-    path: '/Restaurants/:id',
-    name: 'city_Restaurants_List',
-    component: city_Restaurants_List,  // Lazy load DashBoardView
-  },
-  {
-    path: '/Hotels/:id',
-    name: 'city_Hotels_List',
-    component: city_Hotels_List,  // Lazy load DashBoardView
-  },
-  {
-    path: '/Profile_Page',
-    name: 'Profile_Page',
-    component: Profile_Page,  // Lazy load DashBoardView
-  },
-  {
-    path: '/Detail/Place/:id',
-    name: 'Place',
-    component: Place,  // Lazy load SignInView
-  },
-  {
-    path: '/Detail/Restaurant/:id',
-    name: 'Res',
-    component: Res,  // Lazy load SignInView
-  },
-  {
-    path: '/Detail/Hotel/:id',
-    name: 'Hot',
-    component: Hot,  // Lazy load SignInView
-  },
-  {
-    path: '/Review/Write/:id',
-    name: 'WriteReview',
-    component: writeReviewView,  // Lazy load detailLocation_Hotel
-  },
-  {
-    path: '/Review/Update/:id',
-    name: 'UpdateReview',
-    component: updateReviewView,  // Lazy load detailLocation_Hotel
-  },
-  {
-    path: '/Review/Upload/:id',
-    name: 'UploadPicture',
-    component: uploadPictureView,  // Lazy load detailLocation_Hotel
-  },
-
-
-  {
-    path: '/test',
-    name: 'test',
-    component: test,  // Lazy load SignInView
-  },
-  {
-    path: '/test1',
-    name: 'test1',
-    component: test1,  // Lazy load SignInView
-  },
-  {
-    path: '/test2',
-    name: 'test2',
-    component: test2,  // Lazy load SignInView
-  },
-  {
-    path: '/test3',
-    name: 'test3',
-    component: test3,  // Lazy load SignInView
-  },
+  { path: '/login', name: 'Login', component: SignInView },
+  { path: '/sign-up', name: 'SignUp', component: SignUpView },
+  { path: '/home', name: 'Dashboard', component: Dashboard_Final },
+  { path: '/Destination/:id', name: 'Destination', component: Destination_Final },
+  { path: '/ThingsToDo', name: 'ThingsToDoList', component: ThingsToDo_List_All },
+  { path: '/Restaurants', name: 'RestaurantsList', component: Restaurants_List_All },
+  { path: '/Hotels', name: 'HotelsList', component: Hotels_List_All },
+  { path: '/Profile_Page', name: 'ProfilePage', component: Profile_Page },
+  { path: '/ThingsToDo/:id', name: 'CityThingsToDo', component: city_ThingsToDo_List },
+  { path: '/Restaurants/:id', name: 'CityRestaurants', component: city_Restaurants_List },
+  { path: '/Hotels/:id', name: 'CityHotels', component: city_Hotels_List },
+  { path: '/Detail/Place/:id', name: 'PlaceDetail', component: Place },
+  { path: '/Detail/Restaurant/:id', name: 'RestaurantDetail', component: Res },
+  { path: '/Detail/Hotel/:id', name: 'HotelDetail', component: Hot },
+  { path: '/Review/Write/:id', name: 'WriteReview', component: writeReviewView },
+  { path: '/Review/Update/:id', name: 'UpdateReview', component: updateReviewView },
+  { path: '/Review/Upload/:id', name: 'UploadPicture', component: uploadPictureView },
+  { path: '/test', name: 'Test', component: test },
+  { path: '/test1', name: 'Test1', component: test1 },
+  { path: '/test2', name: 'Test2', component: test2 },
+  { path: '/test3', name: 'Test3', component: test3 },
+  { path: '/', redirect: '/login' },
   
-  
-  // Đường dẫn mặc định nếu không có URL cụ thể
-  {
-    path: '/',
-    redirect: '/login',
-  },
 ];
 
+// Router instance
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(import.meta.env.BASE_URL || '/'),
   routes,
 });
 
 export default router;
-
