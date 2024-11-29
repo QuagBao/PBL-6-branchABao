@@ -1,6 +1,6 @@
 <template>
     <button :class="{ active: isActive, hover: isHovered }"
-            @click="toggleActive"
+            @click.stop="toggleActive"
             @mouseover="isHovered = true"
             @mouseleave="isHovered = false">
         <svg width="40px" height="40px" viewBox="0 0 24 24" fill="#curentColor" xmlns="http://www.w3.org/2000/svg">

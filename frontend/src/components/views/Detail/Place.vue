@@ -132,6 +132,8 @@ export default {
 
 <style scoped>
 .information{
+    flex: 0 0 30%; /* 30% of row */
+    max-width: 30%;
     margin-top: 200px;
     color: #13357B;
 }
@@ -186,9 +188,15 @@ export default {
 .read-more-or-less:hover{
     color: #729AE9;
 }
+.carousel {
+  flex: 0 0 65%; /* 70% of row */
+  max-width: 66%;
+  height: auto;
+  margin-left: 3%;
+}
 .carousel-container{
     display: flex;
-    transform: scale(0.62);
+    width: 100%;
     height: 1015px;
 }
 .duration{

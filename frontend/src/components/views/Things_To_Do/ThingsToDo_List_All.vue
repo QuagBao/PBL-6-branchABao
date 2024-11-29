@@ -110,7 +110,7 @@ body {
 
 .img-fluid {
     margin-top: 200px;
-    width: 1600px;
+    width: 100vw;
     padding: 0px;
     height: 600px;
     border-radius: 25px;

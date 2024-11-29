@@ -91,7 +91,7 @@ body {
 }
 .img-fluid {
     margin-top: 150px;
-    width: 100%;
+    width: 100vw;
     padding: 0px;
     height: 600px;
     border-radius: 25px;

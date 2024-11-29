@@ -34,15 +34,15 @@ export default {
 }
 .info-img .info-overlay {
     position: absolute;
-    bottom: 100%;
+    bottom: 100vw;
     text-align: center;
     z-index: 3;
     transition: 0.5s;
 }
 .info-img .search-icon {
     position: absolute;
-    width: 100%;
-    height: 100%;
+    width: 100vw;
+    height: 100vw;
     top: 0;
     right: 0;
     display: flex;

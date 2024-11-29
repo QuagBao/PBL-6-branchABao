@@ -7,7 +7,7 @@
     <div class="container-fluid info-place">
         <div class="container-fluid row">
             <div class="col-10 information">
-                <div class="container name-of-place">{{ hotel.name }}</div>
+                <div class="name-of-place">{{ hotel.name }}</div>
                 <div class="container rating-review">
                     <div class="rating">
                         <div v-for="(star, index) in generateStars(hotel.rating)" :key="index" class="circle">
