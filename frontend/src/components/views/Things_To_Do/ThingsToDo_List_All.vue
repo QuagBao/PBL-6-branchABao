@@ -57,16 +57,26 @@
 <script setup>
 import { ref, onMounted, watch, nextTick } from 'vue';
 import destinationViewModel from '../../viewModels/ThingToDo_ListViewModel';
+import generateViewModel from '../../viewModels/generate_ratingViewModel';
 
 const {
     isMenuVisible, toggleMenu,
-    generateStars, getImageUrl,
+    getImageUrl,
     liked, toggleLikeStatus,
     heartFull: heartFull, heartEmpty: heartEmpty,
     searchQuery,
     cities, visibleCities, prevCity, nextCity,
     attractions, visibleAttraction, prevAttraction, nextAttraction,
 } = destinationViewModel();
+
+const {
+    circles,
+    rating,
+    ratings,
+    generateCircle,
+    generateStars,
+    totalRating,
+  } = generateViewModel();
 
 const navigateToDetailPlace = (id) => {
     window.location.assign(`/Detail/Place/${id}`);

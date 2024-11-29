@@ -1,11 +1,9 @@
 import { ref, onMounted, watch, nextTick } from 'vue';
 import { fetchHotelsByCity } from '../models/destinationModel.js';
-import generate_ratingViewModel from './generate_ratingViewModel';
 import noUiSlider from 'nouislider';
 import 'nouislider/dist/nouislider.css';
 
 export default function (cityId) {
-  const { generateStars } = generate_ratingViewModel();
 
   const isMenuVisible = ref(false);
   const toggleMenu = () => {
@@ -166,7 +164,6 @@ const maxPrice = ref(currency.value === 'USD' ? 10000 : 10000000);
     selectedIndices,
     selectButton,
     hotels,
-    generateStars,
     liked,
     toggleLikeStatus,
     heartFull,

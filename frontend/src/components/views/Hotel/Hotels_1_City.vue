@@ -38,6 +38,7 @@
 <script setup>
 import { ref, onMounted, watch, nextTick } from 'vue';
 import destinationViewModel from '../../viewModels/Hotel_City_ListViewModel';
+import generateViewModel from '../../viewModels/generate_ratingViewModel';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
@@ -46,13 +47,22 @@ const cityId = route.params.id;
 const {
     isMenuVisible, toggleMenu,
     buttons, selectedIndices, selectButton,
-    hotels, generateStars, getImageUrl,
+    hotels, getImageUrl,
     liked, toggleLikeStatus, heartFull, heartEmpty,
     currency, minPrice, maxPrice, setupSlider, updatePrice, handleCurrencyChange,
     activeOption, toggleOptions,
     searchQuery,
     updateSliderFromInput
 } = destinationViewModel(cityId);
+
+const {
+    circles,
+    rating,
+    ratings,
+    generateCircle,
+    generateStars,
+    totalRating,
+  } = generateViewModel();
 
 const navigateToDetailHotel = (hotel_id) => {
         window.location.assign(`/Detail/Hotel/${hotel_id}`);

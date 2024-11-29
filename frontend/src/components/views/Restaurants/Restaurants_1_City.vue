@@ -37,6 +37,7 @@
 
 <script setup>
 import destinationViewModel from '../../viewModels/Restaurant_City_ListViewModel';
+import generateViewModel from '../../viewModels/generate_ratingViewModel';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
@@ -45,13 +46,22 @@ const cityId = route.params.id;
 const {
     isMenuVisible, toggleMenu,
     buttons, selectedIndices, selectButton,
-    restaurants, generateStars, getImageUrl,
+    restaurants, getImageUrl,
     liked, toggleLikeStatus, heartFull, heartEmpty,
     currency, minPrice, maxPrice, setupSlider, updatePrice, handleCurrencyChange,
     activeOption, toggleOptions,
     searchQuery,
     updateSliderFromInput
 } = destinationViewModel(cityId);
+
+const {
+    circles,
+    rating,
+    ratings,
+    generateCircle,
+    generateStars,
+    totalRating,
+  } = generateViewModel();
 
 const navigateToDetailRestaurant = (restaurant_id) =>{
         window.location.assign(`/Detail/Restaurant/${restaurant_id}`);

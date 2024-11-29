@@ -38,17 +38,27 @@
 <script setup>
 import { ref, onMounted, watch, nextTick } from 'vue';
 import destinationViewModel from '../../viewModels/Restaurant_ListViewModel';
+import generateViewModel from '../../viewModels/generate_ratingViewModel';
 
 const {
     isMenuVisible, toggleMenu,
     buttons, selectedIndices, selectButton,
-    restaurants, generateStars, getImageUrl,
+    restaurants, getImageUrl,
     liked, toggleLikeStatus, heartFull, heartEmpty,
     currency, minPrice, maxPrice, setupSlider, updatePrice, handleCurrencyChange,
     activeOption, toggleOptions,
     searchQuery,
     updateSliderFromInput
 } = destinationViewModel();
+
+const {
+    circles,
+    rating,
+    ratings,
+    generateCircle,
+    generateStars,
+    totalRating,
+  } = generateViewModel();
 
 const navigateToDetailRestaurant = (restaurant_id) =>{
         window.location.assign(`/Detail/Restaurant/${restaurant_id}`);

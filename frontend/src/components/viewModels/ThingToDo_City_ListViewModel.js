@@ -1,10 +1,9 @@
 import { ref, computed, onMounted } from 'vue';
 import { fetchDestinationsByCity} from '../models/destinationModel';
 import { fetchCityDetails } from '../models/CityModel';
-import generate_ratingViewModel from './generate_ratingViewModel'; 
 
 export default function (cityId) {
-  const { generateStars } = generate_ratingViewModel();
+  
 
   const isMenuVisible = ref(false);
   
@@ -66,7 +65,6 @@ export default function (cityId) {
     
     attractions,
     city,
-    generateStars,
     liked,
     toggleLikeStatus,
     heartFull,

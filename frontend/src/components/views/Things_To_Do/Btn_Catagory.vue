@@ -18,13 +18,13 @@
 import { ref } from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
-import city_ThingToDo_ListViewModel from '../../viewModels/city_ThingToDo_listViewModel.js';
+import ThingToDo_City_ListViewModel from '../../viewModels/ThingToDo_City_ListViewModel.js';
 // Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/scrollbar';
 
-const { buttons, selectedIndices, selectButton } = city_ThingToDo_ListViewModel();
+const { buttons, selectedIndices, selectButton } = ThingToDo_City_ListViewModel();
 
 const modules = [Navigation, Pagination, Scrollbar, A11y];
 

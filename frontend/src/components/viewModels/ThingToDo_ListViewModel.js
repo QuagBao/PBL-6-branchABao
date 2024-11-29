@@ -1,10 +1,8 @@
 import { ref, onMounted, watch, nextTick, computed } from 'vue';
 import { fetchCities } from '../models/CityModel'
 import { fetchAttractions } from '../models/destinationModel';
-import generate_ratingViewModel from './generate_ratingViewModel';
 
 export default function () {
-  const { generateStars } = generate_ratingViewModel();
 
   const isMenuVisible = ref(false);
   const toggleMenu = () => {
@@ -62,7 +60,6 @@ export default function () {
   return {
     isMenuVisible,
     toggleMenu,
-    generateStars,
     getImageUrl,
     liked,
     toggleLikeStatus,

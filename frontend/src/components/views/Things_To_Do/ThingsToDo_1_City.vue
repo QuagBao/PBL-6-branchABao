@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
         <Header/>
-        <Top_Button v-if="cityDetails && cityDetails.name" :name="cityDetails.name"/>
+        <Top_Button v-if="cityId" :cityID="cityId"/>
     </div>
 
     <!-- Images -->
@@ -42,7 +42,8 @@
  </template>
 
 <script setup>
-import destinationViewModel from '../../viewModels/city_ThingToDo_listViewModel';
+import destinationViewModel from '../../viewModels/ThingToDo_City_ListViewModel';
+import generateViewModel from '../../viewModels/generate_ratingViewModel';
 import { useRoute } from 'vue-router';
 
 const route = useRoute();
@@ -57,13 +58,21 @@ const {
     selectButton,
     attractions,
     city,
-    generateStars,
     getImageUrl,
     liked,
     toggleLikeStatus,
     heartFull,
     heartEmpty,
 } = destinationViewModel(cityId);
+
+const {
+    circles,
+    rating,
+    ratings,
+    generateCircle,
+    generateStars,
+    totalRating,
+  } = generateViewModel();
 const navigateToDetailPlace = (id) => {
     window.location.assign(`/Detail/Place/${id}`);
 };
