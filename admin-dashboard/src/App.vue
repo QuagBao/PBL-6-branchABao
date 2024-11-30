@@ -57,6 +57,15 @@
             <i class="icon-tour-management"></i> Review Management
           </router-link>
         </li>
+        <li>
+          <router-link
+            to="/tags"
+            :class="{ active: isActive('/tags') }"
+            @click="handleNavigation"
+          >
+            <i class="icon-tour-management"></i> Tag Management
+          </router-link>
+        </li>
       </ul>
     </aside>
 

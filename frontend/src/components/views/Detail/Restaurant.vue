@@ -69,12 +69,12 @@
                                         </div>
                                         <div class="detail-item">
                                             <h5>MEALS</h5>
-                                            <p></p>
+                                            <p>{{ restaurant.restaurant.meal || "N/A" }}</p>
                                         </div>
                                     </div>
                                     <div class="detail-item full-width">
                                         <h5>FEATURES</h5>
-                                        <p></p>
+                                        <p>{{ restaurant.restaurant.feature || "N/A" }}</p>
                                     </div>
                                 </div>
                             </div>

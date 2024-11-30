@@ -24,6 +24,11 @@ import axios from 'axios';
           ward: destination.address.ward,
           street: destination.address.street,
         },
+        hotel_id: destination.hotel_id,
+        hotel: destination.hotel,
+        restaurant_id: destination.restaurant_id,
+        restaurant: destination.restaurant,
+        tags: destination.tags,
         images: destination.images,
         rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
         numOfReviews: destination.numOfReviews,
@@ -58,6 +63,11 @@ import axios from 'axios';
           street: destination.address.street,
         },
         images: destination.images,
+        hotel_id: destination.hotel_id,
+        hotel: destination.hotel,
+        restaurant_id: destination.restaurant_id,
+        restaurant: destination.restaurant,
+        tags: destination.tags,
         rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
         numOfReviews: destination.numOfReviews,
       }));
@@ -100,6 +110,7 @@ export async function fetchHotelsByCity (cityId) {
       hotel: destination.hotel,
       restaurant_id: destination.restaurant_id,
       restaurant: destination.restaurant,
+      tags: destination.tags,
       rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
       numOfReviews: destination.numOfReviews,
     }));
@@ -141,6 +152,7 @@ export async function fetchHotels () {
       hotel: destination.hotel,
       restaurant_id: destination.restaurant_id,
       restaurant: destination.restaurant,
+      tags: destination.tags,
       rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
       numOfReviews: destination.numOfReviews,
     }));
@@ -181,6 +193,7 @@ export async function fetchHotels () {
       hotel: destination.hotel,
       restaurant_id: destination.restaurant_id,
       restaurant: destination.restaurant,
+      tags: destination.tags,
       rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
       numOfReviews: destination.numOfReviews,
     }));
@@ -221,6 +234,7 @@ export async function fetchRestaurants(){
       hotel: destination.hotel,
       restaurant_id: destination.restaurant_id,
       restaurant: destination.restaurant,
+      tags: destination.tags,
       rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
       numOfReviews: destination.numOfReviews,
     }));
@@ -260,6 +274,7 @@ export async function getDestinationById(destinationID) {
       hotel: destination.hotel,
       restaurant_id: destination.restaurant_id,
       restaurant: destination.restaurant,
+      tags: destination.tags,
       rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
       numOfReviews: destination.numOfReviews,
     };
@@ -293,6 +308,7 @@ export async function getHotelById(hotelID) {
       hotel: hotel.hotel,
       restaurant_id: hotel.restaurant_id,
       restaurant: hotel.restaurant,
+      tags: hotel.tags,
       rating: hotel.rating ? parseFloat(hotel.rating.toFixed(1)) : null,
       numOfReviews: hotel.numOfReviews,
     };
@@ -324,6 +340,7 @@ export async function getRestaurantById(restaurantID) {
       images: restaurant.images,
       restaurant_id: restaurant.restaurant_id,
       restaurant: restaurant.restaurant,
+      tags: restaurant.tags,
       rating: restaurant.rating ? parseFloat(restaurant.rating.toFixed(1)) : null,
       numOfReviews: restaurant.numOfReviews,
     };

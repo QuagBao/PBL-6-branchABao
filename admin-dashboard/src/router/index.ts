@@ -41,6 +41,11 @@ const routes = [
     name: "ReviewManagement",
     component: () => import("@/views/ReviewManagement.vue"),
   },
+  {
+    path: "/tags",
+    name: "TagManagement",
+    component: () => import("@/views/TagManagement.vue"),
+  },
 ];
 
 const router = createRouter({

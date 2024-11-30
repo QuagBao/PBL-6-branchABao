@@ -56,7 +56,40 @@ export async function getDestinationById(destinationID) {
       hotel: destination.hotel,
       restaurant_id: destination.restaurant_id,
       restaurant: destination.restaurant,
+      tags: destination.tags,
     };
+  } catch (error) {
+    console.error("Error fetching destination:", error);
+    return []; // Hoặc bạn có thể xử lý khác tùy ý
+  }
+}
+
+export async function getDestinationByTagID(tag_id) {
+  try {
+    // Gửi yêu cầu để lấy danh sách người dùng
+    const response = await axios.get(
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/by_tags?tag_ids=${tag_id}`
+    );
+
+    return response.data.map((destination) => ({
+      id: destination.id,
+      user_id: destination.user_id,
+      name: destination.name,
+      price_bottom: destination.price_bottom,
+      price_top: destination.price_top,
+      age: destination.age,
+      opentime: destination.opentime,
+      duration: destination.duration,
+      description: destination.description,
+      date_create: destination.date_create,
+      address: destination.address,
+      images: destination.images,
+      hotel_id: destination.hotel_id,
+      hotel: destination.hotel,
+      restaurant_id: destination.restaurant_id,
+      restaurant: destination.restaurant,
+      tags: destination.tags,
+    }));
   } catch (error) {
     console.error("Error fetching destination:", error);
     return []; // Hoặc bạn có thể xử lý khác tùy ý
@@ -291,6 +324,8 @@ export async function updateRestaurant(restaurant) {
       {
         cuisine: restaurant.restaurant.cuisine,
         special_diet: restaurant.restaurant.special_diet,
+        feature: restaurant.restaurant.feature,
+        meal: restaurant.restaurant.meal,
       }
     );
 
@@ -314,6 +349,8 @@ export async function addRestaurant(restaurant) {
       {
         cuisine: restaurant.restaurant.cuisine,
         special_diet: restaurant.restaurant.special_diet,
+        feature: restaurant.restaurant.feature,
+        meal: restaurant.restaurant.meal,
       }
     );
 

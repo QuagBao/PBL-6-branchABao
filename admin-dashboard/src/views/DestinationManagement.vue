@@ -253,6 +253,20 @@
                 {{ currentDestination.restaurant.special_diet || "N/A" }}</span
               >
             </div>
+            <div class="info-item">
+              <i class="icon-utensils"></i>
+              <span
+                ><strong>Features:</strong>
+                {{ currentDestination.restaurant.feature || "N/A" }}</span
+              >
+            </div>
+            <div class="info-item">
+              <i class="icon-diet"></i>
+              <span
+                ><strong>Meal:</strong>
+                {{ currentDestination.restaurant.meal || "N/A" }}</span
+              >
+            </div>
           </div>
           <div v-else>
             <p class="no-data">Place does not have restaurant information.</p>
@@ -614,6 +628,14 @@
           <label>Special diet:</label>
           <input type="text" v-model="restaurant.restaurant.special_diet" />
         </div>
+        <div class="form-group">
+          <label>Features:</label>
+          <input type="text" v-model="restaurant.restaurant.feature" />
+        </div>
+        <div class="form-group">
+          <label>Meal:</label>
+          <input type="text" v-model="restaurant.restaurant.meal" />
+        </div>
         <div class="button-group">
           <button type="submit" class="action-button add-button">Create</button>
           <button
@@ -638,6 +660,17 @@
           <input
             type="text"
             v-model="currentDestination.restaurant.special_diet"
+          />
+        </div>
+        <div class="form-group">
+          <label>Features:</label>
+          <input type="text" v-model="currentDestination.restaurant.feature" />
+        </div>
+        <div class="form-group">
+          <label>Meal:</label>
+          <input
+            type="text"
+            v-model="currentDestination.restaurant.meal"
           />
         </div>
         <div class="button-group">
@@ -732,6 +765,8 @@ export default {
       restaurant: {
         cuisine: "",
         special_diet: "",
+        feature: "",
+        meal: "",
         id: "",
       },
     });
@@ -770,6 +805,8 @@ export default {
       restaurant: {
         cuisine: "",
         special_diet: "",
+        feature: "",
+        meal: "",
         id: "",
       },
     });
@@ -795,6 +832,8 @@ export default {
       restaurant: {
         cuisine: "",
         special_diet: "",
+        feature: "",
+        meal: "",
         id: "",
       },
     });
