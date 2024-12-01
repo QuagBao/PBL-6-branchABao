@@ -41,7 +41,14 @@ const test1 = () => import('./components/views/Detail/Restaurant.vue');
 const test2 = () => import('./components/views/Detail/Hotel.vue');
 const test3 = () => import('./components/views/Filter_Option.vue');
 
-// 404 Not Found
+//Business
+const addDestination = () => import('./components/views/Business/Business_Destination_Add.vue');
+const updateDestination = () => import('./components/views/Business/Business_Destination_Update.vue');
+const addHotel = () => import('./components/views/Business/Business_Hotel_Add.vue');
+const updateHotel = () => import('./components/views/Business/Business_Hotel_Update.vue');
+const addRestaurant = () => import('./components/views/Business/Business_Restaurant_Add.vue');
+const updateRestaurant = () => import('./components/views/Business/Business_Restaurant_Update.vue');
+
 
 
 // Routes configuration
@@ -63,6 +70,12 @@ const routes = [
   { path: '/Review/Write/:id', name: 'WriteReview', component: writeReviewView },
   { path: '/Review/Update/:id', name: 'UpdateReview', component: updateReviewView },
   { path: '/Review/Upload/:id', name: 'UploadPicture', component: uploadPictureView },
+  { path: '/Business/Destination/Add', name: 'AddDestination', component: addDestination },
+  { path: '/Business/Destination/Update/:id', name: 'UpdateDestination', component: updateDestination },
+  { path: '/Business/Hotel/Add/:id', name: 'AddHotel', component: addHotel },
+  { path: '/Business/Hotel/Update/:id', name: 'UpdateHotel', component: updateHotel },
+  { path: '/Business/Restaurant/Add/:id', name: 'AddRestaurant', component: addRestaurant },
+  { path: '/Business/Restaurant/Update/:id', name: 'UpdateRestaurant', component: updateRestaurant },
   { path: '/test', name: 'Test', component: test },
   { path: '/test1', name: 'Test1', component: test1 },
   { path: '/test2', name: 'Test2', component: test2 },

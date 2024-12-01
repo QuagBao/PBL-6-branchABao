@@ -2,8 +2,6 @@ import axios from 'axios';
 
 export async function getUserById(userId) {
     try {
-      const token = sessionStorage.getItem("access_token");
-      if (!token) throw new Error("No token found");
   
       // Fetch the basic user information based on userId
       const response = await axios.get(
@@ -11,7 +9,6 @@ export async function getUserById(userId) {
         {
           headers: {
             accept: "application/json",
-            Authorization: `Bearer ${token}`,
           },
         }
       );
