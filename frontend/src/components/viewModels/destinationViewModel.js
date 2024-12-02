@@ -15,14 +15,15 @@ export default function (cityId) {
   const isLoading = ref(true);
   const hotels = ref([]);
   const restaurants = ref([]);
-
   const filteredDestinations = ref([]);
   const filteredHotels = ref([]);
   const filteredRestaurants = ref([]);
-
   const isDestinationsLoading = ref(false);
   const isHotelsLoading = ref(false);
   const isRestaurantsLoading = ref(false);
+
+  const buttons = ref([]);
+  const selectedIndices = ref([]);
 
   // Fetch data functions
   const fetchCityDetailsData = async () => {
@@ -35,11 +36,37 @@ export default function (cityId) {
     }
   };
 
+  const fetchTags = async () => {
+    try {
+      buttons.value = await fetchTagsAPI();
+    } catch (error) {
+      console.error("Error fetching tags:", error);
+    }
+  };
+
   const fetchDestinationsData = async () => {
     isDestinationsLoading.value = true;
     try {
-      destinations.value = await fetchDestinationsByCity(cityId);
-      filteredDestinations.value = destinations.value;
+      let place;
+      // Nếu đã có dữ liệu, chỉ lọc lại; nếu chưa, gọi API
+      if (destinations.value.length || hotels.value.length || restaurants.value.length) {
+        place = [...destinations.value, ...hotels.value, ...restaurants.value];
+      } else {
+        place = await fetchDestinationsByCity(cityId);
+      }
+
+      // Lọc dữ liệu theo tags
+      const filteredPlace = filterItems(place);
+
+      // Phân loại dữ liệu
+      destinations.value = place.filter(destination => destination.hotel_id === null && destination.restaurant_id === null);
+      hotels.value = place.filter(destination => destination.hotel_id !== null);
+      restaurants.value = place.filter(destination => destination.restaurant_id !== null);
+
+      filteredDestinations.value = filteredPlace.filter(destination => destination.hotel_id === null && destination.restaurant_id === null);
+      filteredHotels.value = filteredPlace.filter(destination => destination.hotel_id !== null);
+      filteredRestaurants.value = filteredPlace.filter(destination => destination.restaurant_id !== null);
+      
     } catch (error) {
       console.error('Error fetching destinations:', error);
     } finally {
@@ -47,113 +74,41 @@ export default function (cityId) {
     }
   };
 
-  const fetchHotelsData = async () => {
-    isHotelsLoading.value = true;
-    try {
-      hotels.value = await fetchHotelsByCity(cityId);
-      filteredHotels.value = hotels.value;
-    } catch (error) {
-      console.error('Error fetching hotels:', error);
-    } finally {
-      isHotelsLoading.value = false;
-    }
+  const filterItems = (items) => {
+    // Nếu items không tồn tại hoặc không phải là mảng, trả về mảng rỗng
+    if (!Array.isArray(items)) return [];
+    
+    // Nếu không có tag nào được chọn, trả về toàn bộ danh sách
+    if (!selectedIndices.value.length) return [...items];
+  
+    // Lọc các mục có ít nhất một tag trùng với tag đã chọn
+    return items.filter(item => 
+      Array.isArray(item.tags) && item.tags.some(tag => selectedIndices.value.includes(tag.id))
+    );
   };
 
-  const fetchRestaurantsData = async () => {
-    isRestaurantsLoading.value = true;
-    try {
-      restaurants.value = await fetchRestaurantsByCity(cityId);
-      filteredRestaurants.value = restaurants.value;
-    } catch (error) {
-      console.error('Error fetching restaurants:', error);
-    } finally {
-      isRestaurantsLoading.value = false;
-    }
-  };
-
-  const buttons = ref([]);
-  const fetchTags = async () => {
-    try {
-      buttons.value = await fetchTagsAPI();
-    } catch (error) {
-      toast.error("Error fetching tags:", error);
-    }
-  };
-
-  const selectedIndices = ref([]);
-
-  const selectButton = (index) => {
+  const selectButton = async (index) => {
     const currentIndex = selectedIndices.value.indexOf(index);
     if (currentIndex === -1) {
-      selectedIndices.value.push(index);  // Thêm vào selectedIndices nếu chưa có
+      selectedIndices.value.push(index);
     } else {
-      selectedIndices.value.splice(currentIndex, 1);  // Xóa khỏi selectedIndices nếu đã có
+      selectedIndices.value.splice(currentIndex, 1);
     }
-  
-    // Sau khi thay đổi selectedIndices, Vue sẽ tự động cập nhật filteredData
-    console.log('Selected Indices:', selectedIndices.value);  // Để kiểm tra
-    filterData();
+
+    await fetchDestinationsData();
   };
 
+  
 
-  // Return filtered data for all three categories
-  const filterData = () => {
-    const filterItems = (items) => {
-      if (!items) {
-        return []; // Nếu items là null hoặc undefined, trả về mảng rỗng
-      }
-  
-      if (selectedIndices.value.length === 0) {
-        return items; // Nếu không có tags nào được chọn, trả về toàn bộ danh sách
-      }
-  
-      return items.filter((item) => {
-        // Kiểm tra nếu ít nhất một tag trong item có id nằm trong selectedIndices
-        return item.tags && item.tags.some((tag) => selectedIndices.value.includes(tag.id));
-      });
-    };
-  
-    // Lọc dữ liệu cho từng danh sách, đảm bảo mảng không phải null
-    filteredDestinations.value = filterItems(destinations.value);
-    filteredHotels.value = filterItems(hotels.value);
-    filteredRestaurants.value = filterItems(restaurants.value);
-    console.log('Filtered Destinations:', filteredDestinations.value);
-    console.log('Filtered Hotels:', filteredHotels.value);
-    console.log('Filtered Restaurants:', filteredRestaurants.value);
-    
+  const fetchAllData = async () => {
+    try {
+      await fetchCityDetailsData();
+      await fetchDestinationsData();
+      await fetchTags();
+    } catch (error) {
+      console.error("Error fetching data in sequence:", error);
+    }
   };
-  
-
-  // Trigger data loading on mount
-  onMounted(() => {
-    fetchCityDetailsData();
-    fetchDestinationsData();
-    fetchHotelsData();
-    fetchRestaurantsData();
-    fetchTags();
-    filterData();
-  });
-
-  // Watchers for updating UI immediately when data is loaded
-  watch(destinations, (newDestinations) => {
-    console.log('Destinations updated:', newDestinations);
-  });
-
-  watch(hotels, (newHotels) => {
-    console.log('Hotels updated:', newHotels);
-  });
-
-  watch(restaurants, (newRestaurants) => {
-    console.log('Restaurants updated:', newRestaurants);
-  });
-
-  watch(cityDetails, (newCityDetails) => {
-    console.log('City details updated:', newCityDetails);
-  });
-
-  watch(selectedIndices, () => {
-    filterData();
-  });
 
   const toggleMenu = () => {
     isMenuVisible.value = !isMenuVisible.value;
@@ -200,6 +155,9 @@ export default function (cityId) {
   };
 
   return {
+    fetchCityDetailsData,
+    fetchTags,
+    fetchDestinationsData,
     isMenuVisible,
     toggleMenu,
     currentImage,
@@ -228,5 +186,6 @@ export default function (cityId) {
     filteredDestinations,
     filteredHotels,
     filteredRestaurants,
+    fetchAllData,
   };
 }

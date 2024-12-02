@@ -1,13 +1,12 @@
 import axios from 'axios';
 
-
   export async function fetchDestinationsByCity(cityId) {
     try {
       const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/?city_id=${cityId}&is_popular=true&get_rating=true`);
       const filteredDestinations = response.data.filter(destination => destination.hotel_id === null && destination.restaurant_id === null);
 
     // Chỉ map qua các destination đã lọc
-      return filteredDestinations.map(destination => ({
+      return response.data.map(destination => ({
         id: destination.id,
         name: destination.name,
         user_id: destination.user_id,

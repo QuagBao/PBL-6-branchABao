@@ -15,7 +15,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 import destinationViewModel from '../../viewModels/destinationViewModel.js';
@@ -50,7 +50,7 @@ const onSwiper = (swiper) => {
     margin: 20px 0; 
 }
 
-button{
+.button-item{
     color: #13357B;
     width: 80%;
     padding: 8px 16px;

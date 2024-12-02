@@ -98,10 +98,7 @@ const vietnamRegions = {
         id: data.id,
         name: data.name,
         description: data.description,
-        images: data.images.map(image => ({
-          id: image.id,
-          url: image.url,
-        })),
+        images: data.images
       };
     } catch (error) {
       console.error("Có lỗi xảy ra khi lấy dữ liệu chi tiết thành phố:", error);

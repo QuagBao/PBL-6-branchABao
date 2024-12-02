@@ -1,28 +1,31 @@
 <template>
+    <!-- Header Section -->
     <div class="header-container">
         <Header/>
         <Top_Button v-if="cityDetails" :cityID="cityDetails.id"/>
     </div>
 
-    <!-- Carousel -->
+    <!-- Carousel Section -->
     <div class="row">
         <Carousel :currentImage="currentImage" :images="images"/>
     </div>
 
+    <!-- Save Button Section -->
     <div class="save">
         <Btn_Save/>
     </div>
-    <!-- Discover Info -->
+
+    <!-- Discover Info Section -->
     <div class="container-fluid">
         <div class="row p-5 info-destination">
             <div class="col">
                 <p class="title">Discover</p> 
-                <!-- Name of Destination -->
+                <!-- Destination Name -->
                 <div class="row">
                     <div class="col-1"></div>
                     <div class="col-11 name-of-desstination">{{ cityDetails?.name }}</div>
                 </div>
-                <!-- Description -->
+                <!-- Description Section -->
                 <div class="row">
                     <div class="col-1"></div>
                     <div class="col-11">
@@ -31,7 +34,7 @@
                         </p>
                     </div>
                 </div>
-                <!-- Read More/ Read Less -->
+                <!-- Read More/ Less Button -->
                 <div class="row">
                     <div class="col-1"></div>
                     <div class="col-11">
@@ -41,7 +44,8 @@
             </div>
         </div> 
     </div>
-    <!-- Catagory -->
+
+    <!-- Category Section -->
     <div class="container-fluid">
         <div class="row p-5 catagory">
             <div class="col">
@@ -50,20 +54,32 @@
             </div>
         </div>
     </div>
-    <!-- btn catagory & content -->
+
+    <!-- Category Buttons & Content Section -->
     <div class="container-fluid content">
         <div class="container btn-catagory">
-            <Btn_Catagory/>
+            <Swiper class="swiper"
+                :slides-per-view="4"
+                :spaceBetween="10"
+                :scrollbar="{ draggable: true }"
+                :modules="modules">
+                <SwiperSlide v-for="item in buttons" :key="item.id">
+                    <button class="button-category" 
+                            :class="{ selected: selectedIndices.includes(item.id) }" 
+                            @click="selectButton(item.id)">
+                        {{ item.name }}
+                    </button>
+                </SwiperSlide>
+            </Swiper>
         </div>
 
+        <!-- Things to do Section -->
         <div class="row title-content">
-            <p class="p-5 things-to-do">
-                Things to do
-            </p>
+            <p class="p-5 things-to-do">Things to do</p>
             <div class="container-fluid context">
                 <Cards v-for="(item, index) in filteredDestinations"
                         :key="index"
-                        :imageUrl="item.images[0]?.url||'/blue-image.jpg'"
+                        :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
                         :name="item.name"
                         :rating="item.rating"
                         :stars="generateStars(item.rating)"
@@ -72,14 +88,13 @@
             </div>
         </div>
 
+        <!-- Restaurants Section -->
         <div class="row title-content">
-            <p class="p-5 restaurants">
-                Restaurants
-            </p>
+            <p class="p-5 restaurants">Restaurants</p>
             <div class="container-fluid context">
                 <Cards v-for="(item, index) in filteredRestaurants"
                         :key="index"
-                        :imageUrl="item.images[0]?.url||'/blue-image.jpg'"
+                        :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
                         :name="item.name"
                         :rating="item.rating"
                         :stars="generateStars(item.rating)"
@@ -88,14 +103,13 @@
             </div>
         </div>
 
+        <!-- Resort & Hotels Section -->
         <div class="row title-content">
-            <p class="p-5 restaurants">
-                Resort & Hotels
-            </p>
+            <p class="p-5 resorts">Resort & Hotels</p>
             <div class="container-fluid context">
                 <Cards v-for="(item, index) in filteredHotels"
                         :key="index"
-                        :imageUrl="item.images[0]?.url||'/blue-image.jpg'"
+                        :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
                         :name="item.name"
                         :rating="item.rating"
                         :stars="generateStars(item.rating)"
@@ -103,42 +117,80 @@
                         @click="navigateToDetailHotel(item.hotel_id)"/>
             </div>
         </div>
-
     </div>
 </template>
 
 <script setup>
-    import { ref, computed, onMounted } from 'vue';
+    import { ref, computed, onMounted, watch } from 'vue';
     import destinationViewModel from '../../viewModels/destinationViewModel.js';
     import generate_ratingViewModel from '@/components/viewModels/generate_ratingViewModel.js';
     import { useRoute } from 'vue-router';
+    import { Swiper, SwiperSlide } from 'swiper/vue';
+    import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 
+    import 'swiper/css';
+    import 'swiper/css/navigation';
+    import 'swiper/css/pagination';
+    import 'swiper/css/scrollbar';
+
+    const modules = [Navigation, Pagination, Scrollbar, A11y];
+    
+    // Route Params
     const route = useRoute();
-    const cityId = route.params.id; // Lấy cityId từ route params
+    const cityId = route.params.id;
 
+    // ViewModel Import & Initialization
     const {
-        currentImage, images,
-        getTruncatedDescription, toggleReadMore, isReadMore, fullDescription,
-        cityDetails, destinations, hotels,
+        fetchCityDetailsData,
+        fetchTags,
+        fetchDestinationsData,
+        isMenuVisible,
+        toggleMenu,
+        currentImage,
+        isHeartFilled,
+        toggleHeart,
+        getTruncatedDescription,
+        toggleReadMore,
+        isReadMore,
+        fullDescription,
+        buttons,
+        selectedIndices,
+        selectButton,
+        images,
+        liked,
+        toggleLikeStatus,
+        cityDetails,
+        isLoading,
+        destinations,
+        hotels,
         restaurants,
+        isDestinationsLoading,
+        isHotelsLoading,
+        isRestaurantsLoading,
         filteredDestinations,
         filteredHotels,
         filteredRestaurants,
-        filteredData,
+        fetchAllData,
     } = destinationViewModel(cityId);
 
-    const {
-        generateStars,
-    } = generate_ratingViewModel();
-    const navigateToDetailPlace = (id) => {
-        window.location.assign(`/Detail/Place/${id}`);
-    };
-    const navigateToDetailRestaurant = (restaurant_id) =>{
-        window.location.assign(`/Detail/Restaurant/${restaurant_id}`);
-    };
-    const navigateToDetailHotel = (hotel_id) => {
-        window.location.assign(`/Detail/Hotel/${hotel_id}`);
-    };
+    // Lifecycle Hook to Fetch Data on Mount
+    onMounted(async () => {
+        await fetchCityDetailsData();
+        await fetchDestinationsData();
+        await fetchTags();
+    });
+
+    watch(selectedIndices, async () => {
+    await fetchDestinationsData();
+  });
+
+    // Rating Generation Function
+    const { generateStars } = generate_ratingViewModel();
+
+    // Navigation Functions
+    const navigateToDetailPlace = (id) => window.location.assign(`/Detail/Place/${id}`);
+    const navigateToDetailRestaurant = (restaurant_id) => window.location.assign(`/Detail/Restaurant/${restaurant_id}`);
+    const navigateToDetailHotel = (hotel_id) => window.location.assign(`/Detail/Hotel/${hotel_id}`);
 </script>
 
 <script>
@@ -146,14 +198,14 @@
     import Scroll_Bar_Component from '../Scroll_Bar_Component.vue'; 
     import Top_Button from '../Top_Button.vue';
     import Btn_Save from './Btn_Save.vue';
-    import Btn_Catagory from './Btn_Catagory.vue';
     import Cards from './Cards.vue';
     import Carousel from '../Carousel.vue';
+
     export default {
         name: "Destination_View",
         components: {
             Header, Scroll_Bar_Component, Top_Button,
-            Btn_Save, Btn_Catagory, Cards, Carousel,
+            Btn_Save, Cards, Carousel,
         }
     }
 </script>
@@ -236,5 +288,48 @@ body{
     width: 100%;
     height: 100%;
     gap:15px;
+}
+.swiper {
+    width: 100%;
+    max-width: 1450px; /* Set a max-width to ensure enough space for 3 slides */
+}
+
+.swiper-slide {
+    color: #13357B;
+    background-color: #EDF6F9;
+    text-align: center;
+    margin: 20px 0; 
+}
+
+.button-category{
+    color: #13357B;
+    width: 80%;
+    padding: 8px 16px;
+    border: 1px solid #13357B;
+    border-radius: 40px;
+    cursor: pointer;
+    background-color: #EDF6F9;
+    transition: background-color 0.3s ease;
+}
+
+.button-category:hover {
+    background-color: #0077b6;
+    color: #EDF6F9 
+}     
+.button-category.selected {
+    background-color: #13357B;
+    color: #EDF6F9;
+}
+</style>
+
+<style>
+.swiper .swiper-scrollbar {
+    background-color: #EDF6F9 !important;
+    border: 1px solid #13357B !important;
+    height: 6px !important;
+}
+
+.swiper .swiper-scrollbar-drag {
+    background-color: #13357B !important;
 }
 </style>
