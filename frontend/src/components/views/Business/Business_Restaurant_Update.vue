@@ -5,7 +5,7 @@
     </div>
     <div class="main-container">
       <div class="review-container">
-        <h2>Restaurant Update for Business</h2>
+        <h2>Restaurant Update - For {{ destination.name }}</h2>
         <div class="review-title-section">
             <p class="question-title">Cuisine</p>
             <input

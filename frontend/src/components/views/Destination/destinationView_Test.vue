@@ -61,7 +61,7 @@
                 Things to do
             </p>
             <div class="container-fluid context">
-                <Cards v-for="(item, index) in destinations"
+                <Cards v-for="(item, index) in filteredDestinations"
                         :key="index"
                         :imageUrl="item.images[0]?.url||'/blue-image.jpg'"
                         :name="item.name"
@@ -77,7 +77,7 @@
                 Restaurants
             </p>
             <div class="container-fluid context">
-                <Cards v-for="(item, index) in restaurants"
+                <Cards v-for="(item, index) in filteredRestaurants"
                         :key="index"
                         :imageUrl="item.images[0]?.url||'/blue-image.jpg'"
                         :name="item.name"
@@ -93,7 +93,7 @@
                 Resort & Hotels
             </p>
             <div class="container-fluid context">
-                <Cards v-for="(item, index) in hotels"
+                <Cards v-for="(item, index) in filteredHotels"
                         :key="index"
                         :imageUrl="item.images[0]?.url||'/blue-image.jpg'"
                         :name="item.name"
@@ -120,7 +120,11 @@
         currentImage, images,
         getTruncatedDescription, toggleReadMore, isReadMore, fullDescription,
         cityDetails, destinations, hotels,
-        restaurants
+        restaurants,
+        filteredDestinations,
+        filteredHotels,
+        filteredRestaurants,
+        filteredData,
     } = destinationViewModel(cityId);
 
     const {

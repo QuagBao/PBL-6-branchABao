@@ -1,6 +1,7 @@
 import { ref, computed, onMounted, watch } from 'vue';
 import { fetchDestinationsByCity, fetchHotelsByCity, fetchRestaurantsByCity } from '../models/destinationModel';
 import { fetchCityDetails } from '../models/CityModel';
+import { getTags as fetchTagsAPI } from '../models/TagModel';
 
 export default function (cityId) {
   const images = ref([]);
@@ -14,6 +15,10 @@ export default function (cityId) {
   const isLoading = ref(true);
   const hotels = ref([]);
   const restaurants = ref([]);
+
+  const filteredDestinations = ref([]);
+  const filteredHotels = ref([]);
+  const filteredRestaurants = ref([]);
 
   const isDestinationsLoading = ref(false);
   const isHotelsLoading = ref(false);
@@ -34,6 +39,7 @@ export default function (cityId) {
     isDestinationsLoading.value = true;
     try {
       destinations.value = await fetchDestinationsByCity(cityId);
+      filteredDestinations.value = destinations.value;
     } catch (error) {
       console.error('Error fetching destinations:', error);
     } finally {
@@ -45,6 +51,7 @@ export default function (cityId) {
     isHotelsLoading.value = true;
     try {
       hotels.value = await fetchHotelsByCity(cityId);
+      filteredHotels.value = hotels.value;
     } catch (error) {
       console.error('Error fetching hotels:', error);
     } finally {
@@ -56,6 +63,7 @@ export default function (cityId) {
     isRestaurantsLoading.value = true;
     try {
       restaurants.value = await fetchRestaurantsByCity(cityId);
+      filteredRestaurants.value = restaurants.value;
     } catch (error) {
       console.error('Error fetching restaurants:', error);
     } finally {
@@ -63,12 +71,67 @@ export default function (cityId) {
     }
   };
 
+  const buttons = ref([]);
+  const fetchTags = async () => {
+    try {
+      buttons.value = await fetchTagsAPI();
+    } catch (error) {
+      toast.error("Error fetching tags:", error);
+    }
+  };
+
+  const selectedIndices = ref([]);
+
+  const selectButton = (index) => {
+    const currentIndex = selectedIndices.value.indexOf(index);
+    if (currentIndex === -1) {
+      selectedIndices.value.push(index);  // Thêm vào selectedIndices nếu chưa có
+    } else {
+      selectedIndices.value.splice(currentIndex, 1);  // Xóa khỏi selectedIndices nếu đã có
+    }
+  
+    // Sau khi thay đổi selectedIndices, Vue sẽ tự động cập nhật filteredData
+    console.log('Selected Indices:', selectedIndices.value);  // Để kiểm tra
+    filterData();
+  };
+
+
+  // Return filtered data for all three categories
+  const filterData = () => {
+    const filterItems = (items) => {
+      if (!items) {
+        return []; // Nếu items là null hoặc undefined, trả về mảng rỗng
+      }
+  
+      if (selectedIndices.value.length === 0) {
+        return items; // Nếu không có tags nào được chọn, trả về toàn bộ danh sách
+      }
+  
+      return items.filter((item) => {
+        // Kiểm tra nếu ít nhất một tag trong item có id nằm trong selectedIndices
+        return item.tags && item.tags.some((tag) => selectedIndices.value.includes(tag.id));
+      });
+    };
+  
+    // Lọc dữ liệu cho từng danh sách, đảm bảo mảng không phải null
+    filteredDestinations.value = filterItems(destinations.value);
+    filteredHotels.value = filterItems(hotels.value);
+    filteredRestaurants.value = filterItems(restaurants.value);
+    console.log('Filtered Destinations:', filteredDestinations.value);
+    console.log('Filtered Hotels:', filteredHotels.value);
+    console.log('Filtered Restaurants:', filteredRestaurants.value);
+    
+  };
+  
+
   // Trigger data loading on mount
   onMounted(() => {
     fetchCityDetailsData();
     fetchDestinationsData();
     fetchHotelsData();
     fetchRestaurantsData();
+    fetchTags();
+    filterData();
   });
 
   // Watchers for updating UI immediately when data is loaded
@@ -86,6 +149,10 @@ export default function (cityId) {
 
   watch(cityDetails, (newCityDetails) => {
     console.log('City details updated:', newCityDetails);
+  });
+
+  watch(selectedIndices, () => {
+    filterData();
   });
 
   const toggleMenu = () => {
@@ -107,19 +174,6 @@ export default function (cityId) {
   });
 
   const fullDescription = computed(() => cityDetails.value?.description || '');
-
-  const buttons = ref(['Drink', 'Museum', 'Outdoor', 'Adventure', 'Beach', 'Hotel', 'Food', 'F&B', 'Movie']);
-  const selectedIndices = ref([]);
-
-  const selectButton = (index) => {
-    const currentIndex = selectedIndices.value.indexOf(index);
-    if (currentIndex === -1) {
-      selectedIndices.value.push(index);
-    } else {
-      selectedIndices.value.splice(currentIndex, 1);
-    }
-  };
-
 
   const toggleLikeStatus = (id) => {
     liked.value[id] = !liked.value[id];
@@ -171,5 +225,8 @@ export default function (cityId) {
     isDestinationsLoading,
     isHotelsLoading,
     isRestaurantsLoading,
+    filteredDestinations,
+    filteredHotels,
+    filteredRestaurants,
   };
 }
