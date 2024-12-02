@@ -57,7 +57,7 @@
               <div class="dropdown-menu m-0">
                 <button class="dropdown-item" @click="handleButtonClick('profile', '/Profile_Page')">My Profile</button>
                 <button class="dropdown-item">Account Settings</button>
-                <button class="dropdown-item" @click="handleButtonClick('signout', '/login')">Logout</button>
+                <button class="dropdown-item" @click="handleLogout">Logout</button>
               </div>
             </div>
           </div>
@@ -77,10 +77,18 @@
         setActiveButton(buttonName);
         navigateToPage(route);
       };
+
+      const handleLogout = () => {
+        // Xóa token khỏi session storage
+        sessionStorage.removeItem('access-token');
+        // Chuyển hướng về trang login
+        navigateToPage('/login');
+      };
   
       return {
         state,
         handleButtonClick,
+        handleLogout,
       };
     },
   };

@@ -20,8 +20,7 @@
                 </div>
 
                 <div>
-                    <button class="write-review">Write review </button>
-                    <button v-if="destination.user_id == user?.id" class="write-review">Update Place </button>
+                    <button v-if="destination.user_id == user?.id" @click="navigateToUpdateDestination(destination.id)" class="write-review">Update Place </button>
                 </div>
                 
                 <div class="container-fluid info-about">
@@ -109,7 +108,9 @@
     totalRating,
   } = generateViewModel();
 
-  
+  const navigateToUpdateDestination = (id) => {
+  window.location.assign(`/Business/Destination/Update/${id}`);
+};
 
   // Các hàm hoặc logic bổ sung có thể được thêm vào nếu cần
 </script>

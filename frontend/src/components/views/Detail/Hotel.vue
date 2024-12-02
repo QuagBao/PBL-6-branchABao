@@ -19,8 +19,8 @@
                     </div>
                 </div>
                 <div>
-                    <button class="write-review">Write review </button>
-                    <button v-if="hotel.user_id == user?.id" class="write-review">Update Hotel </button>
+                    <button v-if="destination.user_id == user?.id" @click="navigateToUpdateDestination(hotel.id)" class="write-review">Update Place </button>
+                    <button v-if="destination.user_id == user?.id" @click="navigateToUpdateHotel(hotel.id)" class="write-review">Update Hotel Detail </button>
                 </div>
             </div>
         </div>
@@ -127,6 +127,13 @@
     generateStars,
     totalRating,
   } = generateViewModel();
+
+  const navigateToUpdateDestination = (id) => {
+  window.location.assign(`/Business/Destination/Update/${id}`);
+};
+const navigateToUpdateHotel = (id) => {
+  window.location.assign(`/Business/Hotel/Update/${id}`);
+};
 
   // Các hàm hoặc logic bổ sung có thể được thêm vào nếu cần
 </script>
