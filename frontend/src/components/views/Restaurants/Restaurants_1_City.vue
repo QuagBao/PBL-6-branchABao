@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
         <Header/>
-        <Top_Button v-if="cityId" :cityID="cityId"/>
+        <Top_Button v-if="cityId" :cityID="parseInt(cityId, 10)"/>
     </div>
 
     <!-- Images -->
