@@ -38,7 +38,7 @@ import axios from 'axios';
     }
   };
 
-  export async function fetchAttractions(cityId) {
+  export async function fetchAttractions() {
     try {
       const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/?is_popular=true&get_rating=true`);
       const filteredDestinations = response.data.filter(destination => destination.hotel_id === null && destination.restaurant_id === null);
@@ -55,12 +55,7 @@ import axios from 'axios';
         duration: destination.duration,
         description: destination.description,
         date_create: destination.date_create,
-        address: {
-          city_id: destination.address.city_id,
-          district: destination.address.district,
-          ward: destination.address.ward,
-          street: destination.address.street,
-        },
+        address: destination.address,
         images: destination.images,
         hotel_id: destination.hotel_id,
         hotel: destination.hotel,

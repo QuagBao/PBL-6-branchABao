@@ -45,7 +45,8 @@
                         :key="index"
                         :imageUrl="item.images[0]?.url|| '/blue-image.jpg'"
                         :name="item.name"
-                        :rating="generateStars(item.rating)"
+                        :rating= "item.rating"
+                        :stars="generateStars(item.rating)"
                         :review-number="item.numOfReviews"
                         :tags="item.tag"
                         @click="navigateToDetailPlace(item.id)"/>
@@ -93,7 +94,6 @@ const navigateToThingsCity = (id) => {
     import Form_Search from '../Form_Search.vue';
     import Img_Card from '../Img_Card.vue';
     import Card_Item from '../Card_Item.vue';
-import { fetchAttractions } from '@/components/models/destinationModel';
     export default {
         name: "ThingsToDo_List",
         components: {

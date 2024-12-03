@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
         <Header/>
-        <Top_Button v-if="cityId" :cityID="cityId"/>
+        <Top_Button v-if="cityId" :cityID="parseInt(cityId, 10)"/>
     </div>
 
     <!-- Images -->
@@ -18,8 +18,20 @@
         </div>
     </div>
 
-    <div class="container-fluid catagory">
-        <Btn_Catagory/>
+    <div class="container btn-catagory">
+            <Swiper class="swiper"
+                :slides-per-view="4"
+                :spaceBetween="10"
+                :scrollbar="{ draggable: true }"
+                :modules="modules">
+                <SwiperSlide v-for="item in buttons" :key="item.id">
+                    <button class="button-category" 
+                            :class="{ selected: selectedIndices.includes(item.id) }" 
+                            @click="selectButton(item.id)">
+                        {{ item.name }}
+                    </button>
+                </SwiperSlide>
+            </Swiper>
     </div>
 
     <div class="container-fluid p-4">
@@ -29,11 +41,12 @@
     </div>
 
     <div class="container-fluid context list-items-1">
-        <Info_Card v-for="(item, index) in attractions"
+        <Info_Card v-for="(item, index) in filteredDestinations"
                 :key="index"
                 :imageUrl="item.images[0].url||'/blue-image.jpg'"
                 :name="item.name"
-                :rating="generateStars(item.rating)"
+                :rating= "item.rating"
+                :stars="generateStars(item.rating)"
                 :review-number="item.numOfReviews"
                 :tags="item.tag"
                 :description="item.description"
@@ -44,26 +57,46 @@
 <script setup>
 import destinationViewModel from '../../viewModels/ThingToDo_City_ListViewModel';
 import generateViewModel from '../../viewModels/generate_ratingViewModel';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+
+const modules = [Navigation, Pagination, Scrollbar, A11y];
 
 const route = useRoute();
 const cityId = route.params.id; // Lấy cityId từ route params
 
 const {
-    images,
     isMenuVisible,
     toggleMenu,
+    fetchCityDetailsData,
+    fetchTags,
+    fetchDestinationsData,
     buttons,
     selectedIndices,
     selectButton,
-    attractions,
+    
+    destinations,
+    filteredDestinations,
     city,
-    getImageUrl,
     liked,
     toggleLikeStatus,
     heartFull,
     heartEmpty,
+    truncatedDescription,
 } = destinationViewModel(cityId);
+
+onMounted(() => {
+    fetchCityDetailsData();
+    fetchDestinationsData();
+    fetchTags();
+});
 
 const {
     circles,
@@ -153,6 +186,49 @@ body {
 }
 .catagory{
     margin: 40px 0 -10px 0;
+}
+.swiper {
+    width: 100%;
+    max-width: 1450px; /* Set a max-width to ensure enough space for 3 slides */
+}
+
+.swiper-slide {
+    color: #13357B;
+    background-color: #EDF6F9;
+    text-align: center;
+    margin: 20px 0; 
+}
+
+.button-category{
+    color: #13357B;
+    width: 80%;
+    padding: 8px 16px;
+    border: 1px solid #13357B;
+    border-radius: 40px;
+    cursor: pointer;
+    background-color: #EDF6F9;
+    transition: background-color 0.3s ease;
+}
+
+.button-category:hover {
+    background-color: #0077b6;
+    color: #EDF6F9 
+}     
+.button-category.selected {
+    background-color: #13357B;
+    color: #EDF6F9;
+}
+</style>
+
+<style>
+.swiper .swiper-scrollbar {
+    background-color: #EDF6F9 !important;
+    border: 1px solid #13357B !important;
+    height: 6px !important;
+}
+
+.swiper .swiper-scrollbar-drag {
+    background-color: #13357B !important;
 }
 </style>
 

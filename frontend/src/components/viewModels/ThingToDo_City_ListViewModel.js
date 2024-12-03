@@ -1,6 +1,7 @@
 import { ref, computed, onMounted } from 'vue';
 import { fetchDestinationsByCity} from '../models/destinationModel';
 import { fetchCityDetails } from '../models/CityModel';
+import { getTags as fetchTagsAPI } from '../models/TagModel';
 
 export default function (cityId) {
   
@@ -14,32 +15,77 @@ export default function (cityId) {
   
 
 
-  const buttons = ref(['Drink', 'Museum', 'Outdoor', 'Adventure', 'Beach', 'Hotel', 'Food', 'F&B', 'Movie']);
+  const buttons = ref([]);
   const selectedIndices = ref([]);
+  const filteredDestinations = ref([]);
+  const destinations = ref([]);
+  const city = ref(null);
+  
+  const liked = ref({});
 
-  const selectButton = (index) => {
+  const fetchCityDetailsData = async () => {
+    try {
+      const data = await fetchCityDetails(cityId);
+      city.value = data || null;
+    } catch (error) {
+      console.error('Error fetching city details:', error);
+    }
+  };
+
+  const fetchTags = async () => {
+    try {
+      buttons.value = await fetchTagsAPI();
+    } catch (error) {
+      console.error("Error fetching tags:", error);
+    }
+  };
+
+  const fetchDestinationsData = async () => {
+    try {
+      let place;
+      // Nếu đã có dữ liệu, chỉ lọc lại; nếu chưa, gọi API
+      if (destinations.value.length) {
+        place = [...destinations.value];
+      } else {
+        place = await fetchDestinationsByCity(cityId);
+      }
+
+      // Lọc dữ liệu theo tags
+      const filteredPlace = filterItems(place);
+
+      // Phân loại dữ liệu
+      destinations.value = place.filter(destination => destination.hotel_id === null && destination.restaurant_id === null);
+
+      filteredDestinations.value = filteredPlace.filter(destination => destination.hotel_id === null && destination.restaurant_id === null);
+      
+    } catch (error) {
+      console.error('Error fetching destinations:', error);
+    }
+  };
+
+  const filterItems = (items) => {
+    // Nếu items không tồn tại hoặc không phải là mảng, trả về mảng rỗng
+    if (!Array.isArray(items)) return [];
+    
+    // Nếu không có tag nào được chọn, trả về toàn bộ danh sách
+    if (!selectedIndices.value.length) return [...items];
+  
+    // Lọc các mục có ít nhất một tag trùng với tag đã chọn
+    return items.filter(item => 
+      Array.isArray(item.tags) && item.tags.some(tag => selectedIndices.value.includes(tag.id))
+    );
+  };
+
+  const selectButton = async (index) => {
     const currentIndex = selectedIndices.value.indexOf(index);
-
     if (currentIndex === -1) {
       selectedIndices.value.push(index);
     } else {
       selectedIndices.value.splice(currentIndex, 1);
     }
+
+    await fetchDestinationsData();
   };
-
-  const attractions = ref([]);
-  const city = ref(null);
-  
-  const liked = ref({});
-
-  onMounted(async () => {
-    attractions.value = await fetchDestinationsByCity(cityId);
-    
-  });
-
-  onMounted(async () =>{
-    city.value = await fetchCityDetails(cityId);
-  })
 
   const toggleLikeStatus = (id) => {
     liked.value[id] = !liked.value[id];
@@ -58,12 +104,15 @@ export default function (cityId) {
   return {
     isMenuVisible,
     toggleMenu,
-    
+    fetchCityDetailsData,
+    fetchTags,
+    fetchDestinationsData,
     buttons,
     selectedIndices,
     selectButton,
     
-    attractions,
+    destinations,
+    filteredDestinations,
     city,
     liked,
     toggleLikeStatus,
