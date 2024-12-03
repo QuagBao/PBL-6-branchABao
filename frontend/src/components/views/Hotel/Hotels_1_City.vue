@@ -24,7 +24,8 @@
                             :key="index"
                             :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
                             :name="item.name"
-                            :rating="generateStars(item.rating)"
+                            :stars="generateStars(item.rating)"
+                            :rating="item.rating"
                             :reviewNumber="item.numOfReviews"
                             :tags="item.tag"
                             @click="navigateToDetailHotel(item.hotel_id)"/>
@@ -45,14 +46,13 @@ const route = useRoute();
 const cityId = route.params.id;
 
 const {
-    isMenuVisible, toggleMenu,
-    buttons, selectedIndices, selectButton,
-    hotels, getImageUrl,
-    liked, toggleLikeStatus, heartFull, heartEmpty,
-    currency, minPrice, maxPrice, setupSlider, updatePrice, handleCurrencyChange,
-    activeOption, toggleOptions,
+    isMenuVisible,
+    toggleMenu,
+    hotels,
+    liked,
     searchQuery,
-    updateSliderFromInput
+    activeOption,
+    toggleOptions,
 } = destinationViewModel(cityId);
 
 const {

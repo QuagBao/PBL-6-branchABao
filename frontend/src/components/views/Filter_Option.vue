@@ -75,46 +75,6 @@
                     </div>
                 </div>
 
-
-                <div class="filter-item"
-                    @click = "toggleOptions('price-options')"
-                    :class="{ active: activeOption === 'price-options' }">
-                    Price
-                    <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 
-                        14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 
-                        12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 
-                        14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" 
-                        stroke="#currentColor" stroke-width="1.5" stroke-linecap="round" 
-                        stroke-linejoin="round"/>
-                    </svg>
-                </div>
-
-                <div v-if="activeOption === 'price-options'" class="options">
-                    <div class="currency-options">
-                        <label class="label"><input type="radio" name="currency" value="VND" checked @change="handleCurrencyChange('VND')"> VNĐ</label>
-                        <label class="label"><input type="radio" name="currency" value="USD" @change="handleCurrencyChange('USD')"> USD</label>
-                    </div>
-                    <div class="price-inputs">
-                        <input type="number"
-                                v-model="minPrice" @input="updateSliderFromInput('min')"
-                                :placeholder="currency === 'USD' ? 'Min Price (USD)' : 'Min Price (VNĐ)'" 
-                                min="0"/>
-                        <span>-</span>
-                        <input type="number" v-model="maxPrice"
-                                @input="updateSliderFromInput('max')"
-                                :placeholder="currency === 'USD' ? 'Max Price (USD)' : 'Max Price (VNĐ)'"
-                                min="0"/>
-                    </div>
-
-                    <div id="price-slider" class="range-slider"></div>
-
-                    <div class="price-labels">
-                        <p class="col text-start">{{ new Intl.NumberFormat('vi-VN', { style: 'currency', currency }).format(minPrice) }}</p>
-                        <span class="col">-</span>
-                        <p class="col text-end">{{ new Intl.NumberFormat('vi-VN', { style: 'currency', currency }).format(maxPrice) }}</p>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -128,23 +88,9 @@ const {
     isMenuVisible, toggleMenu, buttons, selectedIndices, selectButton,
     entertainments, generateStars, getImageUrl,
     liked, toggleLikeStatus, heartFull, heartEmpty,
-    currency, minPrice, maxPrice, setupSlider, updatePrice, handleCurrencyChange,
     activeOption, toggleOptions, searchQuery, updateSliderFromInput
 } = destinationViewModel();
 
-// Khởi tạo slider khi component được mount
-watch(activeOption, (newValue) => {
-    console.log('Active Option Changed:', newValue);
-    if (newValue === 'price-options') {
-        setupSlider();
-    }
-});
-watch(activeOption, async (newValue) => {
-    if (newValue === 'price-options') {
-        await nextTick(); // Đợi cho DOM cập nhật
-        setupSlider();
-    }
-});
 </script>
 
 <script>
@@ -162,18 +108,6 @@ export default {
         toggleMeal(id) {
             this.FilterViewModel.toggleMeal(id);
         },
-        handleCurrencyChange(currency) {
-            this.FilterViewModel.handleCurrencyChange(currency);
-        },
-        updateSliderFromInput(type) {
-            const {minPrice, maxPrice} = this.FilterViewModel;
-            if (type === 'min') {
-                this.FilterViewModel.updatePriceRange(minPrice, maxPrice);    
-            } else if (type === 'max') {
-                this.FilterViewModel.updatePriceRange(minPrice, maxPrice);
-            }
-            
-        }
     }
 };
 </script>

@@ -20,9 +20,6 @@ export default class FilterViewModel {
             new FilterOptionModel('dinner', 'Dinner'),
         ];
 
-        this.currency = 'VND';
-        this.minPrice = 0;
-        this.maxPrice = 0;
     }
 
     // Phương thức toggle chọn/bỏ chọn cho các tùy chọn của Establishment Type
@@ -37,14 +34,4 @@ export default class FilterViewModel {
         if (option) option.selected = !option.selected;
     }
 
-    // Phương thức cập nhật currency
-    updateCurrency(currency) {
-        this.currency = currency;
-    }
-
-    // Phương thức cập nhật giá trị Min và Max Price
-    updatePriceRange(minPrice, maxPrice) {
-        this.minPrice = minPrice;
-        this.maxPrice = maxPrice;
-    }
 }

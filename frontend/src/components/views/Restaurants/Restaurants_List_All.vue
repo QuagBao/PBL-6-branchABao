@@ -41,14 +41,13 @@ import destinationViewModel from '../../viewModels/Restaurant_ListViewModel';
 import generateViewModel from '../../viewModels/generate_ratingViewModel';
 
 const {
-    isMenuVisible, toggleMenu,
-    buttons, selectedIndices, selectButton,
-    restaurants, getImageUrl,
-    liked, toggleLikeStatus, heartFull, heartEmpty,
-    currency, minPrice, maxPrice, setupSlider, updatePrice, handleCurrencyChange,
-    activeOption, toggleOptions,
+    isMenuVisible,
+    toggleMenu,
+    restaurants,
+    liked,
     searchQuery,
-    updateSliderFromInput
+    activeOption,
+    toggleOptions,
 } = destinationViewModel();
 
 const {
