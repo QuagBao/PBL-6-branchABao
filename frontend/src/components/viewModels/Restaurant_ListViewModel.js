@@ -94,14 +94,14 @@ export default function () {
       save_option_feature.value
     );
     
-    console.log('Filtered restaurants:', filteredRestaurants);  // Kiểm tra dữ liệu
+    console.log('Filtered restaurants');  // Kiểm tra dữ liệu
   
     // Cập nhật restaurants sau khi có dữ liệu
     restaurants.value = filteredRestaurants;
     
     // Gọi nextTick để đảm bảo Vue cập nhật giao diện sau khi thay đổi
     nextTick(() => {
-      console.log('Restaurants updated:', restaurants.value);
+      console.log('Restaurants updated');
     });
   };
 
@@ -132,12 +132,6 @@ export default function () {
       // Thêm phần tử nếu chưa tồn tại
       saveArray.value.push(option);
     }
-
-    console.log(`Updated ${saveArrayName}:`, saveArray.value);
-    console.log(`Option Cuisine :`, save_option_cuisine.value);
-    console.log(`Option Meal :`, save_option_meal.value);
-    console.log(`Option Special Diet :`, save_option_special_diet.value);
-    console.log(`Option Feature :`, save_option_feature.value);
 
     await filterRestaurants();
   };

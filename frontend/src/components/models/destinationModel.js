@@ -763,3 +763,112 @@ export async function fetchRestaurantsByFilter_City(city_id,save_option_cuisine,
     return null; // Trả về null hoặc xử lý theo cách khác nếu cần
   }
 };
+
+export async function fetchHotelsByFilter(save_option_price_range, save_option_amenities, save_option_hotel_star) {
+  try {
+    const url = new URL(
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/hotel/?is_popular=true`
+    );
+    for (const price_range of save_option_price_range) {
+      url.searchParams.append("price_range", price_range);
+    }
+    for (const amenity of save_option_amenities) {
+      url.searchParams.append("amenities", amenity);
+    }
+    for (const hotel_star of save_option_hotel_star) {
+      url.searchParams.append("hotel_star", hotel_star);
+    }
+
+    const response = await axios.get(url.toString());
+    
+    
+
+    // In ra dữ liệu khách sạn để kiểm tra
+
+    return response.data.map((destination) => ({
+      id: destination.id,
+      name: destination.name,
+      user_id: destination.user_id,
+      price_bottom: destination.price_bottom,
+      price_top: destination.price_top,
+      age: destination.age,
+      opentime: destination.opentime,
+      duration: destination.duration,
+      description: destination.description,
+      date_create: destination.date_create,
+      address: {
+        city_id: destination.address.city_id,
+        district: destination.address.district,
+        ward: destination.address.ward,
+        street: destination.address.street,
+      },
+      images: destination.images,
+      hotel_id: destination.hotel_id,
+      hotel: destination.hotel,
+      restaurant_id: destination.restaurant_id,
+      restaurant: destination.restaurant,
+      tags: destination.tags,
+      rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
+      numOfReviews: destination.numOfReviews,
+    }));
+  } catch (error) {
+    // In ra lỗi nếu có
+    console.error("Có lỗi xảy ra khi lấy dữ liệu chi tiết nhà hàng:", error);
+    return null; // Trả về null hoặc xử lý theo cách khác nếu cần
+  }
+};
+
+export async function fetchHotelsByFilter_City(city_id,save_option_price_range, save_option_amenities, save_option_hotel_star) {
+  try {
+    const url = new URL(
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/hotel/?is_popular=true`
+    );
+    url.searchParams.append("city_id", city_id);
+    for (const price_range of save_option_price_range) {
+      url.searchParams.append("price_range", price_range);
+    }
+    for (const amenity of save_option_amenities) {
+      url.searchParams.append("amenities", amenity);
+    }
+    for (const hotel_star of save_option_hotel_star) {
+      url.searchParams.append("hotel_star", hotel_star);
+    }
+
+    const response = await axios.get(url.toString());
+    
+    
+
+    // In ra dữ liệu khách sạn để kiểm tra
+
+    return response.data.map((destination) => ({
+      id: destination.id,
+      name: destination.name,
+      user_id: destination.user_id,
+      price_bottom: destination.price_bottom,
+      price_top: destination.price_top,
+      age: destination.age,
+      opentime: destination.opentime,
+      duration: destination.duration,
+      description: destination.description,
+      date_create: destination.date_create,
+      address: {
+        city_id: destination.address.city_id,
+        district: destination.address.district,
+        ward: destination.address.ward,
+        street: destination.address.street,
+      },
+      images: destination.images,
+      hotel_id: destination.hotel_id,
+      hotel: destination.hotel,
+      restaurant_id: destination.restaurant_id,
+      restaurant: destination.restaurant,
+      tags: destination.tags,
+      rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
+      numOfReviews: destination.numOfReviews,
+    }));
+  } catch (error) {
+    // In ra lỗi nếu có
+    console.error("Có lỗi xảy ra khi lấy dữ liệu chi tiết nhà hàng:", error);
+    return null; // Trả về null hoặc xử lý theo cách khác nếu cần
+  }
+};

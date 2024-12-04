@@ -134,12 +134,6 @@ export default function (cityID) {
       saveArray.value.push(option);
     }
 
-    console.log(`Updated ${saveArrayName}:`, saveArray.value);
-    console.log(`Option Cuisine :`, save_option_cuisine.value);
-    console.log(`Option Meal :`, save_option_meal.value);
-    console.log(`Option Special Diet :`, save_option_special_diet.value);
-    console.log(`Option Feature :`, save_option_feature.value);
-
     await filterRestaurants();
   };
 
