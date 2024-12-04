@@ -1,116 +1,140 @@
 <template>
     <div class="container-fluid">
-        <div class="container left-panel">
-            <div class="filter-section">
-                <div class="filter-item"
-                    @click = "toggleOptions('establishment-type-options')"
-                    :class="{ active: activeOption === 'establishment-type-options' }">
-                    Establishment Type
-                    <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 
-                        14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 
-                        12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 
-                        14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" 
-                        stroke="#currentColor" stroke-width="1.5" stroke-linecap="round" 
-                        stroke-linejoin="round"/>
-                    </svg>
-                </div>
-
-                <div v-if="activeOption === 'establishment-type-options'" class="options">
-                    <div :class="{'option': true, 'checked': isChecked}">
-                        <input type="checkbox" id="restaurant" v-model="isChecked"/>
-                        <label class="label" for="restaurant">Restaurant</label>
-                    </div>
-                    <div :class="{'option': true, 'checked': isChecked}">
-                        <input type="checkbox" id="coffee-tea" />
-                        <label class="label" for="coffee-tea">Coffee & Tea</label>
-                    </div>
-                    <div :class="{'option': true, 'checked': isChecked}">
-                        <input type="checkbox" id="bar-pubs" />
-                        <label class="label" for="bar-pubs">Bar & Pubs</label>
-                    </div>
-                    <div :class="{'option': true, 'checked': isChecked}">
-                        <input type="checkbox" id="dessert" />
-                        <label class="label" for="dessert">Dessert</label>
-                    </div>
-                    <div :class="{'option': true, 'checked': isChecked}">
-                        <input type="checkbox" id="bakeries" />
-                        <label class="label" for="bakeries">Bakeries</label>
-                    </div>
-                    <div :class="{'option': true, 'checked': isChecked}">
-                        <input type="checkbox" id="delivery-only" />
-                        <label class="label" for="delivery-only">Delivery Only</label>
-                    </div>
-                </div>
-                    
-                <div class="filter-item"
-                    @click = "toggleOptions('meals-options')"
-                    :class="{ active: activeOption === 'meals-options' }">
-                    Meals
-                    <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 
-                        14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 
-                        12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 
-                        14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" 
-                        stroke="#currentColor" stroke-width="1.5" stroke-linecap="round" 
-                        stroke-linejoin="round"/>
-                    </svg>
-                </div>
-                <div v-if="activeOption === 'meals-options'" class="options">
-                    <div :class="{'option': true, 'checked': isChecked}">
-                        <input type="checkbox" id="breakfast" />
-                        <label class="label" for="breakfast">Breakfast</label>
-                    </div>
-                    <div :class="{'option': true, 'checked': isChecked}">
-                        <input type="checkbox" id="brunch" />
-                        <label class="label" for="brunch">Brunch</label>
-                    </div>
-                    <div :class="{'option': true, 'checked': isChecked}">
-                        <input type="checkbox" id="lunch" />
-                        <label class="label" for="lunch">Lunch</label>
-                    </div>
-                    <div :class="{'option': true, 'checked': isChecked}">
-                        <input type="checkbox" id="dinner" />
-                        <label class="label" for="dinner">Dinner</label>
-                    </div>
-                </div>
-
+      <div class="container left-panel">
+        <div class="filter-section">
+  
+          <!-- Cuisine Filter -->
+          <div 
+            class="filter-item" 
+            @click="toggleOptions('cuisine')" 
+            :class="{ active: activeOptions.cuisine }"
+          >
+            Cuisine
+            <div class="icon"></div>
+          </div>
+          <div v-if="activeOptions.cuisine" class="options">
+            <div 
+              v-for="option in cuisine_options" 
+              :key="option" 
+              class="option"
+            >
+              <input 
+                type="checkbox" 
+                :id="`cuisine-${option}`" 
+                :checked="save_option_cuisine.includes(option)" 
+                @change="handleCheckboxChange(option, 'save_option_cuisine')"
+              />
+              <label class="label" :for="`cuisine-${option}`">{{ option }}</label>
             </div>
+          </div>
+  
+          <!-- Meal Filter -->
+          <div 
+            class="filter-item" 
+            @click="toggleOptions('meal')" 
+            :class="{ active: activeOptions.meal }"
+          >
+            Meals
+            <div class="icon"></div>
+          </div>
+          <div v-if="activeOptions.meal" class="options">
+            <div 
+              v-for="option in meal_options" 
+              :key="option" 
+              class="option"
+            >
+              <input 
+                type="checkbox" 
+                :id="`meal-${option}`" 
+                :checked="save_option_meal.includes(option)" 
+                @change="handleCheckboxChange(option, 'save_option_meal')"
+              />
+              <label class="label" :for="`meal-${option}`">{{ option }}</label>
+            </div>
+          </div>
+  
+          <!-- Special Diet Filter -->
+          <div 
+            class="filter-item" 
+            @click="toggleOptions('specialDiet')" 
+            :class="{ active: activeOptions.specialDiet }"
+          >
+            Special Diet
+            <div class="icon"></div>
+          </div>
+          <div v-if="activeOptions.specialDiet" class="options">
+            <div 
+              v-for="option in special_diet_options" 
+              :key="option" 
+              class="option"
+            >
+              <input 
+                type="checkbox" 
+                :id="`specialDiet-${option}`" 
+                :checked="save_option_special_diet.includes(option)" 
+                @change="handleCheckboxChange(option, 'save_option_special_diet')"
+              />
+              <label class="label" :for="`specialDiet-${option}`">{{ option }}</label>
+            </div>
+          </div>
+  
+          <!-- Feature Filter -->
+          <div 
+            class="filter-item" 
+            @click="toggleOptions('feature')" 
+            :class="{ active: activeOptions.feature }"
+          >
+            Features
+            <div class="icon"></div>
+          </div>
+          <div v-if="activeOptions.feature" class="options">
+            <div 
+              v-for="option in feature_options" 
+              :key="option" 
+              class="option"
+            >
+              <input 
+                type="checkbox" 
+                :id="`feature-${option}`" 
+                :checked="save_option_feature.includes(option)" 
+                @change="handleCheckboxChange(option, 'save_option_feature')"
+              />
+              <label class="label" :for="`feature-${option}`">{{ option }}</label>
+            </div>
+          </div>
+  
         </div>
+      </div>
     </div>
-</template>
+  </template>
+  
+  
 
 <script setup>
 import { ref, onMounted, watch, nextTick } from 'vue';
 import destinationViewModel from '../viewModels/Restaurant_ListViewModel';
 
 const {
-    isMenuVisible, toggleMenu, buttons, selectedIndices, selectButton,
-    entertainments, generateStars, getImageUrl,
-    liked, toggleLikeStatus, heartFull, heartEmpty,
-    activeOption, toggleOptions, searchQuery, updateSliderFromInput
+    isMenuVisible,
+    toggleMenu,
+    restaurants,
+    liked,
+    searchQuery,
+    activeOptions,
+    toggleOptions,
+    cuisine_options,
+    meal_options,
+    special_diet_options,
+    feature_options,
+    save_option_cuisine,
+    save_option_meal,
+    save_option_special_diet,
+    save_option_feature,
+    handleCheckboxChange,
 } = destinationViewModel();
 
 </script>
 
-<script>
-import FilterViewModel from '@/components/viewModels/FilterViewModel';
-export default {
-    data() {
-        return {
-            FilterViewModel: new FilterViewModel(),
-        };
-    },
-    methods: {
-        toggleEstablishmentType(id) {
-            this.FilterViewModel.toggleEstablishmentType(id);
-        },
-        toggleMeal(id) {
-            this.FilterViewModel.toggleMeal(id);
-        },
-    }
-};
-</script>
 
 <style scoped>
 .filter-section {
@@ -190,6 +214,8 @@ export default {
     width: 25px;
     height: 25px;
     border-radius: 25%;
+    align-items: center; /* Căn giữa nội dung */
+    position: relative; /* Để pseudo-element ::after hoạt động đúng */
 }
 .option input[type = "checkbox"]:checked { 
     background-color: #13357B;
@@ -202,10 +228,10 @@ export default {
     color: #EDF6F9;
     font-size: 15px;
     font-weight: bold;
-    position: relative;
-    left: 20%;
-    bottom: 7%;
-    transform: translate(-25%, -25%);
+    position: absolute; /* Để kiểm soát vị trí của tick */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Đưa dấu tick vào giữa checkbox */
 }
 .option:hover {
     background-color: #00b4d8;
@@ -231,124 +257,19 @@ export default {
     color: #13357B;
     font-weight: 900;
 }
-.currency-options {
-    margin-top: -15px;
-    display: flex;
-    gap: 20px;
-    justify-content: space-around;
-}
-.currency-options label{
-    color: #13357B;
-    font-size: 20px;
-    cursor: pointer;
-    display: flex;
-    gap: 5px;
-}
-.currency-options input[type="radio"] {
-    appearance: none;
-    background-color: #EDF6F9;
-    border: 2px solid #13357B;
-    width: 25px;
-    height: 25px;
-    border-radius: 50%;
-}
-.currency-options input[type = "radio"]:checked { 
-    background-color: #13357B;
-}
-.price-inputs{
-    display: flex;
-    gap: 10px;
-    justify-content: space-between;
-    color: #13357B;
-}
-.price-inputs input[type="number"]{
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #00b4d8;
-    border-radius: 5px;
-    font-size: 14px;
-    color: #13357B;
-    background-color: #EDF6F9;
-    outline: none;
-    text-align: center;
-}
-.price-inputs input[type="number"]:focus{
-    border: 2px solid #13357B;
-    color: #00b4d8;
-}
-.price-inputs input[type="number"]::-webkit-outer-spin-button,
-.price-inputs input[type="number"]::-webkit-inner-spin-button {
-    background-color: #f1f1f1; /* Default background color for the spinner buttons */
-    color: #13357B; /* Color of the spinner icon */
-    border-radius: 2px;
-    width: 20px;
-}
-.price-inputs input[type="number"]::-webkit-inner-spin-button:hover,
-.price-inputs input[type="number"]::-webkit-outer-spin-button:hover {
-    background-color: #13357B; /* Background color on hover */
-    color: #EDF6F9; /* Icon color on hover */
-}
 
-.price-labels{
-    display: flex;
-    justify-content: space-between;
+.icon {
+    width: 30px;
+    height: 30px;
+    background-image: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2313357B'><path d='M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
 }
-.price-labels{
-    color : #13357B;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    gap: 5px;
-    align-items: first baseline;
-    text-align: center;
-    padding: 7px;
-    margin-bottom: -20px;
+.filter-item:hover .icon {
+    background-image: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23EDF6F9'><path d='M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>");
 }
-
-:deep(.noUi-target) {
-    background-color: #CAF0F8;
-    border-radius: 8px;
-    border: 1px solid #00b4d8;
-    height: 10px;
-}
-
-:deep(.noUi-connect) {
-    background-color: #13357B !important; /* Màu sắc nền của đoạn đã chọn */
-    box-shadow: none !important; /* Loại bỏ box-shadow */
-    border: none !important; /* Loại bỏ đường viền nếu có */
-}
-
-:deep(.noUi-handle) {
-    background-color: #CAF0F8;
-    border: 2px solid #13357B;
-    width: 20px;
-    height: 20px;
-    border-radius: 50%;
-    box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);
-}
-
-:deep(.noUi-tooltip) {
-    background-color: #EDF6F9;
-    color: #13357B;
-    padding: 5px;
-    border-radius: 5px;
-    font-size: 12px;
-    box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);
-}
-:deep(.noUi-handle .icon-class) {
-    opacity: 0 !important;  
-    visibility: hidden !important;
-}
-:deep(.noUi-handle)::before,
-:deep(.noUi-handle)::after {
-    content: '' !important;
-    background: none !important;
-    display: none !important;
-}
-.range-slider{
-    margin: 25px 0px 0 0 ;
-    width: 90.5%;
-    height: 10px;
+.filter-item.active .icon {
+    background-image: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23E7C6FF'><path d='M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>");
 }
 </style>
