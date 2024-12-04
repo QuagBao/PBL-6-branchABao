@@ -20,7 +20,27 @@
                 </div>
 
                 <div>
-                    <button v-if="destination.user_id == user?.id" @click="navigateToUpdateDestination(destination.id)" class="write-review">Update Place </button>
+                    <button 
+                        v-if="token && destination.user_id === user?.id" 
+                        @click="navigateToUpdateDestination(destination.id)" 
+                        class="write-review"
+                    >
+                        Update Place 
+                    </button>
+                    <button 
+                        v-if="token && destination.user_id == user?.id" 
+                        @click="navigateToCreateHotel(destination.id)" 
+                        class="write-review"
+                    >
+                        Create Hotel 
+                    </button>
+                    <button 
+                        v-if="token && destination.user_id == user?.id" 
+                        @click="navigateToCreateRestaurant(destination.id)" 
+                        class="write-review"
+                    >
+                        Create Restaurant 
+                    </button>
                 </div>
                 
                 <div class="container-fluid info-about">
@@ -97,6 +117,7 @@
     destination,
     isLoading,
     user,
+    token,
   } = destinationViewModel(destinationID);
 
   const {
@@ -110,6 +131,12 @@
 
   const navigateToUpdateDestination = (id) => {
   window.location.assign(`/Business/Destination/Update/${id}`);
+};
+const navigateToCreateHotel = (id) => {
+  window.location.assign(`/Business/Hotel/Add/${id}`);
+};
+const navigateToCreateRestaurant = (id) => {
+  window.location.assign(`/Business/Restaurant/Add/${id}`);
 };
 
   // Các hàm hoặc logic bổ sung có thể được thêm vào nếu cần

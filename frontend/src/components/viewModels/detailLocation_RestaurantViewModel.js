@@ -168,6 +168,7 @@ export default function(restaurantID) {
     city,
     isLoading,
     user,
+    token,
   };
 }
 

@@ -166,6 +166,7 @@ export default function(hotelID) {
     city,
     isLoading,
     user,
+    token,
   };
 }
 

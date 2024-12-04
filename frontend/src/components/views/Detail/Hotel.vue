@@ -19,8 +19,20 @@
                     </div>
                 </div>
                 <div>
-                    <button v-if="destination.user_id == user?.id" @click="navigateToUpdateDestination(hotel.id)" class="write-review">Update Place </button>
-                    <button v-if="destination.user_id == user?.id" @click="navigateToUpdateHotel(hotel.id)" class="write-review">Update Hotel Detail </button>
+                    <button 
+                        v-if="token && hotel.user_id == user?.id" 
+                        @click="navigateToUpdateDestination(hotel.id)" 
+                        class="write-review"
+                    >
+                        Update Place 
+                    </button>
+                    <button 
+                        v-if="token && hotel.user_id == user?.id" 
+                        @click="navigateToUpdateHotel(hotel.id)" 
+                        class="write-review"
+                    >
+                        Update Hotel Detail 
+                    </button>
                 </div>
             </div>
         </div>

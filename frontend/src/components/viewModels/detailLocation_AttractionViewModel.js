@@ -198,6 +198,7 @@ export default function(destinationID) {
     city,
     isLoading,
     user,
+    token,
   };
 }
 
