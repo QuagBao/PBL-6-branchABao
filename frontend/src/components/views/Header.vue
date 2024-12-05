@@ -136,7 +136,7 @@ body{
     height: 100px;
     padding: 35px 15px;
     color: #8da9c4 !important;
-    font-size: 0.9rem;
+    font-size: 1.5rem;
     font-weight: 500;
     outline: none;
     transition: .3s;
