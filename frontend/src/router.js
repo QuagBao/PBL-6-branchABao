@@ -49,6 +49,9 @@ const updateHotel = () => import('./components/views/Business/Business_Hotel_Upd
 const addRestaurant = () => import('./components/views/Business/Business_Restaurant_Add.vue');
 const updateRestaurant = () => import('./components/views/Business/Business_Restaurant_Update.vue');
 
+//Search
+const search = () => import('./components/views/Search/Search.vue');
+
 
 
 // Routes configuration
@@ -76,6 +79,13 @@ const routes = [
   { path: '/Business/Hotel/Update/:id', name: 'UpdateHotel', component: updateHotel },
   { path: '/Business/Restaurant/Add/:id', name: 'AddRestaurant', component: addRestaurant },
   { path: '/Business/Restaurant/Update/:id', name: 'UpdateRestaurant', component: updateRestaurant },
+  { path: '/Business/Restaurant/Update/:id', name: 'UpdateRestaurant', component: updateRestaurant },
+  { 
+    path: '/search', 
+    name: 'Search', 
+    component: search,
+    props: route => ({ query: route.query.q }) // Truyền query vào props của component
+  },
   { path: '/test', name: 'Test', component: test },
   { path: '/test1', name: 'Test1', component: test1 },
   { path: '/test2', name: 'Test2', component: test2 },

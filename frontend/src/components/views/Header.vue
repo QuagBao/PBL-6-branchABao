@@ -129,13 +129,17 @@ body{
 }
 
 .navbar-light .navbar-nav .nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
-    padding: 35px 25px;
+    height: 100px;
+    padding: 35px 15px;
     color: #8da9c4 !important;
-    font-size: 20px;
-    font-weight: 400;
+    font-size: 0.9rem;
+    font-weight: 500;
     outline: none;
-    transition: .5s;
+    transition: .3s;
 }
 
 .navbar-light .navbar-nav .nav-link:hover,

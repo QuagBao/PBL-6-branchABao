@@ -1,6 +1,5 @@
 <template>
     <div class="container-fluid search">
-        <h1 class="title">{{ name_of_page }}</h1>
         <div class="container-fluid position-relative">
             <input class="form-control" type="text" :placeholder="name" v-model="searchQuery">
             <button type="button" class="btn btn-primary" @click="performSearch">Search</button>

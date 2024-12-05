@@ -1,11 +1,32 @@
 <template>
     <div class="container-fluid search">
-        <div class="container-fluid position-relative">
-            <input class="form-control" type="text" placeholder="Where do you want to go?">
-            <button type="button" class="btn btn-primary">Search</button>
-        </div>
+      <div class="container-fluid position-relative">
+        <!-- Input search, liên kết với biến searchQuery -->
+        <input class="form-control" type="text" v-model="searchQuery" placeholder="Where do you want to go?">
+        
+        <!-- Nút Search với sự kiện click để gọi hàm performSearch -->
+        <button type="button" class="btn btn-primary" @click="performSearch">Search</button>
+      </div>
     </div>            
-</template>
+  </template>
+  
+  <script setup>
+  import { ref } from 'vue';
+  
+  // Biến lưu trữ từ khóa tìm kiếm
+  const searchQuery = ref("");
+  
+  // Hàm thực hiện tìm kiếm và chuyển hướng đến trang kết quả
+  const performSearch = () => {
+    if (searchQuery.value) {
+      // Chuyển hướng tới trang tìm kiếm với query string là giá trị từ searchQuery
+      window.location.assign(`/search?q=${searchQuery.value}`);
+    } else {
+      // Hiển thị cảnh báo nếu không có từ khóa tìm kiếm
+      alert("Please enter a search query.");
+    }
+  };
+  </script>
 
 <script>
     export default {
