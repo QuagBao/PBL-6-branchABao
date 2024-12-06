@@ -1,32 +1,55 @@
 <template>
-    <div class="container-fluid search">
+  <div class="container-fluid search">
       <div class="container-fluid position-relative">
-        <!-- Input search, liên kết với biến searchQuery -->
-        <input class="form-control" type="text" v-model="searchQuery" placeholder="Where do you want to go?">
-        
-        <!-- Nút Search với sự kiện click để gọi hàm performSearch -->
-        <button type="button" class="btn btn-primary" @click="performSearch">Search</button>
+          <!-- Input search -->
+          <input 
+              class="form-control" 
+              type="text" 
+              v-model="searchQuery" 
+              placeholder="Where do you want to go?"
+          />
+          
+          <!-- Nút Search -->
+          <button type="button" class="btn btn-primary" @click="performSearch">Search</button>
+          
+          <!-- Danh sách kết quả -->
+          <div v-if="results.length" class="search-results" :class="{'show': results.length > 0}">
+              <ul>
+                  <li 
+                      v-for="(result, index) in results" 
+                      :key="index" 
+                      @click="selectResult(result)"
+                  >
+                      {{ result }}
+                  </li>
+              </ul>
+          </div>
       </div>
-    </div>            
-  </template>
-  
-  <script setup>
-  import { ref } from 'vue';
-  
-  // Biến lưu trữ từ khóa tìm kiếm
-  const searchQuery = ref("");
-  
-  // Hàm thực hiện tìm kiếm và chuyển hướng đến trang kết quả
-  const performSearch = () => {
-    if (searchQuery.value) {
-      // Chuyển hướng tới trang tìm kiếm với query string là giá trị từ searchQuery
-      window.location.assign(`/search?q=${searchQuery.value}`);
-    } else {
-      // Hiển thị cảnh báo nếu không có từ khóa tìm kiếm
-      alert("Please enter a search query.");
-    }
-  };
-  </script>
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue';
+import useLiveSearch from '../viewModels/LiveSearchViewModel.js';
+
+const searchQuery = ref('');
+const { search, isLoading, results } = useLiveSearch(searchQuery);
+
+// Hàm thực hiện tìm kiếm
+const performSearch = (query = null) => {
+  const queryToSearch = query || searchQuery.value;
+  if (queryToSearch) {
+      window.location.assign(`/search?q=${queryToSearch}`);
+  } else {
+      alert('Please enter a search query.');
+  }
+};
+
+// Hàm xử lý khi chọn một kết quả
+const selectResult = (result) => {
+  performSearch(result);
+};
+</script>
 
 <script>
     export default {
@@ -97,5 +120,56 @@ button {
     color: #13357B;
     background-color: #EDF6F9;  
     border: 2px solid #13357B;
+}
+.search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 10px;
+    padding: 10px;
+    
+    /* Hiệu ứng đổ xuống */
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: slideDown 0.3s ease-out forwards;
+}
+
+.search-results.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Animation: Đổ xuống */
+@keyframes slideDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.search-results ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.search-results li {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.search-results li:hover {
+    background-color: #f0f0f0;
 }
 </style>
