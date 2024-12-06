@@ -173,6 +173,7 @@ export default {
   width: 90vw; /* Đảm bảo chiều rộng của container-search là 100% */
   background-color: #4996ee;
   padding: 20px;
+  border-radius: 50px;
 }
 
 .title-content {
