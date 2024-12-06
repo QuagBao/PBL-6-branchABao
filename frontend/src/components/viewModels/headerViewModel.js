@@ -1,6 +1,6 @@
 import { reactive, onMounted, onUnmounted } from 'vue';
 import { useRouter } from 'vue-router';
-import HeaderModel from '../models/HeaderModel';  // Importing the model
+import HeaderModel from '../models/headerModel';  // Importing the model
 
 export default function useHeaderViewModel() {
   const state = reactive({

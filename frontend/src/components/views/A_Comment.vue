@@ -2,7 +2,7 @@
     <div class="container-fluid">
         <div class="container row info ">
             <div class="col-1">
-                <img :src="imageUrl" alt="User Image" class="user-image" />
+                <img :src="imageUrl ? imageUrl: '/blue-image.jpg'" alt="User Image" class="user-image" />
             </div>
             
             <div class="col-6">
@@ -11,9 +11,13 @@
                         <h3>{{ userName }}</h3>
                     </div>
                     <div class="col rating-stars">
-                        <img v-for="circle in circles" :src="circle" :key="circle" class="circle-icon" />
+                        <img v-for="star in stars" :src="star" :key="index" class="circle-icon" />
                     </div>
                 </div>
+            </div>
+            <div class="col-2 d-flex justify-content-end align-items-center update-container" v-if="canedit">
+                <i class="icon-update" @click="updateReview(id)"></i>
+                <i class="icon-delete" @click="deleteReview(id)"></i>
             </div>
         </div>
         <div class="container content-comment">
@@ -22,12 +26,26 @@
             <h6>{{ comment }}</h6>
         </div>
         <div class="container img">
-            <img v-if="condition" :src="URL" alt="Review Image" class="review-image" />
+            <img v-if="condition"
+                v-for="(img, index) in URL" 
+                :src="img.url" 
+                :key="index" 
+                alt="Review Image" 
+                class="review-image" />
         </div>
     </div>
 
     <div class="container-fluid line"></div>
 </template>
+<script setup>
+import DeleteReview from '../viewModels/Review_DeleteViewModel'
+const {
+    deleteReview
+} = DeleteReview();
+const updateReview = (id) => {
+        window.location.assign(`/Review/Update/${id}`);
+    };
+</script>
 
 <script>
 export default {
@@ -35,12 +53,14 @@ export default {
     props: {
         imageUrl: String,
         userName: String,
-        circles: Array,
+        stars: Array,
         title: String,
         date_comment: String,
         comment: String,
         condition: String,
-        URL: String
+        canedit: Boolean,
+        URL: Array,
+        id: Number
     }
 }
 </script>
@@ -84,5 +104,58 @@ export default {
     height: 2px;
     background-color: #13357B;
     border-radius: 5px;
+}
+i {
+  margin-right: 8px;
+  font-size: 16px;
+  display: inline-block;
+  font-weight: 900;
+  font-family: "Font Awesome 5 Free";
+}
+.icon-update:before {
+  content: "\f044";
+  color: #007bff;
+}
+.update-container {
+    display: flex;
+    justify-content: flex-end; /* Căn icon sang phải */
+    align-items: center;
+}
+
+.icon-update {
+    font-size: 18px;
+    color: #007bff;
+    cursor: pointer;
+    transition: transform 0.2s, color 0.2s ease;
+}
+
+.icon-update:hover {
+    color: #0056b3; /* Màu khi hover */
+    transform: scale(1.2); /* Phóng to nhẹ khi hover */
+}
+
+.icon-update:active {
+    transform: scale(1); /* Trả về kích thước ban đầu khi nhấn */
+}
+
+.icon-delete:before {
+  content: "\f2ed";
+  color: #dc3545;
+}
+
+.icon-delete {
+    font-size: 18px;
+    color: #f84109;
+    cursor: pointer;
+    transition: transform 0.2s, color 0.2s ease;
+}
+
+.icon-delete:hover {
+    color: #a90d05; /* Màu khi hover */
+    transform: scale(1.2); /* Phóng to nhẹ khi hover */
+}
+
+.icon-delete:active {
+    transform: scale(1); /* Trả về kích thước ban đầu khi nhấn */
 }
 </style>

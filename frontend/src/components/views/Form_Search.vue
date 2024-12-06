@@ -2,11 +2,26 @@
     <div class="container-fluid search">
         <h1 class="title">{{ name_of_page }}</h1>
         <div class="container-fluid position-relative">
-            <input class="form-control" type="text" :placeholder= "name" v-model="searchQuery">
-            <button type="button" class="btn btn-primary">Search</button>
+            <input class="form-control" type="text" :placeholder="name" v-model="searchQuery">
+            <button type="button" class="btn btn-primary" @click="performSearch">Search</button>
         </div>
     </div>            
 </template>
+
+<script setup>
+import { ref } from 'vue';
+
+const searchQuery = ref(""); // Để lưu trữ từ khóa tìm kiếm
+
+// Hàm xử lý sự kiện khi bấm nút Search
+const performSearch = () => {
+  if (searchQuery.value) {
+    window.location.assign(`/search?q=${searchQuery.value}`); // Sử dụng window.location.assign để chuyển hướng
+  } else {
+    alert("Please enter a search query.");
+  }
+};
+</script>
 
 <script>
     export default {
@@ -16,15 +31,6 @@
             name: String
         }
     }
-</script>
-
-<script setup>
-import { ref, onMounted, watch, nextTick } from 'vue';
-import destinationViewModel from '../viewModels/Restaurant_ListViewModel';
-  
-const {
-    searchQuery
-} = destinationViewModel();
 </script>
 
 <style scoped>

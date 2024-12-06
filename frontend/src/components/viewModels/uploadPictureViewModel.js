@@ -1,23 +1,22 @@
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
+import { getDestinationById } from '../models/destinationModel.js';
+import { addImage } from '../models/ReviewModel';
 
-import {  ImageModel } from '../models/uploadPictureModel.js';
+export default function(destinationID) {
+  const destination = ref();
+  const loadDestination = async () => {
+    try {
+      destination.value = await getDestinationById(destinationID);
+    } catch (error) {
+      console.error("Có lỗi xảy ra khi lấy dữ liệu destination:", error);
+    }
+  };
 
+  loadDestination();
+  const photos = ref([]);
+  const photoPreviews = ref([]);
 
-const isMenuVisible = ref(false)
-const toggleMenu = () => {
-  isMenuVisible.value = !isMenuVisible.value;
-  console.log(isMenuVisible);
-}
-
-
-const images = ref([]);
-const fetchImages = async () => {
-  images.value = await ImageModel.fetchImages();
-};
-
-const photos = ref([]);
-const photoPreviews = ref([]);
-const handlePhotoUpload = (event) => {
+  const handlePhotoUpload = (event) => {
     const files = Array.from(event.target.files);
     
     files.forEach((file) => {
@@ -31,20 +30,25 @@ const handlePhotoUpload = (event) => {
       reader.readAsDataURL(file);
     });
   };
-const submitReview = () => {
+
+  const submitReview = async () => {
     console.log({
+      place: destination.value.name,
       photos: photos.value,
     });
-};
+    for (let image of photos.value) {
+      const result = await addImage(destination.value.id, image);
+      console.log(result);
+    }
+      window.history.back();
+  };
 
-fetchImages();
+  return {
+    destination,
+    photos,
+    photoPreviews,
+    handlePhotoUpload,
+    submitReview,
+  };
+}
 
-export { 
-  images,
-  isMenuVisible,
-  toggleMenu,
-  photos,
-  handlePhotoUpload,
-  submitReview,
-  photoPreviews,
-};

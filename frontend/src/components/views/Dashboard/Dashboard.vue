@@ -1,6 +1,11 @@
 <template>
     <div class="container-fluid">
+<<<<<<< HEAD
         <Header></Header>
+=======
+        <Header />
+        <Top_Button v-if="isTopButtonVisible" />
+>>>>>>> 791efc5a2a050f1d64e213f9ecd3fe990e13cba4
     </div>
 
     <Carousel_For_Dashboard/>
@@ -72,8 +77,14 @@
 
 <script setup>
 import { useRouter } from 'vue-router';
+<<<<<<< HEAD
 import dashboardViewModel from '../../viewModels/dashboardViewModel.js';
 
+=======
+import { ref, onMounted, onUnmounted } from 'vue';
+import dashboardViewModel from '../../viewModels/dashboardViewModel.js';
+const isTopButtonVisible = ref(false);
+>>>>>>> 791efc5a2a050f1d64e213f9ecd3fe990e13cba4
 // Sử dụng useRouter để lấy đối tượng router trong component
 const router = useRouter();
 
@@ -87,8 +98,25 @@ const {
 } = dashboardViewModel;
 
 const navigateToDestination = (id) => {
+<<<<<<< HEAD
   window.location.assign(`/Destination_Final/${id}`);
 };
+=======
+  window.location.assign(`/Destination/${id}`);
+};
+
+const handleScroll = () => {
+  isTopButtonVisible.value = window.scrollY > 300;
+};
+
+onMounted(() => {
+  window.addEventListener('scroll', handleScroll);
+});
+
+onUnmounted(() => {
+  window.removeEventListener('scroll', handleScroll);
+});
+>>>>>>> 791efc5a2a050f1d64e213f9ecd3fe990e13cba4
 </script>
 
 <script>
@@ -97,6 +125,7 @@ const navigateToDestination = (id) => {
     import Search_Btn_Big from '../Search_Btn_Big.vue';
     import Tag_Button from './Tag_Button.vue';
     import Control_Button from './Control_Button.vue';
+<<<<<<< HEAD
     import Carousel_For_Dashboard from '../../views/Carousel_For_Dashboard.vue';
     import Img_Card from '../Img_Card.vue';
     import Img_Card_2 from '../Img_Card_2.vue';
@@ -104,17 +133,33 @@ const navigateToDestination = (id) => {
     export default {
   watch: {
   },
+=======
+    import Carousel_For_Dashboard from './Carousel_For_Dashboard.vue';
+    import Img_Card from '../Img_Card.vue';
+    import Img_Card_2 from '../Img_Card_2.vue';
+    import Swiper_Tour from './Swiper_Tour.vue';
+    import Top_Button from '../Top_Button.vue';
+    export default {
+>>>>>>> 791efc5a2a050f1d64e213f9ecd3fe990e13cba4
         name: "Dashboard",
         components: {
             Header, Scroll_Bar_Component, Search_Btn_Big, Tag_Button,
             Control_Button, Carousel_For_Dashboard, Img_Card,
+<<<<<<< HEAD
             Img_Card_2, Swiper_Tour
+=======
+            Img_Card_2, Swiper_Tour, Top_Button
+>>>>>>> 791efc5a2a050f1d64e213f9ecd3fe990e13cba4
         }
     }
 
 </script>
 
 <style scoped>
+<<<<<<< HEAD
+=======
+
+>>>>>>> 791efc5a2a050f1d64e213f9ecd3fe990e13cba4
 .search-btn {
     margin-top: -65px;
     margin-bottom: 100px;

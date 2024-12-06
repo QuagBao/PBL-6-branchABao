@@ -1,8 +1,8 @@
 import { ref, onMounted, watch, nextTick, computed } from 'vue';
-import ThingtodoModel from '../models/ThingToDo_ListModel';
+import { fetchCities } from '../models/CityModel'
+import { fetchAttractions } from '../models/destinationModel';
 
 export default function () {
-  const model = ThingtodoModel();
 
   const isMenuVisible = ref(false);
   const toggleMenu = () => {
@@ -15,8 +15,8 @@ export default function () {
   const liked = ref({});
 
   onMounted(async () => {
-    attractions.value = await model.fetchEntertainments();
-    cities.value = await model.fetchCities();
+    attractions.value = await fetchAttractions();
+    cities.value = await fetchCities();
   });
 
   const currentIndexCity = ref(0);
@@ -45,10 +45,6 @@ export default function () {
     if (currentIndexAttraction.value < attractions.value.length - 4) currentIndexAttraction.value++;
   };
 
-  const generateStars = (rating) => {
-    return model.generateStars(rating);
-  };
-
   const getImageUrl = (imageUrl) => {
     return new URL(imageUrl, import.meta.url).href;
   };
@@ -58,23 +54,15 @@ export default function () {
     console.log(`Item ID: ${id}, Liked: ${liked.value[id]}`);
   };
 
-
-
-  
-
-  
-
-  
+  const heartFull = new URL('@/assets/svg/heart-full.svg', import.meta.url).href;
+  const heartEmpty = new URL('@/assets/svg/heart-none.svg', import.meta.url).href;
 
   return {
     isMenuVisible,
     toggleMenu,
-    generateStars,
     getImageUrl,
     liked,
     toggleLikeStatus,
-    heartFull: model.heartFull,
-    heartEmpty: model.heartEmpty,
     searchQuery,
     cities,
     visibleCities,
@@ -84,5 +72,7 @@ export default function () {
     visibleAttraction,
     prevAttraction,
     nextAttraction,
+    heartFull,
+    heartEmpty,
   };
 }

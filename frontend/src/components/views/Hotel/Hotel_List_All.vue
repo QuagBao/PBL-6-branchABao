@@ -1,55 +1,151 @@
 <template>
     <div class="container-fluid">
-        <Header/>
-        <Top_Button/>
+      <Header />
+      <Top_Button />
     </div>
-
+  
     <!-- Images -->
-    <img src="@/assets/images/hotel_background.jpg" alt="City 1" class="img-fluid">
+    <img src="@/assets/images/tms-hotel-da-nang-beach.jpg" alt="City 1" class="img-fluid" />
     <!-- Search -->
     <div class="container-fluid search">
-        <div class="container">
-            <Form_Search    :name_of_page="'Find your perfect restaurant'"
-                            :name="'Hotel name or destination'"/>
-        </div>
+      <div class="container">
+        <Form_Search :name_of_page="'Find your perfect place to stay'" :name="'Attraction, activities or destination'" />
+      </div>
     </div>
-
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-5">
-                <Filter_Option :filterType="'hotel'" class="left-panel"/>
+  
+    <div class="content">
+      <div class="row">
+        <div class="col-5">
+          <div class="container left-panel">
+            <div class="filter-section">
+              <!-- Cuisine Filter -->
+              <div
+                class="filter-item"
+                @click="toggleOptions('amenities')"
+                :class="{ active: activeOptions.amenities }"
+              >
+                Amenities
+                <div class="icon"></div>
+              </div>
+              <div v-if="activeOptions.amenities" class="options">
+                <div v-for="option in amenities_options" :key="option" class="option">
+                  <input
+                    type="checkbox"
+                    :id="`amenities-${option}`"
+                    :checked="save_option_amenities.includes(option)"
+                    @change="handleCheckboxChange(option, 'save_option_amenities')"
+                  />
+                  <label class="label" :for="`amenities-${option}`">{{ option }}</label>
+                </div>
+              </div>
+  
+              <!-- Meal Filter -->
+              <div
+                class="filter-item"
+                @click="toggleOptions('hotel_star')"
+                :class="{ active: activeOptions.hotel_star }"
+              >
+                Hotel star
+                <div class="icon"></div>
+              </div>
+              <div v-if="activeOptions.hotel_star" class="options">
+                <div v-for="option in hotel_star_options" :key="option" class="option">
+                  <input
+                    type="checkbox"
+                    :id="`hotel_star-${option}`"
+                    :checked="save_option_hotel_star.includes(option)"
+                    @change="handleCheckboxChange(option, 'save_option_hotel_star')"
+                  />
+                  <label class="label" :for="`hotel_star-${option}`">{{ option }}</label>
+                </div>
+              </div>
+  
+              <!-- Special Diet Filter -->
+              <div
+                class="filter-item"
+                @click="toggleOptions('price_range')"
+                :class="{ active: activeOptions.price_range }"
+              >
+                Price Range
+                <div class="icon"></div>
+              </div>
+              <div v-if="activeOptions.price_range" class="options">
+                <div v-for="option in price_range_options" :key="option" class="option">
+                  <input
+                    type="checkbox"
+                    :id="`priceRange-${option}`"
+                    :checked="save_option_price_range.includes(option)"
+                    @change="handleCheckboxChange(option, 'save_option_price_range')"
+                  />
+                  <label class="label" :for="`priceRange-${option}`">{{ option }}</label>
+                </div>
+              </div>
             </div>
-            <div class="col-7 list-hotels">
-                <Card_Item v-for="(item, index) in entertainments"
-                            :key="index"
-                            :imageUrl="getImageUrl(item.imageUrl)"
-                            :name="item.name"
-                            :rating="generateStars(item.rating)"
-                            :reviewNumber="item.reviewNumber"
-                            :tags="item.tag"/>
-            </div>
+          </div>
         </div>
+        <div class="col-7 list-hotels">
+          <Card_Item
+            v-for="(item, index) in hotels"
+            :key="index"
+            :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
+            :name="item.name"
+            :stars="generateStars(item.rating)"
+            :rating="item.rating"
+            :reviewNumber="item.numOfReviews"
+            :tags="item.tag"
+            @click="navigateToDetailHotel(item.hotel_id)"
+          />
+        </div>
+      </div>
     </div>
-
-    
- </template>
+  </template>
 
 <script setup>
 import { ref, onMounted, watch, nextTick } from 'vue';
-import destinationViewModel from '../../viewModels/Restaurant_ListViewModel';
+import destinationViewModel from '../../viewModels/Hotel_ListViewModel';
+import generateViewModel from '../../viewModels/generate_ratingViewModel';
 
 const {
-    isMenuVisible, toggleMenu,
-    buttons, selectedIndices, selectButton,
-    entertainments, generateStars, getImageUrl,
-    liked, toggleLikeStatus, heartFull, heartEmpty,
-    currency, minPrice, maxPrice, setupSlider, updatePrice, handleCurrencyChange,
-    activeOption, toggleOptions,
+    filterHotels,
+    isMenuVisible,
+    toggleMenu,
+    hotels,
+    liked,
     searchQuery,
-    updateSliderFromInput
+    activeOptions,
+    toggleOptions,
+    feature_options,
+    amenities_options,
+    hotel_star_options,
+    price_range_options,
+    save_option_price_range,
+    save_option_amenities,
+    save_option_hotel_star,
+    handleCheckboxChange,
 } = destinationViewModel();
+onMounted(async () => {
+    await filterHotels();
+  });
 
+  watch(
+  [save_option_price_range, save_option_amenities, save_option_hotel_star],
+  async () => {
+    // Gọi hàm async bên trong mà không trả về Promise từ callback
+    await filterHotels();
+  }
+);
+const {
+    circles,
+    rating,
+    ratings,
+    generateCircle,
+    generateStars,
+    totalRating,
+  } = generateViewModel();
 
+const navigateToDetailHotel = (hotel_id) => {
+        window.location.assign(`/Detail/Hotel/${hotel_id}`);
+    };
 </script>
 
 <script>
@@ -73,14 +169,14 @@ const {
 body {
     background-color: #EDF6F9;
 }
-
 .img-fluid {
     margin-top: 200px;
-    width: 1600px;
+    width: 100vw;
     padding: 0px;
     height: 600px;
     border-radius: 25px;
     box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);
+    margin-bottom: 50px;
 }
 .search{
     margin-top: -25%;
@@ -91,7 +187,7 @@ body {
     flex-direction: column;
     color: #13357B;
     font-size: 28px;
-    margin-top: 15px;
+    padding-top: 20px;
 }
 .content p{
     font-weight: 900;
@@ -100,6 +196,14 @@ body {
 .list-items {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
+    gap: 30px;
+    align-items: center;
+    width: 95%;
+    height: 100%;
+}
+.list-items-1 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     gap: 30px;
     align-items: center;
     width: 95%;
@@ -116,6 +220,142 @@ body {
 .left-panel{
     position: sticky;
     top: 160px;
+    width: 70%;
+}
+.filter-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    margin-top: 0px;
+    padding: 30px;
+    border-radius: 25px;
+    box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);
+}
+.filter-item {
+    position: sticky;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 20px;
+    background-color: #CAF0F8;
+    box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);
+    color: #13357B;
+    font-weight: bold;
+    cursor: pointer;
+    border-radius: 15px;
+    transition: background-color 0.3s;
+    gap: 50px;
+    font-size: 25px;
+    width: 100%;
+}
+.filter-item svg{
+    stroke: #13357B;
+}
+.filter-item:hover {
+    background-color: #13357B;
+    color: #EDF6F9;
+}
+.filter-item:hover svg{
+    stroke: #EDF6F9;
+}
+.filter-item.active {
+    background-color: #13357B;
+    color: #e7c6ff;
+}
+.filter-item.active svg{
+    stroke: #e7c6ff;
+    transform: rotate(180deg);
+}
+.options {
+    display: flex;
+    flex-direction: column;
+    padding: 25px;
+    background-color: #EDF6F9;
+    border-radius: 8px;
+    width: 100%;
+    min-width: 400px;
+    gap: 20px;
+    max-height: 280px; /* Set a maximum height for the scroll area */
+    overflow-y: auto;  /* Enable vertical scroll */
+}
+.option{
+    display: flex;
+    padding: 20px;
+    gap: 10px;
+    background-color: #EDF6F9;
+    border-radius: 10px;
+}
+.option label{
+    color: #13357B;
+    font-size: 20px;
+}
+.option input[type="checkbox"]  {
+    appearance: none;
+    background-color: #EDF6F9;
+    margin-right: 10px;
+    border: 2px solid #13357B;
+    width: 25px;
+    height: 25px;
+    border-radius: 25%;
+    align-items: center; /* Căn giữa nội dung */
+    position: relative; /* Để pseudo-element ::after hoạt động đúng */
+}
+.option input[type = "checkbox"]:checked { 
+    background-color: #13357B;
+}
+.option input[type = "checkbox"]:checked +label { 
+    font-weight: 900;
+}
+.option input[type = "checkbox"]:checked::after { 
+    content: "\2714";
+    color: #EDF6F9;
+    font-size: 15px;
+    font-weight: bold;
+    position: absolute; /* Để kiểm soát vị trí của tick */
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Đưa dấu tick vào giữa checkbox */
+}
+.option:hover {
+    background-color: #00b4d8;
+}
+.option:hover label{
+    color: #EDF6F9;
+    font-weight: 800;
+}
+.option.active {
+    background-color: #13357B;
+    font-weight: 800;
+    color: #e7c6ff;
+}
+.option.active label{
+    color: #e7c6ff;
+    font-weight: 800;
+}
+.checked {
+    /* Background color when checked */
+    background-color: #CAF0F8;
+}
+.checked label{
+    color: #13357B;
+    font-weight: 900;
+}
+
+.icon {
+    width: 30px;
+    height: 30px;
+    background-image: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2313357B'><path d='M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+}
+.filter-item:hover .icon {
+    background-image: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23EDF6F9'><path d='M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+}
+.filter-item.active .icon {
+    background-image: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23E7C6FF'><path d='M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>");
 }
 </style>
 

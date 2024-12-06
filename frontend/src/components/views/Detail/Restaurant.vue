@@ -1,29 +1,47 @@
 <template>
     <div class="container-fluid">
         <Header/>
-        <Top_Button/>
+        <Top_Button v-if="restaurant" :cityID="restaurant.address.city_id"/>
     </div> 
 
-    <div class="container-fluid info-place">
+    <div class="container-fluid info-place" v-if="isLoading">
         <div class="container-fluid row">
             <div class="col-10 information">
-                <div class="container name-of-place">Văn Miếu Quốc Tử Giám</div>
+                <div class="name-of-place">{{ restaurant.name }}</div>
                 <div class="container rating-review">
                     <div class="rating">
-                        <div v-for="(circle, index) in circles" :key="index" class="circle">
-                            <img :src="circle" alt="Circle" /> 
+                        <div v-for="(star, index) in generateStars(restaurant.rating)" :key="index" class="circle">
+                            <img :src="star" alt="Circle" /> 
                         </div>
                     </div>
                     <div class="reviews">
-                        {{ totalRating }} Reviews
+                        {{ restaurant.numOfReviews }} Reviews
                     </div>
                 </div>
-                <button class="write-review">Write review </button>
+                <div>
+                    <button 
+                        v-if="token && restaurant.user_id == user?.id" 
+                        @click="navigateToUpdateDestination(restaurant.id)" 
+                        class="write-review"
+                    >
+                        Update Place 
+                    </button>
+                    <button 
+                        v-if="token && restaurant.user_id == user?.id" 
+                        @click="navigateToUpdateRestaurant(restaurant.id)" 
+                        class="write-review"
+                    >
+                        Update Restaurant Detail 
+                    </button>
+                </div>
+                
             </div>
         </div>
+
+        
         
         <div class="row">
-            <Carousel :currentImage="currentImage" :images="images_1"/>
+            <Carousel :currentImage="currentImage" :images="images"/>
         </div>
         
         <div class="container-fluid location">
@@ -36,11 +54,11 @@
                                     <div class="map"><p>Map</p></div>
                                     <div class="container frame location">
                                         <i class="icon-location"></i>
-                                        <p>18 Phan Boi Chau Street, Hoan Kiem Dist, Hanoi</p>
+                                        <p v-if="restaurant.address">{{ restaurant.address.street }}, {{ restaurant.address.ward }}, {{ restaurant.address.district }}, {{ city.name }}</p>
                                     </div>
                                     <div class="container frame phone">
                                         <i class="icon-phone"></i>
-                                        <p>+84 90 324 69 63</p>
+                                        <p></p>
                                     </div>
                                 </div>
                             </div>
@@ -51,24 +69,24 @@
                                     <div class="details-grid">
                                         <div class="detail-item">
                                             <h5>PRICE RANGE</h5>
-                                            <p>0.000 ~ 250.000 VND</p>
+                                            <p>${{ restaurant.price_bottom || 0 }} - ${{ restaurant.price_top || "N/A" }}</p>
                                         </div>
                                         <div class="detail-item">
                                             <h5>SPECIAL DIETS</h5>
-                                            <p>Vegetarian friendly, Vegan options, Gluten free options</p>
+                                            <p>{{ restaurant.restaurant.special_diet || "N/A" }}</p>
                                         </div>
                                         <div class="detail-item">
                                             <h5>CUISINES</h5>
-                                            <p>Vietnamese</p>
+                                            <p>{{ restaurant.restaurant.cuisine || "N/A" }}</p>
                                         </div>
                                         <div class="detail-item">
                                             <h5>MEALS</h5>
-                                            <p>Breakfast, Lunch, Dinner, Brunch, Late Night</p>
+                                            <p>{{ restaurant.restaurant.meal || "N/A" }}</p>
                                         </div>
                                     </div>
                                     <div class="detail-item full-width">
                                         <h5>FEATURES</h5>
-                                        <p>Delivery, Takeout, Reservations, Outdoor Seating, Buffet, Seating, Highchairs Available, Wheelchair Accessible, Serves Alcohol, Full Bar, Wine and Beer, Accepts Mastercard, Accepts Visa, Cash Only, Free Wifi, Accepts Credit Cards, Table Service</p>
+                                        <p>{{ restaurant.restaurant.feature || "N/A" }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -78,11 +96,13 @@
             </div>
         </div>
         <div class="container-fluid contribute">
-            <Contribute :rating="rating"
-                        :circles="circles"
+            <Contribute :rating="restaurant.rating"
                         :ratings="ratings"
                         :commentList="commentList"
-                        :stars = "generateCircle()"/>
+                        :destination_id="restaurant.id"
+                        :user="user?.id||0"
+                        :description="restaurant.description"
+                        :stars = "generateStars(restaurant.rating)"/>
         </div>
     </div>
 
@@ -90,14 +110,48 @@
 </template>
 
 <script setup>
-import { circles,rating, ratings, commentList, 
-  generateCircle, images, images_1, currentImage, nextImage, 
-  prevImage,totalRating, isDropdownVisible, 
-  toggleDropdown, isMenuVisible, toggleMenu, 
-  truncatedDescription, toggleReadMore, 
-  isReadMore,
-} from '../../viewModels/detailLocation_AttractionViewModel.js';
+  import { useRoute } from 'vue-router';
+  import restaurantViewModel from '../../viewModels/detailLocation_RestaurantViewModel.js';
+  import generateViewModel from '../../viewModels/generate_ratingViewModel';
 
+  // Lấy thông tin từ route
+  const route = useRoute();
+  const restaurantID = route.params.id; // Lấy destinationID từ route params
+
+  // Destructure các giá trị từ destinationViewModel
+  const {
+    commentList,
+    images,
+    currentImage,
+    nextImage,
+    prevImage,
+    isDropdownVisible,
+    toggleDropdown,
+    isMenuVisible,
+    toggleMenu,
+    restaurant,
+    city,
+    isLoading,
+    user,
+  } = restaurantViewModel(restaurantID);
+
+  const {
+    circles,
+    rating,
+    ratings,
+    generateCircle,
+    generateStars,
+    totalRating,
+  } = generateViewModel();
+
+  const navigateToUpdateDestination = (id) => {
+  window.location.assign(`/Business/Destination/Update/${id}`);
+};
+const navigateToUpdateRestaurant = (id) => {
+  window.location.assign(`/Business/Restaurant/Update/${id}`);
+};
+
+  // Các hàm hoặc logic bổ sung có thể được thêm vào nếu cần
 </script>
 
 <script>
@@ -180,7 +234,6 @@ export default {
 .contact{
     background-color: #EDF6F9;
     padding: 30px;
-    color: #13357B;
     border-radius: 20px;
     box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);
     margin-bottom: 50px;
@@ -189,6 +242,30 @@ export default {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
     gap: 20px;
+}
+.restaurant-detail {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.section-title {
+    color: #13357B;
+    font-weight: 800;
+    font-size: 25px;
+    margin-bottom: 10px;
+}
+
+.detail-item h5 {
+    color: #13357B;
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 10px;
+}
+.detail-item p {
+    color: #13357B;
+    font-size: 16px;
+    margin-bottom: 10px;
 }
 .detail-item {
   width: calc(100%);
@@ -200,7 +277,6 @@ export default {
 .details {
     background-color: #EDF6F9;
     padding: 20px;
-    color: #13357B;
     border-radius: 20px;
     box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);
     margin-bottom: 50px;
@@ -209,10 +285,6 @@ export default {
     display: flex;
     gap: 20px;
 }
-.restaurant-detail {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
+
 </style>
 

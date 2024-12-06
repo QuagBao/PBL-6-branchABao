@@ -15,7 +15,7 @@
             <button
               class="nav-item nav-link"
               :class="{ active: state.activeButton === 'home' }"
-              @click="handleButtonClick('home', '/Dashboard_Final')"
+              @click="handleButtonClick('home', '/home')"
             >
               Home
             </button>
@@ -57,7 +57,7 @@
               <div class="dropdown-menu m-0">
                 <button class="dropdown-item" @click="handleButtonClick('profile', '/Profile_Page')">My Profile</button>
                 <button class="dropdown-item">Account Settings</button>
-                <button class="dropdown-item">Logout</button>
+                <button class="dropdown-item" @click="handleLogout">Logout</button>
               </div>
             </div>
           </div>
@@ -67,7 +67,7 @@
   </template>
   
   <script>
-  import useHeaderViewModel from "../viewmodels/headerViewmodel.js";
+  import useHeaderViewModel from "../viewModels/headerViewModel";
   
   export default {
     setup() {
@@ -77,10 +77,18 @@
         setActiveButton(buttonName);
         navigateToPage(route);
       };
+
+      const handleLogout = () => {
+        // Xóa token khỏi session storage
+        sessionStorage.removeItem('access-token');
+        // Chuyển hướng về trang login
+        navigateToPage('/login');
+      };
   
       return {
         state,
         handleButtonClick,
+        handleLogout,
       };
     },
   };
@@ -121,13 +129,17 @@ body{
 }
 
 .navbar-light .navbar-nav .nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
-    padding: 35px 25px;
+    height: 100px;
+    padding: 35px 15px;
     color: #8da9c4 !important;
-    font-size: 20px;
-    font-weight: 400;
+    font-size: 1.5rem;
+    font-weight: 500;
     outline: none;
-    transition: .5s;
+    transition: .3s;
 }
 
 .navbar-light .navbar-nav .nav-link:hover,

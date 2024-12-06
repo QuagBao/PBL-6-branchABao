@@ -1,63 +1,114 @@
 <template>
     <div class="container-fluid">
         <Header/>
-        <Top_Button v-if="cityDetails && cityDetails.name" :name="cityDetails.name"/>
+        <Top_Button v-if="cityId" :cityID="parseInt(cityId, 10)"/>
     </div>
 
     <!-- Images -->
     <div class="container-fluid overall">
         <div class="image-container">
             <div class="base"></div>
-            <img src="@/assets/images/thingstodo_2.avif" alt="City 1" class="img-fluid">
+            <img :src="city?.images?.[0]?.url || '/blue-image.jpg'" alt="City 1" class="img-fluid">
         </div>
         <div class="overall-container">
             <div class="text-container">
-                <h1>Things to do in Ha Noi</h1>
+                <h1>Things to do in {{ city?.name || 'Loading...' }}</h1>
                 <p>Check out must-see sights and activities:</p>
             </div>
         </div>
     </div>
 
-    <div class="container-fluid catagory">
-        <Btn_Catagory/>
+    <div class="container btn-catagory">
+            <Swiper class="swiper"
+                :slides-per-view="4"
+                :spaceBetween="10"
+                :scrollbar="{ draggable: true }"
+                :modules="modules">
+                <SwiperSlide v-for="item in buttons" :key="item.id">
+                    <button class="button-category" 
+                            :class="{ selected: selectedIndices.includes(item.id) }" 
+                            @click="selectButton(item.id)">
+                        {{ item.name }}
+                    </button>
+                </SwiperSlide>
+            </Swiper>
     </div>
 
     <div class="container-fluid p-4">
         <div class="container p-2">
-            <h1 class="title">Top Attraction in Ha Noi</h1>
+            <h1 class="title">Top Attraction in {{ city?.name || 'Loading...' }}</h1>
         </div>
     </div>
 
     <div class="container-fluid context list-items-1">
-        <Info_Card v-for="(item, index) in entertainments"
+        <Info_Card v-for="(item, index) in filteredDestinations"
                 :key="index"
-                :imageUrl="getImageUrl(item.imageUrl)"
+                :imageUrl="item.images[0].url||'/blue-image.jpg'"
                 :name="item.name"
-                :rating="generateStars(item.rating)"
-                :review-number="item.reviewNumber"
+                :rating= "item.rating"
+                :stars="generateStars(item.rating)"
+                :review-number="item.numOfReviews"
                 :tags="item.tag"
-                :description="item.description"/>
+                :description="item.description"
+                @click="navigateToDetailPlace(item.id)"/>
     </div>
  </template>
 
 <script setup>
-import destinationViewModel from '../../viewModels/city_ThingToDo_ListViewModel';
+import destinationViewModel from '../../viewModels/ThingToDo_City_ListViewModel';
+import generateViewModel from '../../viewModels/generate_ratingViewModel';
+import { ref, computed, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/scrollbar';
+
+const modules = [Navigation, Pagination, Scrollbar, A11y];
+
+const route = useRoute();
+const cityId = route.params.id; // Lấy cityId từ route params
 
 const {
-    images,
     isMenuVisible,
     toggleMenu,
+    fetchCityDetailsData,
+    fetchTags,
+    fetchDestinationsData,
     buttons,
     selectedIndices,
     selectButton,
-    entertainments,
-    generateStars,
-    getImageUrl,
+    
+    destinations,
+    filteredDestinations,
+    city,
     liked,
     toggleLikeStatus,
     heartFull,
     heartEmpty,
-} = destinationViewModel();
+    truncatedDescription,
+} = destinationViewModel(cityId);
+
+onMounted(() => {
+    fetchCityDetailsData();
+    fetchDestinationsData();
+    fetchTags();
+});
+
+const {
+    circles,
+    rating,
+    ratings,
+    generateCircle,
+    generateStars,
+    totalRating,
+  } = generateViewModel();
+const navigateToDetailPlace = (id) => {
+    window.location.assign(`/Detail/Place/${id}`);
+};
 </script>
 
 <script>
@@ -135,6 +186,49 @@ body {
 }
 .catagory{
     margin: 40px 0 -10px 0;
+}
+.swiper {
+    width: 100%;
+    max-width: 1450px; /* Set a max-width to ensure enough space for 3 slides */
+}
+
+.swiper-slide {
+    color: #13357B;
+    background-color: #EDF6F9;
+    text-align: center;
+    margin: 20px 0; 
+}
+
+.button-category{
+    color: #13357B;
+    width: 80%;
+    padding: 8px 16px;
+    border: 1px solid #13357B;
+    border-radius: 40px;
+    cursor: pointer;
+    background-color: #EDF6F9;
+    transition: background-color 0.3s ease;
+}
+
+.button-category:hover {
+    background-color: #0077b6;
+    color: #EDF6F9 
+}     
+.button-category.selected {
+    background-color: #13357B;
+    color: #EDF6F9;
+}
+</style>
+
+<style>
+.swiper .swiper-scrollbar {
+    background-color: #EDF6F9 !important;
+    border: 1px solid #13357B !important;
+    height: 6px !important;
+}
+
+.swiper .swiper-scrollbar-drag {
+    background-color: #13357B !important;
 }
 </style>
 

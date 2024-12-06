@@ -21,9 +21,9 @@
       <button type="submit">Sign up</button>
 
       <!-- Options -->
-      <h4 style="font-family: 'roboto'; color: #EDF6F9; padding-top: 10px;">
+      <p style="font-family: 'roboto'; color: #EDF6F9; padding-top: 10px;">
         Already have an account? <router-link class="sign-in-link" to="/login">Sign in here</router-link>
-      </h4>
+      </p>
   
     </form>
   </div>
@@ -49,12 +49,7 @@
           password: this.password,
           password_confirm: this.password_confirm
         });
-        const result = signUpVM.validate();
-        if (result.success) {
-          alert('Sign up successfully');
-        } else {
-          alert(result.message);
-        }
+        signUpVM.validate();
       },
     },
   };
@@ -102,12 +97,32 @@ html, body {
   color: #EDF6F9; /* Màu chữ */
 }
 
-.container{
-  position: relative;
-  top:150px;
-  left:300px;
-  font-family: 'Roboto';
+.container {
+  position: absolute;
+  top: calc(10% + 10px); /* Đảm bảo khoảng cách tương đối với viewport */
+  right: 20%; /* Cách phải 20% */
+  max-width: 400px;
+  width: 100%;
   text-align: center;
+}
+
+/* Responsive cho màn hình nhỏ */
+@media (max-width: 768px) {
+  .container {
+    top: 50%; /* Đưa form vào giữa chiều dọc */
+    left: 50%; /* Đưa form vào giữa chiều ngang */
+    right: auto; /* Xóa định nghĩa right */
+    transform: translate(-50%, -50%); /* Căn chính xác giữa màn hình */
+    max-width: 90%; /* Đảm bảo form không vượt quá chiều ngang màn hình */
+  }
+}
+
+/* Điều chỉnh cho màn hình rất lớn hoặc scale cao */
+@media (min-height: 1400px) and (min-width: 2560px) {
+  .container {
+    top: calc(10% + 50px); /* Giảm khoảng cách top để phù hợp với scale */
+    right: 15%; /* Cách phải 15% để giữ sự cân đối */
+  }
 }
 
 .title {

@@ -5,7 +5,8 @@
                 <p>Contribute</p>
             </div>
             <div class="container-fluid">
-                <button class="write-review">Write Review</button>
+                <button class="write-review" @click="writeReview(destination_id)">Write Review</button>
+                <button class="write-review" @click="uploadPicture(destination_id)">Upload Picture</button>
             </div>
         </div>
 
@@ -19,8 +20,8 @@
                     <div class="rating">
                         <h2>{{ rating }}</h2>
                         <div class="circle-container">
-                            <div v-for="(circle, index) in circles" :key="index">
-                                <img :src="circle" alt="Circle" class="circle"/>
+                            <div v-for="(star, index) in stars" :key="index">
+                                <img :src="star" alt="Star" class="star"/>
                             </div>
                         </div>
                     </div>
@@ -34,6 +35,10 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+                    <div class="description-container" v-if="description">
+                        <h3 class="description-title">About the Place</h3>
+                        <span class="description-content">{{ description }}</span>
                     </div>
                 </div>
 
@@ -50,16 +55,18 @@
                         </div>
                     </div>
 
-                    <div class="container-fluid comment-list">
-                        <div v-for="comment in commentList" :key="comment.user" class="comment"  >
-                            <A_Comment :imageUrl="comment.personalImage"
-                                        :userName="comment.user"
-                                        :circles= "generateCircle(comment.rating)"
+                    <div v-if="commentList && commentList.length > 0" class="container-fluid comment-list">
+                        <div v-for="comment in commentList" :key="comment.id" class="comment"  >
+                            <A_Comment :imageUrl="comment.user?.userInfo?.image?.url || ''"
+                                        :userName="comment.user?.username || 'Unknown User'"
+                                        :stars= "generateStars(comment.rating)"
                                         :title="comment.title"
-                                        :date_comment="comment.day"
-                                        :comment="comment.comment"
-                                        :condition="comment.picture"
-                                        :URL="comment.picture"/>
+                                        :date_comment="comment.date_create"
+                                        :comment="comment.content"
+                                        :condition="comment.images"
+                                        :canedit="comment.user_id === user"
+                                        :id="comment.id"
+                                        :URL="comment.images"/>
                         </div>
                     </div>
                 </div>
@@ -68,23 +75,56 @@
     </div>
 </template>
 <script setup>
-import { generateCircle } from '../viewModels/detailLocation_AttractionViewModel';
-</script>
-<script>
-
+import { computed } from 'vue';
+import generateViewModel from '../viewModels/generate_ratingViewModel';
+// Lấy hàm tạo vòng tròn (circle)
+const { generateStars } = generateViewModel();
 import A_Comment from './A_Comment.vue';
-export default {
-    name: "Contribute",
-    props: {
-        rating:  Number,
-        circles : Array,
-        ratings : Object,
-        commentList : Array,
-    },
-    components: {
-        A_Comment
-    },
-}
+
+const writeReview = (id) => {
+        window.location.assign(`/Review/Write/${id}`);
+    };
+const uploadPicture = (id) => {
+    window.location.assign(`/Review/Upload/${id}`);
+};
+// Khai báo các props
+defineProps({
+
+  rating: {
+    type: String,
+    required: true,
+  },
+  ratings: {
+    type: Object,
+    required: true,
+  },
+  circles: {
+    type: Array,
+    required: true,
+  },
+  stars: {
+    type: Array,
+    required: true,
+  },
+  commentList: {
+    type: Array,
+    required: true,
+  },
+  destination_id:{
+    type: Number,
+    required: true,
+  },
+  user:{
+    type: Number,
+    required: true,
+  },
+  description: {
+    type: String,
+    required: false,
+  },
+  
+  
+});
 </script>
 
 <style scoped>
@@ -199,5 +239,26 @@ input:focus{
 }
 .comment-list{
     margin-top: 50px;
+}
+.description-container {
+    margin-top: 30px;
+    background-color: #EDF6F9;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.15);
+}
+
+/* Tiêu đề của phần mô tả */
+.description-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #13357B;
+    margin-bottom: 10px;
+}
+
+/* Nội dung mô tả */
+.description-content {
+    font-size: 18px;
+    color: #24478f;
 }
 </style>

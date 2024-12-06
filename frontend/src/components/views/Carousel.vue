@@ -6,9 +6,15 @@
 
             <!-- The slideshow/carousel -->
             <div class="carousel-inner">
-                <div v-for="(image, index) in images" :key="index" :class="['carousel-item', { active: index === currentIndex }]">
-                    <img :src="image" :alt="`Image ${index + 1}`" class="img-fluid">
-                </div>
+                    <div v-for="(image, index) in images" :key="index" :class="['carousel-item', { active: index === currentIndex }]">
+                        <!-- Ensure image is a URL, otherwise access image.url if it's an object -->
+                        <img 
+                            :src="image?.url  || '/blue-image.jpg'" 
+                            :alt="`Image ${index + 1}`" 
+                            class="img-fluid" 
+                            loading="lazy"
+                        >
+                    </div>
             </div>
 
             <!-- Left and right controls/icons -->
@@ -73,7 +79,7 @@ export default {
 }
 .carousel-header .carousel-control-prev .carousel-control-prev-icon {
     display: flex;
-    margin-left: -148px;
+    margin-left: -12vw;
     padding: 25px 30px;
     border-top-left-radius: 0;
     border-top-right-radius: 50px;
@@ -84,7 +90,7 @@ export default {
 }
 .carousel-header .carousel-control-next .carousel-control-next-icon {
     display: flex;
-    margin-right: -148px;
+    margin-right: -12vw;
     padding: 25px 30px;
     border-top-left-radius: 50px;
     border-top-right-radius: 0;
@@ -92,24 +98,16 @@ export default {
     border-bottom-right-radius: 0;
     background-color: #13357B;
     background-size: 50% 50%;
-
 }
-.carousel-header .carousel .carousel-indicators button{
+.carousel-header .carousel .carousel-indicators button {
     opacity: 0;
 }
-.carousel-header .carousel-inner {
-    width: 1400px;
-    min-width: 500px;
-    margin: 0 auto;
-    border-radius: 20px;
-}
-.carousel-header .carousel-inner .carousel-item {
-    border-radius: 20px;
-}
 .carousel-header .carousel-inner .carousel-item img {
-    width: 1400px;
-    height: 700px;
+    width: 100vw;
+    height: calc(50vw);
+    max-height: 600px;
     object-fit: cover;
+    object-position: center;
     border-radius: 20px;
 }
 /*** Carousel Hero Header End ***/

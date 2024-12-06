@@ -1,29 +1,44 @@
 <template>
     <div class="container-fluid">
         <Header/>
-        <Top_Button/>
+        <Top_Button v-if="hotel" :cityID="hotel.address.city_id"/>
     </div> 
 
     <div class="container-fluid info-place">
         <div class="container-fluid row">
             <div class="col-10 information">
-                <div class="container name-of-place">Vinpearl Resort Nha Trang</div>
+                <div class="name-of-place">{{ hotel.name }}</div>
                 <div class="container rating-review">
                     <div class="rating">
-                        <div v-for="(circle, index) in circles" :key="index" class="circle">
-                            <img :src="circle" alt="Circle" /> 
+                        <div v-for="(star, index) in generateStars(hotel.rating)" :key="index" class="circle">
+                            <img :src="star" alt="Circle" /> 
                         </div>
                     </div>
                     <div class="reviews">
-                        {{ totalRating }} Reviews
+                        {{ hotel.numOfReviews }} Reviews
                     </div>
                 </div>
-                <button class="write-review">Write review </button>
+                <div>
+                    <button 
+                        v-if="token && hotel.user_id == user?.id" 
+                        @click="navigateToUpdateDestination(hotel.id)" 
+                        class="write-review"
+                    >
+                        Update Place 
+                    </button>
+                    <button 
+                        v-if="token && hotel.user_id == user?.id" 
+                        @click="navigateToUpdateHotel(hotel.id)" 
+                        class="write-review"
+                    >
+                        Update Hotel Detail 
+                    </button>
+                </div>
             </div>
         </div>
         
         <div class="row">
-            <Carousel :currentImage="currentImage" :images="images_1"/>
+            <Carousel :currentImage="currentImage" :images="images"/>
         </div>
         
         <div class="container-fluid location">
@@ -36,11 +51,11 @@
                                     <div class="map"><p>Map</p></div>
                                     <div class="container frame location">
                                         <i class="icon-location"></i>
-                                        <p>18 Phan Boi Chau Street, Hoan Kiem Dist, Hanoi</p>
+                                        <p v-if="hotel.address">{{ hotel.address.street }}, {{ hotel.address.ward }}, {{ hotel.address.district }}, {{ city.name }}</p>
                                     </div>
                                     <div class="container frame phone">
                                         <i class="icon-phone"></i>
-                                        <p>+84 90 324 69 63</p>
+                                        <p v-if="hotel.hotel.phone">{{ hotel.hotel.phone }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -51,28 +66,24 @@
                                     <div class="details-grid">
                                         <div class="detail-item">
                                             <h5>PRICE RANGE</h5>
-                                            <p>500.000 VNĐ ~ 30.000.000 VNĐ</p>
+                                            <p>${{ hotel.price_bottom || 0 }} - ${{ hotel.price_top || "N/A" }}</p>
                                         </div>
                                         <div class="detail-item">
-                                            <h5>HOTEL SERVICES & FACILITIES </h5>
-                                            <p>Facilities include multiple outdoor pools, a luxurious spa, fully equipped gym, restaurants, and bars</p>
-                                            <p>Additional services: Airport shuttle, car rental, guided tours, and laundry services.</p>
+                                            <h5>HOTEL Property Amenities </h5>
+                                            <p>{{ hotel.hotel.property_amenities || "N/A" }}</p>
                                         </div>
                                         <div class="detail-item">
-                                            <h5>HOTEL POLICIES</h5>
-                                            <p>Check-in/check-out: Typically, check-in is at 2:00 PM and check-out is by 12:00 PM</p>
-                                            <p>Cancellation policies vary depending on booking platforms. Children policies allow free stays for kids under certain ages, while pets are usually not allowed</p>
+                                            <h5>HOTEL Room Features</h5>
+                                            <p>{{ hotel.hotel.room_features || "N/A" }}</p>
                                         </div>
                                         <div class="detail-item">
-                                            <h5>ROOM TYPES AND CAPACITY</h5>
-                                            <p>Available room types include single rooms, double rooms, family rooms, and suites</p>
-                                            <p>Capacity: Some suites and villas can accommodate families, offering extra beds or cribs upon request</p>
+                                            <h5>Hotel Styles</h5>
+                                            <p>{{ hotel.hotel.hotel_styles || "N/A" }}</p>
                                         </div>
                                     </div>
                                     <div class="detail-item full-width">
-                                        <h5>ROOM AMENITIES</h5>
-                                        <p>Standard amenities include air conditioning, flat-screen TV, minibar, safety deposit box, private bathroom with toiletries, and free high-speed internet</p>
-                                        <p>Additional services: Daily housekeeping, 24/7 room service, and turndown service for certain room types</p>
+                                        <h5>Room Types</h5>
+                                        <p>{{ hotel.hotel.room_types || "N/A" }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -82,11 +93,13 @@
             </div>
         </div>
         <div class="container-fluid contribute">
-            <Contribute :rating="rating"
-                        :circles="circles"
+            <Contribute :rating="hotel.rating"
                         :ratings="ratings"
                         :commentList="commentList"
-                        :stars = "generateCircle()"/>
+                        :destination_id="hotel.id"
+                        :user="user?.id||0"
+                        :description="hotel.description"
+                        :stars = "generateStars(hotel.rating)"/>
         </div>
     </div>
 
@@ -94,14 +107,47 @@
 </template>
 
 <script setup>
-import { circles,rating, ratings, commentList, 
-  generateCircle, images, images_1, currentImage, nextImage, 
-  prevImage,totalRating, isDropdownVisible, 
-  toggleDropdown, isMenuVisible, toggleMenu, 
-  truncatedDescription, toggleReadMore, 
-  isReadMore,
-} from '../../viewModels/detailLocation_AttractionViewModel.js';
+  import { useRoute } from 'vue-router';
+  import hotelViewModel from '../../viewModels/detailLocation_HotelViewModel.js';
+  import generateViewModel from '../../viewModels/generate_ratingViewModel';
 
+  // Lấy thông tin từ route
+  const route = useRoute();
+  const destinationID = route.params.id; // Lấy destinationID từ route params
+
+  // Destructure các giá trị từ destinationViewModel
+  const {
+    commentList,
+    images,
+    currentImage,
+    nextImage,
+    prevImage,
+    isDropdownVisible,
+    toggleDropdown,
+    isMenuVisible,
+    toggleMenu,
+    hotel,
+    city,
+    isLoading,
+    user,
+  } = hotelViewModel(destinationID);
+
+  const {
+    circles,
+    rating,
+    ratings,
+    generateStars,
+    totalRating,
+  } = generateViewModel();
+
+  const navigateToUpdateDestination = (id) => {
+  window.location.assign(`/Business/Destination/Update/${id}`);
+};
+const navigateToUpdateHotel = (id) => {
+  window.location.assign(`/Business/Hotel/Update/${id}`);
+};
+
+  // Các hàm hoặc logic bổ sung có thể được thêm vào nếu cần
 </script>
 
 <script>

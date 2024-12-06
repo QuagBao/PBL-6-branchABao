@@ -16,7 +16,7 @@
         </div>
         <div class="row p-2">
             <div class="col-sm-4 rating">
-                <img v-for="star in rating" :key="star" :src="star" alt="Circle" class="star"/>
+                <img v-for="star in stars" :key="star" :src="star" alt="Circle" class="star"/>
             </div>
             <div class="col-sm-6 review-number">
                 / {{ reviewNumber }} reivews
@@ -51,6 +51,7 @@ export default {
     props: {
         imageUrl: String,
         name: String,
+        stars: Array,
         rating: Number,
         reviewNumber: Number,
         tags: Array,
@@ -109,9 +110,8 @@ img {
     cursor: pointer;
     transform:  translateY(-5px);
     box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);
-    transition: 0.75s ease-in-out;
+    transition: 0.5s ease-in-out;
     border-radius: 30px;
-    background-color: #8ecae6;
 }
 .tags span{
     font-size: 20px;

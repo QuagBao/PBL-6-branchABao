@@ -1,22 +1,46 @@
 <template>
     <div class="container-fluid">
         <Header/>
-        <Top_Button/>
+        <Top_Button v-if="destination" :cityID="destination.address.city_id"/>
     </div> 
 
     <div class="container-fluid info-place">
-        <div class="container-fluid row">
+        <div class="container-fluid row" v-if="isLoading">
             <div class="col-4 information">
-                <div class="container name-of-place">Văn Miếu Quốc Tử Giám</div>
+                <div class="container name-of-place">{{ destination.name }}</div>
                 <div class="container rating-review">
                     <div class="rating">
-                        <div v-for="(circle, index) in circles" :key="index" class="circle">
-                            <img :src="circle" alt="Circle" /> 
+                        <div v-for="(star, index) in generateStars(destination.rating)" :key="index" class="circle">
+                            <img :src="star" alt="Circle" /> 
                         </div>
                     </div>
                     <div class="reviews">
-                        {{ totalRating }} Reviews
+                        {{ destination.numOfReviews }} Reviews
                     </div>
+                </div>
+
+                <div>
+                    <button 
+                        v-if="token && destination.user_id === user?.id" 
+                        @click="navigateToUpdateDestination(destination.id)" 
+                        class="write-review"
+                    >
+                        Update Place 
+                    </button>
+                    <button 
+                        v-if="token && destination.user_id == user?.id" 
+                        @click="navigateToCreateHotel(destination.id)" 
+                        class="write-review"
+                    >
+                        Create Hotel 
+                    </button>
+                    <button 
+                        v-if="token && destination.user_id == user?.id" 
+                        @click="navigateToCreateRestaurant(destination.id)" 
+                        class="write-review"
+                    >
+                        Create Restaurant 
+                    </button>
                 </div>
                 
                 <div class="container-fluid info-about">
@@ -35,14 +59,14 @@
                                 </svg>
                             </div>
                             <div class="duration-info">
-                                Duration: 5 days
+                                Duration: {{ destination.duration }} days
                             </div>
                         </div>
 
                         <div class="container-fluid line-divide"></div>
 
                         <div class="container-fluid price" style="font-size: 25px;">
-                            <p style="font-weight: 700;">Price from: <span style="font-weight: 700;"> $30.00 </span> </p>
+                            <p style="font-weight: 700;">Price from: <span style="font-weight: 700;">$ {{ destination.price_bottom }} - $ {{ destination.price_top }} </span> </p>
                         </div>
                     </div>
                 </div>
@@ -50,15 +74,17 @@
 
             <div class="col-3 carousel">
                 <div class="container carousel-container">
-                    <Carousel :currentImage="currentImage" :images="images_1"/>
+                    <Carousel :currentImage="currentImage" :images="images"/>
                 </div>
             </div>  
         </div>
         <div class="container-fluid contribute">
-            <Contribute :rating="rating"
-                        :circles="circles"
+            <Contribute :rating="destination.rating"
                         :ratings="ratings"
-                        :commentList="commentList"/>
+                        :commentList="commentList"
+                        :destination_id="destination.id"
+                        :user="user?.id||0"
+                        :stars = "generateStars(destination.rating)"/>
         </div>
     </div>
 
@@ -66,14 +92,54 @@
 </template>
 
 <script setup>
-import { circles,rating, ratings, commentList, 
-  generateCircle, images, images_1, currentImage, nextImage, 
-  prevImage,totalRating, isDropdownVisible, 
-  toggleDropdown, isMenuVisible, toggleMenu, 
-  truncatedDescription, toggleReadMore, 
-  isReadMore,
-} from '../../viewModels/detailLocation_AttractionViewModel.js';
+  import { useRoute } from 'vue-router';
+  import destinationViewModel from '../../viewModels/detailLocation_AttractionViewModel.js';
+  import generateViewModel from '../../viewModels/generate_ratingViewModel';
 
+  // Lấy thông tin từ route
+  const route = useRoute();
+  const destinationID = route.params.id; // Lấy destinationID từ route params
+
+  // Destructure các giá trị từ destinationViewModel
+  const {
+    images,
+    currentImage,
+    commentList,
+    nextImage,
+    prevImage,
+    isDropdownVisible,
+    toggleDropdown,
+    isMenuVisible,
+    toggleMenu,
+    truncatedDescription,
+    toggleReadMore,
+    isReadMore,
+    destination,
+    isLoading,
+    user,
+    token,
+  } = destinationViewModel(destinationID);
+
+  const {
+    circles,
+    rating,
+    ratings,
+    generateCircle,
+    generateStars,
+    totalRating,
+  } = generateViewModel();
+
+  const navigateToUpdateDestination = (id) => {
+  window.location.assign(`/Business/Destination/Update/${id}`);
+};
+const navigateToCreateHotel = (id) => {
+  window.location.assign(`/Business/Hotel/Add/${id}`);
+};
+const navigateToCreateRestaurant = (id) => {
+  window.location.assign(`/Business/Restaurant/Add/${id}`);
+};
+
+  // Các hàm hoặc logic bổ sung có thể được thêm vào nếu cần
 </script>
 
 <script>
@@ -94,6 +160,8 @@ export default {
 
 <style scoped>
 .information{
+    flex: 0 0 30%; /* 30% of row */
+    max-width: 30%;
     margin-top: 200px;
     color: #13357B;
 }
@@ -148,9 +216,15 @@ export default {
 .read-more-or-less:hover{
     color: #729AE9;
 }
+.carousel {
+  flex: 0 0 65%; /* 70% of row */
+  max-width: 66%;
+  height: auto;
+  margin-left: 3%;
+}
 .carousel-container{
     display: flex;
-    transform: scale(0.62);
+    width: 100%;
     height: 1015px;
 }
 .duration{
@@ -163,6 +237,23 @@ export default {
     height: 3px;
     border-radius: 5px;
     background-color: #13357B;
+}
+.write-review{
+    color: #13357B;
+    background: none;
+    border: none;
+    font-size: 18px;
+    font-weight: 700;
+    appearance: none;
+    margin: 15px 0 0 5px;
+    text-decoration: underline;
+    transition: all 0.3s ease-in-out;
+    text-align: left;
+    z-index: 10;
+    position: relative;
+}
+.write-review:hover{
+    color: #729AE9;
 }
 </style>
 

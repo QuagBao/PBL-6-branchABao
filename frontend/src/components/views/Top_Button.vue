@@ -3,7 +3,11 @@
         <div class="row">
             <div class="text-center text-lg-start">
                 <div class="d-inline-flex align-items-center row" style="height: 50px; padding: 0 10px;">
-                    <button v-for="button in buttons" :key="button.key" class="col me-3">
+                    <button 
+                        v-for="button in buttons" 
+                        :key="button.key" 
+                        class="col me-3"
+                        @click="handleButtonClick(button.key)">
                         {{ button.label }}
                     </button>
                 </div>
@@ -12,23 +16,62 @@
     </div>
 </template>
 
+
 <script>
     import '@fortawesome/fontawesome-free/css/all.css';
     import 'bootstrap-icons/font/bootstrap-icons.css';
-import topButton_ViewModel from '../viewModels/topButton_ViewModel';
+    import topButton_ViewModel from '../viewModels/topButton_ViewModel';
+    import { useRouter } from 'vue-router';
     export default {
-        name: "Top_Button",
-        props: {
-            name: String
-        },
-        setup(props){
-            const { buttons } = topButton_ViewModel(props.name);
-            
-            return {
-                buttons
+    name: "Top_Button",
+    props: {
+        cityID: Number,
+    },
+    setup(props) {
+        const router = useRouter(); // Khởi tạo router để điều hướng
+
+        const handleButtonClick = (key) => {
+            switch (key) {
+                case 'things-to-do':
+                    if (props.cityID) {
+                        router.push(`/ThingsToDo/${props.cityID}`);
+                    } else {
+                        router.push('/ThingsToDo');
+                    }
+                    break;
+                case 'resorts-hotels':
+                    if (props.cityID) {
+                        router.push(`/Hotels/${props.cityID}`);
+                    } else {
+                        router.push('/Hotels');
+                    }
+                    break;
+                case 'restaurants':
+                    if (props.cityID) {
+                        router.push(`/Restaurants/${props.cityID}`);
+                    } else {
+                        router.push('/Restaurants');
+                    }
+                    break;
+                case 'name': // City label
+                    if (props.cityID) {
+                        router.push(`/Destination/${props.cityID}`);
+                    }
+                    break;
+                default:
+                    console.warn(`Unhandled button key: ${key}`);
+                    break;
             }
-        }
-    }
+        };
+
+        const { buttons } = topButton_ViewModel(props.cityID);
+
+        return {
+            buttons,
+            handleButtonClick,
+        };
+    },
+};
 </script>
 <style scoped>
 .container-fluid {

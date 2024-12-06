@@ -4,18 +4,18 @@
             :spaceBetween="10"
             :scrollbar="{ draggable: true }"
             :modules="modules">
-            <SwiperSlide class="swiper-slide" v-for="(item, index) in buttons" :key="index">
+            <SwiperSlide class="swiper-slide" v-for="item in buttons" :key="item.id">
                 <button class="button-item" 
-                        :class="{ selected: selectedIndices.includes(index) }" 
-                        @click="selectButton(index)">
-                    {{ item }}
+                        :class="{ selected: selectedIndices.includes(item.id) }" 
+                        @click="selectButton(item.id)">
+                    {{ item.name }}
                 </button>
             </SwiperSlide>
     </Swiper>
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 import destinationViewModel from '../../viewModels/destinationViewModel.js';
