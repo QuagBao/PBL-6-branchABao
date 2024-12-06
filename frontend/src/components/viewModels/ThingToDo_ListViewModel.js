@@ -69,8 +69,6 @@ export default function () {
   return {
     isMenuVisible,
     toggleMenu,
-    
-    
     generateStars,
     getImageUrl,
     liked,

@@ -346,15 +346,27 @@
     },
     {
       "id": 8,
-      "imageUrl": "/cities/laocai.jpg"
+      "imageUrl": "/cities/thuathienhue.jpg"
     },
     {
       "id": 9,
-      "imageUrl": "/cities/khanhhoa.jpg"
+      "imageUrl": "/cities/tphochiminh.jpg"
     },
     {
       "id": 10,
       "imageUrl": "/cities/nghean.jpg"
+    }
+  ],
+  "companys": [
+    {
+      "id": 1,
+      "name": "Vinpearl",
+      "logo": "/image/company/Vinpearl/logo/logo_vinpearl.svg" 
+    },
+    {
+      "id": 2,
+      "name": "Helio",
+      "logo": "/image/company/Helio/logo/logo_helio.png" 
     }
   ]
 }

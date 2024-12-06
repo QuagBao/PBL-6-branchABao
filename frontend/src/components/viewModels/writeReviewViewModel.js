@@ -9,9 +9,9 @@ const toggleMenu = () => {
   console.log(isMenuVisible);
 }
 
-const fullCircle = new URL('@/assets/circle-full.svg', import.meta.url).href;
-const halfCircle = new URL('@/assets/circle-half.svg', import.meta.url).href;
-const emptyCircle = new URL('@/assets/circle-none.svg', import.meta.url).href;
+const fullCircle = new URL('@/assets/star_full.svg', import.meta.url).href;
+const halfCircle = new URL('@/assets/star_half.svg', import.meta.url).href;
+const emptyCircle = new URL('@/assets/star_none.svg', import.meta.url).href;
 const currentRating = ref(0);
 const hoveredRating = ref(0);
 const visitDate = ref('');

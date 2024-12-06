@@ -26,11 +26,11 @@ const filteredCities = computed(() => {
   if (activeButton.value === 'all') {
     return cities.value;
   }
-  return cities.value.filter(city => city.location.toLowerCase().includes(activeButton.value.replace("-", " ")));
+  return cities.value.filter(city => city.region.toLowerCase().includes(activeButton.value.replace("-", " ")));
 });
 
 const visibleCities = computed(() => {
-  return filteredCities.value.slice(currentIndex.value, currentIndex.value + 8);
+  return filteredCities.value.slice(currentIndex.value, currentIndex.value + 6);
 });
 
 const prevSlide = () => {
@@ -40,6 +40,9 @@ const prevSlide = () => {
 const nextSlide = () => {
   if (currentIndex.value < filteredCities.value.length - 8) currentIndex.value++;
 };
+
+// Trả về id thành phố mà không thực hiện điều hướng
+const goToDestination = (id) => id;
 
 const loadTopics = async () => {
   try {
@@ -78,7 +81,7 @@ const loadTours = async () => {
 const currentIndex_tour = ref(0);
 
 const visibleTours = computed(() => {
-  return tours.value.slice(currentIndex_tour.value, currentIndex_tour.value + 3);
+  return tours.value.slice(currentIndex_tour.value, currentIndex_tour.value + 12);
 });
 
 const prevTour = () => {
@@ -138,5 +141,6 @@ export default {
   nextTour,
   isMenuVisible,
   toggleMenu,
-  generateStars, // Xuất hàm tạo sao
+  generateStars,
+  goToDestination,
 };

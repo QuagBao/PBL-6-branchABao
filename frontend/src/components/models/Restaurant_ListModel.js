@@ -29,9 +29,9 @@ export default function () {
 
 
   const generateStars = (rating) => {
-    const fullCircle = new URL('@/assets/circle-full.svg', import.meta.url).href;
-    const halfCircle = new URL('@/assets/circle-half.svg', import.meta.url).href;
-    const emptyCircle = new URL('@/assets/circle-none.svg', import.meta.url).href;
+    const fullCircle = new URL('@/assets/svg/star_full.svg', import.meta.url).href;
+    const halfCircle = new URL('@/assets/svg/star_half.svg', import.meta.url).href;
+    const emptyCircle = new URL('@/assets/svg/star_none.svg', import.meta.url).href;
 
     let circles = [];
     for (let i = 1; i <= 5; i++) {

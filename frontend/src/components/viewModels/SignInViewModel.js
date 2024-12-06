@@ -1,4 +1,5 @@
 import SignInModel from '../models/SignInModel';
+import router from '@/router';
 
 class SignInViewModel {
   constructor({ username, password, rememberMe }) {
@@ -35,6 +36,10 @@ class SignInViewModel {
 
         // Display success message
         alert('Login successful! Token: ' + result.token);
+
+        // Sử dụng router để chuyển hướng
+        router.push('/Dashboard_Final'); // Chuyển hướng
+        
         return { success: true, token: result.token };
       } else {
         // Handle case where the token is missing

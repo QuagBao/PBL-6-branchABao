@@ -11,6 +11,7 @@ const isReadMore = ref(false);
 
 const truncatedDescription = ref(descriptionModel.getTruncatedDescription());
 
+
   const toggleReadMore = () => {
     isReadMore.value = !isReadMore.value;
     truncatedDescription.value = descriptionModel.getDescription(isReadMore);
@@ -28,9 +29,9 @@ const toggleMenu = () => {
 
 // Tạo danh sách sao
 const generateStars = (rating) => {
-  const fullStar = new URL('@/assets/star_full.svg', import.meta.url).href;
-  const halfStar = new URL('@/assets/star_half.svg', import.meta.url).href;
-  const emptyStar = new URL('@/assets/star_none.svg', import.meta.url).href;
+  const fullStar = new URL('@/assets/svg/star_full.svg', import.meta.url).href;
+  const halfStar = new URL('@/assets/svg/star_half.svg', import.meta.url).href;
+  const emptyStar = new URL('@/assets/svg/star_none.svg', import.meta.url).href;
 
   let stars = [];
   for (let i = 1; i <= 5; i++) {
@@ -47,9 +48,9 @@ const generateStars = (rating) => {
 
 // Tạo danh sách hình tròn
 const generateCircle = (rating) => {
-  const fullCircle = new URL('@/assets/circle-full.svg', import.meta.url).href;
-  const halfCircle = new URL('@/assets/circle-half.svg', import.meta.url).href;
-  const emptyCircle = new URL('@/assets/circle-none.svg', import.meta.url).href;
+  const fullCircle = new URL('@/assets/svg/star_full.svg', import.meta.url).href;
+  const halfCircle = new URL('@/assets/svg/star_half.svg', import.meta.url).href;
+  const emptyCircle = new URL('@/assets/svg/star_none.svg', import.meta.url).href;
 
   let circles = [];
   for (let i = 1; i <= 5; i++) {
@@ -96,17 +97,31 @@ const totalRating = ref(ratingModel.getTotal());
 // Danh sách bình luận
 const commentList = ref(mockComments);
 const images = ref([]);
-const fetchImages = async () => {
-  images.value = await ImageModel.fetchImages();
+const images_1 = ref([]);
+const fetchImages_1 = async () => {
+  const rawImages = await ImageModel.fetchImages();
+  // Chuyển đổi các đối tượng ImageModel thành một mảng các URL đơn giản
+  images_1.value = rawImages.map(image => image.imageUrl);
+  console.log("List Images: ", images_1.value);
 };
 
-const currentIndex = ref(0);
+const fetchImages = async () => {
+  images.value = await ImageModel.fetchImages();
+  console.log( "Images: " ,images.value);
+};
+
+  const getAllcomments = async () => {
+    console.log("Comment: ",commentList.value);
+  };
+
+  const currentIndex = ref(0);
 
   const currentImage = computed(() => {
     // Kiểm tra xem images có rỗng hay currentIndex nằm ngoài giới hạn không
     if (!images.value.length || currentIndex.value < 0 || currentIndex.value >= images.value.length) {
       return null; // Hoặc một giá trị mặc định, ví dụ: '/cities/default.jpg'
     }
+    console.log("Current image: ", images.value[currentIndex.value].imageUrl);  
     return images.value[currentIndex.value].imageUrl;
   });
 
@@ -123,7 +138,8 @@ const currentIndex = ref(0);
   };
 
 fetchImages();
-
+fetchImages_1();
+getAllcomments();
 export {
   isDropdownVisible,
   toggleDropdown,
@@ -139,6 +155,7 @@ export {
   generateStars,
   generateCircle,
   images,
+  images_1,
   isMenuVisible,
   toggleMenu,
   truncatedDescription,

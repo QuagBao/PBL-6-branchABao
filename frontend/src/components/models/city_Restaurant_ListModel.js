@@ -1,11 +1,9 @@
 import axios from 'axios';
 export default function () {
   
-  const heartFull = new URL('@/assets/heart-full.svg', import.meta.url).href;
-  const heartEmpty = new URL('@/assets/heart-none.svg', import.meta.url).href;
+  const heartFull = new URL('@/assets/svg/heart-full.svg', import.meta.url).href;
+  const heartEmpty = new URL('@/assets/svg/heart-none.svg', import.meta.url).href;
   
-  
-
   const buttons = ['Drink', 'Museum', 'Outdoor', 'Adventure', 'Beach', 'Hotel', 'Food', 'F&B', 'Movie'];
 
   const fetchEntertainments = async () => {
@@ -29,9 +27,9 @@ export default function () {
 
 
   const generateStars = (rating) => {
-    const fullCircle = new URL('@/assets/circle-full.svg', import.meta.url).href;
-    const halfCircle = new URL('@/assets/circle-half.svg', import.meta.url).href;
-    const emptyCircle = new URL('@/assets/circle-none.svg', import.meta.url).href;
+    const fullCircle = new URL('@/assets/star_full.svg', import.meta.url).href;
+    const halfCircle = new URL('@/assets/star_half.svg', import.meta.url).href;
+    const emptyCircle = new URL('@/assets/star_none.svg', import.meta.url).href;
 
     let circles = [];
     for (let i = 1; i <= 5; i++) {
