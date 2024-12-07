@@ -11,7 +11,7 @@
                         <h3>{{ userName }}</h3>
                     </div>
                     <div class="col rating-stars">
-                        <img v-for="star in stars" :src="star" :key="index" class="circle-icon" />
+                        <img v-for="(star, index) in stars" :src="star" :key="index" class="circle-icon" />
                     </div>
                 </div>
             </div>

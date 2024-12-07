@@ -91,6 +91,7 @@
 
 <script setup>
   import { useRoute } from 'vue-router';
+  import { ref, onMounted, watch, nextTick } from 'vue';
   import hotelViewModel from '../../viewModels/detailLocation_HotelViewModel.js';
   import generateViewModel from '../../viewModels/generate_ratingViewModel';
 
@@ -113,14 +114,11 @@
     city,
     isLoading,
     user,
+    ratings
   } = hotelViewModel(destinationID);
 
   const {
-    circles,
-    rating,
-    ratings,
     generateStars,
-    totalRating,
   } = generateViewModel();
 
   const navigateToUpdateDestination = (id) => {

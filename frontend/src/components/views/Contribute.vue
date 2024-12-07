@@ -87,16 +87,12 @@ const uploadPicture = (id) => {
 defineProps({
 
   rating: {
-    type: String,
+    type: Number,
     required: true,
   },
   ratings: {
     type: Object,
-    required: true,
-  },
-  circles: {
-    type: Array,
-    required: true,
+    default: () => ({}),
   },
   stars: {
     type: Array,

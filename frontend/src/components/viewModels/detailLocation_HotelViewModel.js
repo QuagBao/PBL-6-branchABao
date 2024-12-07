@@ -3,7 +3,8 @@ import { getHotelById } from '../models/destinationModel.js';
 import { getReviewByDestinationId } from '../models/ReviewModel.js';
 import { getUserById } from '../models/UserModel.js';
 import { fetchCityDetails } from '../models/CityModel';
-import SignInModel from '../models/SignInModel'; 
+import SignInModel from '../models/SignInModel';
+import generateViewModel from './generate_ratingViewModel'; 
 
 
 export default function(hotelID) {
@@ -16,18 +17,22 @@ export default function(hotelID) {
   const images = ref([]);
   const commentList = ref([]);
   const city = ref(null);
+  const { fetchRatingDistribution, ratings} = generateViewModel();
 
   const user = ref(null);
   const token = sessionStorage.getItem('access_token');
   const loadUser = async () => {
     const signInModel = new SignInModel("", "");
     try{
-      const userResult = await signInModel.fetchCurrentUser(token);
-      if(userResult.success){
-        user.value = userResult.user;
-      } else {
+      if(token){
+        const userResult = await signInModel.fetchCurrentUser(token);
+        if(userResult.success){
+          user.value = userResult.user;
+        } else {
         console.error('Cannot get user:', error);
+        }
       }
+      
     } catch (error) {
       console.error('An error occurred during authentication:', error);
       return { success: false, message: error.message || 'An error occurred' };
@@ -104,6 +109,8 @@ export default function(hotelID) {
       await loadHotel();      // Đợi loadRestaurant hoàn tất
       await getAllcomments();      // Sau đó gọi getAllcomments
       await loadUsersForComments(); // Cuối cùng là loadUsersForComments
+      await fetchRatingDistribution(hotel.value.id);
+
   
       isLoading.value = true; // Chuyển trạng thái sang loaded khi hoàn thành
     } catch (error) {
@@ -167,6 +174,7 @@ export default function(hotelID) {
     isLoading,
     user,
     token,
+    ratings,
   };
 }
 

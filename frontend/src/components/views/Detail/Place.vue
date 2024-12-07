@@ -77,7 +77,7 @@
                         </div>
                         <div class="container-fluid contribute">
                             <Contribute :rating="destination.rating"
-                                        :ratings="ratings"
+                                        :ratings="ratings || {}"
                                         :commentList="commentList"
                                         :destination_id="destination.id"
                                         :user="user?.id||0"
@@ -92,6 +92,7 @@
 
 <script setup>
   import { useRoute } from 'vue-router';
+  import { ref, onMounted, watch, nextTick } from 'vue';
   import destinationViewModel from '../../viewModels/detailLocation_AttractionViewModel.js';
   import generateViewModel from '../../viewModels/generate_ratingViewModel';
 
@@ -117,15 +118,11 @@
     isLoading,
     user,
     token,
+    ratings
   } = destinationViewModel(destinationID);
 
   const {
-    circles,
-    rating,
-    ratings,
-    generateCircle,
     generateStars,
-    totalRating,
   } = generateViewModel();
 
   const navigateToUpdateDestination = (id) => {
@@ -147,6 +144,7 @@ import Top_Button from '../Top_Button.vue';
 import Header from '../Header.vue';
 import Carousel from '../Carousel.vue';
 import Contribute from '../Contribute.vue';
+import { onMounted } from 'vue';
 export default {
     name: "Place",
     components: {
