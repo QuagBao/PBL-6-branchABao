@@ -78,7 +78,7 @@ export default {
 }
 .carousel-header .carousel-control-prev .carousel-control-prev-icon {
     display: flex;
-    margin-left: -12vw;
+    margin-left: -10.9vw;
     padding: 25px 30px;
     border-top-left-radius: 0;
     border-top-right-radius: 50px;
@@ -89,7 +89,7 @@ export default {
 }
 .carousel-header .carousel-control-next .carousel-control-next-icon {
     display: flex;
-    margin-right: -12vw;
+    margin-right: -10.9vw;
     padding: 25px 30px;
     border-top-left-radius: 50px;
     border-top-right-radius: 0;

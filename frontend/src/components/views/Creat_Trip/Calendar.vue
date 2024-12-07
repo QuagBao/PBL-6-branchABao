@@ -2,67 +2,70 @@
     <div class="container-fluid calendar">
         <div class="container-fluid">
             <div class="container-fluid frame-calendar">
-                <button class="container btn prev" @click="prevMonth">
-                    <svg width="35px" height="35px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 
-                        14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 
-                        11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 
-                        14.1599L5 9" stroke="#currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </button>
-                <div class="container-fluid frame month-year-1">
-                    <div class="container-fluid month-year">
-                        <span>{{ currentMonthName }}</span>
-                        <span> - </span>
-                        <span>{{ currentYear }}</span>
-                    </div>
-                    <div class="container-fluid day">
-                        <p>Sun</p>
-                        <p>Mon</p>
-                        <p>Tue</p>
-                        <p>Wed</p>
-                        <p>Thu</p>
-                        <p>Fri</p>
-                        <p>Sat</p>
-                    </div>
-                    <div class="container-fluid frame-1">
-                        <button v-for="(day, index) in monthDays" 
-                                :key="index">
-                            {{ day }}
-                        </button>
-                    </div>
-                </div>
-                <div class="container-fluid line"></div>
-                <div class="container-fluid frame month-year-2">
-                    <div class="container-fluid month-year">
-                        <span>{{ nextMonthName }}</span>
-                        <span> - </span>
-                        <span>{{ nextYear }}</span>
-                    </div>
-                    <div class="container-fluid day">
-                        <p>Sun</p>
-                        <p>Mon</p>
-                        <p>Tue</p>
-                        <p>Wed</p>
-                        <p>Thu</p>
-                        <p>Fri</p>
-                        <p>Sat</p>
-                    </div>
-                    <div class="container-fluid frame-1">
-                        <button v-for="(day, index) in nextMonthDays" 
-                                :key="index">
-                            {{ day }}
-                        </button>
+                <div class="prev-month">
+                    <button class="btn prev" @click="prevMonth">
+                        <svg width="35px" height="35px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 
+                            14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 
+                            11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 
+                            14.1599L5 9" stroke="#currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                    <div class="container-fluid frame month-year-1">
+                        <div class="container-fluid month-year">
+                            <span>{{ currentMonthName }}</span>
+                            <span> - </span>
+                            <span>{{ currentYear }}</span>
+                        </div>
+                        <div class="container-fluid day">
+                            <p>Sun</p>
+                            <p>Mon</p>
+                            <p>Tue</p>
+                            <p>Wed</p>
+                            <p>Thu</p>
+                            <p>Fri</p>
+                            <p>Sat</p>
+                        </div>
+                        <div class="container-fluid frame-1">
+                            <button v-for="(day, index) in monthDays" 
+                                    :key="index">
+                                {{ day }}
+                            </button>
+                        </div>
                     </div>
                 </div>
-                <button class="container btn next" @click="nextMonth">
-                    <svg width="35px" height="35px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 
-                        14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 
-                        11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 
-                        14.1599L5 9" stroke="#currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
-                </button>
+                <div class="next-month">
+                    <div class="container-fluid frame month-year-2">
+                        <div class="container-fluid month-year">
+                            <span>{{ nextMonthName }}</span>
+                            <span> - </span>
+                            <span>{{ nextYear }}</span>
+                        </div>
+                        <div class="container-fluid day">
+                            <p>Sun</p>
+                            <p>Mon</p>
+                            <p>Tue</p>
+                            <p>Wed</p>
+                            <p>Thu</p>
+                            <p>Fri</p>
+                            <p>Sat</p>
+                        </div>
+                        <div class="container-fluid frame-1">
+                            <button v-for="(day, index) in nextMonthDays" 
+                                    :key="index">
+                                {{ day }}
+                            </button>
+                        </div>
+                    </div>
+                    <button class="btn next" @click="nextMonth">
+                        <svg width="35px" height="35px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 
+                            14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 
+                            11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 
+                            14.1599L5 9" stroke="#currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
             </div>
         </div>
     </div>
@@ -125,11 +128,14 @@ export default {
 
 <style scoped>
 .frame-calendar {
-    display: flex;
-    justify-content: space-around;
-    align-items: baseline;
-    font-size: 30px;
+    display: grid;
+    grid-template-columns: 45% 45%;
+    gap: 10%;
     color: #13357B;
+}
+.prev-month, .next-month {
+    display: flex;
+    gap: 25px;
 }
 .btn {
     border: 3px solid #13357B;
@@ -137,7 +143,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 80px;
+    width: 110px;
     height: 65px;
     background-color: transparent;
 }
@@ -170,7 +176,6 @@ export default {
 }
 .day p {
     font-size: 20px;
-    color: #13357B;
     display: flex;
     justify-content: center;
     min-width: 58.5px;

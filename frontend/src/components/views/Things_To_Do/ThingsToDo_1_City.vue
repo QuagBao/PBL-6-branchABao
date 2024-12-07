@@ -4,53 +4,57 @@
         <Top_Button v-if="cityId" :cityID="parseInt(cityId, 10)"/>
     </div>
 
-    <!-- Images -->
-    <div class="container-fluid overall">
-        <div class="image-container">
-            <div class="base"></div>
-            <img :src="city?.images?.[0]?.url || '/blue-image.jpg'" alt="City 1" class="img-fluid">
-        </div>
-        <div class="overall-container">
-            <div class="text-container">
-                <h1>Things to do in {{ city?.name || 'Loading...' }}</h1>
-                <p>Check out must-see sights and activities:</p>
+    <div class="contaner-fluid">
+        <div class="contaner-fluid">
+            <div class="contaner-fluid">
+                <div class="contaner-fluid frame-1 d-flex flex-column gap-5">
+                    <!-- Images -->
+                    <div class="overall">
+                        <div class="image-container">
+                            <div class="base"></div>
+                            <img :src="city?.images?.[0]?.url || '/blue-image.jpg'" alt="City 1" class="img-fluid">
+                        </div>
+                        <div class="overall-container p-5">
+                            <div class="text-container p-5 d-flex flex-column">
+                                <h1>Things to do in {{ city?.name || 'Loading...' }}</h1>
+                                <p>Check out must-see sights and activities:</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="container-fluid d-flex flex-column gap-5 ">
+                        <div class="container-fluid btn-catagory d-flex justify-content-center">
+                            <Swiper class="swiper"
+                                    :slides-per-view="4"
+                                    :spaceBetween="10"
+                                    :scrollbar="{ draggable: true }"
+                                    :modules="modules">
+                                <SwiperSlide v-for="item in buttons" :key="item.id">
+                                    <button class="button-category" 
+                                            :class="{ selected: selectedIndices.includes(item.id) }" 
+                                            @click="selectButton(item.id)">
+                                        {{ item.name }}
+                                    </button>
+                                </SwiperSlide>
+                            </Swiper>
+                        </div>
+                        <div class=" title-content">
+                            <p class="title p-5">Top Attraction in {{ city?.name || 'Loading...' }}</p>
+                            <div class="container-fluid list-items-1">
+                                <Info_Card v-for="(item, index) in filteredDestinations"
+                                            :key="index"
+                                            :imageUrl="item.images[0].url||'/blue-image.jpg'"
+                                            :name="item.name"
+                                            :stars="generateStars(item.rating)"
+                                            :review-number="item.numOfReviews"
+                                            :tags="item.tag"
+                                            :description="item.description"
+                                            @click="navigateToDetailPlace(item.id)"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-
-    <div class="container btn-catagory">
-            <Swiper class="swiper"
-                :slides-per-view="4"
-                :spaceBetween="10"
-                :scrollbar="{ draggable: true }"
-                :modules="modules">
-                <SwiperSlide v-for="item in buttons" :key="item.id">
-                    <button class="button-category" 
-                            :class="{ selected: selectedIndices.includes(item.id) }" 
-                            @click="selectButton(item.id)">
-                        {{ item.name }}
-                    </button>
-                </SwiperSlide>
-            </Swiper>
-    </div>
-
-    <div class="container-fluid p-4">
-        <div class="container p-2">
-            <h1 class="title">Top Attraction in {{ city?.name || 'Loading...' }}</h1>
-        </div>
-    </div>
-
-    <div class="container-fluid context list-items-1">
-        <Info_Card v-for="(item, index) in filteredDestinations"
-                :key="index"
-                :imageUrl="item.images[0].url||'/blue-image.jpg'"
-                :name="item.name"
-                :rating= "item.rating"
-                :stars="generateStars(item.rating)"
-                :review-number="item.numOfReviews"
-                :tags="item.tag"
-                :description="item.description"
-                @click="navigateToDetailPlace(item.id)"/>
     </div>
  </template>
 
@@ -127,12 +131,10 @@ const navigateToDetailPlace = (id) => {
 </script>
 
 <style scoped>
-body {
-    background-color: #EDF6F9;
-}
 .overall{
     display: flex;
     margin-top: 200px;
+    color: #13357B;
 }
 .image-container{
     display: flex;
@@ -151,30 +153,21 @@ body {
     height: 550px;
     box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);
 }
-.overall-container{
-    display: flex;
-    flex-direction: column;
-    margin: 100px 0 0 100px;
-    color: #13357B;
-}
 .text-container{
-    display: flex;
-    flex-direction: column;
     gap: 50px;
     font-size: 30px;
-    justify-content: center;
-    align-items: center;
 }
 .text-container h1{
-    width: 550px;
     font-size: 50px;
     font-weight: 900;
 }
-.title{
+.title-content {
+    margin-bottom: 30px;
+}
+.title-content p{
     color: #13357B;
-    font-size: 40px;
+    font-size: 30px;
     font-weight: 900;
-    margin-top: 70px;
 }
 .list-items-1 {
     display: grid;
@@ -183,9 +176,6 @@ body {
     align-items: center;
     width: 95%;
     height: 100%;
-}
-.catagory{
-    margin: 40px 0 -10px 0;
 }
 .swiper {
     width: 100%;
@@ -198,7 +188,6 @@ body {
     text-align: center;
     margin: 20px 0; 
 }
-
 .button-category{
     color: #13357B;
     width: 80%;
@@ -209,7 +198,6 @@ body {
     background-color: #EDF6F9;
     transition: background-color 0.3s ease;
 }
-
 .button-category:hover {
     background-color: #0077b6;
     color: #EDF6F9 

@@ -12,7 +12,7 @@
                 </div>
             </div>
 
-            <div class="container-fluid frame-button">
+            <div class="container-fluid frame-button px-5 py-2">
                 <button class="button back" @click="goBack" >Back</button>
                 <button type="submit" @click="goView" class="button next-button">View trip</button>
             </div>
@@ -81,6 +81,7 @@ const {
     align-items: center;
     justify-content: space-between;
     margin-top: 50px;
+    margin-bottom: 45px;
 }
 .button {
     padding: 10px 50px;

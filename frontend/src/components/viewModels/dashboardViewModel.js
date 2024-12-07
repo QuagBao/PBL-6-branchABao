@@ -10,6 +10,7 @@ const tours = ref([]);
 const currentIndex = ref(0);
 
 const setActive = (button) => {
+  console.log(button);
   activeButton.value = button;
   currentIndex.value = 0;
 };
@@ -28,7 +29,7 @@ const filteredCities = computed(() => {
   if (activeButton.value === 'all') {
     return cities.value;
   }
-  return cities.value.filter(city => city.location.toLowerCase().includes(activeButton.value.replace("-", " ")));
+  return cities.value.filter(city => city.region.toLowerCase().includes(activeButton.value.replace("-", " ")));
 });
 
 const getCityName = (cityId) => {

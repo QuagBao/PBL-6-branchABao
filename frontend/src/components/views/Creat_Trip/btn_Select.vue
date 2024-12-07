@@ -13,7 +13,7 @@ const {
 
 <script>
 export default {
-    name: "btn_heart",
+    name: "btn_select",
     props: {
         id: Number
     }

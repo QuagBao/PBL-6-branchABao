@@ -1,103 +1,107 @@
 <template>
     <div class="container-fluid">
       <Header />
-      <Top_Button />
+      <Top_Button v-if="cityId" :cityID="parseInt(cityId, 10)"/>
     </div>
   
-    <!-- Images -->
-    <img src="@/assets/images/tms-hotel-da-nang-beach.jpg" alt="City 1" class="img-fluid" />
-    <!-- Search -->
-    <div class="container-fluid search">
-      <div class="container">
-        <Form_Search :name_of_page="'Find your perfect place to stay'" :name="'Attraction, activities or destination'" />
-      </div>
-    </div>
-  
-    <div class="content">
-      <div class="row">
-        <div class="col-5">
-          <div class="container left-panel">
-            <div class="filter-section">
-              <!-- Cuisine Filter -->
-              <div
-                class="filter-item"
-                @click="toggleOptions('amenities')"
-                :class="{ active: activeOptions.amenities }"
-              >
-                Amenities
-                <div class="icon"></div>
-              </div>
-              <div v-if="activeOptions.amenities" class="options">
-                <div v-for="option in amenities_options" :key="option" class="option">
-                  <input
-                    type="checkbox"
-                    :id="`amenities-${option}`"
-                    :checked="save_option_amenities.includes(option)"
-                    @change="handleCheckboxChange(option, 'save_option_amenities')"
-                  />
-                  <label class="label" :for="`amenities-${option}`">{{ option }}</label>
+    <div class="container-fluid">
+      <div class="container-fluid">
+        <div class="container-fluid">
+          <div class="container-fluid">
+            <div class="container-fluid frame-image-search">
+              <img src="@/assets/images/tms-hotel-da-nang-beach.jpg" alt="City 1" class="img-fluid" />
+              <div class="container-fluid search">
+                <div class="container">
+                  <Form_Search :name_of_page="'Find your perfect place to stay'" :name="'Attraction, activities or destination'" />
                 </div>
               </div>
-  
-              <!-- Meal Filter -->
-              <div
-                class="filter-item"
-                @click="toggleOptions('hotel_star')"
-                :class="{ active: activeOptions.hotel_star }"
-              >
-                Hotel star
-                <div class="icon"></div>
-              </div>
-              <div v-if="activeOptions.hotel_star" class="options">
-                <div v-for="option in hotel_star_options" :key="option" class="option">
-                  <input
-                    type="checkbox"
-                    :id="`hotel_star-${option}`"
-                    :checked="save_option_hotel_star.includes(option)"
-                    @change="handleCheckboxChange(option, 'save_option_hotel_star')"
-                  />
-                  <label class="label" :for="`hotel_star-${option}`">{{ option }}</label>
+            </div>
+            <div class="content">
+              <div class="frame-flter">
+                <div class="container left-panel">
+                  <div class="filter-section">
+                    <!-- Cuisine Filter -->
+                    <div
+                      class="filter-item"
+                      @click="toggleOptions('amenities')"
+                      :class="{ active: activeOptions.amenities }"
+                    >
+                      Amenities
+                      <div class="icon"></div>
+                    </div>
+                    <div v-if="activeOptions.amenities" class="options">
+                      <div v-for="option in amenities_options" :key="option" class="option">
+                        <input
+                          type="checkbox"
+                          :id="`amenities-${option}`"
+                          :checked="save_option_amenities.includes(option)"
+                          @change="handleCheckboxChange(option, 'save_option_amenities')"
+                        />
+                        <label class="label" :for="`amenities-${option}`">{{ option }}</label>
+                      </div>
+                    </div>
+        
+                    <!-- Meal Filter -->
+                    <div
+                      class="filter-item"
+                      @click="toggleOptions('hotel_star')"
+                      :class="{ active: activeOptions.hotel_star }"
+                    >
+                      Hotel star
+                      <div class="icon"></div>
+                    </div>
+                    <div v-if="activeOptions.hotel_star" class="options">
+                      <div v-for="option in hotel_star_options" :key="option" class="option">
+                        <input
+                          type="checkbox"
+                          :id="`hotel_star-${option}`"
+                          :checked="save_option_hotel_star.includes(option)"
+                          @change="handleCheckboxChange(option, 'save_option_hotel_star')"
+                        />
+                        <label class="label" :for="`hotel_star-${option}`">{{ option }}</label>
+                      </div>
+                    </div>
+        
+                    <!-- Special Diet Filter -->
+                    <div
+                      class="filter-item"
+                      @click="toggleOptions('price_range')"
+                      :class="{ active: activeOptions.price_range }"
+                    >
+                      Price Range
+                      <div class="icon"></div>
+                    </div>
+                    <div v-if="activeOptions.price_range" class="options">
+                      <div v-for="option in price_range_options" :key="option" class="option">
+                        <input
+                          type="checkbox"
+                          :id="`priceRange-${option}`"
+                          :checked="save_option_price_range.includes(option)"
+                          @change="handleCheckboxChange(option, 'save_option_price_range')"
+                        />
+                        <label class="label" :for="`priceRange-${option}`">{{ option }}</label>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-  
-              <!-- Special Diet Filter -->
-              <div
-                class="filter-item"
-                @click="toggleOptions('price_range')"
-                :class="{ active: activeOptions.price_range }"
-              >
-                Price Range
-                <div class="icon"></div>
-              </div>
-              <div v-if="activeOptions.price_range" class="options">
-                <div v-for="option in price_range_options" :key="option" class="option">
-                  <input
-                    type="checkbox"
-                    :id="`priceRange-${option}`"
-                    :checked="save_option_price_range.includes(option)"
-                    @change="handleCheckboxChange(option, 'save_option_price_range')"
-                  />
-                  <label class="label" :for="`priceRange-${option}`">{{ option }}</label>
-                </div>
+              <div class="list-hotels">
+                <Card_Item  v-for="(item, index) in hotels"
+                            :key="index"
+                            :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
+                            :name="item.name"
+                            :rating="generateStars(item.rating)"
+                            :reviewNumber="item.numOfReviews"
+                            :tags="item.tag"
+                            @click="navigateToDetailHotel(item.hotel_id)" />
               </div>
             </div>
           </div>
         </div>
-        <div class="col-7 list-hotels">
-          <Card_Item
-            v-for="(item, index) in hotels"
-            :key="index"
-            :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
-            :name="item.name"
-            :stars="generateStars(item.rating)"
-            :rating="item.rating"
-            :reviewNumber="item.numOfReviews"
-            :tags="item.tag"
-            @click="navigateToDetailHotel(item.hotel_id)"
-          />
-        </div>
       </div>
     </div>
+  
+    
   </template>
 
 <script setup>
@@ -170,9 +174,6 @@ const navigateToDetailHotel = (hotel_id) => {
 </script>
 
 <style scoped>
-body {
-    background-color: #EDF6F9;
-}
 .img-fluid {
     margin-top: 200px;
     width: 100vw;
@@ -187,44 +188,25 @@ body {
     margin-bottom: 250px;
 }
 .content{
-    display: flex;
-    flex-direction: column;
-    color: #13357B;
-    font-size: 28px;
-    padding-top: 20px;
+  display: grid;
+  grid-template-columns: 30% 65%;
+  gap: 5%
 }
 .content p{
     font-weight: 900;
     margin-top: 15px; 
 }
-.list-items {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 30px;
-    align-items: center;
-    width: 95%;
-    height: 100%;
-}
-.list-items-1 {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-    align-items: center;
-    width: 95%;
-    height: 100%;
-}
 .list-hotels{
-    display: grid;
-    margin-top: 0px;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
-    align-items: center;
-    height: 100%;
+  display: grid;
+  margin-top: 0px;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 50px;
+  align-items: center;
+  height: 100%;
 }
 .left-panel{
     position: sticky;
     top: 160px;
-    width: 70%;
 }
 .filter-section {
     display: flex;

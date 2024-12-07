@@ -10,7 +10,7 @@
 <style>
 /* Tùy chỉnh thanh cuộn cho toàn bộ website */
 ::-webkit-scrollbar {
-    width: 7px; /* Độ rộng của thanh cuộn dọc */
+    width: 10px; /* Độ rộng của thanh cuộn dọc */
     height: 5px; /* Độ rộng của thanh cuộn ngang */
 }
 

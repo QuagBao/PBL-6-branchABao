@@ -3,107 +3,90 @@
         <Header/>
         <Top_Button v-if="hotel" :cityID="hotel.address.city_id"/>
     </div> 
-
-    <div class="container-fluid info-place">
-        <div class="container-fluid row">
-            <div class="col-10 information">
-                <div class="name-of-place">{{ hotel.name }}</div>
-                <div class="container rating-review">
-                    <div class="rating">
-                        <div v-for="(star, index) in generateStars(hotel.rating)" :key="index" class="circle">
-                            <img :src="star" alt="Circle" /> 
-                        </div>
-                    </div>
-                    <div class="reviews">
-                        {{ hotel.numOfReviews }} Reviews
-                    </div>
-                </div>
-                <div>
-                    <button 
-                        v-if="token && hotel.user_id == user?.id" 
-                        @click="navigateToUpdateDestination(hotel.id)" 
-                        class="write-review"
-                    >
-                        Update Place 
-                    </button>
-                    <button 
-                        v-if="token && hotel.user_id == user?.id" 
-                        @click="navigateToUpdateHotel(hotel.id)" 
-                        class="write-review"
-                    >
-                        Update Hotel Detail 
-                    </button>
-                </div>
-            </div>
-        </div>
-        
-        <div class="row">
-            <Carousel :currentImage="currentImage" :images="images"/>
-        </div>
-        
-        <div class="container-fluid location">
+    <div class="container-fluid">
+        <div class="container-fluid">
             <div class="container-fluid">
                 <div class="container-fluid">
                     <div class="container-fluid">
-                        <div class="row info-hotel">
-                            <div class="col-3 contact">
-                                <div class="row">
-                                    <div class="map"><p>Map</p></div>
-                                    <div class="container frame location">
+                        <div class="information d-flex flex-column gap-2">
+                            <div class="name-of-place">{{ hotel.name }}</div>
+                            <div class="rating-review d-flex gap-3 align-items-center ">
+                                <div class="rating d-flex gap-1">
+                                    <img v-for="(star, index) in generateStars(hotel.rating)" :key="index" 
+                                         :src="star" alt="star" /> 
+                                </div>
+                                <span class="reviews">
+                                    {{ hotel.numOfReviews }} Reviews
+                                </span>
+                                <div class="frame-button d-flex gap-3 align-items-center">
+                                    <button v-if="token && hotel.user_id == user?.id" 
+                                            @click="navigateToUpdateDestination(hotel.id)" 
+                                            class="write-review" >
+                                        Update Place 
+                                    </button>
+                                    <button v-if="token && hotel.user_id == user?.id" 
+                                            @click="navigateToUpdateHotel(hotel.id)" 
+                                            class="write-review">
+                                        Update Hotel Detail 
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <Carousel class="custom" :currentImage="currentImage" :images="images"/>
+                        <div class="info-hotel">
+                            <div class="contact d-flex flex-column gap-5">
+                                <div class="map"><p>Map</p></div>
+                                <div class="location-phone">
+                                    <div class="frame location">
                                         <i class="icon-location"></i>
                                         <p v-if="hotel.address">{{ hotel.address.street }}, {{ hotel.address.ward }}, {{ hotel.address.district }}, {{ city.name }}</p>
                                     </div>
-                                    <div class="container frame phone">
+                                    <div class="frame phone">
                                         <i class="icon-phone"></i>
                                         <p v-if="hotel.hotel.phone">{{ hotel.hotel.phone }}</p>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col details">
-                                <div class="hotel-detail p-4">
+                            <div class="details">
+                                <div class="hotel-detail d-flex flex-column gap-4 p-4">
                                     <h3 class="section-title" style="font-weight: 900;">Details</h3>
-
                                     <div class="details-grid">
                                         <div class="detail-item">
                                             <h5>PRICE RANGE</h5>
                                             <p>${{ hotel.price_bottom || 0 }} - ${{ hotel.price_top || "N/A" }}</p>
                                         </div>
                                         <div class="detail-item">
-                                            <h5>HOTEL Property Amenities </h5>
+                                            <h5>HOTEL PROPERTY AMENITIES </h5>
                                             <p>{{ hotel.hotel.property_amenities || "N/A" }}</p>
                                         </div>
                                         <div class="detail-item">
-                                            <h5>HOTEL Room Features</h5>
+                                            <h5>HOTEL ROOM FEATURES</h5>
                                             <p>{{ hotel.hotel.room_features || "N/A" }}</p>
                                         </div>
                                         <div class="detail-item">
-                                            <h5>Hotel Styles</h5>
+                                            <h5>HOTEL STYLES</h5>
                                             <p>{{ hotel.hotel.hotel_styles || "N/A" }}</p>
                                         </div>
                                     </div>
                                     <div class="detail-item full-width">
-                                        <h5>Room Types</h5>
+                                        <h5>ROOM TYPES</h5>
                                         <p>{{ hotel.hotel.room_types || "N/A" }}</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        <Contribute :rating="hotel.rating"
+                                    :ratings="ratings"
+                                    :commentList="commentList"
+                                    :destination_id="hotel.id"
+                                    :user="user?.id||0"
+                                    :description="hotel.description"
+                                    :stars = "generateStars(hotel.rating)"/>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="container-fluid contribute">
-            <Contribute :rating="hotel.rating"
-                        :ratings="ratings"
-                        :commentList="commentList"
-                        :destination_id="hotel.id"
-                        :user="user?.id||0"
-                        :description="hotel.description"
-                        :stars = "generateStars(hotel.rating)"/>
-        </div>
     </div>
-
-
 </template>
 
 <script setup>
@@ -168,24 +151,14 @@ export default {
 
 <style scoped>
 .information{
-    margin-top: 200px;
-    margin-bottom: -150px;
+    margin-top: 180px;
+    margin-bottom: -160px;
     color: #13357B;
+    font-size: 18px;
 }
 .name-of-place{
     font-size: 35px;
     font-weight: 900;
-}
-.rating-review{
-    display: flex;
-    gap: 20px;
-    justify-content: left;
-    align-items: baseline;
-    margin: 20px 0;
-}
-.rating {
-    display: flex;
-    gap: 3px;
 }
 .rating img{
     width: 20px;
@@ -195,21 +168,32 @@ export default {
     color: #13357B;
     background: none;
     border: none;
-    font-size: 18px;
     font-weight: 700;
-    appearance: none;
-    margin: 15px 0 0 5px;
     text-decoration: underline;
     transition: all 0.3s ease-in-out;
-    text-align: left;
-    z-index: 10;
-    position: relative;
+    cursor: pointer;
 }
 .write-review:hover{
     color: #729AE9;
 }
-.icon-location::before {
-  content: "📍";
+:deep(.custom .carousel-control-next .carousel-control-next-icon) {
+    margin-right: -10.3vw; /* Giá trị mới */
+}
+:deep(.custom .carousel-control-prev .carousel-control-prev-icon) {
+    margin-left: -10.3vw; /* Giá trị mới */
+}
+.info-hotel {
+    display: grid;
+    margin-top: 2%;
+    grid-template-columns: 30% 68%;
+    gap: 2%;
+}
+.contact{
+    padding: 20px;
+    color: #13357B;
+    border-radius: 20px;
+    box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);
+    margin-bottom: 50px;
 }
 .map{
     display: flex;
@@ -224,16 +208,11 @@ export default {
     display: flex;
     gap:15px;
 }
+.icon-location::before {
+  content: "📍";
+}
 .icon-phone::before {
   content: "📞";
-}
-.contact{
-    background-color: #EDF6F9;
-    padding: 30px;
-    color: #13357B;
-    border-radius: 20px;
-    box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);
-    margin-bottom: 50px;
 }
 .details-grid{
     display: grid;
@@ -241,32 +220,21 @@ export default {
     gap: 20px;
 }
 .detail-item {
-  background-color: #EDF6F9;
-  padding: 25px;
-  font-size: 15px;
-  border-radius: 15px;
-  box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);
+    padding: 30px;
+    font-size: 20px;
+    border-radius: 15px;
+    box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);
 }
 .detail-item h5 {
-    font-weight: 700;
-    font-size: 18px;
+    font-weight: bolder;
+    font-size: 16px;
 }
 .details {
-    background-color: #EDF6F9;
     padding: 20px;
     color: #13357B;
     border-radius: 20px;
     box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);
     margin-bottom: 50px;
-}
-.info-hotel {
-    display: flex;
-    gap: 20px;
-}
-.hotel-detail {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
 }
 </style>
 

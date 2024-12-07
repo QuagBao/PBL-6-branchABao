@@ -35,8 +35,8 @@
         </label>
         <button class="forgot-password">Forgot password</button>
       </div>
-      <h4>
-        Don’t have an account? <router-link to="/sign-up">Sign up here</router-link>
+      <h4 style="color: #EDF6F9">
+        Don’t have an account? <router-link class="sign-up-link" to="/sign-up">Sign up here</router-link>
       </h4>
     </form>
   </div>
@@ -119,13 +119,12 @@ html, body {
 
 .container {
   position: absolute;
-  top: calc(10% + 10px); /* Đảm bảo khoảng cách tương đối với viewport */
-  right: 20%; /* Cách phải 20% */
+  top: calc(20% + 10px); /* Đảm bảo khoảng cách tương đối với viewport */
+  left: 20%; /* Cách phải 20% */
   max-width: 400px;
   width: 100%;
   text-align: center;
 }
-
 /* Responsive cho màn hình nhỏ */
 @media (max-width: 768px) {
   .container {

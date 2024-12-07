@@ -1,18 +1,16 @@
 <template>
     <div class="container-fluid">
-        <div class="container-fluid"    >
-            <div class="container-fluid frame-title" style="width: 1480px;">
-                <h1>When are you going?</h1>
-                <h5>Choose a day range, up to 7 days</h5>
-            </div>
-            <Calendar/>
-            <div class="container-fluid frame-dates">
-                <p class="linked" @click="goMonth">I don't know my dates yet</p>
-            </div>
-            <div class="container-fluid frame-button">
-                <button class="back" @click="goBack" >Back</button>
-                <button class="next" @click="goNext" >Next</button>
-            </div>
+        <div class="container-fluid frame-title mx-3">
+            <h1>When are you going?</h1>
+            <h5>Choose a day range, up to 7 days</h5>
+        </div>
+        <Calendar class="p-2"/>
+        <div class="container-fluid frame-dates">
+            <p class="linked" @click="goMonth">I don't know my dates yet</p>
+        </div>
+        <div class="container-fluid frame-button px-5">
+            <button class="back" @click="goBack" >Back</button>
+            <button class="next" @click="goNext" >Next</button>
         </div>
     </div>
 </template>
@@ -97,11 +95,11 @@ button:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 50px;
     color: #13357B;
     font-size: 20px;
     text-decoration: underline;
     text-underline-offset: 7px;
+    cursor: pointer;
 }
 .frame-dates:hover {
     color: #00B4D8;

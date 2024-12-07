@@ -73,9 +73,9 @@
             <div id="price-slider" class="range-slider"></div>
 
             <div class="price-labels">
-                <p class="col text-start">{{ new Intl.NumberFormat('vi-VN', { style: 'currency', currency }).format(minPrice) }}</p>
+                <!-- <p class="col text-start">{{ new Intl.NumberFormat('vi-VN', { style: 'currency', currency }).format(minPrice) }}</p> -->
                 <span class="col">-</span>
-                <p class="col text-end">{{ new Intl.NumberFormat('vi-VN', { style: 'currency', currency }).format(maxPrice) }}</p>
+                <!-- <p class="col text-end">{{ new Intl.NumberFormat('vi-VN', { style: 'currency', currency }).format(maxPrice) }}</p> -->
             </div>
         </div>
     </div>

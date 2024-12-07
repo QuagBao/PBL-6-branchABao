@@ -1,23 +1,30 @@
 <template>
     <div class="container-fluid">
-        <div class="container-fluid"    >
-            <div class="container-fluid frame-search">
-                <Form_Search class="custom-search"
-                            :name_of_page="'Where do you want to go?'"
-                            :name="'Attraction, activities or destination'"/>
-            </div>
-            <div class="container-fluid frame-item">
-                <div class="container-fluid item" :key="index"
-                     v-for="(destination, index) in suggestedDestinations.slice(0, 4)">
-                    <Img_Card :imageUrl="destination.imageUrl" 
-                              :name="destination.name"/>
+        <div class="container-fluid">
+            <div class="container-fluid">
+                <div class="container-fluid">
+                    <div class="container-fluid">
+                        <div class="container-fluid frame-search">
+                            <Form_Search class="custom-search"
+                                        :name_of_page="'Where do you want to go?'"
+                                        :name="'Choose a city or town'"/>
+                        </div>
+                        <div class="container-fluid frame-item">
+                            <div class="container-fluid item" :key="index"
+                                v-for="(destination, index) in suggestedDestinations.slice(0, 4)">
+                                <Img_Card :imageUrl="destination.imageUrl" 
+                                        :name="destination.name"/>
+                            </div>
+                        </div>
+                        <div class="container-fluid frame-button">
+                            <button @click="goNext" class="next">Next</button>
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="container-fluid frame-button">
-                <button @click="goNext" class="next">Next</button>
             </div>
         </div>
     </div>
+    
 </template>
 
 <script>

@@ -1,90 +1,85 @@
 <template>
     <div class="container-fluid">
-<<<<<<< HEAD
-        <Header></Header>
-=======
         <Header />
         <Top_Button v-if="isTopButtonVisible" />
->>>>>>> 791efc5a2a050f1d64e213f9ecd3fe990e13cba4
     </div>
 
     <Carousel_For_Dashboard/>
     
-    <div class="container-fluid search-btn">
-        <Search_Btn_Big/>
+    <div class="container-fluid">
+        <div class="container-fluid">
+            <div class="container-fluid">
+                <div class="container-fluid search-btn">
+                    <Search_Btn_Big/>
+                </div>
+                <div class="container-fluid frame destination">
+                    <div class="container">
+                        <div class="mx-auto text-center mb-5 title">
+                            <h5 class="section-title px-3 ">Destination</h5>
+                            <h1 class="mb-0">Popular Destination</h1>
+                        </div>
+                        <div class="container-fluid control-button">
+                            <Control_Button/>
+                        </div>
+                    </div>
+
+                    <div class="container tag">
+                        <div class="container tag-button">
+                            <Tag_Button/>
+                        </div>
+                    </div>        
+                    <div class="container-fluid list-items">
+                        <div class="item" v-for="(city, index) in visibleCities" 
+                            :key="city.id">
+                            <Img_Card_2  :condition="city.images && city.images.length > 0" 
+                                        :imageUrl = 'city.images[0]'
+                                        :name_picture="city.name"
+                                        :name="city.name"
+                                        @click="navigateToDestination(goToDestination(city.id))"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid frame topic">
+                    <div class="container">
+                        <div class="mx-auto text-center mb-5 title">
+                            <h5 class="section-title px-3 ">WANNA TRY ?</h5>
+                            <h1 class="mb-0">Awesome Topic</h1>
+                        </div>
+                    </div>
+
+                    <div class="container-fluid list-items">
+                        <div class="item" v-for="(topic, index) in topics" 
+                            :key="topic.id">
+                            <Img_Card  :condition="topic.imageUrl"
+                                        :imageUrl = 'topic.imageUrl'
+                                        :name_picture="topic.name"
+                                        :name="topic.name"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid frame tour">
+                    <div class="container" style="z-index: 10;">
+                        <div class="mx-auto text-center mb-5 title">
+                            <h5 class="section-title px-3 ">Tour proposal</h5>
+                            <h1 class="mb-0">Awesome Tour</h1>
+                        </div>
+                    </div>
+
+                    <div class="container-fluid list-tour">
+                        <Swiper_Tour/>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="container-fluid frame destination">
-        <div class="container">
-            <div class="mx-auto text-center mb-5 title">
-                <h5 class="section-title px-3 ">Destination</h5>
-                <h1 class="mb-0">Popular Destination</h1>
-            </div>
-            <div class="container-fluid control-button">
-                <Control_Button/>
-            </div>
-        </div>
-
-        <div class="container tag">
-            <div class="container tag-button">
-                <Tag_Button/>
-            </div>
-        </div>        
-        <div class="container-fluid list-items">
-            <div class="item" v-for="(city, index) in visibleCities" 
-                :key="city.id">
-                <Img_Card_2  :condition="city.images && city.images.length > 0" 
-                            :imageUrl = 'city.images[0]'
-                            :name_picture="city.name"
-                            :name="city.name"
-                            @click="navigateToDestination(goToDestination(city.id))"/>
-            </div>
-        </div>
-    </div>
-
-    <div class="container-fluid frame topic">
-        <div class="container">
-            <div class="mx-auto text-center mb-5 title">
-                <h5 class="section-title px-3 ">WANNA TRY ?</h5>
-                <h1 class="mb-0">Awesome Topic</h1>
-            </div>
-        </div>
-
-        <div class="container-fluid list-items">
-            <div class="item" v-for="(topic, index) in topics" 
-                :key="topic.id">
-                <Img_Card  :condition="topic.imageUrl"
-                            :imageUrl = 'topic.imageUrl'
-                            :name_picture="topic.name"
-                            :name="topic.name"/>
-            </div>
-        </div>
-    </div>
-
-    <div class="container-fluid frame tour">
-        <div class="container" style="z-index: 10;">
-            <div class="mx-auto text-center mb-5 title">
-                <h5 class="section-title px-3 ">Tour proposal</h5>
-                <h1 class="mb-0">Awesome Tour</h1>
-            </div>
-        </div>
-
-        <div class="container-fluid list-tour">
-            <Swiper_Tour/>
-        </div>
-    </div>
+    
 </template>
 
 <script setup>
 import { useRouter } from 'vue-router';
-<<<<<<< HEAD
-import dashboardViewModel from '../../viewModels/dashboardViewModel.js';
-
-=======
 import { ref, onMounted, onUnmounted } from 'vue';
 import dashboardViewModel from '../../viewModels/dashboardViewModel.js';
 const isTopButtonVisible = ref(false);
->>>>>>> 791efc5a2a050f1d64e213f9ecd3fe990e13cba4
 // Sử dụng useRouter để lấy đối tượng router trong component
 const router = useRouter();
 
@@ -98,10 +93,6 @@ const {
 } = dashboardViewModel;
 
 const navigateToDestination = (id) => {
-<<<<<<< HEAD
-  window.location.assign(`/Destination_Final/${id}`);
-};
-=======
   window.location.assign(`/Destination/${id}`);
 };
 
@@ -116,7 +107,6 @@ onMounted(() => {
 onUnmounted(() => {
   window.removeEventListener('scroll', handleScroll);
 });
->>>>>>> 791efc5a2a050f1d64e213f9ecd3fe990e13cba4
 </script>
 
 <script>
@@ -125,41 +115,23 @@ onUnmounted(() => {
     import Search_Btn_Big from '../Search_Btn_Big.vue';
     import Tag_Button from './Tag_Button.vue';
     import Control_Button from './Control_Button.vue';
-<<<<<<< HEAD
-    import Carousel_For_Dashboard from '../../views/Carousel_For_Dashboard.vue';
-    import Img_Card from '../Img_Card.vue';
-    import Img_Card_2 from '../Img_Card_2.vue';
-    import Swiper_Tour from './Swiper_Tour.vue';
-    export default {
-  watch: {
-  },
-=======
     import Carousel_For_Dashboard from './Carousel_For_Dashboard.vue';
     import Img_Card from '../Img_Card.vue';
     import Img_Card_2 from '../Img_Card_2.vue';
     import Swiper_Tour from './Swiper_Tour.vue';
     import Top_Button from '../Top_Button.vue';
     export default {
->>>>>>> 791efc5a2a050f1d64e213f9ecd3fe990e13cba4
         name: "Dashboard",
         components: {
             Header, Scroll_Bar_Component, Search_Btn_Big, Tag_Button,
             Control_Button, Carousel_For_Dashboard, Img_Card,
-<<<<<<< HEAD
-            Img_Card_2, Swiper_Tour
-=======
             Img_Card_2, Swiper_Tour, Top_Button
->>>>>>> 791efc5a2a050f1d64e213f9ecd3fe990e13cba4
         }
     }
 
 </script>
 
 <style scoped>
-<<<<<<< HEAD
-=======
-
->>>>>>> 791efc5a2a050f1d64e213f9ecd3fe990e13cba4
 .search-btn {
     margin-top: -65px;
     margin-bottom: 100px;

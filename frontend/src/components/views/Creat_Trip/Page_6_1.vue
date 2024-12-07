@@ -17,7 +17,7 @@
                 </div>
             </div>
 
-            <div class="container-fluid frame-button">
+            <div class="container-fluid frame-button px-5">
                 <button class="button back" @click="goBack" >Back</button>
                 <button type="submit" @click="goCreate" class="button next-button">Create</button>
             </div>

@@ -1,50 +1,57 @@
 <template>
     <div class="container-fluid">
-        <div class="container-fluid frame-title">
-            <h1>Da Nang</h1>
-        </div>
-        <div class="container-fluid line"></div>
-        <div class="container-fluid title desinations">
-            <span>Exploring the Lively Cultural Heritage and Natural Beauty of Central Viet Nam</span>
-            <div class="container-fluid context grid-items">
-                <Item v-for="(place, index) in suggestedDestinations" :key="index"
-                      :imageUrl="place.imageUrl"
-                      :name="place.name"
-                      :rating="generateStars(place.rating)"
-                      :id="place.id"/>
-            </div>
-        </div>
-        <div class="container-fluid line"></div>
-        <div class="container-fluid title restaurants">
-            <span>Local Restaurant Picks</span>
-            <span class="description">Here are some local favorites.</span>
-            <div class="container-fluid grid-items">
-                <Item v-for="(place, index) in suggestedDestinations" :key="index"
-                      :imageUrl="place.imageUrl"
-                      :name="place.name"
-                      :rating="generateStars(place.rating)"
-                      :id="place.id"/>
-            </div>
-        </div>
-        <div class="container-fluid line"></div>
-        <div class="container-fluid title hotels">
-            <span>Places to stay</span>
-            <span class="description">We've also recommended some places to stay during your trip.</span>
-            <div class="container-fluid grid-items">
-                <Item v-for="(place, index) in suggestedDestinations" :key="index"
-                      :imageUrl="place.imageUrl"
-                      :name="place.name"
-                      :rating="generateStars(place.rating)"
-                      :id="place.id"/>
-            </div>
-        </div>
+        <div class="container-fluid">
+            <div class="container-fluid">
+                <div class="container-fluid">
+                    <div class="container-fluid frame-title">
+                        <h1>Da Nang</h1>
+                    </div>
+                    <div class="container-fluid line"></div>
+                    <div class="container-fluid title desinations">
+                        <span>Exploring the Lively Cultural Heritage and Natural Beauty of Central Viet Nam</span>
+                        <div class="container-fluid context grid-items">
+                            <Item v-for="(place, index) in suggestedDestinations" :key="index"
+                                :imageUrl="place.imageUrl"
+                                :name="place.name"
+                                :rating="generateStars(place.rating)"
+                                :id="place.id"/>
+                        </div>
+                    </div>
+                    <div class="container-fluid line"></div>
+                    <div class="container-fluid title restaurants">
+                        <span>Local Restaurant Picks</span>
+                        <span class="description">Here are some local favorites.</span>
+                        <div class="container-fluid grid-items">
+                            <Item v-for="(place, index) in suggestedDestinations" :key="index"
+                                :imageUrl="place.imageUrl"
+                                :name="place.name"
+                                :rating="generateStars(place.rating)"
+                                :id="place.id"/>
+                        </div>
+                    </div>
+                    <div class="container-fluid line"></div>
+                    <div class="container-fluid title hotels">
+                        <span>Places to stay</span>
+                        <span class="description">We've also recommended some places to stay during your trip.</span>
+                        <div class="container-fluid grid-items">
+                            <Item v-for="(place, index) in suggestedDestinations" :key="index"
+                                :imageUrl="place.imageUrl"
+                                :name="place.name"
+                                :rating="generateStars(place.rating)"
+                                :id="place.id"/>
+                        </div>
+                    </div>
 
-        <div class="container-fluid frame-button">
-            <button class="button back" @click="goBack" >Back</button>
-            <button class="button next" @click="goNext" >Next</button>
+                    <div class="container-fluid frame-button">
+                        <button class="button back" @click="goBack" >Back</button>
+                        <button class="button next" @click="goNext" >Next</button>
+                    </div>
+                    <Float_Button class="float-button"/>
+                </div>
+            </div>
         </div>
-        <Float_Button class="float-button"/>
     </div>
+    
 </template>
 
 <script>
@@ -104,7 +111,7 @@ const {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     justify-content: space-around;
-    gap: 65px;
+    gap: 35px;
     align-items: center;
 }
 .line {

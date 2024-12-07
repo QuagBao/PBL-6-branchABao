@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid">
-        <div class="container-fluid"    >
+        <div class="container-fluid p-2">
             <div class="container-fluid frame-title" style="width: 1480px;">
                 <h1>Tell us what you’re interested in</h1>
                 <h5>Select all that apply</h5>
@@ -13,7 +13,7 @@
                     {{ topic }}
                 </button>
             </div>
-            <div class="container-fluid frame-button">
+            <div class="container-fluid frame-button px-5 py-2">
                 <button class="button back" @click="goBack" >Back</button>
                 <button class="button next" @click="goNext" >Next</button>
             </div>

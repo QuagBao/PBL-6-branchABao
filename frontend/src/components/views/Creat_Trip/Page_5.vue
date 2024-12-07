@@ -31,7 +31,7 @@
                 </div>
             </div>
 
-            <div class="container-fluid frame-button">
+            <div class="container-fluid frame-button px-5 -y-2">
                 <button class="button back" @click="goBack" >Back</button>
             </div>
         </div>

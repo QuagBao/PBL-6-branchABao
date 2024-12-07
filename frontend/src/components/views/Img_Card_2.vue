@@ -30,6 +30,7 @@ export default {
     align-items: end;
     justify-content: center;
     z-index: 1;
+    cursor: pointer;
 }
 .info-img .info-overlay {
     position: absolute;
@@ -51,11 +52,14 @@ export default {
     border-radius: 10px;
     transition: 0.5s;
 }
-.info-img:hover .info-overlay {
+.info-img .info-overlay {
     bottom: 0;
 }
+.info-img .search-icon {
+    background: rgba(19, 53, 123, 0.3);
+}
 .info-img:hover .search-icon {
-    background: rgba(19, 53, 123, 0.4);
+    background: rgba(19, 53, 123, 0.55);
 }
 .info-img:hover img {
     transition: 0.5s;

@@ -20,7 +20,7 @@ const {
 } = CreateTripViewModel();
 </script>
 
-<style>
+<style scoped>
 .frame {
     display: flex;
     padding: 15px;

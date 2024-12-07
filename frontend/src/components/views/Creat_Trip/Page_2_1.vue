@@ -1,6 +1,6 @@
 <template>
     <div class="container-fluid">
-        <div class="container-fluid"    >
+        <div class="container-fluid p-2">
             <div class="container-fluid frame-title" style="width: 1480px;">
                 <h1>When are you going?</h1>
                 <h5>Choose month and trip length</h5>
@@ -49,7 +49,7 @@
             <div class="container-fluid frame-dates">
                 <p @click="exactDates">Enter exact dates</p>
             </div>
-            <div class="container-fluid frame-button">
+            <div class="container-fluid frame-button px-5 py-2">
                 <button class="button back" @click="goBack" >Back</button>
                 <button class="button next" @click="goNext" >Next</button>
             </div>
@@ -166,6 +166,7 @@ button:hover {
     font-size: 20px;
     text-decoration: underline;
     text-underline-offset: 7px;
+    cursor: pointer;
 }
 .frame-dates:hover{
     color: #00B4D8
@@ -203,6 +204,7 @@ button:hover {
 }
 .length #Icon-Set {
     fill: #13357B;
+    cursor: pointer;
 }
 .length .button-1:hover #Icon-Set{
     fill: #00B4D8;
