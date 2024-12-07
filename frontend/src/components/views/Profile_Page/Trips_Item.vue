@@ -43,7 +43,7 @@ export default {
 
 .trip-item {
     display: flex;
-    margin: 50px 0;
+    margin: 20px 0;
     background-color: #CAF0F8;
     width: 99%;
     color: #13357B;

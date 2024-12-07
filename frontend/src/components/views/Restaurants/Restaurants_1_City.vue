@@ -3,122 +3,126 @@
       <Header />
       <Top_Button v-if="cityId" :cityID="parseInt(cityId, 10)"/>
     </div>
-  
-    <!-- Images -->
-    <img src="@/assets/images/restaurant_image.jpg" alt="City 1" class="img-fluid" />
-    <!-- Search -->
-    <div class="container-fluid search">
-      <div class="container">
-        <Form_Search :name_of_page="'Find your perfect restaurant'" :name="'Attraction, activities or destination'" />
-      </div>
-    </div>
-  
-    <div class="content">
-      <div class="row">
-        <div class="col-5">
-          <div class="container left-panel">
-            <div class="filter-section">
-              <!-- Cuisine Filter -->
-              <div
-                class="filter-item"
-                @click="toggleOptions('cuisine')"
-                :class="{ active: activeOptions.cuisine }"
-              >
-                Cuisine
-                <div class="icon"></div>
-              </div>
-              <div v-if="activeOptions.cuisine" class="options">
-                <div v-for="option in cuisine_options" :key="option" class="option">
-                  <input
-                    type="checkbox"
-                    :id="`cuisine-${option}`"
-                    :checked="save_option_cuisine.includes(option)"
-                    @change="handleCheckboxChange(option, 'save_option_cuisine')"
-                  />
-                  <label class="label" :for="`cuisine-${option}`">{{ option }}</label>
-                </div>
-              </div>
-  
-              <!-- Meal Filter -->
-              <div
-                class="filter-item"
-                @click="toggleOptions('meal')"
-                :class="{ active: activeOptions.meal }"
-              >
-                Meals
-                <div class="icon"></div>
-              </div>
-              <div v-if="activeOptions.meal" class="options">
-                <div v-for="option in meal_options" :key="option" class="option">
-                  <input
-                    type="checkbox"
-                    :id="`meal-${option}`"
-                    :checked="save_option_meal.includes(option)"
-                    @change="handleCheckboxChange(option, 'save_option_meal')"
-                  />
-                  <label class="label" :for="`meal-${option}`">{{ option }}</label>
-                </div>
-              </div>
-  
-              <!-- Special Diet Filter -->
-              <div
-                class="filter-item"
-                @click="toggleOptions('specialDiet')"
-                :class="{ active: activeOptions.specialDiet }"
-              >
-                Special Diet
-                <div class="icon"></div>
-              </div>
-              <div v-if="activeOptions.specialDiet" class="options">
-                <div v-for="option in special_diet_options" :key="option" class="option">
-                  <input
-                    type="checkbox"
-                    :id="`specialDiet-${option}`"
-                    :checked="save_option_special_diet.includes(option)"
-                    @change="handleCheckboxChange(option, 'save_option_special_diet')"
-                  />
-                  <label class="label" :for="`specialDiet-${option}`">{{ option }}</label>
-                </div>
-              </div>
-  
-              <!-- Feature Filter -->
-              <div
-                class="filter-item"
-                @click="toggleOptions('feature')"
-                :class="{ active: activeOptions.feature }"
-              >
-                Features
-                <div class="icon"></div>
-              </div>
-              <div v-if="activeOptions.feature" class="options">
-                <div v-for="option in feature_options" :key="option" class="option">
-                  <input
-                    type="checkbox"
-                    :id="`feature-${option}`"
-                    :checked="save_option_feature.includes(option)"
-                    @change="handleCheckboxChange(option, 'save_option_feature')"
-                  />
-                  <label class="label" :for="`feature-${option}`">{{ option }}</label>
+    <div class="container-fluid">
+      <div class="container-fluid">
+        <div class="container-fluid">
+          <div class="container-fluid">
+            <div class="container-fluid frame-image-search">
+              <img src="@/assets/images/restaurant_image.jpg" alt="City 1" class="img-fluid" />
+              <div class="container-fluid search">
+                <div class="container">
+                  <Form_Search :name_of_page="'Find your perfect restaurant'" :name="'Attraction, activities or destination'" />
                 </div>
               </div>
             </div>
+            
+            <div class="content">
+              <div class="frame-filter">
+                  <div class="container left-panel">
+                    <div class="filter-section">
+                      <!-- Cuisine Filter -->
+                      <div
+                        class="filter-item"
+                        @click="toggleOptions('cuisine')"
+                        :class="{ active: activeOptions.cuisine }"
+                      >
+                        Cuisine
+                        <div class="icon"></div>
+                      </div>
+                      <div v-if="activeOptions.cuisine" class="options">
+                        <div v-for="option in cuisine_options" :key="option" class="option">
+                          <input
+                            type="checkbox"
+                            :id="`cuisine-${option}`"
+                            :checked="save_option_cuisine.includes(option)"
+                            @change="handleCheckboxChange(option, 'save_option_cuisine')"
+                          />
+                          <label class="label" :for="`cuisine-${option}`">{{ option }}</label>
+                        </div>
+                      </div>
+          
+                      <!-- Meal Filter -->
+                      <div
+                        class="filter-item"
+                        @click="toggleOptions('meal')"
+                        :class="{ active: activeOptions.meal }"
+                      >
+                        Meals
+                        <div class="icon"></div>
+                      </div>
+                      <div v-if="activeOptions.meal" class="options">
+                        <div v-for="option in meal_options" :key="option" class="option">
+                          <input
+                            type="checkbox"
+                            :id="`meal-${option}`"
+                            :checked="save_option_meal.includes(option)"
+                            @change="handleCheckboxChange(option, 'save_option_meal')"
+                          />
+                          <label class="label" :for="`meal-${option}`">{{ option }}</label>
+                        </div>
+                      </div>
+          
+                      <!-- Special Diet Filter -->
+                      <div
+                        class="filter-item"
+                        @click="toggleOptions('specialDiet')"
+                        :class="{ active: activeOptions.specialDiet }"
+                      >
+                        Special Diet
+                        <div class="icon"></div>
+                      </div>
+                      <div v-if="activeOptions.specialDiet" class="options">
+                        <div v-for="option in special_diet_options" :key="option" class="option">
+                          <input
+                            type="checkbox"
+                            :id="`specialDiet-${option}`"
+                            :checked="save_option_special_diet.includes(option)"
+                            @change="handleCheckboxChange(option, 'save_option_special_diet')"
+                          />
+                          <label class="label" :for="`specialDiet-${option}`">{{ option }}</label>
+                        </div>
+                      </div>
+          
+                      <!-- Feature Filter -->
+                      <div
+                        class="filter-item"
+                        @click="toggleOptions('feature')"
+                        :class="{ active: activeOptions.feature }"
+                      >
+                        Features
+                        <div class="icon"></div>
+                      </div>
+                      <div v-if="activeOptions.feature" class="options">
+                        <div v-for="option in feature_options" :key="option" class="option">
+                          <input
+                            type="checkbox"
+                            :id="`feature-${option}`"
+                            :checked="save_option_feature.includes(option)"
+                            @change="handleCheckboxChange(option, 'save_option_feature')"
+                          />
+                          <label class="label" :for="`feature-${option}`">{{ option }}</label>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="list-restaurants">
+                  <Card_Item  v-for="(item, index) in restaurants"
+                              :key="index"
+                              :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
+                              :name="item.name"
+                              :rating="generateStars(item.rating)"
+                              :reviewNumber="item.numOfReviews"
+                              :tags="item.tag"
+                              @click="navigateToDetailRestaurant(item.restaurant_id)" />
+                </div>
+            </div>
           </div>
-        </div>
-        <div class="col-7 list-restaurants">
-          <Card_Item
-            v-for="(item, index) in restaurants"
-            :key="index"
-            :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
-            :name="item.name"
-            :stars="generateStars(item.rating)"
-            :rating="item.rating"
-            :reviewNumber="item.numOfReviews"
-            :tags="item.tag"
-            @click="navigateToDetailRestaurant(item.restaurant_id)"
-          />
         </div>
       </div>
     </div>
+  
+    
   </template>
 
 <script setup>
@@ -194,9 +198,6 @@ const navigateToDetailRestaurant = (restaurant_id) =>{
 </script>
 
 <style scoped>
-body {
-    background-color: #EDF6F9;
-}
 .img-fluid {
     margin-top: 150px;
     width: 100vw;
@@ -211,44 +212,25 @@ body {
     margin-bottom: 250px;
 }
 .content{
-    display: flex;
-    flex-direction: column;
-    color: #13357B;
-    font-size: 28px;
-    padding-top: 20px;
+  display: grid;
+  grid-template-columns: 30% 65%;
+  gap: 5%
 }
 .content p{
     font-weight: 900;
     margin-top: 15px; 
 }
-.list-items {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 30px;
-    align-items: center;
-    width: 95%;
-    height: 100%;
-}
-.list-items-1 {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
-    align-items: center;
-    width: 95%;
-    height: 100%;
-}
 .list-restaurants{
     display: grid;
     margin-top: 0px;
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    gap: 50px;
     align-items: center;
     height: 100%;
 }
 .left-panel{
     position: sticky;
     top: 160px;
-    width: 70%;
 }
 .filter-section {
     display: flex;

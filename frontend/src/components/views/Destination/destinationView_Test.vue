@@ -5,116 +5,115 @@
         <Top_Button v-if="cityDetails" :cityID="cityDetails.id"/>
     </div>
 
-    <!-- Carousel Section -->
-    <div class="row">
-        <Carousel :currentImage="currentImage" :images="images"/>
-    </div>
-
-    <!-- Save Button Section -->
-    <div class="save">
-        <Btn_Save/>
-    </div>
-
-    <!-- Discover Info Section -->
     <div class="container-fluid">
-        <div class="row p-5 info-destination">
-            <div class="col">
-                <p class="title">Discover</p> 
-                <!-- Destination Name -->
-                <div class="row">
-                    <div class="col-1"></div>
-                    <div class="col-11 name-of-desstination">{{ cityDetails?.name }}</div>
-                </div>
-                <!-- Description Section -->
-                <div class="row">
-                    <div class="col-1"></div>
-                    <div class="col-11">
-                        <p class="description">
-                            {{ isReadMore ? fullDescription : getTruncatedDescription }}
-                        </p>
+        <div class="container-fluid">
+            <div class="container-fluid">
+                <div class="container-fluid">
+                    <!-- Carousel Section -->
+                    <Carousel class="custom" :currentImage="currentImage" :images="images"/>
+
+                    <!-- Save Button Section -->
+                    <div class="save">
+                        <Btn_Save/>
+                    </div>
+                    <!-- Discover Info Section -->
+                     <div class="container-fluid">
+                        <div class="container-fluid">
+                            <div class="container-fluid d-flex flex-column gap-5">
+                                <div class="info-destination d-flex flex-column gap-2">
+                                    <p class="title">Discover</p> 
+                                    <!-- Destination Name -->
+                                    <div class="row">
+                                        <div class="col-1"></div>
+                                        <div class="col-11 name-of-desstination">{{ cityDetails?.name }}</div>
+                                    </div>
+                                    <!-- Description Section -->
+                                    <div class="row">
+                                        <div class="col-1"></div>
+                                        <div class="col-11">
+                                            <p class="description">
+                                                {{ isReadMore ? fullDescription : getTruncatedDescription }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                    <!-- Read More/ Less Button -->
+                                    <div class="row">
+                                        <div class="col-1"></div>
+                                        <div class="col-11">
+                                            <button class="read-more-or-less" @click="toggleReadMore">{{ isReadMore ? 'Read less' : 'Read more' }}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="catagory">
+                                    <!-- Category Section -->
+                                    <p class="characteristic">Characteristic of {{ cityDetails?.name }}</p>
+                                    <p class="title-catagory">Select a category to filter suggestion</p>    
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                    
+                    <!-- Category Buttons & Content Section -->
+                    <div class="container-fluid content">
+                        <div class="container btn-catagory">
+                            <Swiper class="swiper"
+                                :slides-per-view="4"
+                                :spaceBetween="10"
+                                :scrollbar="{ draggable: true }"
+                                :modules="modules">
+                                <SwiperSlide v-for="item in buttons" :key="item.id">
+                                    <button class="button-category" 
+                                            :class="{ selected: selectedIndices.includes(item.id) }" 
+                                            @click="selectButton(item.id)">
+                                        {{ item.name }}
+                                    </button>
+                                </SwiperSlide>
+                            </Swiper>
+                        </div>
+
+                        <!-- Things to do Section -->
+                        <div class="title-content">
+                            <p class="p-5 things-to-do">Things to do</p>
+                            <div class="container-fluid context">
+                                <Cards v-for="(item, index) in filteredDestinations"
+                                        :key="index"
+                                        :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
+                                        :name="item.name"
+                                        :rating="generateStars(item.rating)"
+                                        :tags="item.tag"
+                                        @click="navigateToDetailPlace(item.id)"/>
+                            </div>
+                        </div>
+
+                        <!-- Restaurants Section -->
+                        <div class="row title-content">
+                            <p class="p-5 restaurants">Restaurants</p>
+                            <div class="container-fluid context">
+                                <Cards v-for="(item, index) in filteredRestaurants"
+                                        :key="index"
+                                        :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
+                                        :name="item.name"
+                                        :rating="generateStars(item.rating)"
+                                        :tags="item.tag"
+                                        @click="navigateToDetailRestaurant(item.restaurant_id)"/>
+                            </div>
+                        </div>
+
+                        <!-- Resort & Hotels Section -->
+                        <div class="row title-content">
+                            <p class="p-5 resorts">Resort & Hotels</p>
+                            <div class="container-fluid context">
+                                <Cards v-for="(item, index) in filteredHotels"
+                                        :key="index"
+                                        :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
+                                        :name="item.name"
+                                        :rating="generateStars(item.rating)"
+                                        :tags="item.tag"
+                                        @click="navigateToDetailHotel(item.hotel_id)"/>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <!-- Read More/ Less Button -->
-                <div class="row">
-                    <div class="col-1"></div>
-                    <div class="col-11">
-                        <button class="read-more-or-less" @click="toggleReadMore">{{ isReadMore ? 'Read less' : 'Read more' }}</button>
-                    </div>
-                </div>
-            </div>
-        </div> 
-    </div>
-
-    <!-- Category Section -->
-    <div class="container-fluid">
-        <div class="row p-5 catagory">
-            <div class="col">
-                <div class="row"><p class="characteristic">Characteristic of {{ cityDetails?.name }}</p></div>
-                <div class="row"><p class="title-catagory">Select a category to filter suggestion</p></div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Category Buttons & Content Section -->
-    <div class="container-fluid content">
-        <div class="container btn-catagory">
-            <Swiper class="swiper"
-                :slides-per-view="4"
-                :spaceBetween="10"
-                :scrollbar="{ draggable: true }"
-                :modules="modules">
-                <SwiperSlide v-for="item in buttons" :key="item.id">
-                    <button class="button-category" 
-                            :class="{ selected: selectedIndices.includes(item.id) }" 
-                            @click="selectButton(item.id)">
-                        {{ item.name }}
-                    </button>
-                </SwiperSlide>
-            </Swiper>
-        </div>
-
-        <!-- Things to do Section -->
-        <div class="row title-content">
-            <p class="p-5 things-to-do">Things to do</p>
-            <div class="container-fluid context">
-                <Cards v-for="(item, index) in filteredDestinations"
-                        :key="index"
-                        :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
-                        :name="item.name"
-                        :rating="item.rating"
-                        :stars="generateStars(item.rating)"
-                        :tags="item.tag"
-                        @click="navigateToDetailPlace(item.id)"/>
-            </div>
-        </div>
-
-        <!-- Restaurants Section -->
-        <div class="row title-content">
-            <p class="p-5 restaurants">Restaurants</p>
-            <div class="container-fluid context">
-                <Cards v-for="(item, index) in filteredRestaurants"
-                        :key="index"
-                        :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
-                        :name="item.name"
-                        :rating="item.rating"
-                        :stars="generateStars(item.rating)"
-                        :tags="item.tag"
-                        @click="navigateToDetailRestaurant(item.restaurant_id)"/>
-            </div>
-        </div>
-
-        <!-- Resort & Hotels Section -->
-        <div class="row title-content">
-            <p class="p-5 resorts">Resort & Hotels</p>
-            <div class="container-fluid context">
-                <Cards v-for="(item, index) in filteredHotels"
-                        :key="index"
-                        :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
-                        :name="item.name"
-                        :rating="item.rating"
-                        :stars="generateStars(item.rating)"
-                        :tags="item.tag"
-                        @click="navigateToDetailHotel(item.hotel_id)"/>
             </div>
         </div>
     </div>
@@ -243,7 +242,6 @@ body{
 .name-of-desstination{
     font-size: 50px;
     font-weight: 700;
-    margin-bottom: 10px;
 }
 
 .read-more-or-less{
@@ -268,16 +266,10 @@ body{
 .title-catagory{
     color: #13357B;
     font-size: 20px;
-    margin-bottom: -20px ;
 }
-
-.btn-catagory{
-    margin-bottom: 30px;
-}
-
 .title-content p{
     color: #13357B;
-    font-size: 25px;
+    font-size: 30px;
     font-weight: 900;
 }
 
@@ -287,7 +279,7 @@ body{
     align-items: center;
     width: 100%;
     height: 100%;
-    gap:15px;
+    gap:30px;
 }
 .swiper {
     width: 100%;
@@ -320,13 +312,22 @@ body{
     background-color: #13357B;
     color: #EDF6F9;
 }
+.content {
+    margin-bottom: 30px;
+}
+:deep(.custom .carousel-control-next .carousel-control-next-icon) {
+    margin-right: -10vw; /* Giá trị mới */
+}
+:deep(.custom .carousel-control-prev .carousel-control-prev-icon) {
+    margin-left: -10vw; /* Giá trị mới */
+}
 </style>
 
 <style>
 .swiper .swiper-scrollbar {
     background-color: #EDF6F9 !important;
     border: 1px solid #13357B !important;
-    height: 6px !important;
+    height: 8px !important;
 }
 
 .swiper .swiper-scrollbar-drag {

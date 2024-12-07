@@ -2,9 +2,8 @@
     <Swiper class="swiper"
             :slides-per-view="3"
             :space-between="30"
-            :grid="{ rows: 2 }"
-            pagination
-            modules="[Pagination, Grid]">
+            :grid="{ rows: 2, fill: 'row' }"
+            pagination >
       <SwiperSlide>Slide 1</SwiperSlide>
       <SwiperSlide>Slide 2</SwiperSlide>
       <SwiperSlide>Slide 3</SwiperSlide>
@@ -20,14 +19,12 @@
   
   <script setup>
   import { Swiper, SwiperSlide } from 'swiper/vue';
-  import SwiperCore, { Pagination, Grid } from 'swiper';
   
   // Import Swiper styles
   import 'swiper/css';
+  import 'swiper/css/grid';
   import 'swiper/css/pagination';
   
-  // Register the modules with Swiper
-  SwiperCore.use([Pagination, Grid]);
   </script>
   
   <style scoped>

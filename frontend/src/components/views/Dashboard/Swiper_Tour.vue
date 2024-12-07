@@ -1,12 +1,10 @@
 <template>
-    <div class="container-fluid tour">
+    <div class="tour">
         <div class="container">
             <Swiper :slidesPerView="3"
-                    :spaceBetween="30"
+                    :spaceBetween="50"
+                    :pagination="{ clickable: true }"
                     :navigation="true"
-                    :pagination="{
-                        clickable: true,
-                    }"
                     :modules="modules"
                     class="mySwiper">
                 <SwiperSlide class="tour-item"v-for="(tour, index) in tours" 
@@ -102,14 +100,9 @@ export default {
 </script>
 
 <style scoped>
-.container-fluid.tour {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
-    color: #13357B;
-    gap: 30px;
-    width: 100%;
+.tour {
+    cursor: pointer;
+    margin-bottom: 30px
 }
 
 .tour .tours-item {

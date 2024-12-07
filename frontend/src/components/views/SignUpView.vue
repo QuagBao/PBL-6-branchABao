@@ -21,9 +21,9 @@
       <button type="submit">Sign up</button>
 
       <!-- Options -->
-      <p style="font-family: 'roboto'; color: #EDF6F9; padding-top: 10px;">
+      <h5 style="font-family: 'roboto'; color: #EDF6F9; padding-top: 10px;">
         Already have an account? <router-link class="sign-in-link" to="/login">Sign in here</router-link>
-      </p>
+      </h5>
   
     </form>
   </div>
@@ -99,8 +99,8 @@ html, body {
 
 .container {
   position: absolute;
-  top: calc(10% + 10px); /* Đảm bảo khoảng cách tương đối với viewport */
-  right: 20%; /* Cách phải 20% */
+  top: calc(20% + 10px); /* Đảm bảo khoảng cách tương đối với viewport */
+  left: 20%; /* Cách phải 20% */
   max-width: 400px;
   width: 100%;
   text-align: center;

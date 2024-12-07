@@ -66,7 +66,7 @@
                     <img :src="place.imageUrl" alt="Place Image" class="place-image" />
                     <div class="pick-button" @click="togglePickStatus(place.id)">
                         <img :src="picked[place.id] ? pickFull : pickEmpty" alt="pick icon" class="pick-icon" />
-                    </div>
+                    </div>   
                     <div class="place-detail">
                         <p class="place-name">{{ place.name }}</p>
                         <div class="rating">
@@ -126,7 +126,7 @@
             <h3 class="title-detail">Save your selections and get inspired with more more guidance</h3>
             <div class="button-container">
                 <button @click="createItinerary" class="option-button">
-                    <img src="@/assets/travel.svg" alt="Icon 1" class="button-icon" />
+                    <!-- <img src="@/assets/svg/travel.svg" alt="Icon 1" class="button-icon" /> -->
                     <div>
                         <h3 class="button-title">Create an itinerary</h3>
                         <p class="button-info">We'll smartly organize your picks into a daily itinerary you can edit and add to.</p>
@@ -134,7 +134,7 @@
                 </button>
 
                 <button @click="saveForLater" class="option-button">
-                    <img src="@/assets/heart-none.svg" alt="Icon 2" class="button-icon" />
+                    <img src="@/assets/svg/heart-none.svg" alt="Icon 2" class="button-icon" />
                     <div>
                         <h3 class="button-title">Just save for now</h3>
                         <p class="button-info">We’ll keep all your selections together in a trip you can review, organize, and create an itinerary later.</p>
@@ -163,7 +163,7 @@
 </template>
 
 <script setup>
-import CreateTripViewModel from '../viewModels/CreateTripViewModel';
+import CreateTripViewModel from '../viewModels/Create_Trip_ViewModel/CreateTripViewModel';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 

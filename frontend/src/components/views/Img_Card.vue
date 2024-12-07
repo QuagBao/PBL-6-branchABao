@@ -4,7 +4,6 @@
             <img :src="imageUrl" :alt="name_picture" class="img-fluid rounded w-100"/>
             <div class="info-overlay p-4">
                 <h4 class="text-white mb-2 mt-3">{{name}}</h4>
-                
             </div>
             <div class="search-icon"></div>
         </div>
@@ -31,18 +30,19 @@ export default {
     align-items: end;
     justify-content: center;
     z-index: 1;
+    cursor: pointer;
 }
 .info-img .info-overlay {
     position: absolute;
-    bottom: 100vw;
+    bottom: 100%;
     text-align: center;
     z-index: 3;
     transition: 0.5s;
 }
 .info-img .search-icon {
     position: absolute;
-    width: 100vw;
-    height: 100vw;
+    width: 100%;
+    height: 100%;
     top: 0;
     right: 0;
     display: flex;
@@ -51,11 +51,14 @@ export default {
     border-radius: 10px;
     transition: 0.5s;
 }
-.info-img:hover .info-overlay {
+.info-img .info-overlay {
     bottom: 30%;
 }
+.info-img .search-icon {
+    background: rgba(19, 53, 123, 0.3);
+}
 .info-img:hover .search-icon {
-    background: rgba(19, 53, 123, 0.4);
+    background: rgba(19, 53, 123, 0.55);
 }
 .info-img:hover img {
     transition: 0.5s;

@@ -10,6 +10,7 @@ const tours = ref([]);
 const currentIndex = ref(0);
 
 const setActive = (button) => {
+  console.log(button);
   activeButton.value = button;
   currentIndex.value = 0;
 };

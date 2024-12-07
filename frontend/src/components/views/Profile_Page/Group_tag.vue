@@ -1,31 +1,36 @@
 <template>
     <div class="group-tag">
-        <div class="btn-group">
-            <button>Activity Feed</button>
-        </div>
-        <div class="btn-group">
-            <button>Trips</button>
-        </div>
-        <div class="btn-group">
-            <button>Reviews</button>
-        </div>
-        <div class="btn-group">
-            <button>My Favourites</button>
-        </div>
-        <div class="btn-group">
-            <button>Account Settings</button>
+        <div class="btn-group" 
+            v-for="tab in profileViewModel.tabsMap.values()" 
+            :key="tab.name">
+            <button :class="{ active: tab.active }"
+                @click="selectTab(tab.tagName)">
+                {{ tab.tagName }}
+            </button>
         </div>
     </div>
 </template>
 
 <script>
-    export default {
-        name: "Info_User",
+import ProfileViewModel from '@/components/viewModels/Profile_Page_ViewModel/profilePage_ViewModel';
+export default {
+    name: "Info_User",
+    data() {
+        return {
+            profileViewModel: new ProfileViewModel()
+        }
+    }, 
+    methods: {
+        selectTab(tabName) {
+            console.log('Selected TabName:', tabName);
+            this.profileViewModel.changeTab(tabName);
+            this.$emit('change-tab', tabName);
+        }
     }
+}
 </script>
 
 <style scoped>
-
 .group-tag {
     display: flex;
     width: 100%;

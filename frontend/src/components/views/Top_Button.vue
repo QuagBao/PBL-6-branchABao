@@ -77,7 +77,7 @@
 .container-fluid {
     width: 100%;
     position: fixed;
-    top: 0;
+    top: -25px;
     left: 0;
     border-bottom: 1px solid #13357B;
     background-color: #EDF6F9;

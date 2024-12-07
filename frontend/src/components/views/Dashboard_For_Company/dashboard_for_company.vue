@@ -1,197 +1,131 @@
 <template>
-    <div class="container-fluid header" style="z-index: 9999;">
-        <Header/>
-    </div>
+    <header_For_company/>
 
-    <div class="container-fluid-carousel">
-        <div class="carousel-header">
-            <!-- Carousel -->
-            <div id="carouselId" class="carousel slide" data-bs-ride="carousel">
-
-            <!-- The slideshow/carousel -->
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img src="@/assets/image/company/Vinpearl/images/vinpearl.webp" alt="City 1" class="img-fluid">
-                </div>
-                <div class="carousel-item">
-                    <img src="@/assets/image/company/Vinpearl/images/vinpearl_1.webp" alt="City 1" class="img-fluid">
-                </div>
-                <div class="carousel-item">
-                    <img src="@/assets/image/company/Vinpearl/images/vinpearl_2.webp" alt="City 1" class="img-fluid">
-                </div>
-            </div>
-
-            <!-- Left and right controls/icons -->
-            <button class="carousel-control-prev" type="button" data-bs-target="#carouselId" data-bs-slide="prev">
-                <span class="carousel-control-prev-icon btn"></span>
-            </button>
-            <button class="carousel-control-next" type="button" data-bs-target="#carouselId" data-bs-slide="next">
-                <span class="carousel-control-next-icon btn"></span>
-            </button>
-            </div>
-        </div>
+    <Carousel_For_Dashboard/>
+    <div class="container-fluid search-btn">
+        <Search_Btn_Big/>
     </div>
 
     <div class="container-fluid">
-        <div class="container">
-            <div class="position-relative">
-                <input class="form-control" type="text" placeholder="Where do you want to go?">
-                <button type="button" class="btn btn-primary">Search</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="container-fluid" style="margin-top: 100px; color: #13357B;">
-        <div class="container">
-            <div class="mx-auto text-center p-5">
-                <h2 class="section-title px-5 ">Room & Rates</h2>
-                <h4 class="mb-0" style="margin-top: 20px;">Popular Room</h4>
-            </div>
-
-            <div class="container-fluid list-card-rooms">
-                <Card_room/> <Card_room/> <Card_room/>
-            </div>
-        </div>
-    </div>
-
-    <div class="container-fluid" style="margin-top: 100px; color: #13357B;">
-        <div class="container">
-            <div class="mx-auto text-center p-5">
-                <h2 class="section-title px-5 ">Our services</h2>
-                <h6 class="mb-0" style="margin-top: 20px;">Info about of service of hotels provide</h6>
-            </div>
-
-            <div class="container-fluid list-our-services">
+        <div class="container-fluid">
+            <div class="container-fluid">
+                <div class="container-fluid d-flex justify-content-center align-items-center gap-3">
+                    <div class="container-fluid frame-1 d-flex justify-content-between align-items-center gap-5">
+                        <div class="container-fluid info d-flex flex-column gap-3">
+                            <h6>Total Places</h6>
+                            <p>9999</p>
+                        </div>
+                        <div class="d-flex justify-content-center align-items-center svg">
+                            <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M12.2848 18.9935C12.1567 19.0875 12.0373 19.1728 11.9282 
+                                19.2493C11.8118 19.1721 11.6827 19.0833 11.5427 18.9832C10.8826 18.5109 10.0265 17.8176 9.18338 16.9529C7.45402 
+                                15.1792 6 12.9151 6 10.5C6 7.18629 8.68629 4.5 12 4.5C15.3137 4.5 18 7.18629 18 10.5C18 12.8892 16.4819 15.1468 
+                                14.6893 16.9393C13.8196 17.8091 12.9444 18.5099 12.2848 18.9935ZM19.5 10.5C19.5 16.5 12 21 12 21C11.625 21 4.5 16.5 
+                                4.5 10.5C4.5 6.35786 7.85786 3 12 3C16.1421 3 19.5 6.35786 19.5 10.5ZM13.5 10.5C13.5 11.3284 12.8284 12 12 
+                                12C11.1716 12 10.5 11.3284 10.5 10.5C10.5 9.67157 11.1716 9 12 9C12.8284 9 13.5 9.67157 13.5 10.5ZM15 10.5C15 
+                                12.1569 13.6569 13.5 12 13.5C10.3431 13.5 9 12.1569 9 10.5C9 8.84315 10.3431 7.5 12 7.5C13.6569 7.5 15 8.84315 15 
+                                10.5Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="container-fluid frame-1 d-flex justify-content-between align-items-center gap-5">
+                        <div class="container-fluid info d-flex flex-column gap-3">
+                            <h6>Total Tour Packages</h6>
+                            <p>9999</p>
+                        </div>
+                        <div class="d-flex justify-content-center align-items-center svg">
+                            <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M9 20L3 17V4L9 7M9 20L15 17M9 20V7M15 17L21 20V7L15 4M15 17V4M9 7L15 4" 
+                                stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="container-fluid frame-1 d-flex justify-content-between align-items-center gap-5">
+                        <div class="container-fluid info d-flex flex-column gap-3">
+                            <h6>Total Reviews</h6>
+                            <p>9999</p>
+                        </div>
+                        <div class="d-flex justify-content-center align-items-center svg">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="40px" height="40px" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 
+                                01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" />
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="container-fluid frame-1 d-flex justify-content-between align-items-center gap-5">
+                        <div class="container-fluid info d-flex flex-column gap-3">
+                            <h6>Average Rating</h6>
+                            <p>9999</p>
+                        </div>
+                        <div class="d-flex justify-content-center align-items-center svg">
+                            <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M12.2848 18.9935C12.1567 19.0875 12.0373 19.1728 11.9282 
+                                19.2493C11.8118 19.1721 11.6827 19.0833 11.5427 18.9832C10.8826 18.5109 10.0265 17.8176 9.18338 16.9529C7.45402 
+                                15.1792 6 12.9151 6 10.5C6 7.18629 8.68629 4.5 12 4.5C15.3137 4.5 18 7.18629 18 10.5C18 12.8892 16.4819 15.1468 
+                                14.6893 16.9393C13.8196 17.8091 12.9444 18.5099 12.2848 18.9935ZM19.5 10.5C19.5 16.5 12 21 12 21C11.625 21 4.5 
+                                16.5 4.5 10.5C4.5 6.35786 7.85786 3 12 3C16.1421 3 19.5 6.35786 19.5 10.5ZM13.5 10.5C13.5 11.3284 12.8284 12 12 
+                                12C11.1716 12 10.5 11.3284 10.5 10.5C10.5 9.67157 11.1716 9 12 9C12.8284 9 13.5 9.67157 13.5 10.5ZM15 10.5C15 
+                                12.1569 13.6569 13.5 12 13.5C10.3431 13.5 9 12.1569 9 10.5C9 8.84315 10.3431 7.5 12 7.5C13.6569 7.5 15 8.84315 15 
+                                10.5Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                    </div>
+                </div>
                 
+                <div class="container-fluid d-flex justify-content-center align-items-center gap-3">
+                    <div class="container-fluid">
+                        Statics Reviews:
+                        Sẽ gồm biểu đồ đường hiển thị đánh giá trung bình theo từng tháng
+                        Biểu đồ cột hiển thị tổng số reviews
+                    </div>
+                    <div class="container-fluid">
+                        sẽ hiển thị ra top 5 destination của doanh nghiệp dựa trên số rating, nếu cùng rating sẽ sắp xếp theo tổng reviews
+                    </div>
+                </div>
             </div>
         </div>
     </div>
+    
+
+    
+
 </template>
 
 <script>
-    import Header from '../Header.vue';
-    import Card_room from './Card_room.vue';
-    export default {
-        name: "Dashboard_For_Company",
-        components: {
-            Header, Card_room
-        }   
-    } 
+import header_For_company from './header_For_company.vue';
+import Carousel_For_Dashboard from '../Carousel_For_Dashboard.vue';
+import Search_Btn_Big from '../Search_Btn_Big.vue';
+import Scroll_Bar_Component from '../Scroll_Bar_Component.vue';
+export default {
+    name: "Dashboard_For_Company",
+    components: {
+        header_For_company, Carousel_For_Dashboard, Search_Btn_Big
+    }
+}
 </script>
 
 <style scoped>
-
-.position-relative {
-    position: relative;
-    background: rgba(19, 53, 123, 0.8);
-    border-radius: 50rem;
-    padding: 3rem;
-    margin-right: auto;
-    margin-left: auto;
-    margin-top: -78px;
-    width: 100%;
+.search-btn {
+    margin-top: -65px;
+    margin-bottom: 80px;
+    width: 95%;
 }
-.form-control {
-    display: block;
-    width: 100%;
-    padding: 0.375rem 0.75rem;
-    padding-left: 1.5rem;
-    padding-right: 3rem;
-    padding-top: 1rem;
-    padding-bottom: 1rem;
-    border: 0;
-    font-size: 1rem;
-    font-weight: 400;
-    line-height: 1.5;
+.frame-1 {
+    background-color: #CAF0F8;
+    border-radius: 20px;
+    padding: 10px;
     color: #13357B;
+}
+.svg{
+    padding: 10px;
+    border-radius: 50%;
     background-color: #EDF6F9;
-    background-clip: padding-box;
-    border: 2px solid #EDF6F9;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    border-radius: 30px;
-    transition: border-color 0.15s ease-in-out, 
-    box-shadow 0.15s ease-in-out;
 }
-.form-control::placeholder,
-.form-control:focus{
-    color: #13357B;
+h6{
+    font-weight: bold;
+    font-size: 16px;
 }
-
-.btn-primary {
-    top : 50%;
-    right: 46px;
-    transform: translateY(-50%);
-    box-shadow: inset 0 0 0 0 #13357B;  
-    border-radius: 50rem;
-    font-weight: 600;
-    transition: all 0.5s;
-    position: absolute;
-    color: #fff;
-    background-color: #13357B;
-    border: 0;
-    border-color: #13357B;
-    padding-top: .5rem;
-    padding-bottom: .5rem;
-    padding-left: 1.5rem;    
-    padding-right: 1.5rem;
-    margin-right: 1rem;
-    display: inline-block;
-    line-height: 1.5;
-    text-align: center;
-    vertical-align: middle;
-}
-.btn-primary:hover {
-    color: #13357B;
-    background-color: #EDF6F9;  
-    border: 2px solid #13357B;
-}
-.carousel-item img{
-    height: 600px;
-    object-fit: cover
-}
-.carousel-item{
-    height: 600px;
-}
-.section-title {
-    position: relative;
-    display: inline-block;
-    color: #13357B;
-    text-transform: uppercase;  
-    /* font-size: 30px; */
-    font-weight: 700;
-}
-
-.section-title::before {
-    position: absolute;
-    content: "";
-    width: 100px;
-    top: 50%;
-    left: 0;
-    border-radius: 5px;
-    transform: translateY(-50%); 
-    margin-left: -150px;   
-    border: 2px solid #13357B;
-}
-.section-title::after{
-    position: absolute;
-    content: "";
-    width: 100px;
-    top: 50%;
-    right: 0;
-    border-radius: 5px;
-    transform: translateY(-50%); 
-    margin-right: -150px;   
-    border: 2px solid #13357B;
-}
-.list-card-rooms{
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    align-items: center;
-    width: 100%;
-    height: 100%;
-    gap:40px;
+p {
+    font-size: 25px;
 }
 </style>
-

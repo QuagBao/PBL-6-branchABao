@@ -1,78 +1,74 @@
 <template>
-    <div class="container-fluid">
-        <div class="container-fluid titlte">
-            <div class="container-fluid contribute">
-                <p>Contribute</p>
-            </div>
-            <div class="container-fluid">
-                <button class="write-review" @click="writeReview(destination_id)">Write Review</button>
-                <button class="write-review" @click="uploadPicture(destination_id)">Upload Picture</button>
-            </div>
+    <div class="titlte">
+        <div class="container-fluid contribute">
+            <p>Contribute</p>
         </div>
+        <div class="d-flex gap-3">
+            <button class="write-review" @click="writeReview(destination_id)">Write Review</button>
+            <button class="write-review" @click="uploadPicture(destination_id)">Upload Picture</button>
+        </div>
+    </div>
 
-        <div class="container-fluid">
-            <div class="row">
-                <!-- Evaluate -->
-                <div class="col-6">
-                    <div class="container-fluid evaluate p-2">
-                        <h1 style="font-weight: 900;">Evaluate</h1>
-                    </div>
-                    <div class="rating">
-                        <h2>{{ rating }}</h2>
-                        <div class="circle-container">
-                            <div v-for="(star, index) in stars" :key="index">
-                                <img :src="star" alt="Star" class="star"/>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="container-fluid type-rating">
-                        <div class="rating-row" 
-                            v-for="(ratingInfo, label) in ratings" :key="label">
-                            <div class="col rating-label">{{ label }}</div>
-                            <div class="col-3 rating-bar-container">
-                                <div class="rating-bar"
-                                    :style="{ width: ratingInfo.percentage + '%' }">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="description-container" v-if="description">
-                        <h3 class="description-title">About the Place</h3>
-                        <span class="description-content">{{ description }}</span>
+    <div class="frame-evaluate-review">
+        <!-- Evaluate -->
+        <div class="frame-evaluate">
+            <div class="container-fluid evaluate p-2">
+                <h1 style="font-weight: 900;">Evaluate</h1>
+            </div>
+            <div class="rating">
+                <h2>{{ rating }}</h2>
+                <div class="circle-container">
+                    <div v-for="(star, index) in stars" :key="index">
+                        <img :src="star" alt="Star" class="star"/>
                     </div>
                 </div>
-
-                <!-- Review -->
-                <div class="col-6">
-                    <div class="container-fluid search-bar-container">
-                        <div class="search-bar">
-                            <input type="text" class="search-input" placeholder="Search for reviews">
-                            <button class="icon-search">
-                                <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M11 6C13.7614 6 16 8.23858 16 11M16.6588 16.6549L21 21M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="#currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                                </svg>
-                            </button>
+            </div>
+            <div class="container-fluid type-rating">
+                <div class="rating-row" 
+                    v-for="(ratingInfo, label) in ratings" :key="label">
+                    <div class="col rating-label">{{ label }}</div>
+                    <div class="col-3 rating-bar-container">
+                        <div class="rating-bar"
+                            :style="{ width: ratingInfo.percentage + '%' }">
                         </div>
                     </div>
+                </div>
+            </div>
+            <div class="description-container" v-if="description">
+                <h3 class="description-title">About the Place</h3>
+                <span class="description-content">{{ description }}</span>
+            </div>
+        </div>
+        <!-- Review -->
+        <div class="frame-review">
+            <div class="search-bar-container">
+                <div class="search-bar">
+                    <input type="text" class="search-input" placeholder="Search for reviews">
+                    <button class="icon-search">
+                        <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M11 6C13.7614 6 16 8.23858 16 11M16.6588 16.6549L21 21M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="#currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
 
-                    <div v-if="commentList && commentList.length > 0" class="container-fluid comment-list">
-                        <div v-for="comment in commentList" :key="comment.id" class="comment"  >
-                            <A_Comment :imageUrl="comment.user?.userInfo?.image?.url || ''"
-                                        :userName="comment.user?.username || 'Unknown User'"
-                                        :stars= "generateStars(comment.rating)"
-                                        :title="comment.title"
-                                        :date_comment="comment.date_create"
-                                        :comment="comment.content"
-                                        :condition="comment.images"
-                                        :canedit="comment.user_id === user"
-                                        :id="comment.id"
-                                        :URL="comment.images"/>
-                        </div>
-                    </div>
+            <div v-if="commentList && commentList.length > 0" class="container-fluid comment-list">
+                <div v-for="comment in commentList" :key="comment.id" class="comment"  >
+                    <A_Comment :imageUrl="comment.user?.userInfo?.image?.url || ''"
+                                :userName="comment.user?.username || 'Unknown User'"
+                                :stars= "generateStars(comment.rating)"
+                                :title="comment.title"
+                                :date_comment="comment.date_create"
+                                :comment="comment.content"
+                                :condition="comment.images"
+                                :canedit="comment.user_id === user"
+                                :id="comment.id"
+                                :URL="comment.images"/>
                 </div>
             </div>
         </div>
     </div>
+
 </template>
 <script setup>
 import { computed } from 'vue';
@@ -129,6 +125,7 @@ defineProps({
 
 <style scoped>
 .titlte{
+    margin-top: 30px;
     display: flex;
     flex-direction: column;
     gap: 30px;
@@ -147,7 +144,7 @@ defineProps({
     background-color: transparent;
     border: 2px solid #13357B;
     border-radius: 40px;
-    padding: 15px 80px;
+    padding: 15px 55px;
     transition: all 0.5 ease-in-out;
 }
 .write-review:hover{
@@ -157,14 +154,18 @@ defineProps({
     transform: translateY(-3px);
     transition: 0.25 ease-in-out;
 }
-.evaluate{
-    margin-top: 50px;
+.frame-evaluate-review{
+    margin-top: 40px;
+    display: grid;
+    grid-template-columns: 32% 53%;
+    gap: 15%;
 }
 .rating{
     display: flex;
     align-items: center;
     gap: 20px;
     margin-left: 10px;
+    color: #13357B;
 }
 .rating h1{
     font-size: 30px;
@@ -181,7 +182,7 @@ defineProps({
 }
 .type-rating{
     display: flex;
-    margin-top: 30px;
+    margin-top: 20px;
     flex-direction: column;
     gap: 15px;
     font-size: 25px;
@@ -224,7 +225,7 @@ input::placeholder{
 }
 input:focus{
     background-color: #caf0f8;
-    box-shadow: 0px 5px 3px rgba(19, 53, 123, 0.25)
+    box-shadow: 0px 5px 10px rgba(19, 53, 123, 0.25)
 }
 .icon-search{
     border:none;
@@ -247,7 +248,6 @@ input:focus{
     border-radius: 10px;
     box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.15);
 }
-
 /* Tiêu đề của phần mô tả */
 .description-title {
     font-size: 24px;

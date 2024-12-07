@@ -50,7 +50,7 @@ const onSwiper = (swiper) => {
     margin: 20px 0; 
 }
 
-.button-item{
+button{
     color: #13357B;
     width: 80%;
     padding: 8px 16px;

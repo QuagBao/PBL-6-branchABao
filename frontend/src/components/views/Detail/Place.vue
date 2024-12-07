@@ -4,91 +4,90 @@
         <Top_Button v-if="destination" :cityID="destination.address.city_id"/>
     </div> 
 
-    <div class="container-fluid info-place">
-        <div class="container-fluid row" v-if="isLoading">
-            <div class="col-4 information">
-                <div class="container name-of-place">{{ destination.name }}</div>
-                <div class="container rating-review">
-                    <div class="rating">
-                        <div v-for="(star, index) in generateStars(destination.rating)" :key="index" class="circle">
-                            <img :src="star" alt="Circle" /> 
-                        </div>
-                    </div>
-                    <div class="reviews">
-                        {{ destination.numOfReviews }} Reviews
-                    </div>
-                </div>
+    <div class="container-fluid">
+        <div class="container-fluid">
+            <div class="container-fluid">
+                <div class="container-fluid">
+                    <div class="container-fluid info-place">
+                        <div class="container-fluid d-flex gap-5" v-if="isLoading">
+                            <div class="information">
+                                <div class="container name-of-place">{{ destination.name }}</div>
+                                <div class="container rating-review">
+                                    <div class="rating">
+                                        <div v-for="(star, index) in generateStars(destination.rating)" :key="index" class="circle">
+                                            <img :src="star" alt="Circle" /> 
+                                        </div>
+                                    </div>
+                                    <div class="reviews">
+                                        {{ destination.numOfReviews }} Reviews
+                                    </div>
+                                </div>
 
-                <div>
-                    <button 
-                        v-if="token && destination.user_id === user?.id" 
-                        @click="navigateToUpdateDestination(destination.id)" 
-                        class="write-review"
-                    >
-                        Update Place 
-                    </button>
-                    <button 
-                        v-if="token && destination.user_id == user?.id" 
-                        @click="navigateToCreateHotel(destination.id)" 
-                        class="write-review"
-                    >
-                        Create Hotel 
-                    </button>
-                    <button 
-                        v-if="token && destination.user_id == user?.id" 
-                        @click="navigateToCreateRestaurant(destination.id)" 
-                        class="write-review"
-                    >
-                        Create Restaurant 
-                    </button>
-                </div>
-                
-                <div class="container-fluid info-about">
-                    <div class="row context">
-                        <h1 class="">About</h1>
-                        
-                        <p>{{ truncatedDescription}}</p>
-                        
-                        <button class="read-more-or-less" @click="toggleReadMore">{{ isReadMore ? 'Read less' : 'Read more' }}</button>
-                        
-                        <div class="duration">
-                            <div class="svg">
-                                <svg fill="#13357B" width="25px" height="25px" viewBox="0 0 24 24" id="Outline" xmlns="http://www.w3.org/2000/svg"><title>194 restore</title>
-                                    <path d="M12,6a1,1,0,0,0-1,1v5a1,1,0,0,0,.293.707l3,3a1,1,0,0,0,1.414-1.414L13,11.586V7A1,1,0,0,0,12,6Z
-                                    M23.812,10.132A12,12,0,0,0,3.578,3.415V1a1,1,0,0,0-2,0V5a2,2,0,0,0,2,2h4a1,1,0,0,0,0-2H4.827a9.99,9.99,0,1,1-2.835,7.878A.982.982,0,0,0,1,12a1.007,1.007,0,0,0-1,1.1,12,12,0,1,0,23.808-2.969Z"/>
-                                </svg>
+                                <div class="button">
+                                    <button v-if="token && destination.user_id === user?.id" 
+                                            @click="navigateToUpdateDestination(destination.id)" 
+                                            class="write-review" >
+                                        Update Place 
+                                    </button>
+                                    <button v-if="token && destination.user_id == user?.id" 
+                                            @click="navigateToCreateHotel(destination.id)" 
+                                            class="write-review" >
+                                        Create Hotel 
+                                    </button>
+                                    <button v-if="token && destination.user_id == user?.id" 
+                                            @click="navigateToCreateRestaurant(destination.id)" 
+                                            class="write-review" >
+                                        Create Restaurant 
+                                    </button>
+                                </div>
+                                
+                                <div class="container-fluid info-about">
+                                    <div class="row context">
+                                        <h1 class="">About</h1>
+                                        
+                                        <p>{{ truncatedDescription}}</p>
+                                        
+                                        <button class="read-more-or-less" @click="toggleReadMore">{{ isReadMore ? 'Read less' : 'Read more' }}</button>
+                                        
+                                        <div class="duration">
+                                            <div class="svg">
+                                                <svg fill="#13357B" width="25px" height="25px" viewBox="0 0 24 24" id="Outline" xmlns="http://www.w3.org/2000/svg"><title>194 restore</title>
+                                                    <path d="M12,6a1,1,0,0,0-1,1v5a1,1,0,0,0,.293.707l3,3a1,1,0,0,0,1.414-1.414L13,11.586V7A1,1,0,0,0,12,6Z
+                                                    M23.812,10.132A12,12,0,0,0,3.578,3.415V1a1,1,0,0,0-2,0V5a2,2,0,0,0,2,2h4a1,1,0,0,0,0-2H4.827a9.99,9.99,0,1,1-2.835,7.878A.982.982,0,0,0,1,12a1.007,1.007,0,0,0-1,1.1,12,12,0,1,0,23.808-2.969Z"/>
+                                                </svg>
+                                            </div>
+                                            <div class="duration-info">
+                                                Duration: {{ destination.duration }} days
+                                            </div>
+                                        </div>
+
+                                        <div class="container-fluid line-divide"></div>
+
+                                        <div class="container-fluid price" style="font-size: 25px;">
+                                            <p style="font-weight: 700;">Price from: <span style="font-weight: 700;">$ {{ destination.price_bottom }} - $ {{ destination.price_top }} </span> </p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="duration-info">
-                                Duration: {{ destination.duration }} days
-                            </div>
+                            <div class="carousel">
+                                <div class="container carousel-container">
+                                    <Carousel class="custom" :currentImage="currentImage" :images="images"/>
+                                </div>
+                            </div>  
                         </div>
-
-                        <div class="container-fluid line-divide"></div>
-
-                        <div class="container-fluid price" style="font-size: 25px;">
-                            <p style="font-weight: 700;">Price from: <span style="font-weight: 700;">$ {{ destination.price_bottom }} - $ {{ destination.price_top }} </span> </p>
+                        <div class="container-fluid contribute">
+                            <Contribute :rating="destination.rating"
+                                        :ratings="ratings"
+                                        :commentList="commentList"
+                                        :destination_id="destination.id"
+                                        :user="user?.id||0"
+                                        :stars = "generateStars(destination.rating)"/>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="col-3 carousel">
-                <div class="container carousel-container">
-                    <Carousel :currentImage="currentImage" :images="images"/>
-                </div>
-            </div>  
-        </div>
-        <div class="container-fluid contribute">
-            <Contribute :rating="destination.rating"
-                        :ratings="ratings"
-                        :commentList="commentList"
-                        :destination_id="destination.id"
-                        :user="user?.id||0"
-                        :stars = "generateStars(destination.rating)"/>
         </div>
     </div>
-
-
 </template>
 
 <script setup>
@@ -217,7 +216,7 @@ export default {
     color: #729AE9;
 }
 .carousel {
-  flex: 0 0 65%; /* 70% of row */
+  flex: 0 0 65%; 
   max-width: 66%;
   height: auto;
   margin-left: 3%;
@@ -225,7 +224,12 @@ export default {
 .carousel-container{
     display: flex;
     width: 100%;
-    height: 1015px;
+}
+:deep(.custom .carousel-control-next .carousel-control-next-icon) {
+    margin-right: -4.5vw; /* Giá trị mới */
+}
+:deep(.custom .carousel-control-prev .carousel-control-prev-icon) {
+    margin-left: -4.5vw; /* Giá trị mới */
 }
 .duration{
     display: flex;

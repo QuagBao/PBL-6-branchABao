@@ -18,37 +18,25 @@
             <Icon></Icon>
         </div>
         <div class="infor-user">
-            <Info_User></Info_User>
+            <Info_User :username = "userInfo.username"
+                        :gmail = "userInfo.gmail"/>
         </div>
     </div>
     <div class="main-content">
         <div class="group-tag">
-            <Group_tag></Group_tag>
+            <Group_tag @change-tab="handleTabChange"></Group_tag>
         </div>
         
         <div class="content-1">
-
-            <!-- <Activity_Feed></Activity_Feed> -->
-            
-            <!-- <Trips_Profile></Trips_Profile> -->
-
-            <!-- <Reviews_Profile></Reviews_Profile> -->
-            
-            <!-- <Favourite_Profile></Favourite_Profile> -->
-
-            <!-- <Setting_Profile/> -->
-        </div>
-
-        <div class="content-2">
-            <!-- <Content_Review/>
-            <Content_Review/>
-            <Content_Trip/> -->
+            <component :is="currentComponent"></component>
         </div>
     </div>
     
 </template> 
 
 <script>
+    import ProfileViewModel from '@/components/viewModels/Profile_Page_ViewModel/profilePage_ViewModel';
+
     import Header from '../Header.vue';
     import Scroll_Bar_Component from '../Scroll_Bar_Component.vue'; 
     import Top_Button from '../Top_Button.vue';
@@ -69,7 +57,31 @@
             Header, Scroll_Bar_Component, Top_Button, Cover_photo_btn, Icon,
             Info_User, Group_tag, Reviews_Profile,
             Activity_Feed, Trips_Profile, Favourite_Profile, Setting_Profile
-        }
+        },
+        data () {   
+            return {
+                viewModel: new ProfileViewModel(), // Quản lý danh sách tab
+                currentComponent: 'Activity_Feed', // Component mặc định
+                userInfo: {
+                    username: '',
+                    gmail: '',
+                    dateJoined: '',
+                    location: ''
+                },
+            };
+        },
+        async created() {
+            await this.viewModel.loadUserInfo();
+            this.userInfo = this.viewModel.getUserInfo();
+        },
+        methods: {
+            handleTabChange(tabName) {
+                console.log('Tab Name:', tabName);
+                this.viewModel.changeTab(tabName); // Thay đổi tab mà không duyệt danh sách
+                this.currentComponent = this.viewModel.getCurrentComponent(); // Cập nhật component hiển thị
+                console.log('Current Component:', this.currentComponent);
+            },
+        },
     }
 </script>
 <style>
@@ -144,7 +156,7 @@ body{
 }
 .infor-user {
     display: flex;
-    margin: -50px 0 -50px -120px;    
+    margin: -20px 0 -50px 20px;    
     z-index: 15;
 }
 .main-content {

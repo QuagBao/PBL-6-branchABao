@@ -14,18 +14,27 @@
         <div class="row name-of-location p-3">
             {{ name }}
         </div>
-        <div class="row p-2">
-            <div class="col-sm-4 rating">
-                <img v-for="star in stars" :key="star" :src="star" alt="Circle" class="star"/>
-            </div>
-            <div class="col-sm-6 review-number">
-                / {{ reviewNumber }} reivews
+        <div class="container-fluid p-2 frame-rating">
+            <div class="rating">
+                <img v-for="star in rating" :key="star" :src="star" alt="Circle" class="star"/>
+                <span class="review-number">/ {{ reviewNumber }} reivews</span>
             </div>
         </div>
         <div class=" row info-location p-2">
-            <div class="row tags p-2">
-                <div class="col" v-for="tag in tags" :key="tag">
-                    <span>{{ tag }}</span>
+            <div class="tags p-2">
+                <div class="tag-item" v-for="tag in tags" :key="tag">
+                    <div class="tag">
+                        <svg width="20px" height="20px" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" 
+                            xmlns:xlink="http://www.w3.org/1999/xlink">
+                            <title>tag-filled</title>
+                            <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                <g id="icon" fill="#currentColor" transform="translate(64.000000, 64.000000)">
+                                    <path d="M192,0 L405.333333,213.333333 L213.333333,405.333333 L0,192 L0,0 L192,0 Z M96,64 C78.326888,64 64,78.326888 64,96 C64,113.673112 78.326888,128 96,128 C113.673112,128 128,113.673112 128,96 C128,78.326888 113.673112,64 96,64 Z" id="Combined-Shape"></path>
+                                </g>
+                            </g>
+                        </svg>
+                        <span>{{ tag }}</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -44,7 +53,6 @@ export default {
         imageUrl: String,
         name: String,
         rating: Number,
-        stars: Array,
         reviewNumber: Number,
         tags: Array
     },
@@ -70,9 +78,8 @@ img {
     margin: -350px 15px 0 0px;
 }
 .rating{
-    display: flex;
     margin: 0 0 0 -5px;
-    gap:3px;
+    display: flex;
     align-items: center;
 }
 .rating img {
@@ -85,17 +92,39 @@ img {
 }
 .tags{
     margin-bottom: 15px;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: space-between;
+    align-items: center;
+}
+.tags .tag svg #icon{
+    fill: #13357B
+}
+.tags .tag {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    justify-content: center;
+    padding: 8px;
+    border-radius: 25px;
+    width: 190px;
+    background-color: #CAF0F8;
+    font-size: 18px;
 }
 .cards{
-    border-radius: 30px;
+    border-radius: 32px;
 }
 .cards:hover{
     cursor: pointer;
-    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);
     transition: 0.75s ease-in-out;
-    border-radius: 30px;
+    border-radius: 32px;
+    background-color: #8ecae6;
 }
-.tags span{
+.review-number {
     font-size: 20px;
+    margin-left: 20px;
 }
 </style>

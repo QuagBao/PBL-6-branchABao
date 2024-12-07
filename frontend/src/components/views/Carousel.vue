@@ -30,10 +30,6 @@
 
 </template>
 
-<script setup>
-
-</script>
-
 <script>
 export default {
     name: "Carousel",
@@ -79,25 +75,21 @@ export default {
 }
 .carousel-header .carousel-control-prev .carousel-control-prev-icon {
     display: flex;
-    margin-left: -12vw;
+    margin-left: -10.85vw;
     padding: 25px 30px;
-    border-top-left-radius: 0;
     border-top-right-radius: 50px;
-    border-bottom-left-radius: 0;
     border-bottom-right-radius: 50px;
     background-color: #13357B;
     background-size: 60% 60%;
 }
 .carousel-header .carousel-control-next .carousel-control-next-icon {
     display: flex;
-    margin-right: -12vw;
+    margin-right: -10.85vw;
     padding: 25px 30px;
     border-top-left-radius: 50px;
-    border-top-right-radius: 0;
     border-bottom-left-radius: 50px;
-    border-bottom-right-radius: 0;
     background-color: #13357B;
-    background-size: 50% 50%;
+    background-size: 60% 60%;
 }
 .carousel-header .carousel .carousel-indicators button {
     opacity: 0;
@@ -105,7 +97,7 @@ export default {
 .carousel-header .carousel-inner .carousel-item img {
     width: 100vw;
     height: calc(50vw);
-    max-height: 600px;
+    max-height: 550px;
     object-fit: cover;
     object-position: center;
     border-radius: 20px;

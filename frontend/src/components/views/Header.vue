@@ -104,7 +104,7 @@ body{
 }
 
 .logo {
-    height: 70px;
+    height: 50px;
     margin-right: 10px;
     border-radius: 50%;
     z-index: 8;
@@ -133,12 +133,10 @@ body{
     align-items: center;
     justify-content: center;
     position: relative;
-    height: 100px;
+    height: 80px;
     padding: 35px 15px;
     color: #8da9c4 !important;
-    font-size: 1.5rem;
-    font-weight: 500;
-    outline: none;
+    font-size: 18px;
     transition: .3s;
 }
 
@@ -153,7 +151,9 @@ body{
 }
 
 .navbar-light .navbar-brand h1 {
-    color: #8da9c4 !important;
+  color: #8da9c4 !important;
+  font-size: 25px;
+  font-weight: 900;
 }
 
 .header.scrolled {

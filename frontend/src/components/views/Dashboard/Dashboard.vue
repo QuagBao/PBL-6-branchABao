@@ -6,69 +6,73 @@
 
     <Carousel_For_Dashboard/>
     
-    <div class="container-fluid search-btn">
-        <Search_Btn_Big/>
+    <div class="container-fluid">
+        <div class="container-fluid">
+            <div class="container-fluid">
+                <div class="container-fluid search-btn">
+                    <Search_Btn_Big/>
+                </div>
+                <div class="container-fluid frame destination">
+                    <div class="container">
+                        <div class="mx-auto text-center mb-5 title">
+                            <h5 class="section-title px-3 ">Destination</h5>
+                            <h1 class="mb-0">Popular Destination</h1>
+                        </div>
+                        <div class="container-fluid control-button">
+                            <Control_Button/>
+                        </div>
+                    </div>
+
+                    <div class="container tag">
+                        <div class="container tag-button">
+                            <Tag_Button/>
+                        </div>
+                    </div>        
+                    <div class="container-fluid list-items">
+                        <div class="item" v-for="(city, index) in visibleCities" 
+                            :key="city.id">
+                            <Img_Card_2  :condition="city.images && city.images.length > 0" 
+                                        :imageUrl = 'city.images[0]'
+                                        :name_picture="city.name"
+                                        :name="city.name"
+                                        @click="navigateToDestination(goToDestination(city.id))"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid frame topic">
+                    <div class="container">
+                        <div class="mx-auto text-center mb-5 title">
+                            <h5 class="section-title px-3 ">WANNA TRY ?</h5>
+                            <h1 class="mb-0">Awesome Topic</h1>
+                        </div>
+                    </div>
+
+                    <div class="container-fluid list-items">
+                        <div class="item" v-for="(topic, index) in topics" 
+                            :key="topic.id">
+                            <Img_Card  :condition="topic.imageUrl"
+                                        :imageUrl = 'topic.imageUrl'
+                                        :name_picture="topic.name"
+                                        :name="topic.name"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="container-fluid frame tour">
+                    <div class="container" style="z-index: 10;">
+                        <div class="mx-auto text-center mb-5 title">
+                            <h5 class="section-title px-3 ">Tour proposal</h5>
+                            <h1 class="mb-0">Awesome Tour</h1>
+                        </div>
+                    </div>
+
+                    <div class="container-fluid list-tour">
+                        <Swiper_Tour/>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-
-    <div class="container-fluid frame destination">
-        <div class="container">
-            <div class="mx-auto text-center mb-5 title">
-                <h5 class="section-title px-3 ">Destination</h5>
-                <h1 class="mb-0">Popular Destination</h1>
-            </div>
-            <div class="container-fluid control-button">
-                <Control_Button/>
-            </div>
-        </div>
-
-        <div class="container tag">
-            <div class="container tag-button">
-                <Tag_Button/>
-            </div>
-        </div>        
-        <div class="container-fluid list-items">
-            <div class="item" v-for="(city, index) in visibleCities" 
-                :key="city.id">
-                <Img_Card_2  :condition="city.images && city.images.length > 0" 
-                            :imageUrl = 'city.images[0]'
-                            :name_picture="city.name"
-                            :name="city.name"
-                            @click="navigateToDestination(goToDestination(city.id))"/>
-            </div>
-        </div>
-    </div>
-
-    <div class="container-fluid frame topic">
-        <div class="container">
-            <div class="mx-auto text-center mb-5 title">
-                <h5 class="section-title px-3 ">WANNA TRY ?</h5>
-                <h1 class="mb-0">Awesome Topic</h1>
-            </div>
-        </div>
-
-        <div class="container-fluid list-items">
-            <div class="item" v-for="(topic, index) in topics" 
-                :key="topic.id">
-                <Img_Card  :condition="topic.imageUrl"
-                            :imageUrl = 'topic.imageUrl'
-                            :name_picture="topic.name"
-                            :name="topic.name"/>
-            </div>
-        </div>
-    </div>
-
-    <div class="container-fluid frame tour">
-        <div class="container" style="z-index: 10;">
-            <div class="mx-auto text-center mb-5 title">
-                <h5 class="section-title px-3 ">Tour proposal</h5>
-                <h1 class="mb-0">Awesome Tour</h1>
-            </div>
-        </div>
-
-        <div class="container-fluid list-tour">
-            <Swiper_Tour/>
-        </div>
-    </div>
+    
 </template>
 
 <script setup>
@@ -128,7 +132,6 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
-
 .search-btn {
     margin-top: -65px;
     margin-bottom: 100px;

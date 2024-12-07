@@ -16,11 +16,11 @@
 
         <!-- Rating If is a review-->
         <div class="rating">
-            <img src="@/assets/svg/circle-full.svg" alt="Circle" class="circle"/>
-            <img src="@/assets/svg/circle-full.svg" alt="Circle" class="circle"/>
-            <img src="@/assets/svg/circle-full.svg" alt="Circle" class="circle"/>
-            <img src="@/assets/svg/circle-half.svg" alt="Circle" class="circle"/>
-            <img src="@/assets/svg/circle-none.svg" alt="Circle" class="circle"/>
+            <img src="@/assets/svg/star_full.svg" alt="Circle" class="circle"/>
+            <img src="@/assets/svg/star_full.svg" alt="Circle" class="circle"/>
+            <img src="@/assets/svg/star_full.svg" alt="Circle" class="circle"/>
+            <img src="@/assets/svg/star_half.svg" alt="Circle" class="circle"/>
+            <img src="@/assets/svg/star_none.svg" alt="Circle" class="circle"/>
         </div>
 
         <!-- Title and Context Review -->

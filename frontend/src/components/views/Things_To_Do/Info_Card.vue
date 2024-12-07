@@ -29,10 +29,8 @@
                 </div>
             </div>
         </div>
-        
-
-        <div class="container line"></div>
-        <div class=" container info-location p-2">
+        <div class="line"></div>
+        <div class="info-location p-1">
             <div class="description">
                 {{ description}}
             </div>
@@ -52,7 +50,6 @@ export default {
         imageUrl: String,
         name: String,
         stars: Array,
-        rating: Number,
         reviewNumber: Number,
         tags: Array,
         description: String
@@ -62,12 +59,6 @@ export default {
 </script>
 
 <style scoped>
-.container-fluid{
-    display: grid;
-    color: #13357B;
-    height: 100%;
-}
-
 img {
     width: 100%;
     height: 350px;
@@ -103,6 +94,8 @@ img {
   content: ""; /* Xóa ký tự & cho tag cuối cùng */
 }
 .cards{
+    color: #13357B;
+    height: 100%;
     border-radius: 30px;
     transition: all 0.3s ease-in-out; 
 }
@@ -112,6 +105,7 @@ img {
     box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);
     transition: 0.5s ease-in-out;
     border-radius: 30px;
+    background-color: #8ecae6;
 }
 .tags span{
     font-size: 20px;
@@ -123,8 +117,7 @@ img {
     background-color: #13357B;
     margin: 20px 0;
 }
-.description{
-    width: 100%;
-    margin: 5px 0 25px 0;
+.description {
+    margin-bottom: 20px;
 }
 </style>

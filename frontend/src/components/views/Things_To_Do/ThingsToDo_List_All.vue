@@ -4,55 +4,64 @@
         <Top_Button/>
     </div>
 
-    <!-- Images -->
-    <img src="@/assets/images/thingstodo_2.avif" alt="City 1" class="img-fluid">
-    <!-- Search -->
-    <div class="container-fluid search">
-        <div class="container">
-            <Form_Search    :name_of_page="'Find Things to Do anywhere in Viet Nam'"
-                            :name="'Attraction, activities or destination'"/>
-        </div>
-    </div>
+    <div class="container-fluid">
+        <div class="container-fluid">
+            <div class="container-fluid">
+                <div class="container-fluid">
+                    <!-- Images -->
+                    <div class="container-fluid frame-base-image">
+                        <img src="@/assets/images/thingstodo_2.avif" alt="City 1" class="img-fluid">
+                        <!-- Search -->
+                        <div class="container-fluid search">
+                            <div class="container">
+                                <Form_Search    :name_of_page="'Find Things to Do anywhere in Viet Nam'"
+                                                :name="'Attraction, activities or destination'"/>
+                            </div>
+                        </div>
+                    </div>
 
-    <div class="container-fluid content">
-        <div class="row title-content">
-            <p class="p-5 top-destinations">
-                Top destinations in Viet Nam
-            </p>
-            <div class="container-fluid context list-items">
-                <button @click="prevCity" class="carousel-control-prev" type="button">
-                    <span class="carousel-control-prev-icon"></span>
-                </button>
+                    <div class="container-fluid content d-flex gap-5">
+                        <div class="title-content d-flex flex-column gap-4">
+                            <p class="top-destinations">
+                                Top destinations in Viet Nam
+                            </p>
+                            <div class="container-fluid context list-items">
+                                <button @click="prevCity" class="carousel-control-prev" type="button">
+                                    <span class="carousel-control-prev-icon"></span>
+                                </button>
 
-                <Img_Card v-for="(city, index) in visibleCities"
-                    :key="index"
-                    :imageUrl="city.images[0]"
-                    :name="city.name"
-                    @click="navigateToThingsCity(city.id)"/>
+                                <Img_Card v-for="(city, index) in visibleCities"
+                                    :key="index"
+                                    :imageUrl="city.images[0]"
+                                    :name="city.name"
+                                    @click="navigateToThingsCity(city.id)"/>
 
-                <button @click="nextCity" class="carousel-control-next" type="button">
-                    <span class="carousel-control-next-icon"></span>
-                </button>
+                                <button @click="nextCity" class="carousel-control-next" type="button">
+                                    <span class="carousel-control-next-icon"></span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="title-content d-flex flex-column gap-4">
+                            <p class="top-attractions">
+                                Top attractions in Viet Nam
+                            </p>
+                            <div class="container-fluid context list-items-1">
+                                <Card_Item v-for="(item, index) in attractions"
+                                        :key="index"
+                                        :imageUrl="item.images[0]?.url|| '/blue-image.jpg'"
+                                        :name="item.name"
+                                        :rating="generateStars(item.rating)"q
+                                        :review-number="item.numOfReviews"
+                                        :tags="item.tag"
+                                        @click="navigateToDetailPlace(item.id)"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <div class="row title-content">
-            <p class="p-5 top-attractions">
-                Top attractions in Viet Nam
-            </p>
-            <div class="container-fluid context list-items-1">
-                <Card_Item v-for="(item, index) in attractions"
-                        :key="index"
-                        :imageUrl="item.images[0]?.url|| '/blue-image.jpg'"
-                        :name="item.name"
-                        :rating= "item.rating"
-                        :stars="generateStars(item.rating)"
-                        :review-number="item.numOfReviews"
-                        :tags="item.tag"
-                        @click="navigateToDetailPlace(item.id)"/>
-            </div>
-        </div>
-    </div>
+    </div>    
  </template>
 
 <script setup>
@@ -104,21 +113,16 @@ const navigateToThingsCity = (id) => {
 </script>
 
 <style scoped>
-body {
-    background-color: #EDF6F9;
-}
-
 .img-fluid {
     margin-top: 200px;
     width: 100vw;
-    padding: 0px;
     height: 600px;
-    border-radius: 25px;
+    border-radius: 20px;
     box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);
 }
 .search{
     margin-top: -25%;
-    margin-bottom: 250px;
+    margin-bottom: 15%;
 }
 .content{
     display: flex;
@@ -143,17 +147,10 @@ body {
 .list-items-1 {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    gap: 30px;
+    gap: 40px;
     align-items: center;
-    width: 95%;
+    width: 100%;
     height: 100%;
-}
-
-.container-fluid-carousel { 
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-bottom: 20px;
 }
 .carousel-control-prev,
 .carousel-control-next {
@@ -165,35 +162,14 @@ body {
     border-radius: 50%;
     width: 50px;
     height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     cursor: pointer;
 }
-
-.carousel-control-prev {
-    left: -40px; /* Canh bên trái */
-}
-
-.carousel-control-next {
-    right: -40px; /* Canh bên phải */
-}
-
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
-    display: block;
-    background-size: 20px 20px;
-    width: 20px;
-    height: 20px;
-    filter: invert(1);
-}
-
-.carousel-control-next-icon {
-    background-image: url("data:image/svg+xml;charset=UTF8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23FFF' viewBox='0 0 8 8'%3E%3Cpath d='M4.03 0L3 1.03 5.97 4 3 6.97 4.03 8 8 4 4.03 0z'/%3E%3C/svg%3E");
-}
-
-.carousel-control-prev-icon {
-    background-image: url("data:image/svg+xml;charset=UTF8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23FFF' viewBox='0 0 8 8'%3E%3Cpath d='M3.97 0L4.97 1.03 2 4l2.97 2.97-1 1L0 4l3.97-4z'/%3E%3C/svg%3E");
+    display: flex;
+    width: 30px;
+    height: 30px;
+    align-items: center;
 }
 </style>
 

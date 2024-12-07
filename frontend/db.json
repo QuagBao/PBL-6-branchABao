@@ -389,5 +389,17 @@
       "id": 10,
       "imageUrl": "/cities/nghean.jpg"
     }
+  ],
+  "companys": [
+    {
+      "id": 1,
+      "name": "Vinpearl",
+      "logo": "/image/company/Vinpearl/logo/logo_vinpearl.svg" 
+    },
+    {
+      "id": 2,
+      "name": "Helio",
+      "logo": "/image/company/Helio/logo/logo_helio.png" 
+    }
   ]
 }
