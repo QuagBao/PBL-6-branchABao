@@ -77,6 +77,7 @@
                             <div class="container-fluid context">
                                 <Cards v-for="(item, index) in filteredDestinations"
                                         :key="index"
+                                        :destID="item.id"
                                         :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
                                         :name="item.name"
                                         :stars="generateStars(item.rating)"
@@ -92,6 +93,7 @@
                             <div class="container-fluid context">
                                 <Cards v-for="(item, index) in filteredRestaurants"
                                         :key="index"
+                                        :destID="item.id"
                                         :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
                                         :name="item.name"
                                         :stars="generateStars(item.rating)"
@@ -107,6 +109,7 @@
                             <div class="container-fluid context">
                                 <Cards v-for="(item, index) in filteredHotels"
                                         :key="index"
+                                        :destID="item.id"
                                         :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
                                         :name="item.name"
                                         :stars="generateStars(item.rating)"

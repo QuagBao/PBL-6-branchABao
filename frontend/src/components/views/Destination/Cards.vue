@@ -7,7 +7,7 @@
 
             <div class="col-sm-12 p-2">
                 <div class="btn-heart"> 
-                    <btn_heart/>
+                    <btn_heart :destID="destID" @heartClicked="setHeart" />
                 </div>
             </div>   
         </div>
@@ -48,6 +48,7 @@ export default {
     },
     props: {
         imageUrl: String,
+        destID: Number,
         name: String,
         rating: Number,
         tags: Array,
