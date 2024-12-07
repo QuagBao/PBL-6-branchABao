@@ -16,7 +16,7 @@
         </div>
         <div class="container-fluid p-2 frame-rating">
             <div class="rating">
-                <img v-for="star in rating" :key="star" :src="star" alt="Circle" class="star"/>
+                <img v-for="star in stars" :key="star" :src="star" alt="Circle" class="star"/>
                 <span class="review-number">/ {{ reviewNumber }} reivews</span>
             </div>
         </div>
@@ -54,6 +54,7 @@ export default {
         name: String,
         rating: Number,
         reviewNumber: Number,
+        stars: Array,
         tags: Array
     },
 }
