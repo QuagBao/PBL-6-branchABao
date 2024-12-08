@@ -2,7 +2,7 @@
     <div :class="['container-fluid header p-0', { 'scrolled': state.isScrolled }]">
       <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0">
         <div class="navbar-brand p-0">
-          <h1 class="m-0">
+          <h1 class="m-0" @click="handleButtonClick('home', '/home')">
             <img src="@/assets/images/company_image.png" alt="Logo" class="logo" />
             Travel Trips
           </h1>

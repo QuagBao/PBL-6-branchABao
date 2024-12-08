@@ -42,6 +42,7 @@
                             <div class="container-fluid list-items-1">
                                 <Info_Card v-for="(item, index) in filteredDestinations"
                                             :key="index"
+                                            :destID="item.id"
                                             :imageUrl="item.images[0].url||'/blue-image.jpg'"
                                             :name="item.name"
                                             :stars="generateStars(item.rating)"

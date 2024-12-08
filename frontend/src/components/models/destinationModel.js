@@ -899,3 +899,52 @@ export async function getDestinationRatingStatic(destinationID) {
     }; // Giá trị mặc định nếu có lỗi
   }
 }
+
+export async function setLikeForDestination(user_id, destination_id){
+  try{
+    const response = await axios.post(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/user/${user_id}/like/${destination_id}`)
+    if(response.status === 200){
+      console.log("Destination liked successfully");
+      return { success: true, message: "Destination liked successfully" };
+    }
+    else {
+      console.log("Destination liked failed");
+      return { success: false, message: "Destination liked failed" };
+    }
+  } catch (error) {
+    console.error("Error liking destination:", error);
+    return { success: false, message: "Failed to like destination" };
+  }
+}
+export async function setUnLikeForDestination(user_id, destination_id){
+  try{
+    const response = await axios.delete(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/user/${user_id}/unlike/${destination_id}`)
+    if(response.status === 200){
+      console.log("Destination unliked successfully");
+      return { success: true, message: "Destination unliked successfully" };
+    }
+    else {
+      console.log("Destination unliked failed");
+      return { success: false, message: "Destination unliked failed" };
+    }
+  } catch (error) {
+    console.error("Error unliking destination:", error);
+    return { success: false, message: "Failed to unlike destination" };
+  }
+}
+export async function checkLikeForDestination(user_id, destination_id) {
+  try {
+    const response = await axios.get(
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/user/${user_id}/has_liked/${destination_id}`
+    );
+    if (response.status === 200) {
+      return response.data === true; // Đảm bảo response.data trả về boolean
+    } else {
+      console.error("Error checking like for destination:", response);
+      return false; // Mặc định là false nếu API trả về trạng thái khác 200
+    }
+  } catch (error) {
+    console.error("Error checking like for destination:", error);
+    return false; // Mặc định là false nếu có lỗi
+  }
+}

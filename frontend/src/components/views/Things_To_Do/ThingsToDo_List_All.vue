@@ -49,6 +49,7 @@
                             <div class="container-fluid context list-items-1">
                                 <Card_Item v-for="(item, index) in attractions"
                                         :key="index"
+                                        :destID="item.id"
                                         :imageUrl="item.images[0]?.url|| '/blue-image.jpg'"
                                         :name="item.name"
                                         :rating="generateStars(item.rating)"q

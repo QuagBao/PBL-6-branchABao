@@ -7,7 +7,7 @@
 
             <div class="col-sm-12 p-2">
                 <div class="btn-heart"> 
-                    <btn_heart :destID="destID" @heartClicked="setHeart" />
+                    <btn_heart :destID="destID" />
                 </div>
             </div>   
         </div>
