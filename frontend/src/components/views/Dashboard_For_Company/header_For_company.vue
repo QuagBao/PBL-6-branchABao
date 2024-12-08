@@ -61,7 +61,7 @@
   </template>
   
   <script>
-  import useHeaderViewModel from "../../viewmodels/headerViewmodel.js";
+  import useHeaderViewModel from "../../viewModels/headerViewModel.js";
   
   export default {
     setup() {
