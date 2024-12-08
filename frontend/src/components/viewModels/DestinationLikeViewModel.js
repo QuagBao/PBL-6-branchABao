@@ -1,5 +1,5 @@
 import { ref, onMounted, watch, nextTick } from 'vue';
-import { setLikeForDestination , setUnLikeForDestination , checkLikeForDestination } from '../models/destinationModel';
+import { setLikeForDestination , setUnLikeForDestination , checkLikeForDestination, getDestinationListOfLike, getDestinationById } from '../models/destinationModel';
 import SignInModel from '../models/SignInModel';
 import { useToast } from "vue-toastification";
 export default function (){
@@ -79,12 +79,59 @@ export default function (){
         }
       };
 
+      const likeList = async () => {
+        try {
+          // Kiểm tra và load user nếu chưa có
+          if (!user.value) {
+            const signInModel = new SignInModel("", "");
+            const token = sessionStorage.getItem("access_token");
+      
+            if (!token) {
+              console.error("No access token found. Cannot authenticate user.");
+              return false;
+            }
+      
+            const userResult = await signInModel.fetchCurrentUser(token);
+      
+            if (userResult.success) {
+              user.value = userResult.user;
+            } else {
+              console.error("User authentication failed");
+              return false;
+            }
+          }
+      
+          // Gọi API để lấy danh sách likes
+          const result = await getDestinationListOfLike(user.value.id);
+          console.log('result:', result);
+          return result;
+        } catch (error) {
+          console.error("Error getting like list:", error);
+          return [];
+        }
+      };
+
+
+      const loadDestination = async (destinationID) => {
+        try {
+            console.log('destinationID:', destinationID);
+            const destination = await getDestinationById(destinationID);
+            return destination;
+        } catch (error) {
+            console.error("Có lỗi xảy ra khi lấy dữ liệu destination:", error);
+        }
+        };
+
+    
+
     return {
         user,
         loadUser,
+        loadDestination,
         like,
         unlike,
-        checkLike
+        checkLike,
+        likeList,
     }
 
 }

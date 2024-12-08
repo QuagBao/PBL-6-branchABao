@@ -948,3 +948,20 @@ export async function checkLikeForDestination(user_id, destination_id) {
     return false; // Mặc định là false nếu có lỗi
   }
 }
+
+export async function getDestinationListOfLike(user_id) {
+  try {
+    const response = await axios.get(
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/user/${user_id}/likes`
+    );
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      console.error("Error checking like for destination:", response);
+      return []; // Mặc định là false nếu API trả về trạng thái khác 200
+    }
+  } catch (error) {
+    console.error("Error checking like for destination:", error);
+    return []; // Mặc định là false nếu có lỗi
+  }
+}
