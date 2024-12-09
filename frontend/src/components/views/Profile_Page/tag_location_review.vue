@@ -2,34 +2,56 @@
     <div class="container-fluid-1">
         <div class="row">
             <div class="col-sm-4 p-2">
-                <img src="@/assets/images/tms-hotel-da-nang-beach.jpg" alt="Avatar" class="ava"/>
+                <img :src="destination?.images && destination.images[0] ? destination.images[0].url : '/blue-image.jpg'" alt="pic" class="img-location"/>
             </div>
             <div class="col-sm-8 p-2">
                 <div class="name-of-location">
-                    <span>TMS Hotel Da Nang Beach</span>
+                    <span>{{ destination?.name }}</span>
                 </div>
 
-                <diV class="rating">
-                    <img src="@/assets/svg/circle-full.svg" alt="Circle" class="circle"/>
-                    <img src="@/assets/svg/circle-full.svg" alt="Circle" class="circle"/>
-                    <img src="@/assets/svg/circle-full.svg" alt="Circle" class="circle"/>
-                    <img src="@/assets/svg/circle-half.svg" alt="Circle" class="circle"/>
-                    <img src="@/assets/svg/circle-none.svg" alt="Circle" class="circle"/>
-                </diV>
+                <div class="rating">
+                    <div v-for="(star, index) in generateStars(destination?.rating)" :key="index">
+                        <img :src="star" alt="Star" class="star"/>
+                    </div>
+                </div>
 
                 <div class="row-of-address">
-                    <div class="col-sm-2 icon-of-type">
-                        <img src="@/assets/svg/bed-3-svgrepo-com.svg" alt="Icon" class="icon"/>
-                    </div>
                     <div class="col-sm-10 address-of-location">
-                        <span>Hoi An, Da Nang</span>
+                        <span>{{ destination?.address?.district }}, {{ city?.name }}</span>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </template>
+<script setup>
+import { ref, onMounted } from 'vue';
+import UserReviewViewModel from '../../viewModels/UserReviewViewModel';
+import generateViewModel from '../../viewModels/generate_ratingViewModel';
 
+
+// Khai báo props
+const props = defineProps({
+  destID: {
+    type: Number,
+    required: true,
+  },
+});
+
+const { loadDestination, loadCity } = UserReviewViewModel();
+const {
+    generateStars,
+  } = generateViewModel();
+const destination = ref(null);
+const city = ref(null);
+
+// Tải dữ liệu khi component được mount
+onMounted(async () => {
+    // Sử dụng props.destID thay vì destID
+    destination.value = await loadDestination(props.destID);
+    city.value = await loadCity(destination.value.address.city_id);
+});
+</script>
 <script>
 export default {
     name: "tag_location_review",
@@ -56,6 +78,10 @@ export default {
 .container-fluid .row .col-sm-8{
     top: 25px;
     left: 180px;
+}
+.rating{
+    display: flex;
+    margin: 0px 0 0 5px;
 }
 
 .rating img{

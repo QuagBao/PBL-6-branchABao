@@ -3,53 +3,65 @@
         <!-- Info User Post like username activity, date post, avatar -->
         <div class="user-info">
             <div class="avatar">
-                <img src="@/assets/images/ava.png" alt="Avatar" class="ava"/>
+                <img :src="user?.user_info.images ? user.user_info.images.url : '/blue-image.jpg'" alt="Avatar" class="ava"/>
             </div>
             <div class="activity">
-                <p>Tran Minh Nhat</p>
+                <p>{{ user?.username }}</p>
                 <span>wrote a review</span>
             </div>
             <div class="date-post">
-                Sep 2024
+                {{ review?.date_create }}
             </div>
         </div>
 
         <!-- Rating If is a review-->
         <div class="rating">
-            <img src="@/assets/svg/star_full.svg" alt="Circle" class="circle"/>
-            <img src="@/assets/svg/star_full.svg" alt="Circle" class="circle"/>
-            <img src="@/assets/svg/star_full.svg" alt="Circle" class="circle"/>
-            <img src="@/assets/svg/star_half.svg" alt="Circle" class="circle"/>
-            <img src="@/assets/svg/star_none.svg" alt="Circle" class="circle"/>
+            <div v-for="(star, index) in generateStars(review?.rating)" :key="index">
+                        <img :src="star" alt="Star" class="star"/>
+            </div>
         </div>
 
         <!-- Title and Context Review -->
         <div class="title-content">
             <div class="title">
                 <button class="title-text">
-                    Clean, comfortable and spacious
+                    {{ review?.title }}
                 </button>
             </div>
             
             <div class="context">
                 <p class="text-break">
-                    We recently had a very nice three-night stay at Fraser Residence Hanoi in a 
-                    spacious two-bedroom, two-bathroom apartment. The hotel and room are very modern 
-                    and meticulously clean and spacious. You always felt like you were in a luxury hotel 
-                    no matter where you went...
+                    {{ review?.content }}
                 </p>
             </div>
         </div>
-
-        <button class="read-more">
-            Read more
-        </button>
         <div class="info-location">
-            <tag_location_review/>
+            <tag_location_review :destID="review?.destination_id"/>
         </div>
     </div>
 </template>
 
+<script setup>
+import { ref, onMounted } from 'vue';
+import generateViewModel from '../../viewModels/generate_ratingViewModel';
+
+// Khai báo props
+const props = defineProps({
+    review: {
+        type: Object,
+        required: true,
+    },
+    user: {
+        type: Object,
+        required: true,
+    },
+});
+
+const {
+    generateStars,
+  } = generateViewModel();
+
+</script>
 <script>
 import tag_location_review from './tag_location_review.vue';
 export default {

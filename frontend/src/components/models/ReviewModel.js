@@ -47,6 +47,29 @@ export async function getReviewByDestinationId(destinationID) {
     }
   }
 
+  export async function getReviewByUserID(user_id) {
+    try {
+      const response = await axios.get(
+        `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/review/?user_id=${user_id}`
+      );
+      return response.data.map((review) => ({ 
+        id: review.id,
+        title: review.title,
+        content: review.content,
+        rating: review.rating,
+        language: review.language,
+        date_create: review.date_create,
+        user_id: review.user_id,
+        destination_id: review.destination_id,
+        companion: review.companion,
+        images: review.images,
+      }));
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+      return []; // Hoặc bạn có thể xử lý khác tùy ý
+    }
+  }
+
   export async function addReview(title,content,rating,user_id,destination_id,language,companion,date_create, images) {
     try {
   
