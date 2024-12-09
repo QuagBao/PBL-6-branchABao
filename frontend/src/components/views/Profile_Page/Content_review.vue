@@ -3,7 +3,7 @@
         <!-- Info User Post like username activity, date post, avatar -->
         <div class="user-info">
             <div class="avatar">
-                <img :src="user?.user_info.images ? user.user_info.images.url : '/blue-image.jpg'" alt="Avatar" class="ava"/>
+                <img :src="user?.user_info.image ? user.user_info.image.url : '/blue-image.jpg'" alt="Avatar" class="ava"/>
             </div>
             <div class="activity">
                 <p>{{ user?.username }}</p>
