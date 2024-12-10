@@ -14,7 +14,7 @@
                                 <h2>{{ tour?.name }}</h2>
                             </div>
                             <div class="name-of-business">
-                                <p>By {{ user?.name }}</p>
+                                <p>By {{ user_create?.username }}</p>
                             </div>
                             <div class="frame-rating d-flex gap-3">
                                 <div class="rating">
@@ -29,33 +29,36 @@
                         </div>
                         <div class="frame-image">
                             <div class="item-1">
-                                <img class="img-1" src="@/assets/images/tms-hotel-da-nang-beach.jpg" alt="">
+                                <img class="img-1" :src="images && images[0] ? images[0].url : '/blue-image.jpg'" alt="">
                             </div>
                             <div class="item-2">
-                                <img class="img-2" src="@/assets/images/tms-hotel-da-nang-beach.jpg" alt="">
+                                <img class="img-2" :src="images && images[1] ? images[1].url : '/blue-image.jpg'" alt="">
                             </div>
                             <div class="item-3">
-                                <img class="img-3" src="@/assets/images/tms-hotel-da-nang-beach.jpg" alt="">
+                                <img class="img-3" :src="images && images[2] ? images[2].url : '/blue-image.jpg'" alt="">
                             </div>
                         </div>
                         <div class="frame-info">
                             <div class="detail">
-                                <Info_Card/>
+                                <Info_Card :maxAge="maxAge" :duration="tour?.duration" :totalbottom="totalPriceBottom"/>
                             </div>
                             <div class="about">
-                                <About/>
+                                <About :description="tour?.description"/>
                             </div>
                         </div>
                         <div class="frame-tinerary">
                             <div class="frame-schedule">
-                                <Schedule/>
+                                <Schedule :destinations="tour?.destinations"/>
                             </div>
                             <div class="frame-map">
                                 <p>Map</p>
                             </div>
                         </div>
                         <div class="frame-contribute">
-                            <Contribute/>
+                            <Contribute :commentList="reviews"
+                                        :tour_id="Number(tourID)"
+                                        :user="user?.id||0"/>
+                                        
                         </div>
                     </div>
                 </div>
@@ -69,32 +72,65 @@ import TourViewModel from '../../../viewModels/TourViewModel';
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import generateViewModel from '../../../viewModels/generate_ratingViewModel';
+
 const route = useRoute();
-const tourID = route.params.id; 
+const tourID = route.params.id;
+
 const {
     loadCities,
     loadTours,
     loadTourById,
     loadTourByCityId,
     loadUser,
+    loadReviewByTourId,
+    loadCurrentUser,
 } = TourViewModel();
 
 const {
     generateStars,
-  } = generateViewModel();
+} = generateViewModel();
 
-const tour = ref([]);
+const tour = ref();
 const cities = ref([]);
-const user = ref([]);
+const user_create = ref(null);
+const images = ref([]);
+const maxAge = ref(null);
+const reviews = ref([]);
+const user = ref(null);
+const totalPriceBottom = ref(0);
+
 onMounted(async () => {
-    tour.value =  await loadTourById(tourID);
+    // Load data
+    tour.value = await loadTourById(tourID);
     cities.value = await loadCities();
-    user.value = await loadUser(tour.value.user_id);
+    user_create.value = await loadUser(tour.value.user_id);
+    reviews.value = await loadReviewByTourId(tourID);
+    user.value = await loadCurrentUser();
+    // Add images from destinations to the images array
+    if (tour.value?.destinations?.length) {
+        totalPriceBottom.value = tour.value.destinations.reduce((sum, destination) => {
+            return sum + (destination.price_bottom || 0); // Add price_bottom if it exists
+        }, 0);
+        tour.value.destinations.forEach(destination => {
+            
+            if (destination.images?.length) {
+                destination.images.forEach(image => {
+                    images.value.push(image); // Add each image to the global images array
+                });
+            }
+            if (destination.age !== undefined) {
+                maxAge.value = maxAge.value === null
+                    ? destination.age
+                    : Math.max(maxAge.value, destination.age);
+            }
+
+        });
+    }
 });
 
 const getCity = (city_id) => {
     return cities.value.find(city => city.id === city_id);
-}
+};
 </script>
 <script>
 import Header from '../../Header.vue';
@@ -103,7 +139,7 @@ import Scroll_Bar_Component from '../../Scroll_Bar_Component.vue';
 import Info_Card from './Info_Card.vue';
 import About from './About.vue';
 import Schedule from './Schedule.vue';
-import Contribute from '../../Contribute.vue';
+import Contribute from './Contribute.vue';
 export default {
     name: "Detail_Tour",
     components: {

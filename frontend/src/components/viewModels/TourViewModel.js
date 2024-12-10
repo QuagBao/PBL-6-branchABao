@@ -2,6 +2,8 @@ import { ref, onMounted, watch, nextTick } from 'vue';
 import { fetchCities } from '../models/CityModel';
 import { fetchTours, getTourById, getTourByCityId } from '../models/TourModel';
 import { getUserById } from '../models/UserModel';
+import { getReviewByTourId } from '../models/ReviewModel.js';
+import SignInModel from '../models/SignInModel';
 
 export default function () {
     const loadCities = async () => {
@@ -49,11 +51,82 @@ export default function () {
             return [];
         }
     }
+
+    const loadCurrentUser = async () => {
+        const signInModel = new SignInModel("", "");
+        try{
+            const token = sessionStorage.getItem('access_token');
+          if(token){
+            const userResult = await signInModel.fetchCurrentUser(token);
+            if(userResult.success){
+              return userResult.user;
+            } else {
+            console.error('Cannot get user:', error);
+            return null;
+            }
+          }
+          
+        } catch (error) {
+          console.error('An error occurred during authentication:', error);
+          return { success: false, message: error.message || 'An error occurred' };
+        }
+        
+      }
+
+    const loadReviewByTourId = async (tourID) => {
+        try {
+            let reviews = await getReviewByTourId(tourID);
+            reviews = await loadUsersForComments(reviews);
+            return reviews;
+        } catch (error) {
+            console.error('Error getting review list:', error);
+            return [];
+        }
+    }
+    const loadUsersForComments = async (reviews) => {
+        if (reviews.length === 0) {
+          console.warn("Danh sách nhận xét trống, không thể tải thông tin người dùng.");
+          return;
+        }
+      
+        const userSet = new Set(); // Dùng Set để tránh gọi lại API cho các user_id trùng nhau
+        try {
+            reviews.forEach(comment => {
+            if (comment.user_id) {
+              userSet.add(comment.user_id);
+            }
+          });
+      
+          const userPromises = Array.from(userSet).map(userID => loadUser(userID));
+          const userResults = await Promise.all(userPromises);
+      
+          const userMap = new Map();
+          userResults.forEach(user => {
+            if (user && user.id) {
+              userMap.set(user.id, user);
+            }
+          });
+      
+          reviews.forEach(comment => {
+            const user = userMap.get(comment.user_id);
+            if (user) {
+              comment.user = user; // Thêm thông tin user vào mỗi comment
+            }
+          });
+      
+          console.log("Danh sách nhận xét với thông tin người dùng:", reviews);
+          return reviews;
+        } catch (error) {
+          console.error("Có lỗi xảy ra khi tải thông tin người dùng:", error);
+        }
+      };
     return {
         loadCities,
         loadTours,
         loadTourById,
         loadTourByCityId,
         loadUser,
+        loadReviewByTourId,
+        loadCurrentUser,
     }
 }

@@ -1,85 +1,19 @@
 <template>
     <div class="schedule">
         <h3>Itineray</h3>
-        <div class="itinerary">
-            <div class="location">
+        <div class="itinerary" v-for="destination in destinations" :key="destination.id">
+            <div class="location" >
                 <svg width="30" fill="#13357B" height="30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <!-- Generator: Sketch 56.3 (81716) - https://sketch.com -->
                     <circle cx="15" cy="15" r="5"/>
                 </svg>
                 <div class="detail-location">
-                    <p>You'll get picked up</p>
-                    <span>Pass by Da Nang</span>
-                </div>
-            </div>
-            <div class="location">
-                <svg width="30" fill="#13357B" height="30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                    <!-- Generator: Sketch 56.3 (81716) - https://sketch.com -->
-                    <circle cx="15" cy="15" r="5"/>
-                </svg>
-                <div class="detail-location">
-                    <p>Hai Van Pass</p>
-                    <span>Stop: 15 minutes</span>
+                    <p>{{ destination.name }}</p>
+                    <span>Stop: {{ destination.duration }} hours</span>
                     <div class="infor-location">
-                        <Schedule_Item/>
-                        <span>Chỉ hiển thị khi bấm see details & photos</span>
+                        <Schedule_Item :destination="destination"/>
                     </div>
-                    <button class="read-more-or-less">See less</button>
-                </div>
-            </div>
-            <div class="location">
-                <svg width="30" fill="#13357B" height="30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                    <!-- Generator: Sketch 56.3 (81716) - https://sketch.com -->
-                    <circle cx="15" cy="15" r="5"/>
-                </svg>
-                <div class="detail-location">
-                    <p>Lap An Lagoon</p>
-                    <span>Stop: 20 minutes</span>
-                    <button class="read-more-or-less">See details & photo</button>
-                </div>
-            </div>
-            <div class="location">
-                <svg width="30" fill="#13357B" height="30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                    <!-- Generator: Sketch 56.3 (81716) - https://sketch.com -->
-                    <circle cx="15" cy="15" r="5"/>
-                </svg>
-                <div class="detail-location">
-                    <p>Thien Mu Pagoda</p>
-                    <span>Stop: 60 minutes</span>
-                    <button class="read-more-or-less">See details & photo</button>
-                </div>
-            </div>
-            <div class="location">
-                <svg width="30" fill="#13357B" height="30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                    <!-- Generator: Sketch 56.3 (81716) - https://sketch.com -->
-                    <circle cx="15" cy="15" r="5"/>
-                </svg>
-                <div class="detail-location">
-                    <p>Tomb of Khai Dinh</p>
-                    <span>Stop: 60 minutes</span>
-                    <button class="read-more-or-less">See details & photo</button>
-                </div>
-            </div>
-            <div class="location">
-                <svg width="30" fill="#13357B" height="30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                    <!-- Generator: Sketch 56.3 (81716) - https://sketch.com -->
-                    <circle cx="15" cy="15" r="5"/>
-                </svg>
-                <div class="detail-location">
-                    <p>Hue Imperial City (The Citadel)</p>
-                    <span>Stop: 90 minutes</span>
-                    <button class="read-more-or-less">See details & photo</button>
-                </div>
-            </div>
-            <div class="location">
-                <svg width="30" fill="#13357B" height="30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                    <!-- Generator: Sketch 56.3 (81716) - https://sketch.com -->
-                    <circle cx="15" cy="15" r="5"/>
-                </svg>
-                <div class="detail-location">
-                    <p>You'll return to the starting point</p>
-                    <span>Stop: 15 minutes</span>
-                    <button class="read-more-or-less">See details & photo</button>
+                    <button class="read-more-or-less">See detail place</button>
                 </div>
             </div>
         </div>
@@ -93,6 +27,12 @@ export default {
     name: "Schedule",
     components: {
         Info_Card, Schedule_Item
+    },
+    props:{
+        destinations: {
+            type: Array,
+            default: []
+        }
     }
 }
 </script>

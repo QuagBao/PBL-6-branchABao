@@ -2,32 +2,35 @@
     <div class="cards">
         <div class="">
             <div class="img-location">
-                <img src="@/assets/images/tms-hotel-da-nang-beach.jpg" alt="pic" class="img-location"/>
+                <img :src="destination?.images && destination.images[0] ? destination.images[0].url : '/blue-image.jpg'" alt="pic" class="img-location"/>
             </div>
             <div class="p-2">
                 <div class="btn-heart"> 
-                    <btn_heart/>
+                    <btn_heart :destID="destination.id" />
                 </div>
             </div>   
         </div>
         <div class="frame-rating">
             <div class="rating">
-                <img src="@/assets/svg/star_full.svg" alt="">
-                <img src="@/assets/svg/star_full.svg" alt="">
-                <img src="@/assets/svg/star_full.svg" alt="">
-                <img src="@/assets/svg/star_full.svg" alt="">
-                <img src="@/assets/svg/star_full.svg" alt="">
+                <div v-for="(star, index) in generateStars(destination?.average_rating)" :key="index">
+                    <img :src="star" alt="Star" class="star"/>
+                </div>
             </div>
-            <p class="review-number">/ {{ reviewNumber }} reivews</p>
+            <p class="review-number">/ {{ destination.review_count }} reivews</p>
         </div>
         <div class="info-location">
             <div class="description">
-                <span>Depends on the weather or construction, we will inform for you that stopping here or not. Hai Van pass Vietnam is recognized as one of the world's top ten most beautiful coastal roads. This pass is not only connected with numerous historical events, but it is also a wonderful place for many travelers due to its spectacular and artistic beauty that captivates everyone’s heart. The...</span>
+                <span>{{ destination.description }}</span>
             </div>
         </div>
     </div>
 </template>
-
+<script setup>
+import generateViewModel from '../../../viewModels/generate_ratingViewModel';
+const {
+    generateStars,
+} = generateViewModel();
+</script>
 <script>
 
 import btn_heart from '../../../views/btn_heart.vue';
@@ -37,6 +40,10 @@ export default {
         btn_heart
     },
     props: {
+        destination: {
+            type: Object,
+            default: () => {}
+        },
         imageUrl: String,
         rating: Number,
         reviewNumber: Number,
@@ -59,6 +66,10 @@ img {
 }
 .frame-rating{
     display: flex;
+}
+.rating{
+    display: flex;
+    margin: 0px 0 0 10px;
 }
 .rating img {
     width: 20px;

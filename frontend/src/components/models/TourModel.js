@@ -67,6 +67,8 @@ export async function getTourById(tourID) {
       user_id: tour.user_id,
       city_id: tour.city_id,
       destinations: tour.destinations,
+      rating: tour.rating,
+      numOfReviews: tour.numOfReviews,
     };
   } catch (error) {
     console.error("Error fetching tour:", error);
