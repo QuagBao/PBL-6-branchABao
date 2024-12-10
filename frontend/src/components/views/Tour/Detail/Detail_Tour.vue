@@ -11,21 +11,19 @@
                     <div class="container-fluid frame-detail">
                         <div class="frame-title">
                             <div class="name-of-tour">
-                                <h2>Hue city tour 1 day from Da Nang / Hoi An</h2>
+                                <h2>{{ tour?.name }}</h2>
                             </div>
                             <div class="name-of-business">
-                                <p>By Dragon Travel Viet</p>
+                                <p>By {{ user?.name }}</p>
                             </div>
                             <div class="frame-rating d-flex gap-3">
                                 <div class="rating">
-                                    <img src="@/assets/svg/star_full.svg" alt="">
-                                    <img src="@/assets/svg/star_full.svg" alt="">
-                                    <img src="@/assets/svg/star_full.svg" alt="">
-                                    <img src="@/assets/svg/star_half.svg" alt="">
-                                    <img src="@/assets/svg/star_none.svg" alt="">
+                                    <div v-for="(star, index) in generateStars(tour?.rating)" :key="index">
+                                        <img :src="star" alt="Star" class="star"/>
+                                    </div>
                                 </div>
                                 <div class="reviews">
-                                    <p>/10 reviews</p>
+                                    <p>/{{ tour?.numOfReviews }} reviews</p>
                                 </div>
                             </div>
                         </div>
@@ -66,7 +64,38 @@
     </div>
 </template>
 
+<script setup>
+import TourViewModel from '../../../viewModels/TourViewModel';
+import { ref, computed, onMounted, watch } from 'vue';
+import { useRoute } from 'vue-router';
+import generateViewModel from '../../../viewModels/generate_ratingViewModel';
+const route = useRoute();
+const tourID = route.params.id; 
+const {
+    loadCities,
+    loadTours,
+    loadTourById,
+    loadTourByCityId,
+    loadUser,
+} = TourViewModel();
 
+const {
+    generateStars,
+  } = generateViewModel();
+
+const tour = ref([]);
+const cities = ref([]);
+const user = ref([]);
+onMounted(async () => {
+    tour.value =  await loadTourById(tourID);
+    cities.value = await loadCities();
+    user.value = await loadUser(tour.value.user_id);
+});
+
+const getCity = (city_id) => {
+    return cities.value.find(city => city.id === city_id);
+}
+</script>
 <script>
 import Header from '../../Header.vue';
 import Top_Button from '../../Top_Button.vue';
@@ -94,6 +123,10 @@ export default {
 .name-of-business p {
     text-decoration: underline;
     text-underline-offset: 2px;
+}
+.rating{
+    display: flex;
+    margin: 0px 0 0 10px;
 }
 .rating img{
     width: 20px;

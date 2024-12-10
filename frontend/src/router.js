@@ -142,10 +142,10 @@ const routes = [
   { path: '/Topic_List', name: 'Topic_List', component: Topic_List },
   
   // Detail_Tour
-  { path: '/Detail_Tour', name: 'Detail_Tour', component: Detail_Tour },
+  { path: '/Tour/:id', name: 'Detail_Tour', component: Detail_Tour },
   
   // List_Tour
-  { path: '/List_Tour', name: 'List_Tour', component: List_Tour },
+  { path: '/Tour', name: 'List_Tour', component: List_Tour },
   
   // Business
   { path: '/Business/Dashboard_For_Company', name: 'Dashboard_For_Company', component: Dashboard_For_Company },
