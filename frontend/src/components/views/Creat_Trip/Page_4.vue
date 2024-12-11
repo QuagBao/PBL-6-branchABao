@@ -10,7 +10,7 @@
                     <div class="container-fluid title desinations">
                         <span>Exploring the Lively Cultural Heritage and Natural Beauty of Central Viet Nam</span>
                         <div class="container-fluid context grid-items">
-                            <Item v-for="(place, index) in suggestedDestinations" :key="index"
+                            <Item v-for="(place, index) in places" :key="index"
                                 :imageUrl="place.imageUrl"
                                 :name="place.name"
                                 :rating="generateStars(place.rating)"
@@ -22,8 +22,8 @@
                         <span>Local Restaurant Picks</span>
                         <span class="description">Here are some local favorites.</span>
                         <div class="container-fluid grid-items">
-                            <Item v-for="(place, index) in suggestedDestinations" :key="index"
-                                :imageUrl="place.imageUrl"
+                            <Item v-for="(place, index) in restaurants" :key="index"
+                                :imageUrl="place.images[0]"
                                 :name="place.name"
                                 :rating="generateStars(place.rating)"
                                 :id="place.id"/>
@@ -34,8 +34,8 @@
                         <span>Places to stay</span>
                         <span class="description">We've also recommended some places to stay during your trip.</span>
                         <div class="container-fluid grid-items">
-                            <Item v-for="(place, index) in suggestedDestinations" :key="index"
-                                :imageUrl="place.imageUrl"
+                            <Item v-for="(place, index) in hotels" :key="index"
+                                :imageUrl="place.images[0]"
                                 :name="place.name"
                                 :rating="generateStars(place.rating)"
                                 :id="place.id"/>
@@ -83,7 +83,7 @@ const {
     suggestedDestinations,
     searchDestinations,
     generateStars,
-    places
+    places, hotels, restaurants,
 } = CreateTripViewModel();
 </script>
 

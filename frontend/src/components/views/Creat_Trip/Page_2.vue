@@ -35,7 +35,7 @@ export default {
         // Method for don't know day
         goMonth() {
             this.$router.push({name: 'Page_2_1'});
-        }
+        },
     }
 }
 </script>

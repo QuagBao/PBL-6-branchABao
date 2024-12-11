@@ -127,23 +127,23 @@ export default function () {
         destination.value.date_create = formattedDate; // Gán ngày hôm nay làm mặc định
     };
 
-      const images = ref([]);
-      const new_images = ref([]);
-      const image_ids_to_remove = ref([]);
-      const previewImages = ref([]);
-      const previewNewImages = ref([]);
-        const addDestination = async () => {
-            try {
-            const result = await addDestinationAPI(destination.value, images.value);
-            if (result.success) {
-                toast.success("Add destination successfully");
-            } else {
-                toast.error("Add destination failed");
-            }
-            } catch (error) {
-            toast.error("Error adding destination:", error);
-            }
-        };
+    const images = ref([]);
+    const new_images = ref([]);
+    const image_ids_to_remove = ref([]);
+    const previewImages = ref([]);
+    const previewNewImages = ref([]);
+    const addDestination = async () => {
+        try {
+        const result = await addDestinationAPI(destination.value, images.value);
+        if (result.success) {
+            toast.success("Add destination successfully");
+        } else {
+            toast.error("Add destination failed");
+        }
+        } catch (error) {
+        toast.error("Error adding destination:", error);
+        }
+    };
         const updateDestination = async () => {
             try {
             const result = await updateDestinationAPI(destination.value, new_images.value, image_ids_to_remove.value);

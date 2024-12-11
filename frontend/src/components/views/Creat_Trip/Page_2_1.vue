@@ -6,8 +6,9 @@
                 <h5>Choose month and trip length</h5>
             </div>
             <div class="container frame-items">
-                <button v-for="month in allMonths" :key="month" 
-                        class="item" >
+                <button v-for="(month, index) in allMonths" :key="index" 
+                        class="item" @click="selectMonth(index)" 
+                        :class="{ selected: index === selectedMonthIndex }" >
                     {{ month }}
                 </button>
             </div>  
@@ -65,6 +66,7 @@ export default {
     data() {
         return {
             dateViewModel: new DateViewModel(),
+            selectedMonthIndex: null, //Lưu chỉ mục của tháng được chọn
         };
     },
     computed: {
@@ -76,9 +78,14 @@ export default {
         }
     },
     methods: {
+        // Xử lý khi người dùng chọn tháng
+        selectMonth(index) {
+            this.selectedMonthIndex = index;
+            this.dateViewModel.setSelectedMonth(index);
+        },
         // Method for 'Back' button (to go to the previous page)
         goBack() {
-            this.$router.push({name: 'Page_2'}); // This will take the user to the previous page in the history
+            this.$router.push({name: 'Page_1'}); // This will take the user to the previous page in the history
         },
         // Method for 'Next' button (to navigate to the next page)
         goNext() {
@@ -92,12 +99,14 @@ export default {
             if (currentLength > 1) {
                 this.dateViewModel.setSelectedDays(currentLength - 1);
             }
+            console.log(currentLength);
         },
         increaseLength() {
             let currentLength = this.dateViewModel.getSelectedDays();
             if (currentLength < 7) {
                 this.dateViewModel.setSelectedDays(currentLength + 1);
             }
+            console.log(currentLength);
         },
     }
 }

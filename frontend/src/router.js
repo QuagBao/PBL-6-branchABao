@@ -67,7 +67,7 @@ const List_Tour = () => import('./components/views/Tour/List/List_Tour.vue');
 // Test UI
 const test   = () => import('./components/views/Dashboard_For_Company/dashboard_for_company.vue'); 
 const test1 = () => import('./components/views/Dashboard_For_Company/Service.vue');
-const test2 = () => import('./components/views/Tour/Detail/Detail_Tour.vue');
+const test2 = () => import('./components/views/Chart/Chart.vue');
 const test3 = () => import('./components/views/Tour/List/Tour_Item.vue');
 
 

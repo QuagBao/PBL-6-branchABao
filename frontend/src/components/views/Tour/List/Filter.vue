@@ -57,7 +57,7 @@
             <h5>Price</h5>
             <div class="currency-options">
                 <label class="label"><input type="radio" name="currency" value="VND" checked @change="handleCurrencyChange('VND')"> VNĐ</label>
-                <label class="label"><input type="radio" name="currency" value="USD" @change="handleCurrencyChange('USD')"> USD</label>
+                <label class="label"><input type="radio" name="c3urrency" value="USD" @change="handleCurrencyChange('USD')"> USD</label>
             </div>
             <div class="price-inputs">
                 <input type="number"
@@ -73,9 +73,9 @@
             <div id="price-slider" class="range-slider"></div>
 
             <div class="price-labels">
-                <!-- <p class="col text-start">{{ new Intl.NumberFormat('vi-VN', { style: 'currency', currency }).format(minPrice) }}</p> -->
+                <!-- <p class="col text-start">{{ new Intl.NumberFormat('vi-VN', { style: 'currency', currency }).format(minPrice) }}</p>
                 <span class="col">-</span>
-                <!-- <p class="col text-end">{{ new Intl.NumberFormat('vi-VN', { style: 'currency', currency }).format(maxPrice) }}</p> -->
+                <p class="col text-end">{{ new Intl.NumberFormat('vi-VN', { style: 'currency', currency }).format(maxPrice) }}</p> -->
             </div>
         </div>
     </div>
