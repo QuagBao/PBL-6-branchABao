@@ -98,8 +98,6 @@ export default function (cityId) {
     await fetchDestinationsData();
   };
 
-  
-
   const fetchAllData = async () => {
     try {
       await fetchCityDetailsData();

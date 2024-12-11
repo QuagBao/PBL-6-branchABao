@@ -4,9 +4,6 @@ import DateModel from '../../models/Create_Trip_Models/date_Model.js';
 export default class DateViewModel {
     constructor() {
         this.model = new DateModel();  // Tạo một Model mới
-        const currentDate = new Date();
-        this.currentMonth = currentDate.getMonth(); // Tháng hiện tại (0 - 11)
-        this.currentYear = currentDate.getFullYear(); // Năm hiện tại
     }
 
     // Lấy danh sách các ngày trong tháng hiện tại
@@ -59,6 +56,17 @@ export default class DateViewModel {
         return this.model.year;
     }
 
+    // Đặt tháng được chọn
+    setSelectedMonth(monthIndex) {
+        console.log('Da goi toi ham setSelectedMonth', monthIndex);
+        this.model.setSelectedMonth(monthIndex);
+    }
+
+    getSelectedMonth() {
+        console.log('Da goi toi ham getSelectedMonth', this.model.getSelectedMonth());
+        return this.model.getSelectedMonth();
+    }
+
     // Lấy năm của tháng tiếp theo
     getNextYear() {
         const { nextYear } = this.model.getNextMonth();
@@ -82,5 +90,15 @@ export default class DateViewModel {
     // Cập nhật số ngày đã chọn
     setSelectedDays(days) {
         this.model.setSelectedDays(days);
+    }
+
+    // Cập nhật ngày bắt đầu và ngày kết thúc
+    updateSelectedDate(day, month, year) {
+        const monthIndex = this.getAllMonthNames().indexOf(monthName);
+        if (monthIndex === -1) {
+            console.error("Invalid month name provided:", monthName);
+            return;
+        }
+        this.model.updateSelectedDate(day, monthIndex, year);
     }
 }

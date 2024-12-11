@@ -6,11 +6,11 @@
                 <h5>Select all that apply</h5>
             </div>
             <div class="container frame-items">
-                <button v-for="topic in topics" :key="topic" 
+                <button v-for="(topic,index) in topics" :key="index" 
                         class="item"
                         :class="{ 'selected': selectedTopics.includes(topic) }"
                         @click="toggleTopic(topic)">
-                    {{ topic }}
+                    {{ topic.name }}
                 </button>
             </div>
             <div class="container-fluid frame-button px-5 py-2">
@@ -33,7 +33,7 @@ export default {
     methods: {
         // Method for 'Back' button (to go to the previous page)
         goBack() {
-            this.$router.push({name: 'Page_2'}); // This will take the user to the previous page in the history
+            this.$router.push({name: 'Page_2_1'}); // This will take the user to the previous page in the history
         },
         // Method for 'Next' button (to navigate to the next page)
         goNext() {

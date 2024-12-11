@@ -1,35 +1,32 @@
 import { ref, onMounted, computed, watch } from 'vue';
-import CreateTripModel from '../../models/Create_Trip_Models/CreateTripModel';
+import CreateTripModel from '../../models/CreateTripModel';
+import DateModel from '@/components/models/Create_Trip_Models/date_Model';
 
 export default function CreateTripViewModel() {
     const model = CreateTripModel();
+    const dateModel = new DateModel();
     const currentStep = ref(1);
     const searchQuery = ref('');
+    const selectedCity = ref('');
     const suggestedDestinations = ref([]);
     const activePicker = ref('');
+    const location = ref('');
+    const selectedLength = ref([]);
+    const selectedMonth = ref([]);  
     const rawSelectedDates = ref([]);
-    const topics = ref([
-        "Religious Site/ Historic Sites",
-        "Great Food",
-        "Museum",
-        "Theater",
-        "Parks",
-        "Mountain",
-        "Gallery",
-        "Points of interest & Landmark",
-        "Neighborhoods",
-        "Flea & Street Markets",
-        "Scenic Walking Areas"
-    ]);
+    const topics = ref([]);
     const selectedTopics = ref([]);
     const destinations = ref([]);
     const places = ref([]);
     const attractions = ref([]);
     const restaurants = ref([]);
     const hotels = ref([]);
+    const allDestinations = ref([]);
 
     onMounted(async () => {
         suggestedDestinations.value = await model.fetchCities();
+        topics.value = await model.fetchTags();
+        allDestinations.value = await model.fetchEntertainments();
     });
 
     // Watcher to fetch data whenever currentStep changes to 4
@@ -43,6 +40,16 @@ export default function CreateTripViewModel() {
             hotels.value = allDestinations.filter(dest => dest.destinationType === 'Hotel');
         }
     });
+
+    const getSelectedLength = () => {
+        selectedLength = dateModel.getSelectedLength();
+        return selectedLength.value;
+    }
+
+    const getSelectedMonth = () => {
+        selectedMonth = dateModel.getSelectedMonth();
+        return selectedMonth.value;
+    }
 
     const searchDestinations = () => {
         console.log('Search initiated with query:', searchQuery.value);
@@ -108,6 +115,7 @@ export default function CreateTripViewModel() {
         } else {
             selectedTopics.value.push(topic);
         }
+        console.log('Selected topics:', selectedTopics.value);
     };
 
     const picked = ref({});
@@ -155,6 +163,7 @@ export default function CreateTripViewModel() {
 
         
     };
+
 
     const itineraryName = ref('');
 

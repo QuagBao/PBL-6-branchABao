@@ -4,7 +4,7 @@ export default class DateModel {
         const currentDate = new Date();
         this.year = currentDate.getFullYear(); // Năm hiện tại
         this.month = currentDate.getMonth(); // Tháng hiện tại (0 - 11)
-        this.selectedDate = null; // Ngày được chọn
+        this.selectedDate = []; // Ngày được chọn
         this.selectedDays = 1; // Số ngày mặc định là 1
     }
 
@@ -94,5 +94,47 @@ export default class DateModel {
         if (days >= 1 && days <= 7) {
             this.selectedDays = days;
         }
+    }
+
+    // Lấy tháng được chọn
+    setSelectedMonth(month) {
+        this.month = month; // Lưu tháng được chọn
+    }
+    getSelectedMonth() {
+        return this.month; // Trả về tháng được chọn
+    }
+
+
+    // Lấy ngày bắt đầu và ngày kết thúc
+    updateSelectedDate (day, month, year) {
+        if(!day || !month || !year) return;
+        
+        const selectedDate = new Date(year, month, day);
+
+        // Kiểm tra xem ngày tạo ra có hợp lệ không
+        if (isNaN(selectedDate.getTime())) {
+            console.error("Invalid Date created", { day, month, year });
+            return;
+        }
+        
+        console.log("Selected date:", selectedDate);
+
+        if (this.selectedDate.length === 2) {
+            this.selectedDate = [selectedDate];
+        } else if (this.selectedDate.length === 1) {
+            const startDate = this.selectedDate[0];
+    
+            // Nếu chọn ngày mới nhỏ hơn ngày bắt đầu, hoán đổi
+            if (selectedDate < startDate) {
+                this.selectedDate = [selectedDate, startDate];
+            } else {
+                this.selectedDate.push(selectedDate); // Chọn ngày mới làm ngày kết thúc
+            }
+        } else {
+            // Nếu chưa chọn ngày nào, đặt ngày này làm ngày bắt đầu
+            this.selectedDate = [selectedDate];
+        }
+    
+        console.log("Updated selected dates:", this.selectedDate);
     }
 }

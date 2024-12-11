@@ -42,7 +42,7 @@
                         </div>
                     </div>
                     <div class="container-fluid map">
-                        <span >Map</span>
+                        <Map/>
                     </div>
                 </div>
             </div>
@@ -60,11 +60,13 @@ import Tag_Trip from './Tag_Trip.vue';
 import DetailTripViewModel from '@/components/viewModels/Trip/detailTrip_Viewmodel';
 import Saved_List from './Saved/Saved_List.vue';
 import Itinerary_List from './Itinerary/Itinerary_List.vue';
+import Map from '../Map/Map.vue';
 export default {
 
     name: "Detail_Trip",
     components: {
-        Header, Top_Button, Tag_Trip, Saved_List, Itinerary_List,
+        Header, Top_Button, Tag_Trip, Saved_List, 
+        Itinerary_List, Map
     },
     data() {
         return {

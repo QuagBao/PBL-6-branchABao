@@ -12,7 +12,7 @@
                         <div class="container-fluid frame-item">
                             <div class="container-fluid item" :key="index"
                                 v-for="(destination, index) in suggestedDestinations.slice(0, 4)">
-                                <Img_Card :imageUrl="destination.imageUrl" 
+                                <Img_Card :imageUrl="destination.images[0]" 
                                         :name="destination.name"/>
                             </div>
                         </div>
@@ -38,7 +38,7 @@ export default {
     }, 
     methods: {
         goNext () {
-            this.$router.push({ name: 'Page_2' });
+            this.$router.push({ name: 'Page_2_1' });
         }
     }
 }
@@ -77,6 +77,9 @@ const {
 :deep(.custom-search .title) {
     font-size: 60px;
     color: #00B4D8; /* Dark green color */
+}
+:deep(.custom-search button) {
+    opacity: 0;
 }
 .frame-item {
     display: grid;

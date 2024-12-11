@@ -90,9 +90,6 @@ const vietnamRegions = {
     try {
       const response = await fetch(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/city/${cityId}`);
       const data = await response.json();
-
-      
-  
       // Chuyển đổi dữ liệu thành định dạng có thể sử dụng trong Vue
       return {
         id: data.id,

@@ -74,9 +74,7 @@
                 
                 <div class="container-fluid d-flex justify-content-center align-items-center gap-3">
                     <div class="container-fluid">
-                        Statics Reviews:
-                        Sẽ gồm biểu đồ đường hiển thị đánh giá trung bình theo từng tháng
-                        Biểu đồ cột hiển thị tổng số reviews
+                        <Chart/>
                     </div>
                     <div class="container-fluid">
                         sẽ hiển thị ra top 5 destination của doanh nghiệp dựa trên số rating, nếu cùng rating sẽ sắp xếp theo tổng reviews
@@ -85,10 +83,6 @@
             </div>
         </div>
     </div>
-    
-
-    
-
 </template>
 
 <script>
@@ -96,10 +90,11 @@ import header_For_company from './header_For_company.vue';
 import Carousel_For_Dashboard from '../Carousel_For_Dashboard.vue';
 import Search_Btn_Big from '../Search_Btn_Big.vue';
 import Scroll_Bar_Component from '../Scroll_Bar_Component.vue';
+import Chart from '../Chart/Chart.vue';
 export default {
     name: "Dashboard_For_Company",
     components: {
-        header_For_company, Carousel_For_Dashboard, Search_Btn_Big
+        header_For_company, Carousel_For_Dashboard, Search_Btn_Big, Chart
     }
 }
 </script>

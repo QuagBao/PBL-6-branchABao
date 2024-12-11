@@ -200,4 +200,12 @@ export default {
     background-color: #00B4D8;
     color: #EDF6F9;
 }
+.frame-1 button.highlighted {
+    background-color: #CAF0F8; /* Màu nền cho các ngày nằm giữa */
+    color: #13357B;
+}
+.frame-1 button.active {
+    background-color: #8ecae6;
+    color: #EDF6F9;
+}
 </style>
