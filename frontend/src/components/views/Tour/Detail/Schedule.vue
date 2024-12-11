@@ -13,12 +13,28 @@
                     <div class="infor-location">
                         <Schedule_Item :destination="destination"/>
                     </div>
-                    <button class="read-more-or-less">See detail place</button>
+                    <button class="read-more-or-less" @click="navigate(destination)">See detail place</button>
                 </div>
             </div>
         </div>
     </div>
 </template>
+<script setup>
+const navigate = (destination) => {
+    if(destination.hotel_id!= null){
+        navigateToDetailHotel(destination.hotel_id);
+    }
+    else if(destination.restaurant_id!= null){
+        navigateToDetailRestaurant(destination.restaurant_id);
+    }
+    else{
+        navigateToDetailPlace(destination.id);
+    }
+}
+const navigateToDetailPlace = (id) => window.location.assign(`/Detail/Place/${id}`);
+const navigateToDetailRestaurant = (restaurant_id) => window.location.assign(`/Detail/Restaurant/${restaurant_id}`);
+const navigateToDetailHotel = (hotel_id) => window.location.assign(`/Detail/Hotel/${hotel_id}`);
+</script>
 
 <script>
 import Info_Card from '../../Things_To_Do/Info_Card.vue';

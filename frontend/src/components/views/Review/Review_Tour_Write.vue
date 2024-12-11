@@ -169,7 +169,6 @@
       import Top_Button from '../Top_Button.vue';
       import Img_Card from '../Img_Card.vue';
       import Card_Item from '../Card_Item.vue';
-import TourViewModel from "@/components/viewModels/TourViewModel.js";
       export default {
           name: "ThingsToDo_List",
           components: {

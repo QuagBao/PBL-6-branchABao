@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid favourite-item">
+    <div class="container-fluid favourite-item" @click="navigate(destination)">
         <div class="row p-2">
             <div class="col-sm-12 p-2 img-location">
                 <img :src="destination?.images && destination.images[0] ? destination.images[0].url : '/blue-image.jpg'" alt="pic" class="img-location"/>
@@ -62,6 +62,20 @@ onMounted(async () => {
     // Sử dụng props.destID thay vì destID
     destination.value = await loadDestination(props.destID);
 });
+const navigate = (destination) => {
+    if(destination.hotel_id!= null){
+        navigateToDetailHotel(destination.hotel_id);
+    }
+    else if(destination.restaurant_id!= null){
+        navigateToDetailRestaurant(destination.restaurant_id);
+    }
+    else{
+        navigateToDetailPlace(destination.id);
+    }
+}
+const navigateToDetailPlace = (id) => window.location.assign(`/Detail/Place/${id}`);
+const navigateToDetailRestaurant = (restaurant_id) => window.location.assign(`/Detail/Restaurant/${restaurant_id}`);
+const navigateToDetailHotel = (hotel_id) => window.location.assign(`/Detail/Hotel/${hotel_id}`);
 </script>
 
 <script>
@@ -78,6 +92,14 @@ export default {
 .container-fluid{
     display: grid;
     color: #13357B;
+}
+
+.container-fluid:hover {
+    cursor: pointer;
+    transition: 0.7ms ease-in-out;
+    transform: translateY(-5px);
+    background-color: #CAF0F8;
+    box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);
 }
 
 img {

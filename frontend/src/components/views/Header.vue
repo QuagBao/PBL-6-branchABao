@@ -22,7 +22,7 @@
             <button
               class="nav-item nav-link"
               :class="{ active: state.activeButton === 'tour' }"
-              @click="handleButtonClick('tour', '/tour-proposal')"
+              @click="handleButtonClick('tour', '/tour')"
             >
               Tour Proposal
             </button>

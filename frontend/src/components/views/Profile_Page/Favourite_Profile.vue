@@ -18,6 +18,7 @@ const likes = ref([]);
 onMounted(async () => {
     likes.value =  await likeList();
 });
+
 </script>
 <script>
 import Favourite_Item from './Favourite_Item.vue';

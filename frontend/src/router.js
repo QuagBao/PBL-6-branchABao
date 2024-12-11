@@ -126,8 +126,8 @@ const routes = [
   { path: '/Review/Write/:id', name: 'WriteReview', component: writeReviewView },
   { path: '/Review/Update/:id', name: 'UpdateReview', component: updateReviewView },
   { path: '/Review/Upload/:id', name: 'UploadPicture', component: uploadPictureView },
-  { path: '/Review/Tour/Write/:id', name: 'WriteReview', component: writeTourReviewView },
-  { path: '/Review/Tour/Update/:id', name: 'WriteReview', component: updateTourReviewView },
+  { path: '/Review/Tour/Write/:id', name: 'WriteReviewTour', component: writeTourReviewView },
+  { path: '/Review/Tour/Update/:id', name: 'UpdateReviewTour', component: updateTourReviewView },
   
   // Create Trip
   { path: '/Create_Trip/', name: 'Page_1', component: Page_1 },
