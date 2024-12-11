@@ -3,16 +3,21 @@
         <h3>About</h3>
         <div class="frame-description">
             <p class="text-break" >
-                If you're interested in ancient history, Hue's imperial citadel should be at the top of your Vietnam itinerary. Skip the hassle of advance planning on a full-day tour from Hoi An, the ideal choice for first-time visitors with limited time. You'll travel... 
+                {{ description }}
             </p>
-            <button class="read-more-or-less">Read more</button>
         </div>
     </div>
 </template>
 
 <script>
 export default {
-    name: "About"
+    name: "About",
+    props: {
+        description: {
+            type: String,
+            default: ""
+        }
+    }
 }
 </script>
 

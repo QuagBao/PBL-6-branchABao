@@ -19,18 +19,31 @@ export default function (searchQuery) {
             // Lấy kết quả tìm kiếm
             searchResult.value = await getSearchResult(searchQuery);
             console.log("Search searchResult: ", searchResult.value);
-
-            // Lấy chi tiết các thành phố từ kết quả tìm kiếm
-            await Promise.all(searchResult.value.cities.map(city => getDetailCity(city.id)));
-
-            // Lấy dữ liệu các địa điểm từ kết quả tìm kiếm
-            await Promise.all(searchResult.value.destinations.map(destination => getPlaceData(destination.id)));
+    
+            // Kiểm tra và xử lý mảng cities
+            if (searchResult.value.cities && searchResult.value.cities.length > 0) {
+                await Promise.all(
+                    searchResult.value.cities.map(city => getDetailCity(city.id))
+                );
+            } else {
+                console.log("No cities found in search results.");
+            }
+    
+            // Kiểm tra và xử lý mảng destinations
+            if (searchResult.value.destinations && searchResult.value.destinations.length > 0) {
+                await Promise.all(
+                    searchResult.value.destinations.map(destination => getPlaceData(destination.id))
+                );
+            } else {
+                console.log("No destinations found in search results.");
+            }
         } catch (error) {
             console.error('An error occurred while searching:', error);
         } finally {
             isLoading.value = false;
         }
     };
+    
 
     // Hàm lấy chi tiết thành phố
     const getDetailCity = async (cityId) => {

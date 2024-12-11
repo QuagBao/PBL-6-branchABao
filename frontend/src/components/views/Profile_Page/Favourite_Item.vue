@@ -2,19 +2,19 @@
     <div class="container-fluid favourite-item">
         <div class="row p-2">
             <div class="col-sm-12 p-2 img-location">
-                <img src="@/assets/images/tms-hotel-da-nang-beach.jpg" alt="pic" class="img-location"/>
+                <img :src="destination?.images && destination.images[0] ? destination.images[0].url : '/blue-image.jpg'" alt="pic" class="img-location"/>
             </div>
 
             <div class="col-sm-12 p-2">
                 <div class="btn-heart"> 
-                    <btn_heart/>
+                    <btn_heart :destID="destID"/>
                 </div>
             </div>   
         </div>
 
         <div class=" row info-location p-2">
             <div class="col-sm-12 name-of-location p-2">
-                Hotel Da Nang
+                {{ destination?.name }}
             </div>
 
             <div class="row rating-and-address ">
@@ -30,40 +30,48 @@
                     </div>
 
                     <div class="col-sm-5 number-rating">
-                        <span>4.9</span>
-                    </div>
-                </div>
-                <div class="col-sm-6 address">
-                    <!-- Rating -->
-                    <div class="col icon-address">
-                        <svg fill="#13357B" width="40px" height="40px" viewBox="0 0 24 24" id="cursor" xmlns="http://www.w3.org/2000/svg" class="icon line">
-                            <path id="primary" d="M19.54,3.1,3.62,10.31A1.17,1.17,0,0,0,4,12.5l6.23,1.26L11.5,20a1.17,1.17,0,0,0,2.19.39L20.9,4.46A1,1,0,0,0,19.54,3.1Z" style="fill: none; stroke: #13357B; stroke-linecap: round; stroke-linejoin: round; stroke-width: 1;"></path>
-                        </svg>
-                    </div>
-
-                    <div class="col address-of-location">
-                        <p>Ba Ria Vung Tau, Vietnam</p>
+                        <span>{{ destination?.rating || 0 }}</span>
                     </div>
                 </div>
             </div>
 
             <div class="col-sm-12 price">
-                <p>Price: 25.00$</p>
+                <p>Price: {{ destination?.price_bottom || 0 }} - {{ destination?.price_top || 0 }}</p>
             </div>
         </div>
     </div>
 </template>
 
-<script>
+<script setup>
+import { ref, onMounted } from 'vue';
+import DestinationLike from '../../viewModels/DestinationLikeViewModel';
 
+// Khai báo props
+const props = defineProps({
+  destID: {
+    type: Number,
+    required: true,
+  },
+});
+
+const { loadDestination } = DestinationLike();
+const destination = ref(null);
+
+// Tải dữ liệu khi component được mount
+onMounted(async () => {
+    // Sử dụng props.destID thay vì destID
+    destination.value = await loadDestination(props.destID);
+});
+</script>
+
+<script>
 import btn_heart from '../btn_heart.vue';
 export default {
-    name: "Favourite_Item",
-    components: {
-        btn_heart
-    }
-}
-
+  name: "Favourite_Item",
+  components: {
+    btn_heart,
+  },
+};
 </script>
 
 <style scoped>

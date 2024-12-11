@@ -1,4 +1,5 @@
 import { ref, computed, onMounted } from 'vue';
+import { getDestinationRatingStatic } from '../models/destinationModel.js';
 export default function () {
     class RatingModel {
         constructor(excellent, veryGood, medium, bad, terrible) {
@@ -72,43 +73,69 @@ export default function () {
       const stars = ref(generateStars(ratingModel.getAverageRating()));
   const circles = ref(generateCircle(ratingModel.getAverageRating()));
 
-  // Tính tỷ lệ phần trăm cho mỗi loại đánh giá
-  const ratings = {
-    'Excellent': {
-      count: ratingModel.excellent,
-      percentage: ratingModel.getPercentage(ratingModel.excellent),
-    },
-    'Very Good': {
-      count: ratingModel.veryGood,
-      percentage: ratingModel.getPercentage(ratingModel.veryGood),
-    },
-    'Medium': {
-      count: ratingModel.medium,
-      percentage: ratingModel.getPercentage(ratingModel.medium),
-    },
-    'Bad': {
-      count: ratingModel.bad,
-      percentage: ratingModel.getPercentage(ratingModel.bad),
-    },
-    'Terrible': {
-      count: ratingModel.terrible,
-      percentage: ratingModel.getPercentage(ratingModel.terrible),
-    },
+  const ratingDistribution = ref(null);
+  const ratings = ref(null);
+  const fetchRatingDistribution = async (destinationID) => {
+    try {
+      // Lấy dữ liệu từ API
+      ratingDistribution.value = await getDestinationRatingStatic(destinationID);
+  
+      // Tổng số lượng rating
+      const total = Object.values(ratingDistribution.value).reduce(
+        (sum, count) => sum + count,
+        0
+      );
+  
+      // Lưu chi tiết vào ratingDistributionDetail
+      ratings.value = {
+        Excellent: {
+          count: ratingDistribution.value.Excellent,
+          percentage: total
+            ? ((ratingDistribution.value.Excellent / total) * 100).toFixed(2)
+            : "0.00",
+        },
+        VeryGood: {
+          count: ratingDistribution.value.VeryGood,
+          percentage: total
+            ? ((ratingDistribution.value.VeryGood / total) * 100).toFixed(2)
+            : "0.00",
+        },
+        Medium: {
+          count: ratingDistribution.value.Medium,
+          percentage: total
+            ? ((ratingDistribution.value.Medium / total) * 100).toFixed(2)
+            : "0.00",
+        },
+        Bad: {
+          count: ratingDistribution.value.Bad,
+          percentage: total
+            ? ((ratingDistribution.value.Bad / total) * 100).toFixed(2)
+            : "0.00",
+        },
+        Terrible: {
+          count: ratingDistribution.value.Terrible,
+          percentage: total
+            ? ((ratingDistribution.value.Terrible / total) * 100).toFixed(2)
+            : "0.00",
+        },
+      };
+    } catch (error) {
+      console.error("Error fetching rating details:", error);
+      ratings.value = null; // Xử lý khi có lỗi
+    }
   };
 
-  const rating = ref(ratingModel.getAverageRating());
-  const totalRating = ref(ratingModel.getTotal());
+
 
       return {
         generateStars,
         generateCircle,
         stars,
         circles,
-        rating,
         ratings,
-        totalRating,
         fullStar,
         halfStar,
         emptyStar,
+        fetchRatingDistribution,
       }
 }

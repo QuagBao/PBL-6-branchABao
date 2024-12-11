@@ -77,9 +77,11 @@
                             <div class="container-fluid context">
                                 <Cards v-for="(item, index) in filteredDestinations"
                                         :key="index"
+                                        :destID="item.id"
                                         :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
                                         :name="item.name"
-                                        :rating="generateStars(item.rating)"
+                                        :stars="generateStars(item.rating)"
+                                        :rating="item.rating"
                                         :tags="item.tag"
                                         @click="navigateToDetailPlace(item.id)"/>
                             </div>
@@ -91,9 +93,11 @@
                             <div class="container-fluid context">
                                 <Cards v-for="(item, index) in filteredRestaurants"
                                         :key="index"
+                                        :destID="item.id"
                                         :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
                                         :name="item.name"
-                                        :rating="generateStars(item.rating)"
+                                        :stars="generateStars(item.rating)"
+                                        :rating="item.rating"
                                         :tags="item.tag"
                                         @click="navigateToDetailRestaurant(item.restaurant_id)"/>
                             </div>
@@ -105,9 +109,11 @@
                             <div class="container-fluid context">
                                 <Cards v-for="(item, index) in filteredHotels"
                                         :key="index"
+                                        :destID="item.id"
                                         :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
                                         :name="item.name"
-                                        :rating="generateStars(item.rating)"
+                                        :stars="generateStars(item.rating)"
+                                        :rating="item.rating"
                                         :tags="item.tag"
                                         @click="navigateToDetailHotel(item.hotel_id)"/>
                             </div>

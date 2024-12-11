@@ -91,6 +91,7 @@
 
 <script setup>
   import { useRoute } from 'vue-router';
+  import { ref, onMounted, watch, nextTick } from 'vue';
   import restaurantViewModel from '../../viewModels/detailLocation_RestaurantViewModel.js';
   import generateViewModel from '../../viewModels/generate_ratingViewModel';
 
@@ -113,16 +114,16 @@
     city,
     isLoading,
     user,
+    ratings,
   } = restaurantViewModel(restaurantID);
 
   const {
-    circles,
-    rating,
-    ratings,
-    generateCircle,
     generateStars,
-    totalRating,
   } = generateViewModel();
+
+  onMounted( async() => {
+    await fetchRatingDistribution(restaurant.id);
+  });
 
   const navigateToUpdateDestination = (id) => {
   window.location.assign(`/Business/Destination/Update/${id}`);

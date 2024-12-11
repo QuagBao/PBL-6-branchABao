@@ -99,7 +99,7 @@ html, body {
 
 .container {
   position: absolute;
-  top: calc(20% + 10px); /* Đảm bảo khoảng cách tương đối với viewport */
+  top: calc(10% + 10px); /* Đảm bảo khoảng cách tương đối với viewport */
   left: 20%; /* Cách phải 20% */
   max-width: 400px;
   width: 100%;

@@ -1,24 +1,49 @@
+
 <template>
     <div class="container-fluid search">
         <div class="container-fluid position-relative">
+            <!-- Input search -->
             <input class="form-control" type="text" :placeholder="name" v-model="searchQuery">
+            
+            <!-- Nút Search -->
             <button type="button" class="btn btn-primary" @click="performSearch">Search</button>
+            
+            <!-- Danh sách kết quả -->
+            <div v-if="results.length" class="search-results" :class="{'show': results.length > 0}">
+                <ul>
+                    <li 
+                        v-for="(result, index) in results" 
+                        :key="index" 
+                        @click="selectResult(result)"
+                    >
+                        {{ result }}
+                    </li>
+                </ul>
+            </div>
         </div>
-    </div>            
-</template>
+    </div>
+  </template>
 
 <script setup>
 import { ref } from 'vue';
+import useLiveSearch from '../viewModels/LiveSearchViewModel.js';
 
-const searchQuery = ref(""); // Để lưu trữ từ khóa tìm kiếm
+const searchQuery = ref('');
+const { search, isLoading, results } = useLiveSearch(searchQuery);
 
-// Hàm xử lý sự kiện khi bấm nút Search
-const performSearch = () => {
-  if (searchQuery.value) {
-    window.location.assign(`/search?q=${searchQuery.value}`); // Sử dụng window.location.assign để chuyển hướng
+// Hàm thực hiện tìm kiếm
+const performSearch = (query = null) => {
+  const queryToSearch = query || searchQuery.value;
+  if (queryToSearch) {
+      window.location.assign(`/search?q=${queryToSearch}`);
   } else {
-    alert("Please enter a search query.");
+      alert('Please enter a search query.');
   }
+};
+
+// Hàm xử lý khi chọn một kết quả
+const selectResult = (result) => {
+  performSearch(result);
 };
 </script>
 
@@ -97,5 +122,56 @@ button {
     color: #13357B;
     background-color: #EDF6F9;  
     border: 2px solid #13357B;
+}
+.search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 10px;
+    padding: 10px;
+    
+    /* Hiệu ứng đổ xuống */
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: slideDown 0.3s ease-out forwards;
+}
+
+.search-results.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Animation: Đổ xuống */
+@keyframes slideDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.search-results ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.search-results li {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.search-results li:hover {
+    background-color: #f0f0f0;
 }
 </style>

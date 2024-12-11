@@ -13,10 +13,13 @@
                             <Filter/>
                         </div>
                         <div class="frame-list-items">
-                            <Tour_Item/>
-                            <Tour_Item/>
-                            <Tour_Item/>
-                            <Tour_Item/>
+                            <Tour_Item 
+                                v-for="tour in tours"
+                                :key="tour.id"
+                                :tour="tour"
+                                :city="getCity(tour.city_id)"
+                                @click="navigateToDetailTour(tour.id)"
+                            />
                         </div>
                     </div>
                 </div>
@@ -25,6 +28,30 @@
     </div>
 </template>
 
+<script setup>
+import TourViewModel from '../../../viewModels/TourViewModel';
+import { ref, computed, onMounted, watch } from 'vue';
+const {
+    loadCities,
+    loadTours,
+    loadTourById,
+    loadTourByCityId
+} = TourViewModel();
+
+const tours = ref([]);
+const cities = ref([]);
+onMounted(async () => {
+    tours.value =  await loadTours();
+    cities.value = await loadCities();
+});
+
+const getCity = (city_id) => {
+    return cities.value.find(city => city.id === city_id);
+}
+const navigateToDetailTour = (tour_id) =>{
+        window.location.assign(`/tour/${tour_id}`);
+    };
+</script>
 <script>
 import Header from '../../Header.vue';
 import Top_Button from '../../Top_Button.vue';

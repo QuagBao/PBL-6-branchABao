@@ -30,7 +30,7 @@
         <!-- Heart Icon Section (10% width) -->
         <div class="col-sm-3 p-2">
           <div class="btn-heart">
-            <btn_heart />
+            <btn_heart :destID="destID" />
           </div>
         </div>
       </div>
@@ -50,6 +50,7 @@
     },
     props: {
       imageUrl: String,
+      destID: Number,
       name: String,
       rating: Number,
       stars: Array,

@@ -535,7 +535,7 @@
         </div>
         <div class="form-group">
           <label>Languages:</label>
-          <input type="text" v-model="hotel.hotel.Languages" />
+          <input type="text" v-model="hotel.hotel.languages" />
         </div>
         <div class="form-group">
           <label>Phone number:</label>
@@ -589,7 +589,7 @@
         </div>
         <div class="form-group">
           <label>Languages:</label>
-          <input type="text" v-model="currentDestination.hotel.Languages" />
+          <input type="text" v-model="currentDestination.hotel.languages" />
         </div>
         <div class="form-group">
           <label>Phone number:</label>
@@ -755,7 +755,7 @@ export default {
         room_types: "",
         hotel_class: 0,
         hotel_styles: "",
-        Languages: "",
+        languages: "",
         phone: "",
         email: "",
         website: "",
@@ -795,7 +795,7 @@ export default {
         room_types: "",
         hotel_class: 0,
         hotel_styles: "",
-        Languages: "",
+        languages: "",
         phone: "",
         email: "",
         website: "",
@@ -819,7 +819,7 @@ export default {
         room_types: "",
         hotel_class: 0,
         hotel_styles: "",
-        Languages: "",
+        languages: "",
         phone: "",
         email: "",
         website: "",

@@ -2,76 +2,84 @@
     <div class="container-fluid setting-profile p-5">
         <div class="row">
             <div class="col-sm-6">
-                <p>First name</p>
-            </div>
-
-            <div class="col-sm-6">
-                <div class="container-fluid field-first-name">
-                    <input class="field" type="text" placeholder="Your first name">
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6">
-                <p>Last name</p>
-            </div>
-
-            <div class="col-sm-6">
-                <div class="container-fluid field-last-name">
-                    <input class="field" type="text" placeholder="Your last name">
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-6">
                 <p>Username</p>
             </div>
 
             <div class="col-sm-6">
-                <div class="container-fluid field-username">
-                    <input class="field" type="text" placeholder="Your username">
-                    <svg class="icon" width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M16 12C16 14.2091 14.2091 16 12 16C9.79086 16 8 14.2091 8 12C8 9.79086 9.79086 8 12 8C14.2091 8 16 9.79086 16 12ZM16 12V13.5C16 14.8807 17.1193 16 18.5 16V16C19.8807 16 21 14.8807 21 13.5V12C21 7.02944 16.9706 3 12 3C7.02944 3 3 7.02944 3 12C3 16.9706 7.02944 21 12 21H16" stroke="#13357B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                    </svg>
+                <div class="container-fluid field-first-name">
+                    <input class="field" type="text" placeholder="Your first name" v-model="currentUser.username" disabled>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-6">
-                <p>Country</p>
+                <p>Description</p>
             </div>
 
             <div class="col-sm-6">
-                <div class="container-fluid field-country">
-                    <input class="field" type="text" placeholder="Your country">
+                <div class="container-fluid field-first-name">
+                    <input class="field" type="text" placeholder="Description about you" v-model="currentUser.user_info.description">
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-6">
-                <p>Email</p>
+                <p>Phone Number</p>
             </div>
 
             <div class="col-sm-6">
-                <div class="container-fluid field-email">
-                    <input class="field" type="text" placeholder="Your email">
+                <div class="container-fluid field-last-name">
+                    <input class="field" type="text" placeholder="Your phone number" v-model="currentUser.user_info.phone_number">
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-6">
-                <p>Password</p>
+                <p>City</p>
             </div>
 
             <div class="col-sm-6">
-                <div class="container-fluid field-email">
-                    <input class="field" type="password" placeholder="Your password">
+                <select
+                    v-model="currentUser.user_info.address.city_id"
+                    class="field"
+                >
+                    <option v-for="city in cities" :key="city.id" :value="city.id">
+                        {{ city.name }}
+                    </option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <p>District</p>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="container-fluid field-last-name">
+                    <input class="field" type="text" placeholder="Your district" v-model="currentUser.user_info.address.district">
                 </div>
             </div>
         </div>
         <div class="row">
-            <div class="col-sm-12">
-                <button class="btn-reset" style="width: 100%;">Reset your password</button>
+            <div class="col-sm-6">
+                <p>Ward</p>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="container-fluid field-last-name">
+                    <input class="field" type="text" placeholder="Your ward" v-model="currentUser.user_info.address.ward">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-6">
+                <p>Street</p>
+            </div>
+
+            <div class="col-sm-6">
+                <div class="container-fluid field-last-name">
+                    <input class="field" type="text" placeholder="Your street" v-model="currentUser.user_info.address.street">
+                </div>
             </div>
         </div>
         <div class="row annoucement">
@@ -82,7 +90,7 @@
             </div>
             <div class="row">
                 <div class="col-sm-6">
-                    <button class="btn-save">Save</button>
+                    <button class="btn-save" @click="save">Save</button>
                 </div>
                 <div class="col-sm-6">
                     <button class="btn-cancel">Cancel</button>
@@ -92,13 +100,89 @@
     </div>
 </template>
 
-<script>
+<script setup>
+import { onMounted, ref } from 'vue';
+import UserProfileViewModel from '../../viewModels/UserProfileViewModel';
+const {user,
+        loadUser,
+        createUser,
+        updateUser,
+        loadCities} = UserProfileViewModel();
+const isCreate = ref(false);
+const cities = ref([]);
+const currentUser = ref({
+      id: "",
+      username: "",
+      email: "",
+      role: "",
+      user_info: {
+        id: 0,
+        description: "",
+        phone_number: "",
+        image: {
+          id: 0,
+          url: "",
+        },
+        address: {
+          district: "",
+          street: "",
+          ward: "",
+          city_id: 0,
+          id: 0,
+        },
+      },
+      status: "",
+    });
 
-export default{
-    name : "Setting_Profile"
+onMounted(async () => {
+    currentUser.value = await loadUser();
+    console.log(currentUser.value);
+    if(currentUser.value.user_info == null){
+        isCreate.value = true;
+        currentUser.value.user_info = {
+            id: 0,
+            description: "",
+            phone_number: "",
+            image: {
+                id: 0,
+                url: "",
+            },
+            address: {
+                district: "",
+                street: "",
+                ward: "",
+                city_id: 0,
+                id: 0,
+            },
+        };
+    }
+    if(currentUser.value.user_info.image == null){
+        currentUser.value.user_info.image = {
+            id: 0,
+            url: "",
+        };
+    }
+    if(currentUser.value.user_info.address == null){
+        currentUser.value.user_info.address = {
+            district: "",
+            street: "",
+            ward: "",
+            city_id: 0,
+            id: 0,
+        };
+    }
+    cities.value = await loadCities();
+});
+const save = async () => {
+    if(isCreate.value){
+        await createUser(currentUser.value);
+    }else{
+        await updateUser(currentUser.value);
+    }
 }
-
+     
 </script>
+
 
 <style scoped>
 .setting-profile {

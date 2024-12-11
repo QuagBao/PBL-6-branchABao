@@ -34,6 +34,7 @@
             <Cards
               v-for="(item, index) in destinations"
               :key="index"
+              :destID="item.id"
               :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
               :name="item.name"
               :description="item.description"
@@ -55,6 +56,7 @@
             <Cards
               v-for="(item, index) in restaurants"
               :key="index"
+              :destID="item.id"
               :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
               :name="item.name"
               :description="item.description"
@@ -76,6 +78,7 @@
             <Cards
               v-for="(item, index) in hotels"
               :key="index"
+              :destID="item.id"
               :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
               :name="item.name"
               :description="item.description"
@@ -173,6 +176,7 @@ export default {
   width: 90vw; /* Đảm bảo chiều rộng của container-search là 100% */
   background-color: #4996ee;
   padding: 20px;
+  border-radius: 50px;
 }
 
 .title-content {

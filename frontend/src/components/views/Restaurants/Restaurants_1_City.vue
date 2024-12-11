@@ -109,9 +109,11 @@
                 <div class="list-restaurants">
                   <Card_Item  v-for="(item, index) in restaurants"
                               :key="index"
+                              :destID="item.id"
                               :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
                               :name="item.name"
-                              :rating="generateStars(item.rating)"
+                              :stars="generateStars(item.rating)"
+                              :rating="item.rating"
                               :reviewNumber="item.numOfReviews"
                               :tags="item.tag"
                               @click="navigateToDetailRestaurant(item.restaurant_id)" />

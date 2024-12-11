@@ -9,7 +9,7 @@
             <img src="@/assets/images/bg.webp" alt="Cover Photo" class="img-fluid"/>
         </div>
         <div class="avatar">
-            <img src="@/assets/images/ava.png" alt="Cover Photo" class="img-fluid ava"/>
+            <img :src="userInfo?.user_info?.image ? userInfo.user_info.image.url : '/blue-image.jpg'" alt="Avatar" class="ava"/>
         </div>
         <div class="cover-button-photo">
             <Cover_photo_btn></Cover_photo_btn>
@@ -66,7 +66,8 @@
                     username: '',
                     gmail: '',
                     dateJoined: '',
-                    location: ''
+                    location: '',
+                    user_info: {},
                 },
             };
         },

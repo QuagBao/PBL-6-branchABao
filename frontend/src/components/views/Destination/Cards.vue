@@ -7,7 +7,7 @@
 
             <div class="col-sm-12 p-2">
                 <div class="btn-heart"> 
-                    <btn_heart/>
+                    <btn_heart :destID="destID" />
                 </div>
             </div>   
         </div>
@@ -15,7 +15,7 @@
             {{ name }}
         </div>
         <div class="col-sm-12 rating p-2">
-            <img v-for="star in rating" :key="star" :src="star" alt="Circle" class="star"/>
+            <img v-for="star in stars" :key="star" :src="star" alt="Circle" class="star"/>
         </div>
         <div class=" row info-location p-2">
             <div class="tags p-2">
@@ -48,9 +48,11 @@ export default {
     },
     props: {
         imageUrl: String,
+        destID: Number,
         name: String,
         rating: Number,
-        tags: Array
+        tags: Array,
+        stars: Array,
     },
 }
 

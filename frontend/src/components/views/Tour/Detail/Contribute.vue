@@ -4,8 +4,7 @@
             <p>Contribute</p>
         </div>
         <div class="d-flex gap-3">
-            <button class="write-review" @click="writeReview(destination_id)">Write Review</button>
-            <button class="write-review" @click="uploadPicture(destination_id)">Upload Picture</button>
+            <button class="write-review" @click="writeReview(tour_id)">Write Review</button>
         </div>
     </div>
 
@@ -14,29 +13,6 @@
         <div class="frame-evaluate">
             <div class="container-fluid evaluate p-2">
                 <h1 style="font-weight: 900;">Evaluate</h1>
-            </div>
-            <div class="rating">
-                <h2>{{ rating }}</h2>
-                <div class="circle-container">
-                    <div v-for="(star, index) in stars" :key="index">
-                        <img :src="star" alt="Star" class="star"/>
-                    </div>
-                </div>
-            </div>
-            <div class="container-fluid type-rating">
-                <div class="rating-row" 
-                    v-for="(ratingInfo, label) in ratings" :key="label">
-                    <div class="col rating-label">{{ label }}</div>
-                    <div class="col-3 rating-bar-container">
-                        <div class="rating-bar"
-                            :style="{ width: ratingInfo.percentage + '%' }">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="description-container" v-if="description">
-                <h3 class="description-title">About the Place</h3>
-                <span class="description-content">{{ description }}</span>
             </div>
         </div>
         <!-- Review -->
@@ -72,37 +48,22 @@
 </template>
 <script setup>
 import { computed } from 'vue';
-import generateViewModel from '../viewModels/generate_ratingViewModel';
+import generateViewModel from '../../../viewModels/generate_ratingViewModel';
 // Lấy hàm tạo vòng tròn (circle)
 const { generateStars } = generateViewModel();
 import A_Comment from './A_Comment.vue';
 
 const writeReview = (id) => {
-        window.location.assign(`/Review/Write/${id}`);
+        window.location.assign(`/Review/Tour/Write/${id}`);
     };
-const uploadPicture = (id) => {
-    window.location.assign(`/Review/Upload/${id}`);
-};
 // Khai báo các props
 defineProps({
 
-  rating: {
-    type: Number,
-    required: true,
-  },
-  ratings: {
-    type: Object,
-    default: () => ({}),
-  },
-  stars: {
-    type: Array,
-    required: true,
-  },
   commentList: {
     type: Array,
     required: true,
   },
-  destination_id:{
+  tour_id:{
     type: Number,
     required: true,
   },

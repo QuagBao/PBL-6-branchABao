@@ -88,9 +88,11 @@
               <div class="list-hotels">
                 <Card_Item  v-for="(item, index) in hotels"
                             :key="index"
+                            :destID="item.id"
                             :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
                             :name="item.name"
-                            :rating="generateStars(item.rating)"
+                            :stars="generateStars(item.rating)"
+                            :rating="item.rating"
                             :reviewNumber="item.numOfReviews"
                             :tags="item.tag"
                             @click="navigateToDetailHotel(item.hotel_id)" />

@@ -35,6 +35,8 @@ const Hot = () => import('./components/views/Detail/Hotel.vue');
 const writeReviewView = () => import('./components/views/Review/Review_WriteReview.vue');
 const updateReviewView = () => import('./components/views/Review/Review_UpdateReview.vue');
 const uploadPictureView = () => import('./components/views/Review/Review_UploadPicture.vue');
+const writeTourReviewView = () => import('./components/views/Review/Review_Tour_Write.vue');
+const updateTourReviewView = () => import('./components/views/Review/Review_Tour_Update.vue');
 
 // Create a Trip
 const Create_Trip = () => import('./components/views/Create_Trip.vue');
@@ -60,6 +62,7 @@ const Topic_List = () => import('./components/views/Topic/Topic_List.vue');
 //Tour
 const Detail_Tour = () => import('./components/views/Tour/Detail/Detail_Tour.vue');
 const List_Tour = () => import('./components/views/Tour/List/List_Tour.vue');
+
 
 // Test UI
 const test   = () => import('./components/views/Dashboard_For_Company/dashboard_for_company.vue'); 
@@ -123,6 +126,8 @@ const routes = [
   { path: '/Review/Write/:id', name: 'WriteReview', component: writeReviewView },
   { path: '/Review/Update/:id', name: 'UpdateReview', component: updateReviewView },
   { path: '/Review/Upload/:id', name: 'UploadPicture', component: uploadPictureView },
+  { path: '/Review/Tour/Write/:id', name: 'WriteReview', component: writeTourReviewView },
+  { path: '/Review/Tour/Update/:id', name: 'WriteReview', component: updateTourReviewView },
   
   // Create Trip
   { path: '/Create_Trip/', name: 'Page_1', component: Page_1 },
@@ -142,10 +147,10 @@ const routes = [
   { path: '/Topic_List', name: 'Topic_List', component: Topic_List },
   
   // Detail_Tour
-  { path: '/Detail_Tour', name: 'Detail_Tour', component: Detail_Tour },
+  { path: '/Tour/:id', name: 'Detail_Tour', component: Detail_Tour },
   
   // List_Tour
-  { path: '/List_Tour', name: 'List_Tour', component: List_Tour },
+  { path: '/Tour', name: 'List_Tour', component: List_Tour },
   
   // Business
   { path: '/Business/Dashboard_For_Company', name: 'Dashboard_For_Company', component: Dashboard_For_Company },

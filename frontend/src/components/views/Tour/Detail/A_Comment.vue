@@ -38,12 +38,12 @@
     <div class="container-fluid line"></div>
 </template>
 <script setup>
-import DeleteReview from '../viewModels/Review_DeleteViewModel'
+import DeleteReview from '../../../viewModels/Review_DeleteViewModel'
 const {
     deleteReview
 } = DeleteReview();
 const updateReview = (id) => {
-        window.location.assign(`/Review/Update/${id}`);
+        window.location.assign(`/Review/Tour/Update/${id}`);
     };
 </script>
 

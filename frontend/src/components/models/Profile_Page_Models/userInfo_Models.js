@@ -6,6 +6,7 @@ export default class userInfo_Models {
         this.gmail = '';
         this.dateJoined = '';
         this.location = '';
+        this.user_info = {};
     }
 
     async fetchUserInfo(token) {
@@ -34,12 +35,14 @@ export default class userInfo_Models {
             this.gmail = data.email; // Thay đổi theo format API nếu cần
             this.dateJoined = data.dateJoined;
             this.location = data.location;
+            this.user_info = data.user_info;
     
             return {
                 username: this.username,
                 gmail: this.gmail,
                 dateJoined: this.dateJoined,
-                location: this.location
+                location: this.location,
+                user_info: this.user_info
             };
         } catch (error) {
             console.error('Lỗi khi lấy thông tin user:', error);

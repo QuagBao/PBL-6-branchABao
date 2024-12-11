@@ -1,19 +1,26 @@
 <template>
     <div class="container-fluid reviews">
-        <Content_review></Content_review>
-        <Content_review></Content_review>
-        <Content_review></Content_review>
-        <Content_review></Content_review>
-        <Content_review></Content_review>
-        <Content_review></Content_review>
-        <Content_review></Content_review>
-        <Content_review></Content_review>
-        <Content_review></Content_review>
-        <Content_review></Content_review>
-        <Content_review></Content_review>
-        <Content_review></Content_review>
+        <Content_review 
+            v-for="review in reviewLists"
+            :key="review.id"
+            :review="review"
+            :user="user"
+        />
     </div>
 </template>
+
+<script setup>
+import UserReviewViewModel from '../../viewModels/UserReviewViewModel';
+import { ref, computed, onMounted, watch } from 'vue';
+const {
+    reviewList,
+    user,
+} = UserReviewViewModel();
+const reviewLists = ref([]);
+onMounted(async () => {
+    reviewLists.value =  await reviewList();
+});
+</script>
 
 <script>
 import Content_review from './Content_review.vue';
