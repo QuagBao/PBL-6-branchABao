@@ -1,6 +1,6 @@
 import { ref, onMounted, watch, nextTick } from 'vue';
 import { fetchCities } from '../models/CityModel';
-import { fetchTours, getTourById, getTourByCityId } from '../models/TourModel';
+import { fetchTours, getTourById, getTourByCityId, getTourByUserId } from '../models/TourModel';
 import { getUserById } from '../models/UserModel';
 import { getReviewByTourId } from '../models/ReviewModel.js';
 import SignInModel from '../models/SignInModel';
@@ -42,6 +42,16 @@ export default function () {
             return [];
         }
     }
+    const loadTourByUserId = async (user_id) => {
+      try {
+          const currentUser = await loadCurrentUser();
+          const tours = await getTourByUserId(currentUser.id);
+          return tours;
+      } catch (error) {
+          console.error('Error getting tour list:', error);
+          return [];
+      }
+  }
     const loadUser = async (userId) => {    
         try {
             const user = await getUserById(userId);
@@ -128,5 +138,6 @@ export default function () {
         loadUser,
         loadReviewByTourId,
         loadCurrentUser,
+        loadTourByUserId,
     }
 }

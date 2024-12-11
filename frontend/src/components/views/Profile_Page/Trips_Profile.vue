@@ -41,19 +41,41 @@
         </div>
 
         <div class="list-trip-items">
+            <Tours_Item
+                v-for="tour in tours"
+                :key="tour.id"
+                :tour="tour"
+                @click="navigateToDetailTour(tour.id)"
+            />
             <Trips_Item/>
             <Trips_Item_no_date/>
         </div>
     </div>
 </template>
 
+<script setup>
+import { ref, onMounted } from 'vue';
+import TourViewModel from '../../viewModels/TourViewModel';
+const { loadTourByUserId } = TourViewModel();
+const tours = ref([]);
+onMounted(async () => {
+    tours.value = await loadTourByUserId();
+});
+const navigateToDetailTour = (tour_id) =>{
+        window.location.assign(`/tour/${tour_id}`);
+};
+</script>
+
 <script>
     import Trips_Item from './Trips_Item.vue';
     import Trips_Item_no_date from './Trips_Item_no_date.vue';
+    import Tours_Item from './Tours_Item.vue';
+import { onMounted } from 'vue';
 export default {
     name: "Trips_Profile", 
     components: {
-        Trips_Item, Trips_Item_no_date
+        Trips_Item, Trips_Item_no_date, 
+        Tours_Item,
     },
     data() {
         return {
