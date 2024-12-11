@@ -36,7 +36,7 @@
             </div>
         </div>
         <div class="info-location">
-            <tag_location_review :destID="review?.destination_id"/>
+            <tag_location_review :destID="review?.destination_id" :tourID="review?.tour_id"/>
         </div>
     </div>
 </template>

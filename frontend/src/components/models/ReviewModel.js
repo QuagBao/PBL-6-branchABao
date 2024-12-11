@@ -61,6 +61,7 @@ export async function getReviewByDestinationId(destinationID) {
         date_create: review.date_create,
         user_id: review.user_id,
         destination_id: review.destination_id,
+        tour_id: review.tour_id,
         companion: review.companion,
         images: review.images,
       }));
