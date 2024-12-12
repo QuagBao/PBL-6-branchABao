@@ -31,7 +31,12 @@ class SignInViewModel {
 
         if (userResult.success) {
           console.log('User role:', userResult.user);
-          router.push('/home');
+          if(userResult.user.role === 'business') {
+            router.push('/business');
+          }
+          else{
+            router.push('/home');
+          }
         } else {
           console.error('Failed to fetch user data:', userResult.message);
         }
