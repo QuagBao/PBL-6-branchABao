@@ -19,7 +19,7 @@
                         </div>
                         <div class="container-fluid col-4 p-2">
                             <div class="container save">
-                                <Btn_Save/>
+                                <btn_heart :destID="destID" />
                             </div>
                         </div>
                     </div>
@@ -61,7 +61,7 @@
                                 </g>
                             </svg>
                             <span v-for="(tag, index) in tags" :key="tag" class="tag">
-                                {{ tag }}
+                                {{ tag.name }}
                                 <span v-if="index < tags.length - 1">, </span> <!-- Adds a comma between tags -->
                             </span>
                         </div>
@@ -80,13 +80,14 @@
 </template>
 
 <script>
-import Btn_Save from '../Destination/Btn_Save.vue';
+import btn_heart from '../btn_heart.vue';
 export default {
-    name: "Topic_Item_2",
+    name : "Topic_Item_2",
     components: {
-        Btn_Save
+        btn_heart
     },
     props: {
+        destID: Number,
         imageUrl: String,
         index: Number,
         name: String,
@@ -97,7 +98,6 @@ export default {
         tags: Array,
         price: Number,
     },
-
 }
 
 </script>

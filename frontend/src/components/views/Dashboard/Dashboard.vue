@@ -47,12 +47,13 @@
                         </div>
                     </div>
 
-                    <div class="container-fluid list-items">
+                    <div class="container-fluid list-items-topic">
                         <div class="item" v-for="(topic, index) in topics" 
                             :key="topic.id">
                             <Img_Card  :condition="topic.imageUrl"
                                         :imageUrl = 'topic.imageUrl'
                                         :name_picture="topic.name"
+                                        @click="navigateToTopic(topic.path)"
                                         :name="topic.name"/>
                         </div>
                     </div>
@@ -94,6 +95,10 @@ const {
 
 const navigateToDestination = (id) => {
   window.location.assign(`/Destination/${id}`);
+};
+
+const navigateToTopic = (topic) => {
+  window.location.assign(`/Topic/${topic}`);
 };
 
 const handleScroll = () => {
@@ -216,7 +221,16 @@ h1 {
     grid-template-columns: repeat(3, 1fr);
     gap: 50px;
     align-items: center;
-    width: 100%;
+    width: 80%;
+    height: 100%;
+}
+
+.list-items-topic {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 50px;
+    align-items: center;
+    width: 80%;
     height: 100%;
 }
 </style>
