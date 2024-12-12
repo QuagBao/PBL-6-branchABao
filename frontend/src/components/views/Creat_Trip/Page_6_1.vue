@@ -19,7 +19,9 @@
 
             <div class="container-fluid frame-button px-5">
                 <button class="button back" @click="goBack" >Back</button>
-                <button type="submit" @click="goCreate" class="button next-button">Create</button>
+                <button type="submit" @click="addTour" 
+                        @submit.prevent="finishItinerary"
+                        class="button next-button">Create</button>
             </div>
         </div>
     </div>
@@ -44,7 +46,7 @@ export default {
 <script setup>
 import CreateTripViewModel from '../../viewModels/Create_Trip_ViewModel/CreateTripViewModel';
 const {
-    itineraryName, finishItinerary
+    itineraryName, finishItinerary, addTour
 } = CreateTripViewModel();
 </script>
 

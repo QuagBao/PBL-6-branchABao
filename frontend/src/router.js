@@ -70,9 +70,7 @@ const test1 = () => import('./components/views/Dashboard_For_Company/Service.vue
 const test2 = () => import('./components/views/Chart/Chart.vue');
 const test3 = () => import('./components/views/Tour/List/Tour_Item.vue');
 
-
 // Review
-
 
 //Business
 const addDestination = () => import('./components/views/Business/Business_Destination_Add.vue');

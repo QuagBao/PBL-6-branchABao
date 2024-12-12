@@ -37,24 +37,24 @@ export default function () {
       return []; // Return an empty array or handle as needed
     }
   }
-  const fetchEntertainments = async () => {
-    try {
-      const response = await axios.get('http://localhost:3000/entertainments');
-      return response.data.map(entertainment => ({
-        id: entertainment.id,
-        name: entertainment.name,
-        reviewNumber: entertainment.reviewNumber,
-        tag: entertainment.tag,
-        rating: entertainment.rating,
-        description: entertainment.description,
-        imageUrl: entertainment.imageUrl,
-        destinationType: entertainment.destinationType,
-      }));
-    } catch (error) {
-      console.error('Error fetching entertainments:', error);
-      return [];
-    }
-  };
+  // const fetchEntertainments = async () => {
+  //   try {
+  //     const response = await axios.get('http://localhost:3000/entertainments');
+  //     return response.data.map(entertainment => ({
+  //       id: entertainment.id,
+  //       name: entertainment.name,
+  //       reviewNumber: entertainment.reviewNumber,
+  //       tag: entertainment.tag,
+  //       rating: entertainment.rating,
+  //       description: entertainment.description,
+  //       imageUrl: entertainment.imageUrl,
+  //       destinationType: entertainment.destinationType,
+  //     }));
+  //   } catch (error) {
+  //     console.error('Error fetching entertainments:', error);
+  //     return [];
+  //   }
+  // };
   const generateStars = (rating) => {
     const fullCircle = new URL('@/assets/svg/star_full.svg', import.meta.url).href;
     const halfCircle = new URL('@/assets/svg/star_half.svg', import.meta.url).href;
@@ -72,40 +72,142 @@ export default function () {
     }
     return circles;
   };
+  
   return {
     heartFull,
     heartEmpty,
     fetchCities,
-    fetchEntertainments,
     fetchTags,
     generateStars
   };
 }
 
-export async function addHotel(hotel) {
-  try {
+// Dùng để chọn thêm vào tạo tour = đã like
+export async function setLikeForDestination(user_id, destination_id){
+  try{
+    const response = await axios.post(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/user/${user_id}/like/${destination_id}`)
+    if(response.status === 200){
+      console.log("Destination liked successfully");
+      return { success: true, message: "Destination liked successfully" };
+    }
+    else {
+      console.log("Destination liked failed");
+      return { success: false, message: "Destination liked failed" };
+    }
+  } catch (error) {
+    console.error("Error liking destination:", error);
+    return { success: false, message: "Failed to like destination" };
+  }
+}
+// Dùng để chọn bỏ khỏi tạo tour = unlike
+export async function setUnLikeForDestination(user_id, destination_id){
+  try{
+    const response = await axios.delete(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/user/${user_id}/unlike/${destination_id}`)
+    if(response.status === 200){
+      console.log("Destination unliked successfully");
+      return { success: true, message: "Destination unliked successfully" };
+    }
+    else {
+      console.log("Destination unliked failed");
+      return { success: false, message: "Destination unliked failed" };
+    }
+  } catch (error) {
+    console.error("Error unliking destination:", error);
+    return { success: false, message: "Failed to unlike destination" };
+  }
+}
 
+export async function checkLikeForDestination(user_id, destination_id) {
+  try {
+    const response = await axios.get(
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/user/${user_id}/has_liked/${destination_id}`
+    );
+    if (response.status === 200) {
+      return response.data === true; // Đảm bảo response.data trả về boolean
+    } else {
+      console.error("Error checking like for destination:", response);
+      return false; // Mặc định là false nếu API trả về trạng thái khác 200
+    }
+  } catch (error) {
+    console.error("Error checking like for destination:", error);
+    return false; // Mặc định là false nếu có lỗi
+  }
+}
+
+export async function getDestinationListOfLike(user_id) {
+  try {
+    const response = await axios.get(
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/user/${user_id}/likes`
+    );
+    if (response.status === 200) {
+      return response.data;
+    } else {
+      console.error("Error checking like for destination:", response);
+      return []; // Mặc định là false nếu API trả về trạng thái khác 200
+    }
+  } catch (error) {
+    console.error("Error checking like for destination:", error);
+    return []; // Mặc định là false nếu có lỗi
+  }
+}
+
+export async function fetchDestinationsByCity(cityId) {
+  try {
+    const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/?city_id=${cityId}&is_popular=true&get_rating=true`);
+    const filteredDestinations = response.data.filter(destination => destination.hotel_id === null && destination.restaurant_id === null);
+
+    // Chỉ map qua các destination đã lọc
+    return response.data.map(destination => ({
+      id: destination.id,
+      name: destination.name,
+      user_id: destination.user_id,
+      price_bottom: destination.price_bottom,
+      price_top: destination.price_top,
+      age: destination.age,
+      opentime: destination.opentime,
+      duration: destination.duration,
+      description: destination.description,
+      date_create: destination.date_create,
+      address: {
+        city_id: destination.address.city_id,
+        district: destination.address.district,
+        ward: destination.address.ward,
+        street: destination.address.street,
+      },
+      hotel_id: destination.hotel_id,
+      hotel: destination.hotel,
+      restaurant_id: destination.restaurant_id,
+      restaurant: destination.restaurant,
+      tags: destination.tags,
+      images: destination.images,
+      rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
+      numOfReviews: destination.numOfReviews,
+    }));
+  } catch (error) {
+    console.error('Error fetching destinations:', error);
+    return [];
+  }
+};
+// Thêm tour
+export async function addTour(tripStore) {
+  try {
     const response = await axios.post(
-      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/hotel/${hotel.id}`, // sử dụng user.id làm userId
+      'https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/docs#/Tour/create_tour_tour__post',
       {
-        property_amenities: hotel.hotel.property_amenities,
-        room_features: hotel.hotel.room_features,
-        room_types: hotel.hotel.room_types,
-        hotel_class: hotel.hotel.hotel_class,
-        hotel_styles: hotel.hotel.hotel_styles,
-        Languages: hotel.hotel.Languages,
-        phone: hotel.hotel.phone,
-        email: hotel.hotel.email,
-        website: hotel.hotel.website,
+        name: tripStore.name,
+        description: tripStore.description,
+        user_id: tripStore.userId,
+        city_id: tripStore.selectedDestination.id,
+        destination_ids: tripStore.ids_destination,
       }
     );
-
+    console.log("Data",response.data);
     if (response.status === 200) {
-      console.log("Hotel add successfully");
-      return { success: true, message: "Hotel added successfully" };
+      console.log("Tour add successfully");
+      return { success: true, message: "tour added successfully" };
     }
   } catch (error) {
     console.error("Error add hotel:", error);
-    return { success: false, message: "Failed to added hotel" };
+    return { success: false, message: "Failed to added tour" };
   }
 }

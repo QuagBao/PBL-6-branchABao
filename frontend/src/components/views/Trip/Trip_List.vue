@@ -1,8 +1,6 @@
 <template>
     <div class="container-fluid">
         <Trips_Item_no_date class="custom"/>
-        <Trips_Item_no_date class="custom"/>
-        <Trips_Item class="custom"/>
         <Trips_Item class="custom"/>
     </div>
 </template>

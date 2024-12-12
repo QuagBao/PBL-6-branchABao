@@ -513,7 +513,6 @@ export async function updateHotel(hotel) {
 
     const response = await axios.put(
       `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/hotel/${hotel.hotel_id}`, // sử dụng user.id làm userId
- * @param {string} [hotel.property_amenities] - Ti n nghi v  c a kh ch s n
       {
         property_amenities: hotel.hotel.property_amenities,
         room_features: hotel.hotel.room_features,

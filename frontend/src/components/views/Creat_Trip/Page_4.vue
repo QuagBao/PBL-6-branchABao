@@ -4,17 +4,18 @@
             <div class="container-fluid">
                 <div class="container-fluid">
                     <div class="container-fluid frame-title">
-                        <h1>Da Nang</h1>
+                        <h1>{{ tripStore.selectedDestination.name  }}</h1>
                     </div>
                     <div class="container-fluid line"></div>
-                    <div class="container-fluid title desinations">
+                    <div class=" title desinations">
                         <span>Exploring the Lively Cultural Heritage and Natural Beauty of Central Viet Nam</span>
                         <div class="container-fluid context grid-items">
-                            <Item v-for="(place, index) in places" :key="index"
-                                :imageUrl="place.imageUrl"
+                            <Item v-for="(place, index) in destinations" :key="index"
+                                :imageUrl="place.images[0]?.url"
                                 :name="place.name"
                                 :rating="generateStars(place.rating)"
-                                :id="place.id"/>
+                                :id="place.id"
+                                @click="togglePickStatus(place.id)"/>
                         </div>
                     </div>
                     <div class="container-fluid line"></div>
@@ -23,10 +24,11 @@
                         <span class="description">Here are some local favorites.</span>
                         <div class="container-fluid grid-items">
                             <Item v-for="(place, index) in restaurants" :key="index"
-                                :imageUrl="place.images[0]"
+                                :imageUrl="place.images[0]?.url"
                                 :name="place.name"
                                 :rating="generateStars(place.rating)"
-                                :id="place.id"/>
+                                :id="place.id"
+                                @click="togglePickStatus(place.id)"/>
                         </div>
                     </div>
                     <div class="container-fluid line"></div>
@@ -35,10 +37,11 @@
                         <span class="description">We've also recommended some places to stay during your trip.</span>
                         <div class="container-fluid grid-items">
                             <Item v-for="(place, index) in hotels" :key="index"
-                                :imageUrl="place.images[0]"
+                                :imageUrl="place.images[0]?.url"
                                 :name="place.name"
                                 :rating="generateStars(place.rating)"
-                                :id="place.id"/>
+                                :id="place.id"
+                                @click="togglePickStatus(place.id)"/>
                         </div>
                     </div>
 
@@ -46,7 +49,9 @@
                         <button class="button back" @click="goBack" >Back</button>
                         <button class="button next" @click="goNext" >Next</button>
                     </div>
-                    <Float_Button class="float-button"/>
+                    <Float_Button class="float-button"
+                                  :selectedCount="selectedCount"
+                                  :totalItems="totalItems"/>
                 </div>
             </div>
         </div>
@@ -78,13 +83,35 @@ export default {
 
 <script setup>
 import CreateTripViewModel from '../../viewModels/Create_Trip_ViewModel/CreateTripViewModel';
+import { useTripStore } from '@/store/useTripStore';
+import { ref, computed, onMounted, watch } from 'vue';
+
+const tripStore = useTripStore();
 const {
+    selectedDestination,
     searchQuery,
     suggestedDestinations,
     searchDestinations,
     generateStars,
-    places, hotels, restaurants,
+    places, hotels, restaurants, destinations,
+    filteredDestinations,
+    filteredHotels,
+    filteredRestaurants,
+    togglePickStatus,
+    fetchDestinationsData,
+    totalItems, selectedCount,
 } = CreateTripViewModel();
+
+
+onMounted(async () => {
+    // await fetchCityDetailsData();
+    await fetchDestinationsData();
+    // await fetchTags();
+});
+
+watch(tripStore.selectedTags, async () => {
+    await fetchDestinationsData();
+});
 </script>
 
 <style scoped>
