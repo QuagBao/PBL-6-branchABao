@@ -31,7 +31,7 @@
             <div class="nav-item dropdown">
               <button class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Places</button>
               <div class="dropdown-menu m-0">
-                <button class="dropdown-item" @click="handleButtonClick('allPlace', '/my-trips')">All Places</button>
+                <button class="dropdown-item" @click="handleButtonClick('allPlace', '/business/destination')">All Places</button>
                 <button class="dropdown-item" @click="handleButtonClick('newPlace', '/business/destination/add')">Add New Place</button>
               </div>
             </div>
