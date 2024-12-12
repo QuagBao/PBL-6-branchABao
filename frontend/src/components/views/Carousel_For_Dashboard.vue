@@ -78,7 +78,7 @@ export default {
 }
 .carousel-header .carousel-control-prev .carousel-control-prev-icon {
     display: flex;
-    margin-left: -168px;
+    margin-left: -10.9vw;
     padding: 25px 30px;
     border-top-left-radius: 0;
     border-top-right-radius: 50px;
@@ -89,7 +89,7 @@ export default {
 }
 .carousel-header .carousel-control-next .carousel-control-next-icon {
     display: flex;
-    margin-right: -168px;
+    margin-right: -10.9vw;
     padding: 25px 30px;
     border-top-left-radius: 50px;
     border-top-right-radius: 0;
@@ -97,17 +97,18 @@ export default {
     border-bottom-right-radius: 0;
     background-color: #13357B;
     background-size: 50% 50%;
-
 }
-.carousel-header .carousel .carousel-indicators button{
+.carousel-header .carousel .carousel-indicators button {
     opacity: 0;
 }
 .carousel-header .carousel-inner .carousel-item img {
-    width: 1600px;
-    height: 700px;
-    object-fit: cover;
+    width: 100vw; /* Chiều rộng 100% của container */
+    height: calc(50vw); /* Chiều cao bằng 50% chiều rộng màn hình */
+    max-height: 600px; /* Giới hạn chiều cao tối đa là 600px */
+    object-fit: cover; /* Zoom ảnh nếu cần để khớp khung hình */
+    object-position: center; /* Đặt tâm ảnh làm điểm neo khi zoom */
 }
-.carousel-header .carousel-item::before{
+.carousel-header .carousel-item::before {
     content: '';
     position: absolute;
     top: 0;
@@ -117,7 +118,7 @@ export default {
     background-color: rgba(39, 45, 45, 0.55);
     z-index: 0;
 }
-.captions{
+.captions {
     display: flex;
     flex-direction: column;
     gap: 25px;
