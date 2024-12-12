@@ -191,8 +191,14 @@ export async function fetchDestinationsByCity(cityId) {
 // Thêm tour
 export async function addTour(tripStore) {
   try {
+    console.log("Name",tripStore.name);
+    console.log("Description",tripStore.description);
+    console.log("User ID",tripStore.userId);
+    console.log("City ID",tripStore.selectedDestination.id);
+    console.log("Destination IDS:",tripStore.ids_destination);
+
     const response = await axios.post(
-      'https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/docs#/Tour/create_tour_tour__post',
+      'https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/tour/',
       {
         name: tripStore.name,
         description: tripStore.description,

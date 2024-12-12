@@ -35,6 +35,7 @@ export const useTripStore = defineStore('trip', {
         },
         setDestinationIds() {
             this.ids_destination = this.listDestination.slice().join(', ');
+            this.ids_destination = this.ids_destination.split(', ').map(id => id.trim());
         },
     }
 });
