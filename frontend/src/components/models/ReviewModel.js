@@ -208,8 +208,6 @@ export async function getReviewByDestinationId(destinationID) {
 
   export async function deleteReview(reviewID) {
     try {
-      const token = sessionStorage.getItem("token");
-      if (!token) throw new Error("No token found");
   
       const response = await axios.delete(
         `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/review/${reviewID}`
