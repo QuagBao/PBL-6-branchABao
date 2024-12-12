@@ -32,6 +32,7 @@ export default function(destinationID) {
   const images = ref([]);
   const commentList = ref([]);
   const city = ref(null);
+  const canReview = ref(true);
   const { fetchRatingDistribution, ratings} = generateViewModel();
 
   const user = ref(null);
@@ -96,7 +97,10 @@ export default function(destinationID) {
       commentList.value.forEach(comment => {
         if (comment.user_id) {
           userSet.add(comment.user_id);
-        }
+          if(user.value && comment.user_id == user.value.id){
+            canReview.value = false;
+          }
+      }
       });
   
       const userPromises = Array.from(userSet).map(userID => getUserById(userID));
@@ -134,9 +138,9 @@ export default function(destinationID) {
       console.error("Có lỗi xảy ra khi tải trang:", error);
     }
   };
-  
-  initializePage();
   loadUser();
+  initializePage();
+  
   
 
   const toggleReadMore = () => {
@@ -206,6 +210,7 @@ export default function(destinationID) {
     user,
     token,
     ratings,
+    canReview,
   };
 }
 

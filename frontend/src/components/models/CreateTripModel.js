@@ -209,8 +209,9 @@ export async function addTour(tripStore) {
     );
     console.log("Data",response.data);
     if (response.status === 200) {
-      console.log("Tour add successfully");
-      return { success: true, message: "tour added successfully" };
+      const { id } = response.data; // Lấy id từ response
+      console.log("Tour added successfully");
+      return { success: true, message: "Tour added successfully", id };
     }
   } catch (error) {
     console.error("Error add hotel:", error);

@@ -57,7 +57,7 @@ export default {
         title: String,
         date_comment: String,
         comment: String,
-        condition: String,
+        condition: Array,
         canedit: Boolean,
         URL: Array,
         id: Number

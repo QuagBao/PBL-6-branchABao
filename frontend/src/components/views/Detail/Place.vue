@@ -81,6 +81,7 @@
                                         :commentList="commentList"
                                         :destination_id="destination.id"
                                         :user="user?.id||0"
+                                        :canReview="canReview"
                                         :stars = "generateStars(destination.rating)"/>
                         </div>
                     </div>
@@ -118,7 +119,8 @@
     isLoading,
     user,
     token,
-    ratings
+    ratings,
+    canReview,
   } = destinationViewModel(destinationID);
 
   const {

@@ -24,29 +24,39 @@
 import Scroll_Bar_Component from '../Scroll_Bar_Component.vue';
 import Trips_Item from '../Profile_Page/Trips_Item.vue';
 import Trips_Item_no_date from '../Profile_Page/Trips_Item_no_date.vue';
+
 export default {
     name: "Page_7_1",
     components: {
-      Trips_Item, Trips_Item_no_date  
+        Trips_Item,
+        Trips_Item_no_date  
     },
     methods: {
         // Method for 'Back' button (to go to the previous page)
         goBack() {
-            this.$router.push({name: 'Page_5'}); // This will take the user to the previous page in the history
+            this.$router.push({ name: 'Page_5' }); // Navigate to Page_5
         },
+        // Method for 'View' button (navigate to Tour detail with dynamic id)
         goView() {
-            this.$router.push({name: 'Detail_Trip'}); // This will take the user to the previous page in the history
+            if (this.tourid) {
+                this.$router.push({ path: `/Tour/${this.tourid}` }); // Navigate to Tour with the given id
+            } else {
+                console.error("Tour ID is not defined");
+            }
         },
+    },
+    props: {
+        tourid: Number, // Add tourid as a prop to use it in this script
     }
-}
+};
 </script>
 
 <script setup>
 import CreateTripViewModel from '../../viewModels/Create_Trip_ViewModel/CreateTripViewModel';
-const {
-    itineraryName, finishItinerary
-} = CreateTripViewModel();
+
+const { itineraryName, finishItinerary, tourid } = CreateTripViewModel();
 </script>
+
 
 <style scoped>
 .frame-title{

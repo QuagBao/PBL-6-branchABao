@@ -21,6 +21,7 @@ export default function(restaurantID) {
 
   const user = ref(null);
   const token = sessionStorage.getItem('access_token');
+  const canReview = ref(true);
   const loadUser = async () => {
     const signInModel = new SignInModel("", "");
     try{
@@ -77,6 +78,9 @@ export default function(restaurantID) {
       commentList.value.forEach(comment => {
         if (comment.user_id) {
           userSet.add(comment.user_id);
+          if(user.value && comment.user_id == user.value.id){
+            canReview.value = false;
+          }
         }
       });
   
@@ -115,9 +119,9 @@ export default function(restaurantID) {
       console.error("Có lỗi xảy ra khi tải trang:", error);
     }
   };
-  
-  initializePage();
   loadUser();
+  initializePage();
+  
   
   
 

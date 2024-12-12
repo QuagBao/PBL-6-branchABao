@@ -81,6 +81,7 @@
                                     :destination_id="restaurant.id"
                                     :user="user?.id||0"
                                     :description="restaurant.description"
+                                    :canReview="canReview"
                                     :stars = "generateStars(restaurant.rating)"/>
                     </div>
                 </div>
@@ -115,6 +116,7 @@
     isLoading,
     user,
     ratings,
+    canReview,
   } = restaurantViewModel(restaurantID);
 
   const {

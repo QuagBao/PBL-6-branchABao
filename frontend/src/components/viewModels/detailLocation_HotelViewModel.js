@@ -21,6 +21,7 @@ export default function(hotelID) {
 
   const user = ref(null);
   const token = sessionStorage.getItem('access_token');
+  const canReview = ref(true);
   const loadUser = async () => {
     const signInModel = new SignInModel("", "");
     try{
@@ -78,6 +79,9 @@ export default function(hotelID) {
       commentList.value.forEach(comment => {
         if (comment.user_id) {
           userSet.add(comment.user_id);
+          if(user.value && comment.user_id == user.value.id){
+            canReview.value = false;
+          }
         }
       });
   
@@ -117,9 +121,9 @@ export default function(hotelID) {
       console.error("Có lỗi xảy ra khi tải trang:", error);
     }
   };
-  
-  initializePage();
   loadUser();
+  initializePage();
+  
 
 
   const toggleDropdown = () => {
@@ -175,6 +179,7 @@ export default function(hotelID) {
     user,
     token,
     ratings,
+    canReview,
   };
 }
 

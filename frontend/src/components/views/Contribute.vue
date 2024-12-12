@@ -4,7 +4,7 @@
             <p>Contribute</p>
         </div>
         <div class="d-flex gap-3">
-            <button class="write-review" @click="writeReview(destination_id)">Write Review</button>
+            <button class="write-review" v-if="canReview" @click="writeReview(destination_id)">Write Review</button>
             <button class="write-review" @click="uploadPicture(destination_id)">Upload Picture</button>
         </div>
     </div>
@@ -114,6 +114,9 @@ defineProps({
     type: String,
     required: false,
   },
+  canReview: {
+    type: Boolean,
+  }
   
   
 });

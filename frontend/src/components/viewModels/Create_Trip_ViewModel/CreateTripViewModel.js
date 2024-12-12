@@ -34,6 +34,7 @@ export default function CreateTripViewModel() {
     const selectedDestination = ref({ id: null, name: '' });
     const tripStore = useTripStore();
     const isDestinationsLoading = ref(false);
+    const tourid = ref();
 
     onMounted(async () => {
         suggestedDestinations.value = await model.fetchCities();
@@ -273,6 +274,8 @@ export default function CreateTripViewModel() {
             console.log("Add tour result:", result);
             if (result.success) {
                 console.log("Add tour success");
+                console.log("Tour id: ", result.id);
+                tourid.value = result.id;
             } else {
                 console.log("Add tour failed");
             }
@@ -321,6 +324,7 @@ export default function CreateTripViewModel() {
         saveForLater,
         itineraryName,
         finishItinerary,
-        fetchDestinationsData   
+        fetchDestinationsData,
+        tourid   
     };
 }

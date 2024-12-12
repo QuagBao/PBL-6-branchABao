@@ -45,6 +45,14 @@
                                         <i class="icon-phone"></i>
                                         <p v-if="hotel.hotel.phone">{{ hotel.hotel.phone }}</p>
                                     </div>
+                                    <div class="frame phone">
+                                        <i class="icon-location"></i>
+                                        <p v-if="hotel.hotel.website">
+                                            <a :href="hotel.hotel.website" target="_blank" rel="noopener noreferrer">
+                                                {{ hotel.hotel.website }}
+                                            </a>
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
                             <div class="details">
@@ -81,6 +89,7 @@
                                     :destination_id="hotel.id"
                                     :user="user?.id||0"
                                     :description="hotel.description"
+                                    :canReview="canReview"
                                     :stars = "generateStars(hotel.rating)"/>
                     </div>
                 </div>
@@ -114,7 +123,8 @@
     city,
     isLoading,
     user,
-    ratings
+    ratings,
+    canReview,
   } = hotelViewModel(destinationID);
 
   const {
