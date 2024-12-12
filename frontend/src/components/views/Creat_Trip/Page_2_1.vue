@@ -61,6 +61,8 @@
 <script>
 import Scroll_Bar_Component from '../Scroll_Bar_Component.vue';
 import DateViewModel from '@/components/viewModels/Create_Trip_ViewModel/date_ViewModel';
+import { useTripStore } from '@/store/useTripStore';
+
 export default {
     name: "Page_2_1",
     data() {
@@ -80,8 +82,14 @@ export default {
     methods: {
         // Xử lý khi người dùng chọn tháng
         selectMonth(index) {
+            const tripStore = useTripStore();
             this.selectedMonthIndex = index;
             this.dateViewModel.setSelectedMonth(index);
+
+            // Cập nhật tháng vào store
+            const monthName = this.allMonths[index];
+            tripStore.setSelectedMonth(monthName);
+            console.log('Selected Month in Store:', tripStore.selectedMonth);
         },
         // Method for 'Back' button (to go to the previous page)
         goBack() {
@@ -95,16 +103,24 @@ export default {
             this.$router.push({name: 'Page_2'});
         },
         decreaseLength() {
+            const tripStore = useTripStore();
             let currentLength = this.dateViewModel.getSelectedDays();
             if (currentLength > 1) {
                 this.dateViewModel.setSelectedDays(currentLength - 1);
+                // Cập nhật độ dài chuyến đi vào store
+                tripStore.setSelectLength(currentLength - 1);
+                console.log('Selected Length in Store:', tripStore.selectedLength);
             }
             console.log(currentLength);
         },
         increaseLength() {
+            const tripStore = useTripStore();
             let currentLength = this.dateViewModel.getSelectedDays();
             if (currentLength < 7) {
                 this.dateViewModel.setSelectedDays(currentLength + 1);
+                // Cập nhật độ dài chuyến đi vào store
+                tripStore.setSelectLength(currentLength + 1);
+                console.log('Selected Length in Store:', tripStore.selectedLength);
             }
             console.log(currentLength);
         },

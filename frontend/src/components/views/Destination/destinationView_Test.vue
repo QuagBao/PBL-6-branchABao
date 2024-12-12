@@ -186,8 +186,8 @@
     });
 
     watch(selectedIndices, async () => {
-    await fetchDestinationsData();
-  });
+        await fetchDestinationsData();
+    });
 
     // Rating Generation Function
     const { generateStars } = generate_ratingViewModel();

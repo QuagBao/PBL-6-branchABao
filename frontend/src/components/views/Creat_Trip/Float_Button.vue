@@ -11,13 +11,23 @@
     </div>
 </template>
 
-<script setup>
+<script>
 import CreateTripViewModel from '@/components/viewModels/Create_Trip_ViewModel/CreateTripViewModel';
-
-const {
-    selectAll, selectedCount, totalItems
-
-} = CreateTripViewModel();
+export default {
+    name: "Float_Button",
+    props: {
+        selectedCount: Number,
+        totalItems: Number,
+        isAllSelected: Boolean,
+    },
+    emits: ['update:isAllSelected'],
+    setup() {
+        const { isAllSelected } = CreateTripViewModel();
+        return {
+            isAllSelected
+        }
+    }
+}
 </script>
 
 <style scoped>

@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import Form_Search from '../Form_Search.vue';
 import Page_1 from './Page_1.vue';
 export default {
     name: "Create_Trip",

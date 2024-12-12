@@ -1,5 +1,6 @@
 import './assets/main.css';
 import { createApp } from 'vue';
+import { createPinia } from 'pinia';
 import App from './App.vue';
 import router from './router'; // Import router
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -10,6 +11,7 @@ import Toast from 'vue-toastification';
 import 'vue-toastification/dist/index.css';
 
 const app = createApp(App);
+const pinia = createPinia();
 
 // Cấu hình Toastification (tùy chọn)
 const toastOptions = {
@@ -27,6 +29,7 @@ const toastOptions = {
     rtl: false,
 };
 
+app.use(pinia);       // Sử dụng pinia
 app.use(router);       // Sử dụng router
 app.use(Toast, toastOptions); // Sử dụng Vue Toastification
 app.mount('#app');

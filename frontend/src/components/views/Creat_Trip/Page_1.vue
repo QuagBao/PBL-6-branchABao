@@ -5,15 +5,17 @@
                 <div class="container-fluid">
                     <div class="container-fluid">
                         <div class="container-fluid frame-search">
-                            <Form_Search class="custom-search"
-                                        :name_of_page="'Where do you want to go?'"
-                                        :name="'Choose a city or town'"/>
+                            <Input class="custom-search"
+                                    :name_of_page="'Where do you want to go?'"
+                                    :name="'Choose a city or town'" v-model="searchQuery"
+                                    @enter="handleSearch"/>
                         </div>
                         <div class="container-fluid frame-item">
                             <div class="container-fluid item" :key="index"
                                 v-for="(destination, index) in suggestedDestinations.slice(0, 4)">
                                 <Img_Card :imageUrl="destination.images[0]" 
-                                        :name="destination.name"/>
+                                        :name="destination.name"
+                                        @click="selectDestination(destination.id, destination.name)"/>
                             </div>
                         </div>
                         <div class="container-fluid frame-button">
@@ -28,13 +30,13 @@
 </template>
 
 <script>
-import Form_Search from '../Form_Search.vue';
+import Input from '../Input.vue';
 import Img_Card from '../Img_Card.vue';
 import Scroll_Bar_Component from '../Scroll_Bar_Component.vue';
 export default {
     name: "Create_Trip",
     components: {
-        Form_Search, Img_Card
+        Input, Img_Card
     }, 
     methods: {
         goNext () {
@@ -48,12 +50,42 @@ export default {
 <script setup>
 import CreateTripViewModel from '../../viewModels/Create_Trip_ViewModel/CreateTripViewModel';
 import router from '@/router';
+import { useTripStore } from '@/store/useTripStore';
+
+const tripStore = useTripStore();
 
 const {
     searchQuery,
-        suggestedDestinations,
-        searchDestinations
+    suggestedDestinations,
+    selectDestination,
+    selectedDestination
 } = CreateTripViewModel();
+
+// Hàm xử lý khi nhấn Enter trong input
+const handleSearch = () => {
+    if (!searchQuery.value) {
+        alert('Please enter a search query.');
+        return;
+    }
+
+    // Tìm destination khớp với searchQuery
+    const matchedDestination = suggestedDestinations.value.find(
+        city => city.name.toLowerCase().trim() === searchQuery.value.toLowerCase().trim()
+    );
+
+    if (matchedDestination) {
+        // Lưu kết quả vào selectedDestination
+        selectDestination(matchedDestination.id, matchedDestination.name);
+        tripStore.setSelectedDestination(selectedDestination.value);
+        const test = tripStore.selectedDestination
+        console.log('Selected Destination:', test);
+        console.log('Selected Destination:', tripStore.selectedDestination);
+        console.log('Selected Destination:', selectedDestination.value);
+    } else {
+        alert('No matching destination found.');
+    }
+};
+
 </script>
 
 <style scoped>
