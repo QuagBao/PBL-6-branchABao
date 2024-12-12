@@ -7,8 +7,8 @@
                     :navigation="true"
                     :modules="modules"
                     class="mySwiper">
-                <SwiperSlide class="tour-item"v-for="(tour, index) in tours" 
-                            :key="tours.id" @click="showDetail(tours)">
+                <SwiperSlide class="tour-item swiper-slide"v-for="(tour, index) in tours" 
+                            :key="tour.id" @click="showDetail(tours)">
                     <div class="tour-img">
                         <img v-if="tour.destinations.find(dest => dest.images && dest.images.length)?.images[0]" 
                             :src="tour.destinations.find(dest => dest.images && dest.images.length)?.images[0].url" 
@@ -56,7 +56,7 @@
                         </div>
                         <div class="row bg-primary rounded-bottom mx-0">
                             <div class="col-6 text-start py-4 px-4">
-                                <button class="readmore px-4">Read more</button>
+                                <button class="readmore px-4" @click="navigateToDetailTour(tour.id)">Read more</button>
                             </div>
                             <div></div>
                         </div>
@@ -72,19 +72,24 @@
     const{
         tours, visibleTours, prevTour, nextTour,generateStars, getCityName,
     } = dashboardViewModel;
+    const navigateToDetailTour = (tour_id) => {
+    window.location.assign(`/tour/${tour_id}`);
+};
 
 </script>
 <script>
 // Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from 'swiper/vue';
-
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 // Import Swiper styles
 import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/scrollbar';
 
 import 'swiper/css/pagination';
 
 // import required modules
-import { Pagination, Navigation } from 'swiper/modules';
+const modules = [Navigation, Pagination, Scrollbar, A11y];
 
 export default {
     components: {
@@ -197,6 +202,12 @@ img {
     padding: 10px 20px;
     border-radius: 10px;
     transition: 0.5s;
+}
+::v-deep(.swiper-button-next),
+::v-deep(.swiper-button-prev) {
+    color: #13357B !important;
+    border: none;
+    cursor: pointer;
 }
 </style>
   

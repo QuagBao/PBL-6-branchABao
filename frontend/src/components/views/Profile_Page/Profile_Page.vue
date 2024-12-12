@@ -44,7 +44,6 @@
     import Icon from './Icon.vue';
     import Info_User from './Info_User.vue';
     import Group_tag from './Group_tag.vue';
-    import Activity_Feed from './Activity_Feed.vue';
     import Trips_Profile from './Trips_Profile.vue';
     import Favourite_Profile from './Favourite_Profile.vue';
     import Setting_Profile from './Setting_Profile.vue';
@@ -56,12 +55,12 @@
         components: {
             Header, Scroll_Bar_Component, Top_Button, Cover_photo_btn, Icon,
             Info_User, Group_tag, Reviews_Profile,
-            Activity_Feed, Trips_Profile, Favourite_Profile, Setting_Profile
+            Trips_Profile, Favourite_Profile, Setting_Profile
         },
         data () {   
             return {
                 viewModel: new ProfileViewModel(), // Quản lý danh sách tab
-                currentComponent: 'Activity_Feed', // Component mặc định
+                currentComponent: 'Trips_Profile', // Component mặc định
                 userInfo: {
                     username: '',
                     gmail: '',
@@ -99,11 +98,11 @@ body{
     display: flex;
     flex-direction: column; /* Sắp xếp theo chiều dọc */
     z-index: 1;
-    width: 100%;
+    width: 100vw;
 }
 
 .info-user { 
-    width: 100%;
+    width: 100vw;
     display: flex;
     margin-top: 200px;
     flex-direction: column;
@@ -118,7 +117,7 @@ body{
 
 .info-user .cover-photo img {
     border-radius: 20px;
-    width: 1500px;
+    width: 80vw;
     height: 420px;
     object-fit: cover;
     z-index: 1;
@@ -161,15 +160,19 @@ body{
     z-index: 15;
 }
 .main-content {
-    width: 100%;
+    width: 90vw;
     height: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: center; /* Căn giữa theo trục dọc */
+    align-items: center;    /* Căn giữa theo trục ngang */
     padding: 20px;
+    margin: 0 auto;         /* Đảm bảo căn giữa theo chiều ngang trong trường hợp container không chiếm toàn bộ không gian */
 }
 .group-tag {
     margin-top: -20px;
     padding: 20px;
+    width: 90vw;
 }
 .content-1 {
     display: flex;
