@@ -1,7 +1,6 @@
 <template>
     <div class="container-fluid">
-      <Header />
-      <Top_Button />
+      <header_For_company />
     </div>
     <div class="main-container">
       <div class="review-container">
@@ -48,7 +47,7 @@
   import BusinessViewModel from "../../viewModels/Business_DestinationViewModel.js"
   import VueDatePicker from '@vuepic/vue-datepicker';
   import '@vuepic/vue-datepicker/dist/main.css';
-  import { ref, computed, onMounted, watch } from 'vue';
+  import { ref, computed, onMounted, watch, h } from 'vue';
   import { useRoute } from 'vue-router';
   
   const route = useRoute();
@@ -101,11 +100,12 @@
       import Top_Button from '../Top_Button.vue';
       import Img_Card from '../Img_Card.vue';
       import Card_Item from '../Card_Item.vue';
+      import header_For_company from '../Dashboard_For_Company/header_For_company.vue';
       export default {
           name: "ThingsToDo_List",
           components: {
               Header, Scroll_Bar_Component, Top_Button,
-              Img_Card, Card_Item,
+              Img_Card, Card_Item, header_For_company,
           }
       }
   </script>

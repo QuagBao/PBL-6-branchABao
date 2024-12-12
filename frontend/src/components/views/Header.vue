@@ -12,7 +12,14 @@
         </button>
         <div class="collapse navbar-collapse text-lg-end" id="navbarCollapse">
           <div class="navbar-nav ms-auto py-0">
-            <button
+            <button v-if="role === 'business'"
+              class="nav-item nav-link"
+              :class="{ active: state.activeButton === 'home' }"
+              @click="handleButtonClick('home', '/business')"
+            >
+              Home
+            </button>
+            <button v-else
               class="nav-item nav-link"
               :class="{ active: state.activeButton === 'home' }"
               @click="handleButtonClick('home', '/home')"
@@ -65,14 +72,17 @@
       </nav>
     </div>
   </template>
-  
+
   <script>
   import useHeaderViewModel from "../viewModels/headerViewModel";
-  
+
   export default {
     setup() {
       const { state, setActiveButton, navigateToPage } = useHeaderViewModel();
-  
+
+      // Lấy role từ sessionStorage
+      const role = sessionStorage.getItem('role');
+
       const handleButtonClick = (buttonName, route) => {
         setActiveButton(buttonName);
         navigateToPage(route);
@@ -84,15 +94,17 @@
         // Chuyển hướng về trang login
         navigateToPage('/login');
       };
-  
+
       return {
         state,
+        role, // Trả về role để có thể sử dụng trong template
         handleButtonClick,
         handleLogout,
       };
     },
   };
-  </script>
+</script>
+
 
 <style scoped>
 body{

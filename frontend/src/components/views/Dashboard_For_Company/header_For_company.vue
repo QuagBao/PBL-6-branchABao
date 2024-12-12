@@ -15,7 +15,7 @@
             <button
               class="nav-item nav-link"
               :class="{ active: state.activeButton === 'home' }"
-              @click="handleButtonClick('home', '/Dashboard_For_Company')"
+              @click="handleButtonClick('home', '/business')"
             >
               Home
             </button>
@@ -51,7 +51,7 @@
               <div class="dropdown-menu m-0">
                 <button class="dropdown-item" @click="handleButtonClick('profile', '/Profile_Page')">About Us</button>
                 <button class="dropdown-item">Account Settings</button>
-                <button class="dropdown-item">Logout</button>
+                <button class="dropdown-item" @click="handleLogout">Logout</button>
               </div>
             </div>
           </div>
@@ -66,15 +66,27 @@
   export default {
     setup() {
       const { state, setActiveButton, navigateToPage } = useHeaderViewModel();
-  
+
+      // Lấy role từ sessionStorage
+      const role = sessionStorage.getItem('role');
+
       const handleButtonClick = (buttonName, route) => {
         setActiveButton(buttonName);
         navigateToPage(route);
       };
-  
+
+      const handleLogout = () => {
+        // Xóa token khỏi session storage
+        sessionStorage.removeItem('access-token');
+        // Chuyển hướng về trang login
+        navigateToPage('/login');
+      };
+
       return {
         state,
+        role, // Trả về role để có thể sử dụng trong template
         handleButtonClick,
+        handleLogout,
       };
     },
   };

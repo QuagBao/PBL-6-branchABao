@@ -1,8 +1,7 @@
 <template>
     <!-- Header Section -->
     <div class="header-container">
-        <Header/>
-        <Top_Button/>
+        <header_For_company/>
     </div>
 
     <div class="container-fluid">
@@ -95,12 +94,13 @@
     
     import Cards from './Cards.vue';
     import Carousel from '../Carousel.vue';
+    import header_For_company from '../Dashboard_For_Company/header_For_company.vue';
 
     export default {
         name: "Destination_View",
         components: {
             Header, Scroll_Bar_Component, Top_Button,
-            Cards, Carousel,
+            Cards, Carousel, header_For_company,
         }
     }
 </script>

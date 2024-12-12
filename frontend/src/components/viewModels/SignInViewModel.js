@@ -31,6 +31,7 @@ class SignInViewModel {
 
         if (userResult.success) {
           console.log('User role:', userResult.user);
+          sessionStorage.setItem('role', userResult.user.role);
           if(userResult.user.role === 'business') {
             router.push('/business');
           }
