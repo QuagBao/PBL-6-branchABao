@@ -10,7 +10,7 @@
             <tr>
               <th>Destination Name</th>
               <th>User Create</th>
-              <th>Address</th>
+              <th>City</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -22,8 +22,6 @@
               <td>{{ destination.name }}</td>
               <td>{{ getUserName(destination.user_id) }}</td>
               <td v-if="destination.address">
-                {{ destination.address.street }}, {{ destination.address.ward }},
-                {{ destination.address.district }},
                 {{ getCityName(destination.address.city_id) }}
               </td>
               <td v-else>N/A</td>
