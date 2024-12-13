@@ -104,10 +104,7 @@
   const previewImages = ref([]);
   
   const {
-    fetchDestinations,
     confirmCreate,
-    fetchCities,
-    fetchUsers,
   } = DestinationManagementController();
   
   const destination = ref({
@@ -151,25 +148,6 @@
   });
   
   
-  
-  // Load data
-  const loadDestinations = async () => {
-    destinations.value = await fetchDestinations();
-  };
-  
-  const loadCity = async () => {
-    cities.value = await fetchCities();
-  };
-  
-  const loadUsers = async () => {
-    users.value = await fetchUsers();
-  };
-  
-  onMounted(() => {
-    loadUsers();
-    loadCity();
-    loadDestinations();
-  });
   
   const submitAddDestination = async () => {
     await confirmCreate(destination.value, images.value);

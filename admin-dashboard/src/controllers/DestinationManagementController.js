@@ -58,14 +58,10 @@ export default function () {
     }
   };
 
-  const createDestination = () => {
-    actionStep.value = "create";
-  };
 
   const showDetailDestination = (destinationID) => {
     try {
       const destination = getDestination(destinationID);
-      actionStep.value = "viewDetail";
       return destination;
     } catch (error) {
       toast.error("Error fetching destination");
@@ -75,7 +71,6 @@ export default function () {
   const updateDestination = async (destinationID) => {
     try {
       const destination = getDestination(destinationID);
-      actionStep.value = "update";
       return destination;
     } catch (error) {
       toast.error("Error fetching destination");
@@ -85,7 +80,7 @@ export default function () {
   const confirmCreate = async (destination, images) => {
     try {
       const result = await addDestination(destination, images);
-      actionStep.value = "read";
+      window.location.assign(`/destinations`);
       toast.success(`Add Destination successful: ${result.name}`);
     } catch (error) {
       toast.error("Error add destination");
@@ -98,7 +93,7 @@ export default function () {
   ) => {
     try {
       await updateDestinationAPI(destination, new_images, image_ids_to_remove);
-      actionStep.value = "read";
+      window.location.assign(`/destinations/${destination.id}`);
       toast.success("Update Destination successfull");
     } catch (error) {
       toast.error("Error update destination");
@@ -114,6 +109,7 @@ export default function () {
         const response = await deleteDestinationAPI(destinationID);
         if (response.success) {
           toast.success(response.message);
+          window.location.reload();
           // Trigger a data refresh instead of a page reload if possible
         } else {
           toast.error("Failed to delete destination:", response.message);
@@ -124,14 +120,10 @@ export default function () {
     }
   };
 
-  const createHotel = () => {
-    actionStep.value = "create-hotel";
-  };
 
   const updateHotel = async (destinationID) => {
     try {
       const hotel = getDestination(destinationID);
-      actionStep.value = "update-hotel";
       return hotel;
     } catch (error) {
       toast.error("Error fetching Hotel");
@@ -141,7 +133,7 @@ export default function () {
   const confirmCreateHotel = async (hotel) => {
     try {
       await addHotel(hotel);
-      showDetailDestination(hotel.id);
+      window.location.assign(`/destinations/${hotel.id}`);
       toast.success("Add Hotel successfull");
     } catch (error) {
       toast.error("Error add Hotel");
@@ -150,7 +142,7 @@ export default function () {
   const confirmUpdateHotel = async (hotel) => {
     try {
       await updateHotelAPI(hotel);
-      showDetailDestination(hotel.id);
+      window.location.assign(`/destinations/${hotel.id}`);
       toast.success("Update Hotel successfull");
     } catch (error) {
       toast.error("Error update Hotel");
@@ -165,6 +157,7 @@ export default function () {
         const response = await deleteHotelAPI(hotelID);
         if (response.success) {
           toast.success(response.message);
+          window.location.reload();
         } else {
           toast.error("Failed to delete hotel:", response.message);
         }
@@ -174,14 +167,10 @@ export default function () {
     }
   };
 
-  const createRestaurant = () => {
-    actionStep.value = "create-restaurant";
-  };
 
   const updateRestaurant = async (DestinationID) => {
     try {
       const restaurant = getDestination(DestinationID);
-      actionStep.value = "update-restaurant";
       return restaurant;
     } catch (error) {
       console.error("Error to get Restaurant");
@@ -191,7 +180,7 @@ export default function () {
   const confirmCreateRestaurant = async (Restaurant) => {
     try {
       await addRestaurant(Restaurant);
-      showDetailDestination(Restaurant.id);
+      window.location.assign(`/destinations/${Restaurant.id}`);
       toast.success("Add Restaurant successfull");
     } catch (error) {
       toast.error("Error to add Restaurant");
@@ -200,7 +189,7 @@ export default function () {
   const confirmUpdateRestaurant = async (Restaurant) => {
     try {
       await updateRestaurantAPI(Restaurant);
-      showDetailDestination(Restaurant.id);
+      window.location.assign(`/destinations/${Restaurant.id}`);
       toast.success("Update Restaurant successfull");
     } catch (error) {
       toast.error("Error to update Restaurant");
@@ -216,6 +205,7 @@ export default function () {
         const response = await deleteRestaurantAPI(RestaurantID);
         if (response.success) {
           toast.success(response.message);
+          window.location.reload();
           // Trigger a data refresh instead of a page reload if possible
         } else {
           toast.error("Failed to delete Restaurant:", response.message);
@@ -228,25 +218,21 @@ export default function () {
 
   return {
     fetchDestinations,
-    actionStep,
-    createDestination,
-    updateDestination,
-    confirmCreate,
-    confirmUpdate,
     deleteDestination,
-    getDestination,
     fetchCities,
-    showDetailDestination,
-    createHotel,
-    updateHotel,
-    confirmCreateHotel,
-    confirmUpdateHotel,
-    deleteHotel,
-    createRestaurant,
-    updateRestaurant,
-    confirmCreateRestaurant,
-    confirmUpdateRestaurant,
-    deleteRestaurant,
     fetchUsers,
+    confirmCreate,
+    confirmCreateHotel,
+    getDestination,
+    confirmCreateRestaurant,
+    showDetailDestination,
+    deleteHotel,
+    deleteRestaurant,
+    updateDestination,
+    confirmUpdate,
+    updateHotel,
+    confirmUpdateHotel,
+    updateRestaurant,
+    confirmUpdateRestaurant,
   };
 }

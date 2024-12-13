@@ -160,7 +160,7 @@
             <div v-else>
               <p class="no-data">Place does not have hotel information.</p>
               <div class="action-buttons">
-                <button @click="showCreateForm_hotel">
+                <button @click="showCreateForm_hotel(currentDestination.id)">
                   <i class="icon-create"></i> Create hotel
                 </button>
               </div>
@@ -215,7 +215,7 @@
             <div v-else>
               <p class="no-data">Place does not have restaurant information.</p>
               <div class="action-buttons">
-                <button @click="showCreateForm_restaurant">
+                <button @click="showCreateForm_restaurant(currentDestination.id)">
                   <i class="icon-create"></i> Create Restaurant
                 </button>
               </div>
@@ -365,7 +365,7 @@
   };
   
   const goBack = () => {
-    window.history.back();
+    window.location.assign(`/destinations`);
   };
   
   const showDetail = async (destinationID) => {
