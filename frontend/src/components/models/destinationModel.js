@@ -31,6 +31,7 @@ export async function fetchDestinationsByCity(cityId) {
       images: destination.images,
       rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
       numOfReviews: destination.numOfReviews,
+      popularity_score: destination.popularity_score,
     }));
   } catch (error) {
     console.error('Error fetching destinations:', error);
@@ -64,6 +65,7 @@ export async function fetchAttractions() {
       tags: destination.tags,
       rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
       numOfReviews: destination.numOfReviews,
+      popularity_score: destination.popularity_score,
     }));
   } catch (error) {
     console.error('Error fetching destinations:', error);
@@ -104,6 +106,7 @@ export async function fetchHotelsByCity (cityId) {
       tags: destination.tags,
       rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
       numOfReviews: destination.numOfReviews,
+      popularity_score: destination.popularity_score,
     }));
   } catch (error) {
     // In ra lỗi nếu có
@@ -144,6 +147,7 @@ export async function fetchHotels () {
       tags: destination.tags,
       rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
       numOfReviews: destination.numOfReviews,
+      popularity_score: destination.popularity_score,
     }));
   } catch (error) {
     // In ra lỗi nếu có
@@ -185,6 +189,7 @@ export async function fetchHotels () {
       tags: destination.tags,
       rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
       numOfReviews: destination.numOfReviews,
+      popularity_score: destination.popularity_score,
     }));
   } catch (error) {
     // In ra lỗi nếu có
@@ -226,6 +231,7 @@ export async function fetchRestaurants(){
       tags: destination.tags,
       rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
       numOfReviews: destination.numOfReviews,
+      popularity_score: destination.popularity_score,
     }));
   } catch (error) {
     // In ra lỗi nếu có
@@ -266,6 +272,7 @@ export async function getDestinationById(destinationID) {
       tags: destination.tags,
       rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
       numOfReviews: destination.numOfReviews,
+      popularity_score: destination.popularity_score,
     };
   } catch (error) {
     console.error("Error fetching destination:", error);
@@ -300,6 +307,7 @@ export async function getHotelById(hotelID) {
       tags: hotel.tags,
       rating: hotel.rating ? parseFloat(hotel.rating.toFixed(1)) : null,
       numOfReviews: hotel.numOfReviews,
+      popularity_score: hotel.popularity_score,
     };
   } catch (error) {
     console.error("Error fetching hotel:", error);
@@ -332,6 +340,7 @@ export async function getRestaurantById(restaurantID) {
       tags: restaurant.tags,
       rating: restaurant.rating ? parseFloat(restaurant.rating.toFixed(1)) : null,
       numOfReviews: restaurant.numOfReviews,
+      popularity_score: restaurant.popularity_score,
     };
   } catch (error) {
     console.error("Error fetching restaurant:", error);
@@ -368,6 +377,7 @@ export async function fetchDestinations() {
       images: destination.images,
       rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
       numOfReviews: destination.numOfReviews,
+      popularity_score: destination.popularity_score,
     }));
   } catch (error) {
     console.error('Error fetching destinations:', error);

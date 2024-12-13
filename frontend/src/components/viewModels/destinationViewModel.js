@@ -54,6 +54,7 @@ export default function (cityId) {
       } else {
         place = await fetchDestinationsByCity(cityId);
       }
+      place.value = place.sort((a, b) => b.popularity_score - a.popularity_score);
 
       // Lọc dữ liệu theo tags
       const filteredPlace = filterItems(place);
