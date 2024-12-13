@@ -81,12 +81,29 @@
           </tbody>
         </table>
         <div class="pagination">
-          <button :disabled="currentPage === 1" @click="prevPage">
-            Previous
+          <button :disabled="currentPage === 1" @click="prevPage" class="pagination-button">
+            <span>&lt;</span>
           </button>
-          <span>Page {{ currentPage }} of {{ totalPages }}</span>
-          <button :disabled="currentPage === totalPages" @click="nextPage">
-            Next
+          <div class="pagination-numbers">
+            <button 
+              v-for="page in visiblePages" 
+              :key="page" 
+              @click="goToPage(page)" 
+              :class="{ 'active': currentPage === page }"
+            >
+              {{ page }}
+            </button>
+            <span v-if="totalPages > maxVisiblePages && currentPage < totalPages - 2">...</span>
+            <button 
+              v-if="totalPages > maxVisiblePages" 
+              @click="goToPage(totalPages)" 
+              :class="{ 'active': currentPage === totalPages }"
+            > 
+              {{ totalPages }}
+            </button>
+          </div>
+          <button :disabled="currentPage === totalPages" @click="nextPage" class="pagination-button">
+            <span>&gt;</span>
           </button>
         </div>
       </div>
@@ -178,6 +195,32 @@ const cancelAction = () => {
 
 const toggleDropdown = (userId) => {
   activeDropdown.value = activeDropdown.value === userId ? null : userId;
+};
+
+const maxVisiblePages = 5; // Số trang hiển thị trước và sau trang hiện tại
+
+const visiblePages = computed(() => {
+  const pages = [];
+  const startPage = Math.max(1, currentPage.value - 2);
+  const endPage = Math.min(totalPages.value, currentPage.value + 2);
+
+  for (let i = startPage; i <= endPage; i++) {
+    pages.push(i);
+  }
+
+  if (pages[0] !== 1) {
+    pages.unshift(1); // Thêm trang 1 nếu không nằm trong dải hiển thị
+  }
+  
+  if (pages[pages.length - 1] !== totalPages.value) {
+    pages.push(totalPages.value); // Thêm trang cuối nếu không nằm trong dải hiển thị
+  }
+
+  return pages;
+});
+
+const goToPage = (page) => {
+  currentPage.value = page;
 };
 </script>
 
@@ -447,29 +490,53 @@ const toggleDropdown = (userId) => {
   }
   
   .pagination {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-  }
-  
-  .pagination button {
-    padding: 5px 10px;
-    background-color: #007bff;
-    border: none;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  
-  .pagination button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-  
-  .pagination span {
-    font-weight: bold;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.pagination-button {
+  background: blue;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  margin: 0 0.5rem;
+  border-radius: 50%;
+  transition: background-color 0.3s;
+}
+
+.pagination-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.pagination-numbers {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pagination-numbers button {
+  background: none;
+  border: 1px solid #ccc;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #020729;
+  transition: background-color 0.3s;
+}
+
+.pagination-numbers button.active {
+  background-color: #000;
+  color: #fff;
+}
+
+.pagination-numbers button:hover {
+  background-color: #0f13e6;
+  color: #fff;
+}
 
   .dropdown {
   position: relative;

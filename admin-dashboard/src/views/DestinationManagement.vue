@@ -690,366 +690,326 @@
   </div>
 </template>
 
-<script>
-import DestinationManagementController from "@/controllers/DestinationManagementController";
-import { ref, onMounted, computed } from "vue";
+<script setup>
+import { ref, onMounted, computed } from 'vue';
+import DestinationManagementController from '@/controllers/DestinationManagementController';
 
-export default {
-  setup() {
-    const destinations = ref([]);
-    const images = ref([]);
-    const cities = ref([]);
-    const users = ref([]);
-    const new_images = ref([]);
-    const image_ids_to_remove = ref([]);
-    const previewImages = ref([]);
-    const previewNewImages = ref([]);
+const destinations = ref([]);
+const images = ref([]);
+const cities = ref([]);
+const users = ref([]);
+const new_images = ref([]);
+const image_ids_to_remove = ref([]);
+const previewImages = ref([]);
+const previewNewImages = ref([]);
 
-    const itemsPerPage = 5;
-    const currentPage = ref(1);
+const itemsPerPage = 5;
+const currentPage = ref(1);
 
-    const {
-      fetchDestinations,
-      actionStep,
-      createDestination,
-      updateDestination,
-      confirmCreate,
-      confirmUpdate,
-      deleteDestination,
-      fetchCities,
-      showDetailDestination,
-      createHotel,
-      updateHotel,
-      confirmCreateHotel,
-      confirmUpdateHotel,
-      deleteHotel,
-      createRestaurant,
-      updateRestaurant,
-      confirmCreateRestaurant,
-      confirmUpdateRestaurant,
-      deleteRestaurant,
-      fetchUsers,
-    } = DestinationManagementController();
+const {
+  fetchDestinations,
+  actionStep,
+  createDestination,
+  updateDestination,
+  confirmCreate,
+  confirmUpdate,
+  deleteDestination,
+  fetchCities,
+  showDetailDestination,
+  createHotel,
+  updateHotel,
+  confirmCreateHotel,
+  confirmUpdateHotel,
+  deleteHotel,
+  createRestaurant,
+  updateRestaurant,
+  confirmCreateRestaurant,
+  confirmUpdateRestaurant,
+  deleteRestaurant,
+  fetchUsers,
+} = DestinationManagementController();
 
-    const destination = ref({
-      name: "",
-      user_id: 0,
-      price_bottom: 0,
-      price_top: 0,
-      age: 0,
-      opentime: "",
-      duration: 0,
-      description: "",
-      date_create: "",
-      address: {
-        city_id: 0,
-        district: "",
-        ward: "",
-        street: "",
-      },
-      images: [],
-      hotel_id: 0,
-      hotel: {
-        property_amenities: "",
-        room_features: "",
-        room_types: "",
-        hotel_class: 0,
-        hotel_styles: "",
-        languages: "",
-        phone: "",
-        email: "",
-        website: "",
-        id: "",
-      },
-      restaurant_id: 0,
-      restaurant: {
-        cuisine: "",
-        special_diet: "",
-        feature: "",
-        meal: "",
-        id: "",
-      },
-    });
-    const currentDestination = ref({
-      id: 0,
-      name: "",
-      user_id: 0,
-      price_bottom: 0,
-      price_top: 0,
-      age: 0,
-      opentime: "",
-      duration: 0,
-      description: "",
-      date_create: "",
-      address: {
-        city_id: 0,
-        district: "",
-        ward: "",
-        street: "",
-      },
-      images: [],
-      hotel_id: 0,
-      hotel: {
-        property_amenities: "",
-        room_features: "",
-        room_types: "",
-        hotel_class: 0,
-        hotel_styles: "",
-        languages: "",
-        phone: "",
-        email: "",
-        website: "",
-        id: "",
-      },
-      restaurant_id: 0,
-      restaurant: {
-        cuisine: "",
-        special_diet: "",
-        feature: "",
-        meal: "",
-        id: "",
-      },
-    });
-
-    const hotel = ref({
-      id: 0,
-      hotel: {
-        property_amenities: "",
-        room_features: "",
-        room_types: "",
-        hotel_class: 0,
-        hotel_styles: "",
-        languages: "",
-        phone: "",
-        email: "",
-        website: "",
-        id: "",
-      },
-    });
-
-    const restaurant = ref({
-      id: 0,
-      restaurant: {
-        cuisine: "",
-        special_diet: "",
-        feature: "",
-        meal: "",
-        id: "",
-      },
-    });
-
-    const loadDestinations = async () => {
-      destinations.value = await fetchDestinations();
-    };
-
-    const loadCity = async () => {
-      cities.value = await fetchCities();
-    };
-
-    const loadUsers = async () => {
-      users.value = await fetchUsers();
-    };
-    onMounted(loadUsers);
-    onMounted(loadCity);
-    onMounted(loadDestinations);
-    
-
-    const getCityName = (city_id) => {
-      const city = cities.value.find((c) => c.id === city_id);
-      return city ? city.name : "Unknown City";
-    };
-
-    const getUserName = (user_id) => {
-      const user = users.value.find((c) => c.id === user_id);
-      return user ? user.username : "Unknown User";
-    };
-
-    const showCreateForm = () => {
-      createDestination();
-    };
-
-    const showCreateForm_hotel = () => {
-      hotel.value.id = currentDestination.value.id;
-      createHotel();
-    };
-
-    const showCreateForm_restaurant = () => {
-      restaurant.value.id = currentDestination.value.id;
-      createRestaurant();
-    };
-
-    const submitAddDestination = async () => {
-      await confirmCreate(destination.value, images.value);
-      destination.value = { name: "", description: "" };
-      previewImages.value = [];
-      loadDestinations();
-    };
-
-    const submitAddHotel = async () => {
-      await confirmCreateHotel(hotel.value);
-      destination.value = { name: "", description: "" };
-    };
-
-    const submitAddRestaurant = async () => {
-      await confirmCreateRestaurant(restaurant.value);
-      destination.value = { name: "", description: "" };
-    };
-
-    const showUpdateForm = async (destinationID) => {
-      const destinationData = await updateDestination(destinationID);
-      currentDestination.value = { 
-            ...destinationData,
-            address: destinationData.address || { city_id: null, district: "", ward: "", street: "" },
-        };
-    };
-
-    const showUpdateForm_hotel = async (destinationID) => {
-      const destinationData = await updateHotel(destinationID);
-      currentDestination.value = { ...destinationData };
-    };
-
-    const showUpdateForm_restaurant = async (destinationID) => {
-      const destinationData = await updateRestaurant(destinationID);
-      currentDestination.value = { ...destinationData };
-    };
-
-    const goBack = () => {
-      actionStep.value = "read";
-      loadDestinations();
-    };
-
-    const showDetail = async (destinationID) => {
-      const destinationData = await showDetailDestination(destinationID);
-      currentDestination.value = { ...destinationData };
-    };
-
-    const handleImageUpload = (event) => {
-      const files = event.target.files;
-      Array.from(files).forEach((file) => {
-        images.value.push(file);
-        previewImages.value.push(URL.createObjectURL(file)); // Thêm URL preview vào mảng
-      });
-    };
-
-    const removeImage = (index) => {
-      images.value.splice(index, 1); // Xoá file ảnh khỏi mảng
-      URL.revokeObjectURL(previewImages.value[index]); // Giải phóng bộ nhớ của URL preview
-      previewImages.value.splice(index, 1); // Xoá URL preview khỏi mảng
-    };
-
-    const handleNewImageUpload = (event) => {
-      const files = event.target.files;
-      Array.from(files).forEach((file) => {
-        new_images.value.push(file);
-        previewNewImages.value.push(URL.createObjectURL(file)); // Thêm URL preview vào mảng
-      });
-    };
-
-    const removeNewImage = (index) => {
-      new_images.value.splice(index, 1); // Remove new image by index
-      URL.revokeObjectURL(previewNewImages.value[index]); // Giải phóng bộ nhớ của URL preview
-      previewNewImages.value.splice(index, 1); // Xoá URL preview khỏi mảng
-    };
-
-    const removeExistingImage = (id) => {
-      image_ids_to_remove.value.push(id); // Add image id to removal list
-      currentDestination.value.images = currentDestination.value.images.filter(
-        (img) => img.id !== id
-      );
-    };
-
-    const submitUpdateDestination = async () => {
-      await confirmUpdate(
-        currentDestination.value,
-        new_images.value,
-        image_ids_to_remove.value
-      );
-      previewNewImages.value = [];
-      image_ids_to_remove.value = [];
-      loadDestinations();
-    };
-
-    const submitUpdateHotel = async () => {
-      await confirmUpdateHotel(currentDestination.value);
-    };
-
-    const submitUpdateRestaurant = async () => {
-      await confirmUpdateRestaurant(currentDestination.value);
-    };
-
-    const cancelAction = () => {
-      if (actionStep.value == "create") {
-        actionStep.value = "read";
-      } else {
-        showDetail(currentDestination.value.id);
-      }
-    };
-
-    const paginatedDestinations = computed(() => {
-      const startIndex = (currentPage.value - 1) * itemsPerPage;
-      return destinations.value.slice(startIndex, startIndex + itemsPerPage);
-    });
-
-    const totalPages = computed(() =>
-      Math.ceil(destinations.value.length / itemsPerPage)
-    );
-
-    const prevPage = () => {
-      if (currentPage.value > 1) currentPage.value--;
-    };
-
-    const nextPage = () => {
-      if (currentPage.value < totalPages.value) currentPage.value++;
-    };
-
-    return {
-      destinations,
-      actionStep,
-      destination,
-      currentDestination,
-      showCreateForm,
-      submitAddDestination,
-      showUpdateForm,
-      submitUpdateDestination,
-      cancelAction,
-      deleteDestination,
-      handleImageUpload,
-      handleNewImageUpload,
-      removeImage,
-      removeNewImage,
-      removeExistingImage,
-      images,
-      new_images,
-      image_ids_to_remove,
-      cities,
-      getCityName,
-      users,
-      getUserName,
-      previewImages,
-      previewNewImages,
-      paginatedDestinations,
-      currentPage,
-      totalPages,
-      prevPage,
-      nextPage,
-      showDetail,
-      goBack,
-      restaurant,
-      hotel,
-      showCreateForm_hotel,
-      showCreateForm_restaurant,
-      submitAddHotel,
-      submitAddRestaurant,
-      showUpdateForm_hotel,
-      showUpdateForm_restaurant,
-      deleteHotel,
-      deleteRestaurant,
-      submitUpdateHotel,
-      submitUpdateRestaurant,
-    };
+const destination = ref({
+  name: '',
+  user_id: 0,
+  price_bottom: 0,
+  price_top: 0,
+  age: 0,
+  opentime: '',
+  duration: 0,
+  description: '',
+  date_create: '',
+  address: {
+    city_id: 0,
+    district: '',
+    ward: '',
+    street: '',
   },
+  images: [],
+  hotel_id: 0,
+  hotel: {
+    property_amenities: '',
+    room_features: '',
+    room_types: '',
+    hotel_class: 0,
+    hotel_styles: '',
+    languages: '',
+    phone: '',
+    email: '',
+    website: '',
+    id: '',
+  },
+  restaurant_id: 0,
+  restaurant: {
+    cuisine: '',
+    special_diet: '',
+    feature: '',
+    meal: '',
+    id: '',
+  },
+});
+
+const currentDestination = ref({
+  id: 0,
+  name: '',
+  user_id: 0,
+  price_bottom: 0,
+  price_top: 0,
+  age: 0,
+  opentime: '',
+  duration: 0,
+  description: '',
+  date_create: '',
+  address: {
+    city_id: 0,
+    district: '',
+    ward: '',
+    street: '',
+  },
+  images: [],
+  hotel_id: 0,
+  hotel: {
+    property_amenities: '',
+    room_features: '',
+    room_types: '',
+    hotel_class: 0,
+    hotel_styles: '',
+    languages: '',
+    phone: '',
+    email: '',
+    website: '',
+    id: '',
+  },
+  restaurant_id: 0,
+  restaurant: {
+    cuisine: '',
+    special_diet: '',
+    feature: '',
+    meal: '',
+    id: '',
+  },
+});
+
+const hotel = ref({
+  id: 0,
+  hotel: {
+    property_amenities: '',
+    room_features: '',
+    room_types: '',
+    hotel_class: 0,
+    hotel_styles: '',
+    languages: '',
+    phone: '',
+    email: '',
+    website: '',
+    id: '',
+  },
+});
+
+const restaurant = ref({
+  id: 0,
+  restaurant: {
+    cuisine: '',
+    special_diet: '',
+    feature: '',
+    meal: '',
+    id: '',
+  },
+});
+
+// Load data
+const loadDestinations = async () => {
+  destinations.value = await fetchDestinations();
+};
+
+const loadCity = async () => {
+  cities.value = await fetchCities();
+};
+
+const loadUsers = async () => {
+  users.value = await fetchUsers();
+};
+
+onMounted(() => {
+  loadUsers();
+  loadCity();
+  loadDestinations();
+});
+
+const getCityName = (city_id) => {
+  const city = cities.value.find((c) => c.id === city_id);
+  return city ? city.name : 'Unknown City';
+};
+
+const getUserName = (user_id) => {
+  const user = users.value.find((c) => c.id === user_id);
+  return user ? user.username : 'Unknown User';
+};
+
+// Form actions
+const showCreateForm = () => {
+  createDestination();
+};
+
+const showCreateForm_hotel = () => {
+  hotel.value.id = currentDestination.value.id;
+  createHotel();
+};
+
+const showCreateForm_restaurant = () => {
+  restaurant.value.id = currentDestination.value.id;
+  createRestaurant();
+};
+
+const submitAddDestination = async () => {
+  await confirmCreate(destination.value, images.value);
+  destination.value = { name: '', description: '' };
+  previewImages.value = [];
+  loadDestinations();
+};
+
+const submitAddHotel = async () => {
+  await confirmCreateHotel(hotel.value);
+  destination.value = { name: '', description: '' };
+};
+
+const submitAddRestaurant = async () => {
+  await confirmCreateRestaurant(restaurant.value);
+  destination.value = { name: '', description: '' };
+};
+
+const showUpdateForm = async (destinationID) => {
+  const destinationData = await updateDestination(destinationID);
+  currentDestination.value = {
+    ...destinationData,
+    address: destinationData.address || { city_id: null, district: '', ward: '', street: '' },
+  };
+};
+
+const showUpdateForm_hotel = async (destinationID) => {
+  const destinationData = await updateHotel(destinationID);
+  currentDestination.value = { ...destinationData };
+};
+
+const showUpdateForm_restaurant = async (destinationID) => {
+  const destinationData = await updateRestaurant(destinationID);
+  currentDestination.value = { ...destinationData };
+};
+
+const goBack = () => {
+  actionStep.value = 'read';
+  loadDestinations();
+};
+
+const showDetail = async (destinationID) => {
+  const destinationData = await showDetailDestination(destinationID);
+  currentDestination.value = { ...destinationData };
+};
+
+// Image handling
+const handleImageUpload = (event) => {
+  const files = event.target.files;
+  Array.from(files).forEach((file) => {
+    images.value.push(file);
+    previewImages.value.push(URL.createObjectURL(file)); // Thêm URL preview vào mảng
+  });
+};
+
+const removeImage = (index) => {
+  images.value.splice(index, 1); // Xoá file ảnh khỏi mảng
+  URL.revokeObjectURL(previewImages.value[index]); // Giải phóng bộ nhớ của URL preview
+  previewImages.value.splice(index, 1); // Xoá URL preview khỏi mảng
+};
+
+const handleNewImageUpload = (event) => {
+  const files = event.target.files;
+  Array.from(files).forEach((file) => {
+    new_images.value.push(file);
+    previewNewImages.value.push(URL.createObjectURL(file)); // Thêm URL preview vào mảng
+  });
+};
+
+const removeNewImage = (index) => {
+  new_images.value.splice(index, 1); // Remove new image by index
+  URL.revokeObjectURL(previewNewImages.value[index]); // Giải phóng bộ nhớ của URL preview
+  previewNewImages.value.splice(index, 1); // Xoá URL preview khỏi mảng
+};
+
+const removeExistingImage = (id) => {
+  image_ids_to_remove.value.push(id); // Add image id to removal list
+  currentDestination.value.images = currentDestination.value.images.filter(
+    (img) => img.id !== id
+  );
+};
+
+// Update actions
+const submitUpdateDestination = async () => {
+  await confirmUpdate(
+    currentDestination.value,
+    new_images.value,
+    image_ids_to_remove.value
+  );
+  previewNewImages.value = [];
+  image_ids_to_remove.value = [];
+  loadDestinations();
+};
+
+const submitUpdateHotel = async () => {
+  await confirmUpdateHotel(currentDestination.value);
+};
+
+const submitUpdateRestaurant = async () => {
+  await confirmUpdateRestaurant(currentDestination.value);
+};
+
+// Cancel action
+const cancelAction = () => {
+  if (actionStep.value == 'create') {
+    actionStep.value = 'read';
+  } else {
+    showDetail(currentDestination.value.id);
+  }
+};
+
+// Pagination
+const paginatedDestinations = computed(() => {
+  const startIndex = (currentPage.value - 1) * itemsPerPage;
+  return destinations.value.slice(startIndex, startIndex + itemsPerPage);
+});
+
+const totalPages = computed(() =>
+  Math.ceil(destinations.value.length / itemsPerPage)
+);
+
+const prevPage = () => {
+  if (currentPage.value > 1) currentPage.value--;
+};
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) currentPage.value++;
 };
 </script>
+
 
 <style scoped>
 * {

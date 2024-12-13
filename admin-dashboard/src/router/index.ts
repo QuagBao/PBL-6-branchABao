@@ -44,7 +44,42 @@ const routes = [
   {
     path: "/destinations",
     name: "DestinationManagement",
-    component: () => import("@/views/DestinationManagement.vue"),
+    component: () => import("@/views/destinations/DestinationManagement.vue"),
+  },
+  {
+    path: "/destinations/:id",
+    name: "DestinationManagement-Detail",
+    component: () => import("@/views/destinations/DestinationDetail.vue"),
+  },
+  {
+    path: "/destinations/create",
+    name: "DestinationManagement-Add",
+    component: () => import("@/views/destinations/AddDestination.vue"),
+  },
+  {
+    path: "/destinations/update/:id",
+    name: "DestinationManagement-Update",
+    component: () => import("@/views/destinations/UpdateDestination.vue"),
+  },
+  {
+    path: "/destinations/hotel/create/:id",
+    name: "DestinationManagement-AddHotel",
+    component: () => import("@/views/destinations/AddHotel.vue"),
+  },
+  {
+    path: "/destinations/hotel/update/:id",
+    name: "DestinationManagement-UpdateHotel",
+    component: () => import("@/views/destinations/UpdateHotel.vue"),
+  },
+  {
+    path: "/destinations/restaurant/add/:id",
+    name: "DestinationManagement-AddRestaurant",
+    component: () => import("@/views/destinations/AddRestaurant.vue"),
+  },
+  {
+    path: "/destinations/restaurant/update/:id",
+    name: "DestinationManagement-UpdateRestaurant",
+    component: () => import("@/views/destinations/UpdateRestaurant.vue"),
   },
   {
     path: "/tours",

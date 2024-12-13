@@ -142,155 +142,135 @@
   </div>
 </template>
 
-<script>
+<script setup>
 import CityManagementController from "@/controllers/CityManagementController";
 import { ref, computed, onMounted } from "vue";
 
-export default {
-  setup() {
-    const cities = ref([]);
-    const itemsPerPage = 5;
-    const currentPage = ref(1);
+const cities = ref([]);
+const itemsPerPage = 5;
+const currentPage = ref(1);
 
-    const images = ref([]);
-    const new_images = ref([]);
-    const image_ids_to_remove = ref([]);
-    const previewImages = ref([]);
-    const previewNewImages = ref([]);
+// Image handling
+const images = ref([]);
+const new_images = ref([]);
+const image_ids_to_remove = ref([]);
+const previewImages = ref([]);
+const previewNewImages = ref([]);
 
-    const {
-      fetchCities,
-      actionStep,
-      createCity,
-      updateCity,
-      confirmCreate,
-      confirmUpdate,
-      deleteCity,
-    } = CityManagementController();
+// City data
+const city = ref({ name: "", description: "", images: [] });
+const currentCity = ref({ id: "", name: "", description: "", images: [] });
 
-    const city = ref({ name: "", description: "", images: [] });
-    const currentCity = ref({ id: "", name: "", description: "", images: [] });
+const {
+  fetchCities,
+  actionStep,
+  createCity,
+  updateCity,
+  confirmCreate,
+  confirmUpdate,
+  deleteCity,
+} = CityManagementController();
 
-    const loadCities = async () => {
-      cities.value = await fetchCities();
-    };
-
-    onMounted(loadCities);
-
-    const showCreateForm = () => {
-      createCity();
-    };
-
-    const submitAddCity = async () => {
-      await confirmCreate(city.value, images.value);
-      city.value = { name: "", description: "", images: [] };
-      previewImages.value = [];
-      loadCities();
-    };
-
-    const showUpdateForm = async (cityID) => {
-      const cityData = await updateCity(cityID);
-      currentCity.value = { ...cityData };
-      actionStep.value = "update";
-    };
-
-    const submitUpdateCity = async () => {
-      await confirmUpdate(
-        currentCity.value,
-        new_images.value,
-        image_ids_to_remove.value
-      );
-      previewNewImages.value = [];
-      image_ids_to_remove.value = [];
-      loadCities();
-    };
-
-    const cancelAction = () => {
-      actionStep.value = "read";
-    };
-
-    const paginatedCities = computed(() => {
-      const startIndex = (currentPage.value - 1) * itemsPerPage;
-      return cities.value.slice(startIndex, startIndex + itemsPerPage);
-    });
-
-    const totalPages = computed(() =>
-      Math.ceil(cities.value.length / itemsPerPage)
-    );
-
-    const prevPage = () => {
-      if (currentPage.value > 1) currentPage.value--;
-    };
-
-    const nextPage = () => {
-      if (currentPage.value < totalPages.value) currentPage.value++;
-    };
-
-    const handleImageUpload = (event) => {
-      const files = event.target.files;
-      Array.from(files).forEach((file) => {
-        images.value.push(file);
-        previewImages.value.push(URL.createObjectURL(file)); // Thêm URL preview vào mảng
-      });
-    };
-
-    const removeImage = (index) => {
-      images.value.splice(index, 1); // Xoá file ảnh khỏi mảng
-      URL.revokeObjectURL(previewImages.value[index]); // Giải phóng bộ nhớ của URL preview
-      previewImages.value.splice(index, 1); // Xoá URL preview khỏi mảng
-    };
-
-    const handleNewImageUpload = (event) => {
-      const files = event.target.files;
-      Array.from(files).forEach((file) => {
-        new_images.value.push(file);
-        previewNewImages.value.push(URL.createObjectURL(file)); // Thêm URL preview vào mảng
-      });
-    };
-
-    const removeNewImage = (index) => {
-      new_images.value.splice(index, 1); // Remove new image by index
-      URL.revokeObjectURL(previewNewImages.value[index]); // Giải phóng bộ nhớ của URL preview
-      previewNewImages.value.splice(index, 1); // Xoá URL preview khỏi mảng
-    };
-
-    const removeExistingImage = (id) => {
-      image_ids_to_remove.value.push(id); // Add image id to removal list
-      currentCity.value.images = currentCity.value.images.filter(
-        (img) => img.id !== id
-      );
-    };
-
-    return {
-      cities,
-      actionStep,
-      city,
-      currentCity,
-      showCreateForm,
-      submitAddCity,
-      showUpdateForm,
-      submitUpdateCity,
-      cancelAction,
-      deleteCity,
-      paginatedCities,
-      currentPage,
-      totalPages,
-      prevPage,
-      nextPage,
-      handleImageUpload,
-      handleNewImageUpload,
-      removeImage,
-      removeNewImage,
-      removeExistingImage,
-      images,
-      new_images,
-      image_ids_to_remove,
-      previewImages,
-      previewNewImages,
-    };
-  },
+// Load cities on component mount
+const loadCities = async () => {
+  cities.value = await fetchCities();
 };
+
+onMounted(loadCities);
+
+// Pagination
+const paginatedCities = computed(() => {
+  const startIndex = (currentPage.value - 1) * itemsPerPage;
+  return cities.value.slice(startIndex, startIndex + itemsPerPage);
+});
+
+const totalPages = computed(() => Math.ceil(cities.value.length / itemsPerPage));
+
+const prevPage = () => {
+  if (currentPage.value > 1) currentPage.value--;
+};
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) currentPage.value++;
+};
+
+// CRUD operations
+const showCreateForm = () => {
+  createCity();
+};
+
+const submitAddCity = async () => {
+  await confirmCreate(city.value, images.value);
+  city.value = { name: "", description: "", images: [] };
+  previewImages.value = [];
+  loadCities();
+};
+
+const showUpdateForm = async (cityID) => {
+  const cityData = await updateCity(cityID);
+  currentCity.value = { ...cityData };
+  actionStep.value = "update";
+};
+
+const submitUpdateCity = async () => {
+  await confirmUpdate(
+    currentCity.value,
+    new_images.value,
+    image_ids_to_remove.value
+  );
+  previewNewImages.value = [];
+  image_ids_to_remove.value = [];
+  loadCities();
+};
+
+const cancelAction = () => {
+  actionStep.value = "read";
+};
+
+const removeCity = async (cityID) => {
+  await deleteCity(cityID);
+  loadCities();
+};
+
+// Image handling functions
+const handleImageUpload = (event) => {
+  const files = event.target.files;
+  Array.from(files).forEach((file) => {
+    images.value.push(file);
+    previewImages.value.push(URL.createObjectURL(file));
+  });
+};
+
+const removeImage = (index) => {
+  images.value.splice(index, 1);
+  URL.revokeObjectURL(previewImages.value[index]);
+  previewImages.value.splice(index, 1);
+};
+
+const handleNewImageUpload = (event) => {
+  const files = event.target.files;
+  Array.from(files).forEach((file) => {
+    new_images.value.push(file);
+    previewNewImages.value.push(URL.createObjectURL(file));
+  });
+};
+
+const removeNewImage = (index) => {
+  new_images.value.splice(index, 1);
+  URL.revokeObjectURL(previewNewImages.value[index]);
+  previewNewImages.value.splice(index, 1);
+};
+
+const removeExistingImage = (id) => {
+  image_ids_to_remove.value.push(id);
+  currentCity.value.images = currentCity.value.images.filter(
+    (img) => img.id !== id
+  );
+};
+
+// Return exposed values and methods
 </script>
+
 
 <style scoped>
 /* Reset CSS */
