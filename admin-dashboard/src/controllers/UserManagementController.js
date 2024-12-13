@@ -46,7 +46,6 @@ export default function () {
   const createInfo = async (userID) => {
     try {
       const user = getUser(userID);
-      actionStep.value = "create";
       return user;
     } catch (error) {
       toast.error("Error to get User");
@@ -56,7 +55,6 @@ export default function () {
   const updateInfo = async (userID) => {
     try {
       const user = getUser(userID);
-      actionStep.value = "update";
       return user;
     } catch (error) {
       toast.error("Error to get User");
@@ -66,7 +64,7 @@ export default function () {
   const confirmCreateInfo = async (user, uploadedImageFile) => {
     try {
       await createUserInfo(user, uploadedImageFile);
-      actionStep.value = "read";
+      window.location.assign(`/users`);
       toast.success("Create user info sucessfully");
     } catch (error) {
       toast.error("Error to create user info");
@@ -75,7 +73,7 @@ export default function () {
   const confirmUpdateInfo = async (user, uploadedImageFile) => {
     try {
       await updateUserInfo(user, uploadedImageFile);
-      actionStep.value = "read";
+      window.location.assign(`/users`);
       toast.success("Update user info sucessfully");
     } catch (error) {
       toast.error("Error to update user info");
@@ -89,7 +87,7 @@ export default function () {
     if (confirmDelete) {
       try {
         await deleteUserInfo(userID);
-        fetchUsers();
+        window.location.assign(`/users`);
         toast.success("Delete user info sucessfully");
       } catch (error) {
         toast.error("Error to delete user info");
@@ -105,7 +103,7 @@ export default function () {
     if (user.confirmPassword === user.password) {
       try {
         await addNewUser(user);
-        actionStep.value = "read";
+        window.location.assign(`/users`);
         toast.success("Add user sucessfully");
       } catch (error) {
         toast.error("Error to add user");
@@ -124,8 +122,9 @@ export default function () {
     if (confirmChange) {
       try {
         await changeUserStatus(userID);
-        fetchUsers();
         toast.success("Change user status sucessfully");
+        window.location.assign(`/users`);
+        
       } catch (error) {
         toast.error("Error to Change user status");
       }

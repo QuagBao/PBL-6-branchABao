@@ -19,7 +19,22 @@ const routes = [
   {
     path: "/users",
     name: "UserManagement",
-    component: () => import("@/views/UserManagement.vue"),
+    component: () => import("@/views/users/UserManagement.vue"),
+  },
+  {
+    path: "/users/create",
+    name: "UserManagement-Create",
+    component: () => import("@/views/users/CreateUser.vue"),
+  },
+  {
+    path: "/users/createInfo/:id",
+    name: "UserManagement-CreateUserInfo",
+    component: () => import("@/views/users/CreateUserInfo.vue"),
+  },
+  {
+    path: "/users/updateInfo/:id",
+    name: "UserManagement-UpdateUserInfo",
+    component: () => import("@/views/users/UpdateUserInfo.vue"),
   },
   {
     path: "/cities",
