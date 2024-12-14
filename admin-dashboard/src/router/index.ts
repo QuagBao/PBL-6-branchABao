@@ -104,7 +104,22 @@ const routes = [
   {
     path: "/reviews",
     name: "ReviewManagement",
-    component: () => import("@/views/ReviewManagement.vue"),
+    component: () => import("@/views/reviews/ReviewManagement.vue"),
+  },
+  {
+    path: "/reviews/:id",
+    name: "Review-Detail",
+    component: () => import("@/views/reviews/ReviewDetail.vue"),
+  },
+  {
+    path: "/reviews/create/:id",
+    name: "Review-Create",
+    component: () => import("@/views/reviews/AddReview.vue"),
+  },
+  {
+    path: "/reviews/update/:id",
+    name: "Review-Update",
+    component: () => import("@/views/reviews/UpdateReview.vue"),
   },
   {
     path: "/tags",
