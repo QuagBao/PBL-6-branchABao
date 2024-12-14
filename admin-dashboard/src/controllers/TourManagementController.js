@@ -14,7 +14,6 @@ import { getCities as fetchCitiesAPI } from "@/models/CityManagementModel";
 import { getUsers as fetchUsersAPI } from "@/models/UserManagementModel";
 
 export default function () {
-  const actionStep = ref("read");
   const toast = useToast();
   const fetchTours = async () => {
     try {
@@ -61,24 +60,10 @@ export default function () {
     }
   };
 
-  const showDetailTour = (tourID) => {
-    try {
-      const tour = getTour(tourID);
-      actionStep.value = "viewDetail";
-      return tour;
-    } catch (error) {
-      toast.error("Error fetching tour");
-    }
-  };
-
-  const createTour = () => {
-    actionStep.value = "create";
-  };
 
   const updateTour = async (TourID) => {
     try {
       const tour = getTour(TourID);
-      actionStep.value = "update";
       return tour;
     } catch (error) {
       toast.error("Error fetching tour");
@@ -88,8 +73,8 @@ export default function () {
   const confirmCreate = async (tour) => {
     try {
       await addTour(tour);
-      actionStep.value = "read";
       toast.success("Create a tour success");
+      window.location.assign("tours/${tour.id}");
     } catch (error) {
       toast.error("Error add tour");
     }
@@ -97,8 +82,8 @@ export default function () {
   const confirmUpdate = async (tour) => {
     try {
       await updateTourAPI(tour);
-      actionStep.value = "read";
       toast.success("Update a tour success");
+      window.location.assign("tours/${tour.id}");
     } catch (error) {
       toast.error("Error update tour");
     }
@@ -113,7 +98,7 @@ export default function () {
         const response = await deleteTourAPI(tourID);
         if (response.success) {
           toast.success("Delete a tour complete");
-          fetchTours();
+          window.location.reload();
           // Trigger a data refresh instead of a page reload if possible
         } else {
           toast.error("Failed to delete tour");
@@ -126,17 +111,15 @@ export default function () {
   };
 
   return {
-    fetchTours,
-    actionStep,
-    createTour,
-    updateTour,
     confirmCreate,
-    confirmUpdate,
-    deleteTour,
-    getTour,
     getDestination,
-    showDetailTour,
     fetchCities,
     fetchUsers,
+    deleteTour,
+    getTour,
+    fetchTours,
+    getDestination,
+    updateTour,
+    confirmUpdate,
   };
 }

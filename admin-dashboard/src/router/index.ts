@@ -84,7 +84,22 @@ const routes = [
   {
     path: "/tours",
     name: "TourManagement",
-    component: () => import("@/views/TourManagement.vue"),
+    component: () => import("@/views/tours/TourManagement.vue"),
+  },
+  {
+    path: "/tours/:id",
+    name: "TourManagement-Detail",
+    component: () => import("@/views/tours/TourDetail.vue"),
+  },
+  {
+    path: "/tours/create",
+    name: "TourManagement-Add",
+    component: () => import("@/views/tours/AddTour.vue"),
+  },
+  {
+    path: "/tours/update/:id",
+    name: "TourManagement-Update",
+    component: () => import("@/views/tours/UpdateTour.vue"),
   },
   {
     path: "/reviews",

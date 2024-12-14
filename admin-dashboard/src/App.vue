@@ -182,8 +182,9 @@ export default {
 }
 
 .sidebar li {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   transition: transform 0.2s, color 0.2s;
+  height: 15%;
 }
 
 .sidebar li:hover {
@@ -194,7 +195,7 @@ export default {
 .sidebar a {
   color: #bdc3c7; /* Subtle link color for improved readability */
   text-decoration: none;
-  font-size: 18px;
+  font-size: 1vw;
   display: flex;
   align-items: center;
   padding: 10px 15px;
