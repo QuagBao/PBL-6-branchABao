@@ -160,6 +160,33 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
 }
 
+/* Toàn bộ ứng dụng */
+* {
+  scrollbar-width: thin; /* Cho Firefox */
+  scrollbar-color:rgb(14, 69, 128) #f0f0f0; /* Cho Firefox */
+}
+
+/* Custom Scrollbar cho trình duyệt WebKit (Chrome, Edge, Safari) */
+*::-webkit-scrollbar {
+  width: 10px; /* Độ rộng của scrollbar */
+  height: 10px; /* Độ cao của scrollbar ngang */
+}
+
+*::-webkit-scrollbar-track {
+  background: #f0f0f0; /* Màu nền của track scrollbar */
+  border-radius: 20px; /* Bo tròn track */
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: rgb(37, 89, 141); /* Màu của thumb scrollbar */
+  border-radius: 20px; /* Bo tròn thumb */
+  border: 2px solid #f0f0f0; /* Viền quanh thumb để tạo khoảng cách */
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: rgb(6, 34, 61); /* Màu thumb khi hover */
+}
+
 /* Sidebar styling on the left */
 .sidebar {
   position: fixed;
