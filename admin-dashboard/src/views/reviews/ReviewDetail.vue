@@ -140,39 +140,20 @@
   <script setup>
 import ReviewManagementController from "@/controllers/ReviewManagementController";
 import { ref, onMounted, computed } from "vue";
+import { useRoute } from "vue-router";
+const route = useRoute();
+const destinationID = route.params.id;
 
-const destinations = ref([]);
 const reviews = ref([]);
-const images = ref([]);
 const cities = ref([]);
 const users = ref([]);
-const new_images = ref([]);
-const image_ids_to_remove = ref([]);
-const previewImages = ref([]);
-const previewNewImages = ref([]);
 
-const itemsPerPage = 5;
-const currentPage = ref(1);
-const companions = [
-  { value: 'Solo', label: 'Solo' },
-  { value: 'Family', label: 'Family' },
-  { value: 'Couple', label: 'Couple' },
-  { value: 'Friends', label: 'Friends' },
-  { value: 'Company', label: 'Company' },
-  { value: 'Other', label: 'Other' },
-];
 
 const {
-  actionStep,
   fetchCities,
   fetchUsers,
-  fetchDestinations,
-  showDetailDestination,
+  getDestination,
   fetchReviewByDestination,
-  createReview,
-  updateReview,
-  confirmCreate,
-  confirmUpdate,
   deleteReview,
 } = ReviewManagementController();
 
@@ -215,22 +196,6 @@ const destination = ref({
   },
 });
 
-const review = ref({
-  id: 0,
-  title: "",
-  content: "",
-  rating: "",
-  language: "",
-  date_create: "",
-  companion: "",
-  user_id: 0,
-  destination_id: 0,
-  images: [],
-});
-
-const loadDestinations = async () => {
-  destinations.value = await fetchDestinations();
-};
 
 const loadCity = async () => {
   cities.value = await fetchCities();
@@ -240,9 +205,16 @@ const loadUsers = async () => {
   users.value = await fetchUsers();
 };
 
-onMounted(loadUsers);
-onMounted(loadCity);
-onMounted(loadDestinations);
+const loadReviews = async (destinationID) => {
+  reviews.value = await fetchReviewByDestination(destinationID);
+};
+
+onMounted(async () => {
+    await loadCity();
+    await loadUsers();
+    destination.value = await getDestination(destinationID);
+    await loadReviews(destinationID);
+  });
 
 
 const getCityName = (city_id) => {

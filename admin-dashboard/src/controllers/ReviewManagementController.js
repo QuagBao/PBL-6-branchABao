@@ -58,34 +58,19 @@ export default function () {
     }
   };
 
-  const showDetailDestination = (destinationID) => {
-    try {
-      const destination = getDestination(destinationID);
-      return destination;
-    } catch (error) {
-      toast.error("Error fetching destination");
-    }
-  };
-
   const fetchReviewByDestination = async (destinationID) => {
     try {
       const reviews = await getReviewByDestinationId(destinationID);
-      actionStep.value = "viewDetail";
       return reviews;
     } catch (error) {
       toast.error("Error fetching review:", error);
     }
   };
 
-  const createReview = () => {
-    actionStep.value = "create";
-  };
-
 
   const updateReview = async (reviewID) => {
     try {
       const review = await getReviewById(reviewID);
-      actionStep.value = "update";
       return review;
     } catch (error) {
       toast.error("Error fetching review");
@@ -95,8 +80,8 @@ export default function () {
   const confirmCreate = async (review, images) => {
     try {
       const result = await addReview(review, images);
-      actionStep.value = "read";
       toast.success(`Add Destination successful: ${result.name}`);
+      window.location.assign(`/reviews/:${review.destination_id}`);
     } catch (error) {
       toast.error("Error add destination");
     }
@@ -108,8 +93,8 @@ export default function () {
   ) => {
     try {
       await updateReviewAPI(review, new_images, image_ids_to_remove);
-      actionStep.value = "read";
       toast.success("Update Review successfull");
+      window.location.assign(`/reviews/:${review.destination_id}`);
     } catch (error) {
       toast.error("Error update review");
     }
@@ -117,14 +102,14 @@ export default function () {
 
   const deleteReview = async (reviewID) => {
     const confirmDelete = window.confirm(
-      "Are you sure you want to delete this destination?"
+      "Are you sure you want to delete this review?"
     );
     if (confirmDelete) {
       try {
         const response = await deleteReviewAPI(reviewID);
         if (response.success) {
           toast.success(response.message);
-          // Trigger a data refresh instead of a page reload if possible
+          window.location.reload();
         } else {
           toast.error("Failed to delete review:", response.message);
         }
@@ -136,17 +121,14 @@ export default function () {
 
 
   return {
-    actionStep,
     fetchCities,
     fetchUsers,
+    confirmCreate,
     fetchDestinations,
     getDestination,
-    showDetailDestination,
     fetchReviewByDestination,
-    createReview,
-    updateReview,
-    confirmCreate,
-    confirmUpdate,
     deleteReview,
+    updateReview,
+    confirmUpdate,
   };
 }

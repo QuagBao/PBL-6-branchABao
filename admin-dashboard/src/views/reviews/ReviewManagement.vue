@@ -1,18 +1,12 @@
 <template>
     <div class="destination-management">
       <h2>Review Management</h2>
-      <div v-if="actionStep === 'read'" class="table-container">
-        <button class="action-button add-button" @click="showCreateForm">
-          Add New Review
-        </button>
+      <div class="table-container">
         <table class="destination-table">
           <thead>
             <tr>
-              <th>Id</th>
               <th>Destination Name</th>
               <th>User Create</th>
-              <th>Description</th>
-              <th>Address</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -21,15 +15,8 @@
               v-for="destination in paginatedReviews"
               :key="destination.id"
             >
-              <td>{{ destination.id }}</td>
               <td>{{ destination.name }}</td>
               <td>{{ getUserName(destination.user_id) }}</td>
-              <td>{{ destination.description }}</td>
-              <td v-if="destination.address">
-                {{ destination.address.street }}, {{ destination.address.ward }},
-                {{ destination.address.district }},
-                {{ getCityName(destination.address.city_id) }}
-              </td>
               <td>
                 <button
                   class="action-button view-button"
@@ -42,320 +29,31 @@
           </tbody>
         </table>
         <div class="pagination">
-          <button :disabled="currentPage === 1" @click="prevPage">
-            Previous
+          <button :disabled="currentPage === 1" @click="prevPage" class="pagination-button">
+            <span>&lt;</span>
           </button>
-          <span>Page {{ currentPage }} of {{ totalPages }}</span>
-          <button :disabled="currentPage === totalPages" @click="nextPage">
-            Next
+          <div class="pagination-numbers">
+            <button 
+              v-for="page in visiblePages" 
+              :key="page" 
+              @click="goToPage(page)" 
+              :class="{ 'active': currentPage === page }"
+            >
+              {{ page }}
+            </button>
+            <span v-if="totalPages > maxVisiblePages && currentPage < totalPages - 2">...</span>
+            <button 
+              v-if="totalPages > maxVisiblePages" 
+              @click="goToPage(totalPages)" 
+              :class="{ 'active': currentPage === totalPages }"
+            > 
+              {{ totalPages }}
+            </button>
+          </div>
+          <button :disabled="currentPage === totalPages" @click="nextPage" class="pagination-button">
+            <span>&gt;</span>
           </button>
         </div>
-      </div>
-  
-      <div v-if="actionStep === 'viewDetail'" class="detail-destination">
-        <div class="header-overlay">
-          <button class="back-button" @click="goBack">
-            <i class="icon-back"></i>
-            <!-- Icon Font Awesome -->
-          </button>
-          <h1>Destinations Review</h1>
-        </div>
-  
-        <div v-if="destination" class="destination-info">
-          <section class="info-section destination-detail">
-            <div class="section-header">
-              <h2>Destination Detail</h2>
-              <p>Explore key details about this destination.</p>
-            </div>
-            <div class="detail-card">
-              <div class="detail-item">
-                <i class="icon-dashboard"></i>
-                <span
-                  ><strong>Name:</strong>
-                  {{ destination.name || "N/A" }}</span
-                >
-              </div>
-              <div class="detail-item">
-                <i class="icon-info"></i>
-                <span
-                  ><strong>Description:</strong>
-                  {{
-                    destination.description || "No description available"
-                  }}</span
-                >
-              </div>
-              <div class="detail-item">
-                <i class="icon-user"></i>
-                <span
-                  ><strong>User create:</strong>
-                  {{
-                    getUserName(destination.user_id) || "No description available"
-                  }}</span
-                >
-              </div>
-              <div class="detail-item">
-                <i class="icon-location"></i>
-                <span
-                  ><strong>Address:</strong>
-                  {{ destination.address.street || "N/A" }},
-                  {{ destination.address.ward || "N/A" }},
-                  {{ destination.address.district || "N/A" }},
-                  {{ getCityName(destination.address.city_id) || "N/A" }}
-                </span>
-              </div>
-            </div>
-            <div class="action-buttons">
-              <button @click="showCreateForm_des(destination.id)">
-                <i class="icon-create"></i> Add New Review
-              </button>
-            </div>
-          </section>
-
-          <section class="info-section">
-            <div class="section-header">
-              <h2>Review Information</h2>
-              <p>Top commented by traveler</p>
-            </div>
-            <section class="info-section" v-for="review in reviews" :key="review.id">
-                
-                <div class="info-item">
-                    <i class="icon-user"></i>
-                    <span
-                        ><strong>User:</strong>
-                        {{ getUserName(review.user_id) || "N/A" }}</span
-                    >
-                </div>
-                <div class="info-item">
-                    <i class="icon-info"></i>
-                    <span
-                        ><strong>Title:</strong>
-                        {{ review.title || "N/A" }}</span
-                        >
-                </div>
-                <div class="info-item">
-                    <i class="icon-info"></i>
-                    <span
-                        ><strong>Content</strong>
-                        {{ review.content || "N/A" }}</span
-                    >
-                </div>
-                <div class="info-item">
-                    <i class="icon-info"></i>
-                    <span
-                        ><strong>Rating:</strong>
-                        {{ review.rating || "N/A" }} stars</span
-                    >
-                </div>
-                <div class="info-item">
-                    <i class="icon-language"></i>
-                    <span
-                        ><strong>Language:</strong>
-                        {{ review.language || "N/A" }}</span
-                    >
-                </div>
-                <div class="info-item">
-                    <i class="icon-user"></i>
-                    <span
-                        ><strong>Companion</strong>
-                        {{ review.companion || "N/A" }}</span
-                    >
-                </div>
-                <div class="detail-item">
-                    <i class="icon-duration"></i>
-                    <span
-                        ><strong>Date create:</strong>
-                        {{ review.date_create || "N/A" }}</span
-                    >
-                </div>
-  
-                <div class="action-buttons">
-                    <button @click="showUpdateForm(review.id)">
-                        <i class="icon-update"></i> Update review
-                    </button>
-                    <button @click="deleteReview(review.id)">
-                        <i class="icon-delete"></i> Delete review
-                    </button>
-                </div>
-            </section>
-          </section>
-  
-        </div>
-  
-        <div v-else class="loading">
-          <p>Loading destination details...</p>
-        </div>
-      </div>
-  
-      <div v-if="actionStep === 'create'" class="form-container">
-        <h3>Create Review</h3>
-        <form @submit.prevent="submitAddReview" class="form-style">
-            <div class="form-group">
-                <label>Destination:</label>
-                <select v-model="review.destination_id" required>
-                    <option disabled value="">Select a destination</option>
-                    <option
-                        v-for="dest in destinations"
-                        :key="dest.id"
-                        :value="dest.id"
-                    >
-                        {{ dest.name }}
-                    </option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>User Review:</label>
-                <select v-model="review.user_id" class="form-control">
-                <option v-for="user in users" :key="user.id" :value="user.id">
-                    {{ user.username }}
-                </option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Title:</label>
-                <input type="text" v-model="review.title" />
-            </div>
-            <div class="form-group">
-                <label>Content:</label>
-                <input type="text" v-model="review.content" />
-            </div>
-            <div class="form-group">
-                <label>Rating:</label>
-                <input type="number" v-model="review.rating" />
-            </div>
-            <div class="form-group">
-                <label>Date Create:</label>
-                <input type="date" v-model="review.date_create" />
-            </div>
-            <div class="form-group">
-                <label>Companion:</label>
-                <select v-model="review.companion" class="form-control">
-                    <option v-for="companion in companions" :key="companion.value" :value="companion.value">
-                        {{ companion.label }}
-                    </option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Language:</label>
-                <input type="text" v-model="review.language" />
-            </div>
-            <div class="form-group">
-                <label>Images:</label>
-                <input type="file" @change="handleImageUpload" multiple />
-                    <div class="image-list">
-                        <div
-                            v-for="(img, index) in previewImages"
-                            :key="index"
-                            class="image-item"
-                        >
-                            <img :src="img" alt="Image Preview" />
-                            <button @click.prevent="removeImage(index)">-</button>
-                        </div>
-                    </div>
-                </div>
-            <div class="button-group">
-                <button type="submit" class="action-button add-button">Create</button>
-                <button
-                    type="button"
-                    @click="cancelAction"
-                    class="action-button delete-button"
-                >
-                    Cancel
-                </button>
-            </div>
-        </form>
-      </div>
-  
-      <div v-if="actionStep === 'update'" class="form-container">
-        <h3>Update Review</h3>
-        <form @submit.prevent="submitUpdateReview" class="form-style">
-            <div class="form-group">
-                <label>Destination:</label>
-                <select v-model="review.destination_id" required>
-                    <option disabled value="">Select a destination</option>
-                    <option
-                        v-for="dest in destinations"
-                        :key="dest.id"
-                        :value="dest.id"
-                    >
-                        {{ dest.name }}
-                    </option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>User Review:</label>
-                <select v-model="review.user_id" class="form-control">
-                <option v-for="user in users" :key="user.id" :value="user.id">
-                    {{ user.username }}
-                </option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Title:</label>
-                <input type="text" v-model="review.title" />
-            </div>
-            <div class="form-group">
-                <label>Content:</label>
-                <input type="text" v-model="review.content" />
-            </div>
-            <div class="form-group">
-                <label>Rating:</label>
-                <input type="number" v-model="review.rating" />
-            </div>
-            <div class="form-group">
-                <label>Date Create:</label>
-                <input type="date" v-model="review.date_create" />
-            </div>
-            <div class="form-group">
-                <label>Companion:</label>
-                <select v-model="review.companion" class="form-control">
-                    <option v-for="companion in companions" :key="companion.value" :value="companion.value">
-                        {{ companion.label }}
-                    </option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>Language:</label>
-                <input type="text" v-model="review.language" />
-            </div>
-  
-            <div class="form-group">
-                <label>Current Images:</label>
-                <div class="image-list">
-                    <div v-if="review && review.images"
-                        v-for="img in review.images"
-                        :key="img.id"
-                        class="image-item"
-                    >
-                        <img :src="img.url" alt="Existing Image" />
-                        <button @click.prevent="removeExistingImage(img.id)">-</button>
-                    </div>
-                </div>
-                <label>Upload New Images:</label>
-                <input type="file" @change="handleNewImageUpload" multiple />
-                <div class="image-list">
-                    <div
-                        v-for="(img, index) in previewNewImages"
-                        :key="index"
-                        class="image-item"
-                    >
-                        <img :src="img" alt="Image Preview" />
-                        <button @click.prevent="removeNewImage(index)">-</button>
-                    </div>
-                </div>
-            </div>
-            <div class="button-group">
-                <button type="submit" class="action-button edit-button">
-                    Update
-                </button>
-                <button
-                    type="button"
-                    @click="cancelAction"
-                    class="action-button delete-button"
-                >
-                    Cancel
-                </button>
-            </div>
-        </form>
       </div>
     </div>
   </template>
@@ -365,91 +63,19 @@ import ReviewManagementController from "@/controllers/ReviewManagementController
 import { ref, onMounted, computed } from "vue";
 
 const destinations = ref([]);
-const reviews = ref([]);
-const images = ref([]);
 const cities = ref([]);
 const users = ref([]);
-const new_images = ref([]);
-const image_ids_to_remove = ref([]);
-const previewImages = ref([]);
-const previewNewImages = ref([]);
 
 const itemsPerPage = 5;
 const currentPage = ref(1);
-const companions = [
-  { value: 'Solo', label: 'Solo' },
-  { value: 'Family', label: 'Family' },
-  { value: 'Couple', label: 'Couple' },
-  { value: 'Friends', label: 'Friends' },
-  { value: 'Company', label: 'Company' },
-  { value: 'Other', label: 'Other' },
-];
+
 
 const {
-  actionStep,
   fetchCities,
   fetchUsers,
   fetchDestinations,
-  showDetailDestination,
-  fetchReviewByDestination,
-  createReview,
-  updateReview,
-  confirmCreate,
-  confirmUpdate,
-  deleteReview,
 } = ReviewManagementController();
 
-const destination = ref({
-  id: 0,
-  name: "",
-  user_id: 0,
-  price_bottom: 0,
-  price_top: 0,
-  age: 0,
-  opentime: "",
-  duration: 0,
-  description: "",
-  date_create: "",
-  address: {
-    city_id: 0,
-    district: "",
-    ward: "",
-    street: "",
-  },
-  images: [],
-  hotel_id: 0,
-  hotel: {
-    property_amenities: "",
-    room_features: "",
-    room_types: "",
-    hotel_class: 0,
-    hotel_styles: "",
-    Languages: "",
-    phone: "",
-    email: "",
-    website: "",
-    id: "",
-  },
-  restaurant_id: 0,
-  restaurant: {
-    cuisine: "",
-    special_diet: "",
-    id: "",
-  },
-});
-
-const review = ref({
-  id: 0,
-  title: "",
-  content: "",
-  rating: "",
-  language: "",
-  date_create: "",
-  companion: "",
-  user_id: 0,
-  destination_id: 0,
-  images: [],
-});
 
 const loadDestinations = async () => {
   destinations.value = await fetchDestinations();
@@ -468,8 +94,7 @@ onMounted(loadCity);
 onMounted(loadDestinations);
 
 const getReviewByDesId = async (destinationID) => {
-  destination.value = await showDetailDestination(destinationID);
-  reviews.value = await fetchReviewByDestination(destinationID);
+  window.location.assign('/reviews/' + destinationID);
 };
 
 const getCityName = (city_id) => {
@@ -482,108 +107,7 @@ const getUserName = (user_id) => {
   return user ? user.username : "Unknown User";
 };
 
-const showCreateForm = () => {
-  createReview();
-  review.value = {
-    id: 0,
-    title: "",
-    content: "",
-    rating: "",
-    language: "",
-    date_create: "",
-    companion: "",
-    user_id: 0,
-    destination_id: 0,
-    images: [],
-  };
-};
 
-const showCreateForm_des = (destination_id) => {
-  createReview();
-  review.value = {
-    id: 0,
-    title: "",
-    content: "",
-    rating: "",
-    language: "",
-    date_create: "",
-    companion: "",
-    user_id: 0,
-    destination_id: destination_id,
-    images: [],
-  };
-};
-
-const submitAddReview = async () => {
-  await confirmCreate(review.value, images.value);
-  destination.value = { name: "", description: "" };
-  previewImages.value = [];
-  loadDestinations();
-};
-
-const showUpdateForm = async (reviewID) => {
-  const reviewData = await updateReview(reviewID);
-  if (reviewData) {
-    review.value = { ...reviewData };
-  }
-};
-
-const goBack = () => {
-  actionStep.value = "read";
-  loadDestinations();
-};
-
-const handleImageUpload = (event) => {
-  const files = event.target.files;
-  Array.from(files).forEach((file) => {
-    images.value.push(file);
-    previewImages.value.push(URL.createObjectURL(file));
-  });
-};
-
-const removeImage = (index) => {
-  images.value.splice(index, 1);
-  URL.revokeObjectURL(previewImages.value[index]);
-  previewImages.value.splice(index, 1);
-};
-
-const handleNewImageUpload = (event) => {
-  const files = event.target.files;
-  Array.from(files).forEach((file) => {
-    new_images.value.push(file);
-    previewNewImages.value.push(URL.createObjectURL(file));
-  });
-};
-
-const removeNewImage = (index) => {
-  new_images.value.splice(index, 1);
-  URL.revokeObjectURL(previewNewImages.value[index]);
-  previewNewImages.value.splice(index, 1);
-};
-
-const removeExistingImage = (id) => {
-  image_ids_to_remove.value.push(id);
-  review.value.images = review.value.images.filter((img) => img.id !== id);
-};
-
-const submitUpdateReview = async () => {
-  await confirmUpdate(
-    review.value,
-    new_images.value,
-    image_ids_to_remove.value
-  );
-  previewNewImages.value = [];
-  image_ids_to_remove.value = [];
-  loadDestinations();
-};
-
-const cancelAction = () => {
-  if (actionStep.value == "create") {
-    actionStep.value = "read";
-  } else {
-    getReviewByDesId(review.value.destination_id);
-  }
-};
 
 const paginatedReviews = computed(() => {
   const startIndex = (currentPage.value - 1) * itemsPerPage;
@@ -600,6 +124,32 @@ const prevPage = () => {
 
 const nextPage = () => {
   if (currentPage.value < totalPages.value) currentPage.value++;
+};
+
+const maxVisiblePages = 5; // Số trang hiển thị trước và sau trang hiện tại
+
+const visiblePages = computed(() => {
+  const pages = [];
+  const startPage = Math.max(1, currentPage.value - 2);
+  const endPage = Math.min(totalPages.value, currentPage.value + 2);
+
+  for (let i = startPage; i <= endPage; i++) {
+    pages.push(i);
+  }
+
+  if (pages[0] !== 1) {
+    pages.unshift(1); // Thêm trang 1 nếu không nằm trong dải hiển thị
+  }
+  
+  if (pages[pages.length - 1] !== totalPages.value) {
+    pages.push(totalPages.value); // Thêm trang cuối nếu không nằm trong dải hiển thị
+  }
+
+  return pages;
+});
+
+const goToPage = (page) => {
+  currentPage.value = page;
 };
 </script>
   
@@ -845,29 +395,53 @@ const nextPage = () => {
   }
   
   .pagination {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-  }
-  
-  .pagination button {
-    padding: 5px 10px;
-    background-color: #007bff;
-    border: none;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  
-  .pagination button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-  
-  .pagination span {
-    font-weight: bold;
-  }
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.pagination-button {
+  background: blue;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 0.5rem 1rem;
+  margin: 0 0.5rem;
+  border-radius: 50%;
+  transition: background-color 0.3s;
+}
+
+.pagination-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.pagination-numbers {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.pagination-numbers button {
+  background: none;
+  border: 1px solid #ccc;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  color: #020729;
+  transition: background-color 0.3s;
+}
+
+.pagination-numbers button.active {
+  background-color: #000;
+  color: #fff;
+}
+
+.pagination-numbers button:hover {
+  background-color: #0f13e6;
+  color: #fff;
+}
   
   .back-button {
     position: absolute;
