@@ -1,102 +1,8 @@
 <template>
     <div class="tour-management">
       <h2>Tag Management</h2>
-      <div v-if="actionStep === 'read'" class="table-container">
-        <button class="action-button add-button" @click="showCreateForm">
-          Add New Tag
-        </button>
-        <table class="tour-table">
-          <thead>
-            <tr>
-              <th>Id</th>
-              <th>Tag Name</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="tag in tags" :key="tag.id">
-              <td>{{ tag.id }}</td>
-              <td>{{ tag.name }}</td>
-              <td>
-                <button
-                  class="action-button edit-button"
-                  @click="showUpdateForm(tag.id)"
-                >
-                  Update Tag
-                </button>
-                <button
-                  class="action-button edit-button"
-                  @click="showDetail(tag.id)"
-                >
-                  Show detail
-                </button>
-                <button
-                  class="action-button delete-button"
-                  @click="deleteTag(tag.id)"
-                >
-                  Delete Tag
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <div v-if="actionStep === 'viewDetail'" class="detail-destination">
-        <div class="header-overlay">
-          <button class="back-button" @click="goBack">
-            <i class="icon-back"></i>
-            <!-- Icon Font Awesome -->
-          </button>
-        </div>
   
-        <div v-if="tag" class="destination-info">
-          <section class="info-section destination-detail">
-            <div class="section-header">
-              <h2>Tag Detail</h2>
-              <p>Explore key details about the tag.</p>
-            </div>
-            <div class="detail-card">
-              <div class="detail-item">
-                <i class="icon-dashboard"></i>
-                <span><strong>Name:</strong>{{ tag.name || "N/A" }}</span>
-              </div>
-            </div>
-            <div class="action-buttons">
-              <button @click="showAddDesForm(tag.id)">
-                <i class="icon-create"></i> Add Tag to Destination
-              </button>
-              <button @click="showUpdateForm(tag.id)">
-                <i class="icon-update"></i> Update Tag
-              </button>
-            </div>
-          </section>
-  
-          <section class="info-section">
-            <div class="section-header">
-              <h2>Destination get this tag</h2>
-            </div>
-            <div v-if="destinations" class="info-card">
-              <div
-                class="info-item"
-                v-for="(destination, index) in destinations"
-                :key="index"
-              >
-                <i class="icon-info"></i>
-                <span>
-                  <strong>Destination Name:</strong>
-                  {{ destination.name || "N/A" }}
-                </span>
-              </div>
-            </div>
-          </section>
-        </div>
-  
-        <div v-else class="loading">
-          <p>Loading tag details...</p>
-        </div>
-      </div>
-  
-      <div v-if="actionStep === 'create'" class="form-container">
+      <div class="form-container">
         <form @submit.prevent="submitAddTag" class="form-style">
             <div class="form-group">
                 <label>Tag Name:</label>
@@ -114,170 +20,36 @@
             </div>
         </form>
       </div>
-  
-      <div v-if="actionStep === 'update'" class="form-container">
-        <form @submit.prevent="submitUpdateTag" class="form-style">
-            <div class="form-group">
-                <label>Tag Name:</label>
-                <input type="text" v-model="tag.name" required />
-            </div>
-            <div class="button-group">
-                <button type="submit" class="action-button edit-button">
-                    Update
-                </button>
-                <button
-                    type="button"
-                    @click="cancelAction"
-                    class="action-button delete-button"
-                >
-                    Cancel
-                </button>
-            </div>
-        </form>
-      </div>
-
-      <div v-if="actionStep === 'create-des'" class="form-container">
-        <form @submit.prevent="submitAddDest" class="form-style">
-            <div class="form-group">
-                <label>Destination:</label>
-                <select v-model="tag_dest.destination_id" required>
-                    <option disabled value="">Select a destination</option>
-                    <option
-                        v-for="dest in destinations"
-                        :key="dest.id"
-                        :value="dest.id"
-                    >
-                        {{ dest.name }}
-                    </option>
-                </select>
-            </div>
-            <div class="button-group">
-                <button type="submit" class="action-button add-button">Create</button>
-                <button
-                    type="button"
-                        @click="cancelAction"
-                        class="action-button delete-button"
-                    >
-                    Cancel
-                </button>
-            </div>
-        </form>
-      </div>
     </div>
   </template>
   
-  <script>
-  import TagManagementController from "@/controllers/TagManagementController";
-  import { ref, onMounted } from "vue";
-  
-  export default {
-    setup() {
-      const tags = ref([]);
-      const destinations = ref([]);
-  
-      const {
-        fetchTags,
-        getTag,
-        actionStep,
-        createTag,
-        updateTag,
-        confirmCreate,
-        confirmUpdate,
-        deleteTag,
-        getDestByTagID,
-        showDetailTag,
-        createAddDest,
-        confirmAddDest,
-        fetchDestinations,
-      } = TagManagementController();
-  
-      const tag = ref({
-        id: 0,
-        name: "",
-      });
+  <script setup>
+import { ref, onMounted } from "vue";
+import TagManagementController from "@/controllers/TagManagementController";
 
-      const tag_dest = ref({
-        tag_id: 0,
-        destination_id: 0,
-      });
-      
-  
-      const loadTags = async () => {
-        tags.value = await fetchTags();
-      };
-  
-      onMounted(loadTags);
-  
-      const showCreateForm = () => {
-        tag.value.name = "";
-        createTag();
-      };
-  
-      const submitAddTag = async () => {
-        await confirmCreate(tag.value);
-        loadTags();
-      };
-  
-      const showUpdateForm = async (tagID) => {
-        const tagData = await updateTag(tagID);
-        tag.value = { ...tagData };
-        
-        actionStep.value = "update";
-      };
-  
-      const submitUpdateTag = async () => {
-        await confirmUpdate(tag.value);
-        loadTags();
-      };
+const {
+  confirmCreate,
+} = TagManagementController();
 
-      const showAddDesForm = async (tag_id) => {
-        destinations.value = await fetchDestinations();
-        tag_dest.value.tag_id = tag_id;
-        createAddDest();
-      };
+const tag = ref({
+  id: 0,
+  name: "",
+});
 
-      const submitAddDest = async () => {
-        await confirmAddDest(tag_dest.value.tag_id, tag_dest.value.destination_id);
-        showDetail(tag_dest.value.tag_id);
-      };
-  
-      const cancelAction = () => {
-        actionStep.value = "read";
-      };
-  
-      const showDetail = async (tagID) => {
-        const tagData = await showDetailTag(tagID);
-        tag.value = { ...tagData };
-        destinations.value = await getDestByTagID(tagID);
-        actionStep.value = "viewDetail";
-      };
-  
-      const goBack = () => {
-        actionStep.value = "read";
-        loadTags();
-      };
-  
-      return {
-        tags,
-        destinations,
-        actionStep,
-        tag,
-        showCreateForm,
-        submitAddTag,
-        showUpdateForm,
-        submitUpdateTag,
-        cancelAction,
-        deleteTag,
-        showAddDesForm,
-        showDetail,
-        goBack,
-        createAddDest,
-        submitAddDest,
-        tag_dest,
-      };
-    },
-  };
-  </script>
+
+const submitAddTag = async () => {
+  await confirmCreate(tag.value);
+};
+
+
+
+const cancelAction = () => {
+  window.history.back();
+};
+
+
+</script>
+
   
   <style scoped>
   /* Global styles */

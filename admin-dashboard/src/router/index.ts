@@ -124,7 +124,27 @@ const routes = [
   {
     path: "/tags",
     name: "TagManagement",
-    component: () => import("@/views/TagManagement.vue"),
+    component: () => import("@/views/tags/TagManagement.vue"),
+  },
+  {
+    path: "/tags/:id",
+    name: "TagManagement-TagDetail",
+    component: () => import("@/views/tags/TagDetail.vue"),
+  },
+  {
+    path: "/tags/:id/add-destination",
+    name: "TagManagement-AddTagToDestination",
+    component: () => import("@/views/tags/AddTagToDestination.vue"),
+  },
+  {
+    path: "/tags/create",
+    name: "TagManagement-Create",
+    component: () => import("@/views/tags/AddTag.vue"),
+  },
+  {
+    path: "/tags/update/:id",
+    name: "TagManagement-Update",
+    component: () => import("@/views/tags/UpdateTag.vue"),
   },
 ];
 
