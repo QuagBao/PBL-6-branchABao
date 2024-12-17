@@ -11,7 +11,6 @@ import {
 } from "@/models/CityManagementModel";
 
 export default function () {
-  const actionStep = ref("read");
   const toast = useToast();
 
   const fetchCities = async () => {
@@ -32,14 +31,9 @@ export default function () {
     }
   };
 
-  const createCity = () => {
-    actionStep.value = "create";
-  };
-
   const updateCity = async (cityID) => {
     try {
       const city = getCity(cityID);
-      actionStep.value = "update";
       return city;
     } catch (error) {
       toast.error("Error fetching cities:", error);
@@ -49,8 +43,8 @@ export default function () {
   const confirmCreate = async (city, images) => {
     try {
       await addCity(city, images);
-      actionStep.value = "read";
       toast.success("Add City successfull");
+      window.location.assign("/cities");
     } catch (error) {
       toast.error("Error add city:", error);
     }
@@ -58,8 +52,8 @@ export default function () {
   const confirmUpdate = async (city, new_images, image_ids_to_remove) => {
     try {
       await updateCityAPI(city, new_images, image_ids_to_remove);
-      actionStep.value = "read";
       toast.success("Update City successfull");
+      window.location.assign("/cities");
     } catch (error) {
       toast.error("Error update city:", error);
     }
@@ -74,7 +68,7 @@ export default function () {
         const response = await deleteCityAPI(cityID);
         if (response.success) {
           toast.success(response.message);
-          // Trigger a data refresh instead of a page reload if possible
+          window.location.reload();
         } else {
           toast.error("Failed to delete city:", response.message);
         }
@@ -85,13 +79,10 @@ export default function () {
   };
 
   return {
-    fetchCities,
-    actionStep,
-    createCity,
-    updateCity,
     confirmCreate,
-    confirmUpdate,
+    fetchCities,
     deleteCity,
-    getCity,
+    updateCity,
+    confirmUpdate,
   };
 }

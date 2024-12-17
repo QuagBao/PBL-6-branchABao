@@ -39,7 +39,17 @@ const routes = [
   {
     path: "/cities",
     name: "CityManagement",
-    component: () => import("@/views/CityManagement.vue"),
+    component: () => import("@/views/cities/CityManagement.vue"),
+  },
+  {
+    path: "/cities/create",
+    name: "CityManagement-Create",
+    component: () => import("@/views/cities/AddCity.vue"),
+  },
+  {
+    path: "/cities/update/:id",
+    name: "CityManagement-Update",
+    component: () => import("@/views/cities/UpdateCity.vue"),
   },
   {
     path: "/destinations",
