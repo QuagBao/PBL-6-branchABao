@@ -60,21 +60,7 @@
 
     <div class="container-fluid content"
         v-for="(item, index) in filteredDestinations" :key="index">
-        <div class="container"
-            v-if="index === 0">
-            <Topic_Item_1 :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
-                          :index="index+1"
-                          :destID="item.id"
-                          :name="item.name"
-                          :location="getCity(item.address.city_id).name"
-                          :stars="generateStars(item.rating)"
-                          :reviewNumber="item?.numOfReviews || 0"
-                          :description="truncatedDescription(item.description)"
-                          :tags="item.tags"
-                          :price="item.price_bottom"
-                          @click="navigate(item)"/>
-        </div>
-        <div v-else class="container">
+        <div class="container">
             <Topic_Item_2 :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
                           :index="index+1"
                           :destID="item.id"
@@ -160,6 +146,7 @@ export default {
 </script>
 
 <style>
+
 .select-topic{
     display: flex;
     margin-top: 250px;
@@ -180,7 +167,7 @@ export default {
     align-items: center; /* Căn giữa nội dung theo chiều dọc */
 }
 .dropdown-button{
-    min-width: 300px;
+    min-width: 200px;
     padding: 10px;
     border-radius: 30px;
     border: none;
@@ -232,11 +219,12 @@ export default {
 }
 
 .content{
-    margin-bottom: 50px
+    margin-bottom: 50px;
+    width: 70%;
 }
 .swiper {
     width: 100%;
-    max-width: 1450px; /* Set a max-width to ensure enough space for 3 slides */
+    max-width: 1000px; /* Set a max-width to ensure enough space for 3 slides */
 }
 
 .swiper-slide {
