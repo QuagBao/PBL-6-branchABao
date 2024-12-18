@@ -1,5 +1,5 @@
 <template>
-    <div id="map" style="width: 100%; height: 30vh;"></div>
+    <div id="map" style="width: 80%; height: 50vh;"></div>
 </template>
 
 <script>
@@ -131,8 +131,8 @@ export default {
 
 <style>
 #map {
-    width: 100px;
-    height: 200px;
+    width: 100%;
+    height: 100vh;
     /* Chiều cao của bản đồ */
 }
 </style>

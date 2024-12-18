@@ -65,7 +65,7 @@ const List_Tour = () => import('./components/views/Tour/List/List_Tour.vue');
 
 
 // Test UI
-const test   = () => import('./components/views/Dashboard_For_Company/dashboard_for_company.vue'); 
+const test   = () => import('./components/views/Map/Map.vue'); 
 const test1 = () => import('./components/views/Dashboard_For_Company/Service.vue');
 const test2 = () => import('./components/views/Chart/Chart.vue');
 const test3 = () => import('./components/views/Tour/List/Tour_Item.vue');
@@ -151,7 +151,7 @@ const routes = [
   { path: '/Tour', name: 'List_Tour', component: List_Tour },
   
   // Business
-  { path: '/Business/Dashboard_For_Company', name: 'Dashboard_For_Company', component: Dashboard_For_Company },
+  { path: '/Business/Home', name: 'Dashboard_For_Company', component: Dashboard_For_Company },
   { path: '/Business/Destination/Add', name: 'AddDestination', component: addDestination },
   { path: '/Business/Destination/Update/:id', name: 'UpdateDestination', component: updateDestination },
   { path: '/Business/Hotel/Add/:id', name: 'AddHotel', component: addHotel },

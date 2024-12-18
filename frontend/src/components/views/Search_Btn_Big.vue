@@ -6,7 +6,7 @@
               class="form-control" 
               type="text" 
               v-model="searchQuery" 
-              placeholder="Where do you want to go?"
+              :placeholder="placeholderText"
           />
           
           <!-- Nút Search -->
@@ -54,6 +54,10 @@ const selectResult = (result) => {
 <script>
     export default {
   props: {
+    placeholderText: {
+        type: String,
+        default: 'Where do you want to go?'
+    }
   },
         name: "Search_Btn_Big",
     }

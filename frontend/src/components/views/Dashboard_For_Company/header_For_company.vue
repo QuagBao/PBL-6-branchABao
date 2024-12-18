@@ -24,8 +24,6 @@
               <div class="dropdown-menu m-0">
                 <button class="dropdown-item" @click="handleButtonClick('myTrips', '/my-trips')">All Packages</button>
                 <button class="dropdown-item" @click="handleButtonClick('startNewTrip', '/start-new-trip')">Add New Package</button>
-                <button class="dropdown-item" @click="handleButtonClick('startNewTrip', '/start-new-trip')">All Package Categories</button>
-                <button class="dropdown-item" @click="handleButtonClick('startNewTrip', '/start-new-trip')">Add Package Categories</button>
               </div>
             </div>
             <div class="nav-item dropdown">
@@ -35,13 +33,6 @@
                 <button class="dropdown-item" @click="handleButtonClick('newPlace', '/business/destination/add')">Add New Place</button>
               </div>
             </div>
-            <button
-              class="nav-item nav-link"
-              :class="{ active: state.activeButton === 'itinerary' }"
-              @click="handleButtonClick('itinerary', '/itinerary')"
-            >
-              Contact Us
-            </button>
             <div class="nav-item dropdown">
               <button class="nav-link dropdown-toggle user" data-bs-toggle="dropdown">
                 <svg width="30" height="30" viewBox="0 0 45 45" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -90,7 +81,7 @@ body{
 }
 
 .logo {
-    height: 70px;
+    height: 50px;
     margin-right: 10px;
     border-radius: 50%;
     z-index: 8;
@@ -115,13 +106,15 @@ body{
 }
 
 .navbar-light .navbar-nav .nav-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
-    padding: 35px 25px;
+    height: 80px;
+    padding: 35px 15px;
     color: #8da9c4 !important;
-    font-size: 20px;
-    font-weight: 400;
-    outline: none;
-    transition: .5s;
+    font-size: 18px;
+    transition: .3s;
 }
 
 .navbar-light .navbar-nav .nav-link:hover,
@@ -135,7 +128,9 @@ body{
 }
 
 .navbar-light .navbar-brand h1 {
-    color: #8da9c4 !important;
+  color: #8da9c4 !important;
+  font-size: 25px;
+  font-weight: 900;
 }
 
 .header.scrolled {

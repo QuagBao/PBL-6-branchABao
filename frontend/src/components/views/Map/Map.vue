@@ -1,12 +1,13 @@
 <script>
 // import HelloWorld from './components/HelloWorld.vue'
 // import TheWelcome from './components/TheWelcome.vue'
-import Auto_Complete from './Auto_Complete.vue';
+// import AutoComplete from './components/AutoComplete.vue';
+import AutoComplete from './Auto_Complete.vue';
 import MapComponent from './Map_Component.vue';
 import { ref, defineComponent } from 'vue';
 export default defineComponent ({
   components: {
-    Auto_Complete,
+    AutoComplete,
     MapComponent
   },
   setup() {
@@ -24,8 +25,48 @@ export default defineComponent ({
 </script>
 
 <template>
-    <div>
-        <AutoComplete @location-selected="updateLocation" />
-        <MapComponent :selectedLocation="location" />
+  <!-- <header>
+    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
+
+    <div class="wrapper">
+      <HelloWorld msg="You did it!" />
     </div>
+  </header>
+
+  <main>
+    <TheWelcome />
+  </main> -->
+  <div>
+    <AutoComplete @location-selected="updateLocation" />
+    <MapComponent :selectedLocation="location" />
+  </div>
 </template>
+
+<style scoped>
+header {
+  line-height: 1.5;
+}
+
+.logo {
+  display: block;
+  margin: 0 auto 2rem;
+}
+
+@media (min-width: 1024px) {
+  header {
+    display: flex;
+    place-items: center;
+    padding-right: calc(var(--section-gap) / 2);
+  }
+
+  .logo {
+    margin: 0 2rem 0 0;
+  }
+
+  header .wrapper {
+    display: flex;
+    place-items: flex-start;
+    flex-wrap: wrap;
+  }
+}
+</style>
