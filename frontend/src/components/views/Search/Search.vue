@@ -11,8 +11,8 @@
           <Form_Search :name="'Attraction, activities or destination'" />
         </div>
       </div>
+      <h2 class="title-result">Result for: {{ searchQuery }}</h2>
       <div class="row title-content">
-        <p class="p-5 city">Cities</p>
         <div class="container-fluid context">
           <div class="row">
             <Cards_City
@@ -28,7 +28,6 @@
       </div>
       <!-- Things to do Section -->
       <div class="row title-content">
-        <p class="p-5 things-to-do">Things to do</p>
         <div class="container-fluid context">
           <div class="row">
             <Cards
@@ -50,7 +49,6 @@
 
       <!-- Restaurants Section -->
       <div class="row title-content">
-        <p class="p-5 restaurants">Restaurants</p>
         <div class="container-fluid context">
           <div class="row">
             <Cards
@@ -72,7 +70,6 @@
 
       <!-- Resort & Hotels Section -->
       <div class="row title-content">
-        <p class="p-5 resorts">Resort & Hotels</p>
         <div class="container-fluid context">
           <div class="row">
             <Cards
@@ -184,6 +181,13 @@ export default {
   font-size: 25px;
   font-weight: 900;
   margin-bottom: 10px; /* Giảm khoảng cách giữa tiêu đề và phần cards */
+}
+.title-result {
+  color: #13357B;
+  font-size: 25px;
+  font-weight: 900;
+  margin-bottom: 10px; /* Giảm khoảng cách giữa tiêu đề và phần cards */
+  margin-top: 50px;
 }
 
 .context {

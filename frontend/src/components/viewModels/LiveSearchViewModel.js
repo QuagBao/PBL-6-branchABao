@@ -5,6 +5,7 @@ export default function (searchQuery) {
     const searchResult = ref(null);
     const isLoading = ref(false);
     const results = ref([]);
+    const result_citys = ref([]);
 
     // Hàm debounce
     const debounce = (func, delay) => {
@@ -19,6 +20,7 @@ export default function (searchQuery) {
     const search = async () => {
         if (!searchQuery.value) {
             results.value = [];
+            result_citys.value = [];
             return;
         }
 
@@ -29,6 +31,7 @@ export default function (searchQuery) {
                 ...searchResult.value.cities.map(city => city.name),
                 ...searchResult.value.destinations.map(destination => destination.name),
             ];
+            result_citys.value = searchResult.value.cities.map(city => city.name);
         } catch (error) {
             console.error('An error occurred while searching:', error);
         } finally {
@@ -48,5 +51,6 @@ export default function (searchQuery) {
         searchResult,
         isLoading,
         results,
+        result_citys,
     };
 }

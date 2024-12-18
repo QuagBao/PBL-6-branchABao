@@ -68,14 +68,13 @@
           <!-- Review Section -->
           
           <div class="review-title-section">
-            <p class="question-title">Language</p>
-            <input
-              v-model="review.language"
-              type="text"
-              class="title-input"
-              placeholder="Give us Language you write"
-            />
-          </div>
+          <p class="question-title">Language</p>
+          <select v-model="review.language" class="language-dropdown">
+            <option v-for="lang in languages" :key="lang" :value="lang">
+              {{ lang }}
+            </option>
+          </select>
+        </div>
   
           <div class="review-title-section">
             <p class="question-title">Title your review</p>
@@ -136,6 +135,16 @@
   
   const route = useRoute();
   const reviewID = route.params.id;
+
+  const languages = [
+  'Korean',
+  'Japanese',
+  'English',
+  'Vietnamese',
+  'Thai',
+  'Chinese',
+  'French',
+];
   
   const {
     destination,
@@ -449,5 +458,41 @@
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2); /* Tạo chiều sâu */
       font-family: Arial, sans-serif;
   }
+
+  .language-dropdown {
+  width: 100%;
+  padding: 10px 15px;
+  font-size: 16px;
+  font-weight: 500;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background-color: #f5f6f7; /* Nhẹ nhàng, giống nền Facebook */
+  color: #1c1e21; /* Màu chữ tối */
+  transition: all 0.3s ease;
+  appearance: none; /* Loại bỏ giao diện mặc định */
+  outline: none;
+  cursor: pointer;
+}
+
+.language-dropdown:hover {
+  background-color: #e4e6eb; /* Màu hover nhẹ */
+  border-color: #ccd0d5;
+}
+
+.language-dropdown:focus {
+  border-color: #1877f2; /* Màu xanh Facebook khi được chọn */
+  box-shadow: 0 0 4px rgba(24, 119, 242, 0.6); /* Hiệu ứng ánh sáng */
+}
+
+.language-dropdown option {
+  background-color: #ffffff;
+  color: #1c1e21;
+}
+
+.language-dropdown:disabled {
+  background-color: #ebedf0; /* Màu xám khi bị vô hiệu hóa */
+  color: #9a9a9a;
+  cursor: not-allowed;
+}
   
   </style>
