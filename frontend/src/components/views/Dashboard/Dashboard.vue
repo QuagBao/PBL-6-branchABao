@@ -47,7 +47,7 @@
                         </div>
                     </div>
 
-                    <div class="container-fluid list-items">
+                    <div class="container-fluid list-items-topic">
                         <div class="item" v-for="(topic, index) in topics" 
                             :key="topic.id">
                             <Img_Card  :condition="topic.imageUrl"
@@ -219,4 +219,5 @@ h1 {
     width: 100%;
     height: 100%;
 }
+
 </style>
