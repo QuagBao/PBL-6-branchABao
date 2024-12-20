@@ -63,7 +63,6 @@
               </button>
               <div class="dropdown-menu m-0">
                 <button class="dropdown-item" @click="handleButtonClick('profile', '/Profile_Page')">My Profile</button>
-                <button class="dropdown-item">Account Settings</button>
                 <button class="dropdown-item" @click="handleLogout">Logout</button>
               </div>
             </div>
