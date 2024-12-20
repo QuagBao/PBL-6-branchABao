@@ -61,7 +61,15 @@
                                     <div class="details-grid">
                                         <div class="detail-item">
                                             <h5>PRICE RANGE</h5>
-                                            <p>${{ hotel.price_bottom || 0 }} - ${{ hotel.price_top || "N/A" }}</p>
+                                            <p v-if="hotel.price_bottom === 0 && hotel.price_top === 0">
+                                                    0 VND
+                                            </p>
+                                            <p v-else-if="(hotel.price_bottom > 1000 || hotel.price_top > 1000) && (hotel.price_bottom % 100 === 0 || hotel.price_top % 100 === 0)">
+                                                    {{ formatPrice(hotel.price_bottom) }} VND - {{ formatPrice(hotel.price_top) }} VND
+                                            </p>
+                                            <p v-else>
+                                                    {{ formatPrice(hotel.price_bottom) }} USD - {{ formatPrice(hotel.price_top) }} USD
+                                            </p>
                                         </div>
                                         <div class="detail-item">
                                             <h5>HOTEL PROPERTY AMENITIES </h5>
@@ -137,6 +145,10 @@
 const navigateToUpdateHotel = (id) => {
   window.location.assign(`/Business/Hotel/Update/${id}`);
 };
+
+const formatPrice = (value) => {
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
   // Các hàm hoặc logic bổ sung có thể được thêm vào nếu cần
 </script>

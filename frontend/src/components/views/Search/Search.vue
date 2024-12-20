@@ -39,7 +39,7 @@
               :description="item.description"
               :rating="item.rating"
               :stars="generateStars(item.rating)"
-              :ratingCount="item.numOfReviews"
+              :ratingCount="item.review_count"
               :tags="item.tag"
               @click="navigateToDetailPlace(item.id)"
             />
@@ -60,7 +60,7 @@
               :description="item.description"
               :rating="item.rating"
               :stars="generateStars(item.rating)"
-              :ratingCount="item.numOfReviews"
+              :ratingCount="item.review_count"
               :tags="item.tag"
               @click="navigateToDetailRestaurant(item.restaurant_id)"
             />
@@ -81,7 +81,7 @@
               :description="item.description"
               :rating="item.rating"
               :stars="generateStars(item.rating)"
-              :ratingCount="item.numOfReviews"
+              :ratingCount="item.review_count"
               :tags="item.tag"
               @click="navigateToDetailHotel(item.hotel_id)"
             />
