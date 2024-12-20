@@ -116,7 +116,7 @@
                             :name="item.name"
                             :stars="generateStars(item.rating)"
                             :rating="item.rating"
-                            :reviewNumber="item.numOfReviews"
+                            :reviewNumber="item.review_count"
                             :tags="item.tag"
                             @click="navigateToDetailRestaurant(item.restaurant_id)" />
               </div>

@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export async function fetchDestinationsByCity(cityId) {
   try {
-    const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/?city_id=${cityId}&is_popular=true&get_rating=true`);
+    const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/?city_id=${cityId}&limit=40`);
     const filteredDestinations = response.data.filter(destination => destination.hotel_id === null && destination.restaurant_id === null);
 
   // Chỉ map qua các destination đã lọc
@@ -29,8 +29,8 @@ export async function fetchDestinationsByCity(cityId) {
       restaurant: destination.restaurant,
       tags: destination.tags,
       images: destination.images,
-      rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
-      numOfReviews: destination.numOfReviews,
+      rating: destination.average_rating ? parseFloat(destination.average_rating.toFixed(1)) : null,
+      review_count: destination.review_count,
       popularity_score: destination.popularity_score,
     }));
   } catch (error) {
@@ -41,7 +41,7 @@ export async function fetchDestinationsByCity(cityId) {
 
 export async function fetchAttractions() {
   try {
-    const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/?is_popular=true&get_rating=true`);
+    const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/?limit=40`);
     const filteredDestinations = response.data.filter(destination => destination.hotel_id === null && destination.restaurant_id === null);
 
   // Chỉ map qua các destination đã lọc
@@ -63,8 +63,8 @@ export async function fetchAttractions() {
       restaurant_id: destination.restaurant_id,
       restaurant: destination.restaurant,
       tags: destination.tags,
-      rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
-      numOfReviews: destination.numOfReviews,
+      rating: destination.average_rating ? parseFloat(destination.average_rating.toFixed(1)) : null,
+      review_count: destination.review_count,
       popularity_score: destination.popularity_score,
     }));
   } catch (error) {
@@ -77,7 +77,7 @@ export async function fetchAttractions() {
 export async function fetchHotelsByCity (cityId) {
   try {
     // Gọi API để lấy dữ liệu khách sạn
-    const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/hotel/?city_id=${cityId}&is_popular=true`);
+    const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/hotel/?city_id=${cityId}`);
     
     // In ra dữ liệu khách sạn để kiểm tra
 
@@ -104,8 +104,8 @@ export async function fetchHotelsByCity (cityId) {
       restaurant_id: destination.restaurant_id,
       restaurant: destination.restaurant,
       tags: destination.tags,
-      rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
-      numOfReviews: destination.numOfReviews,
+      rating: destination.average_rating ? parseFloat(destination.average_rating.toFixed(1)) : null,
+      review_count: destination.review_count,
       popularity_score: destination.popularity_score,
     }));
   } catch (error) {
@@ -145,8 +145,8 @@ export async function fetchHotels () {
       restaurant_id: destination.restaurant_id,
       restaurant: destination.restaurant,
       tags: destination.tags,
-      rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
-      numOfReviews: destination.numOfReviews,
+      rating: destination.average_rating ? parseFloat(destination.average_rating.toFixed(1)) : null,
+      review_count: destination.review_count,
       popularity_score: destination.popularity_score,
     }));
   } catch (error) {
@@ -187,8 +187,8 @@ export async function fetchHotels () {
       restaurant_id: destination.restaurant_id,
       restaurant: destination.restaurant,
       tags: destination.tags,
-      rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
-      numOfReviews: destination.numOfReviews,
+      rating: destination.average_rating ? parseFloat(destination.average_rating.toFixed(1)) : null,
+      review_count: destination.review_count,
       popularity_score: destination.popularity_score,
     }));
   } catch (error) {
@@ -229,8 +229,8 @@ export async function fetchRestaurants(){
       restaurant_id: destination.restaurant_id,
       restaurant: destination.restaurant,
       tags: destination.tags,
-      rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
-      numOfReviews: destination.numOfReviews,
+      rating: destination.average_rating ? parseFloat(destination.average_rating.toFixed(1)) : null,
+      review_count: destination.review_count,
       popularity_score: destination.popularity_score,
     }));
   } catch (error) {
@@ -270,8 +270,8 @@ export async function getDestinationById(destinationID) {
       restaurant_id: destination.restaurant_id,
       restaurant: destination.restaurant,
       tags: destination.tags,
-      rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
-      numOfReviews: destination.numOfReviews,
+      rating: destination.average_rating ? parseFloat(destination.average_rating.toFixed(1)) : null,
+      review_count: destination.review_count,
       popularity_score: destination.popularity_score,
     };
   } catch (error) {
@@ -305,8 +305,8 @@ export async function getHotelById(hotelID) {
       restaurant_id: hotel.restaurant_id,
       restaurant: hotel.restaurant,
       tags: hotel.tags,
-      rating: hotel.rating ? parseFloat(hotel.rating.toFixed(1)) : null,
-      numOfReviews: hotel.numOfReviews,
+      rating: hotel.average_rating ? parseFloat(hotel.average_rating.toFixed(1)) : null,
+      review_count: hotel.review_count,
       popularity_score: hotel.popularity_score,
     };
   } catch (error) {
@@ -338,8 +338,8 @@ export async function getRestaurantById(restaurantID) {
       restaurant_id: restaurant.restaurant_id,
       restaurant: restaurant.restaurant,
       tags: restaurant.tags,
-      rating: restaurant.rating ? parseFloat(restaurant.rating.toFixed(1)) : null,
-      numOfReviews: restaurant.numOfReviews,
+      rating: restaurant.average_rating ? parseFloat(restaurant.average_rating.toFixed(1)) : null,
+      review_count: restaurant.review_count,
       popularity_score: restaurant.popularity_score,
     };
   } catch (error) {
@@ -350,7 +350,7 @@ export async function getRestaurantById(restaurantID) {
 
 export async function fetchDestinations() {
   try {
-    const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/`);
+    const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/?limit=40`);
 
     return response.data.map(destination => ({
       id: destination.id,
@@ -375,8 +375,8 @@ export async function fetchDestinations() {
       restaurant: destination.restaurant,
       tags: destination.tags,
       images: destination.images,
-      rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
-      numOfReviews: destination.numOfReviews,
+      average_rating: destination.average_rating ? parseFloat(destination.average_rating.toFixed(1)) : null,
+      review_count: destination.review_count,
       popularity_score: destination.popularity_score,
     }));
   } catch (error) {
@@ -696,8 +696,8 @@ export async function fetchRestaurantsByFilter(save_option_cuisine, save_option_
       restaurant_id: destination.restaurant_id,
       restaurant: destination.restaurant,
       tags: destination.tags,
-      rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
-      numOfReviews: destination.numOfReviews,
+      rating: destination.average_rating ? parseFloat(destination.average_rating.toFixed(1)) : null,
+      numOfReviews: destination.review_count,
     }));
   } catch (error) {
     // In ra lỗi nếu có
@@ -749,8 +749,8 @@ export async function fetchRestaurantsByFilter_City(city_id,save_option_cuisine,
       restaurant_id: destination.restaurant_id,
       restaurant: destination.restaurant,
       tags: destination.tags,
-      rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
-      numOfReviews: destination.numOfReviews,
+      rating: destination.average_rating ? parseFloat(destination.average_rating.toFixed(1)) : null,
+      review_count: destination.review_count,
     }));
   } catch (error) {
     // In ra lỗi nếu có
@@ -798,8 +798,8 @@ export async function fetchHotelsByFilter(save_option_price_range, save_option_a
       restaurant_id: destination.restaurant_id,
       restaurant: destination.restaurant,
       tags: destination.tags,
-      rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
-      numOfReviews: destination.numOfReviews,
+      rating: destination.average_rating ? parseFloat(destination.average_rating.toFixed(1)) : null,
+      review_count: destination.review_count,
     }));
   } catch (error) {
     // In ra lỗi nếu có
@@ -848,8 +848,8 @@ export async function fetchHotelsByFilter_City(city_id,save_option_price_range, 
       restaurant_id: destination.restaurant_id,
       restaurant: destination.restaurant,
       tags: destination.tags,
-      rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
-      numOfReviews: destination.numOfReviews,
+      rating: destination.average_rating ? parseFloat(destination.average_rating.toFixed(1)) : null,
+      review_count: destination.review_count,
     }));
   } catch (error) {
     // In ra lỗi nếu có
@@ -974,8 +974,8 @@ export async function fetchDestinationsByUser(userId) {
       restaurant: destination.restaurant,
       tags: destination.tags,
       images: destination.images,
-      rating: destination.rating ? parseFloat(destination.rating.toFixed(1)) : null,
-      numOfReviews: destination.numOfReviews,
+      rating: destination.average_rating ? parseFloat(destination.average_rating.toFixed(1)) : null,
+      review_count: destination.review_count,
     }));
   } catch (error) {
     console.error('Error fetching destinations:', error);

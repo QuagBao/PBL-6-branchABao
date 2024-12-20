@@ -16,7 +16,7 @@
                                          :src="star" alt="star" /> 
                                 </div>
                                 <span class="reviews">
-                                    {{ hotel.numOfReviews }} Reviews
+                                    {{ hotel.review_count }} Reviews
                                 </span>
                                 <div class="frame-button d-flex gap-3 align-items-center">
                                     <button v-if="token && hotel.user_id == user?.id" 

@@ -52,8 +52,8 @@
                                         :destID="item.id"
                                         :imageUrl="item.images[0]?.url|| '/blue-image.jpg'"
                                         :name="item.name"
-                                        :rating="generateStars(item.rating)"q
-                                        :review-number="item.numOfReviews"
+                                        :rating="generateStars(item.rating)"
+                                        :review-number="item.review_count"
                                         :tags="item.tag"
                                         @click="navigateToDetailPlace(item.id)"/>
                             </div>

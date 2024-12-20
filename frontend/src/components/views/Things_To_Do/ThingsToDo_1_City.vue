@@ -46,7 +46,7 @@
                                             :imageUrl="item.images[0].url||'/blue-image.jpg'"
                                             :name="item.name"
                                             :stars="generateStars(item.rating)"
-                                            :review-number="item.numOfReviews"
+                                            :review-number="item.review_count"
                                             :tags="item.tag"
                                             :description="item.description"
                                             @click="navigateToDetailPlace(item.id)"/>

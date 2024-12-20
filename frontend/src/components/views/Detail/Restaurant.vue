@@ -16,7 +16,7 @@
                                          :src="star" alt="star" /> 
                                 </div>
                                 <span class="reviews">
-                                    {{ restaurant.numOfReviews }} Reviews
+                                    {{ restaurant.review_count }} Reviews
                                 </span>
                                 <div class="frame-button d-flex gap-3 align-items-center">
                                     <button v-if="token && restaurant.user_id == user?.id" 

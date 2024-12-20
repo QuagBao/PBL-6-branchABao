@@ -19,7 +19,7 @@
                                         </div>
                                     </div>
                                     <div class="reviews">
-                                        {{ destination.numOfReviews }} Reviews
+                                        {{ destination.review_count }} Reviews
                                     </div>
                                 </div>
 
