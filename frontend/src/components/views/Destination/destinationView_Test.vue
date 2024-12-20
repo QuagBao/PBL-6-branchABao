@@ -13,9 +13,6 @@
                     <Carousel class="custom" :currentImage="currentImage" :images="images"/>
 
                     <!-- Save Button Section -->
-                    <div class="save">
-                        <Btn_Save/>
-                    </div>
                     <!-- Discover Info Section -->
                      <div class="container-fluid">
                         <div class="container-fluid">
