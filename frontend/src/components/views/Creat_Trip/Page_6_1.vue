@@ -93,8 +93,10 @@ const {
 .search-container {
     display: flex;
     align-items: center;
+    flex-direction: column;
     justify-content: center;
     margin-top: 100px;
+    gap: 20px;
 }
 .itinerary-input{
     flex: 1;
