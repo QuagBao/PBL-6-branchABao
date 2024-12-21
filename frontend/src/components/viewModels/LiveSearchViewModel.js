@@ -31,7 +31,7 @@ export default function (searchQuery) {
                 ...searchResult.value.cities.map(city => city.name),
                 ...searchResult.value.destinations.map(destination => destination.name),
             ];
-            result_citys.value = searchResult.value.cities.map(city => city.name);
+            result_citys.value = searchResult.value.cities;
         } catch (error) {
             console.error('An error occurred while searching:', error);
         } finally {

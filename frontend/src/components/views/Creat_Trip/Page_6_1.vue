@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid">
+    <div class="container-fluid-1">
         <div class="container-fluid">
             <div class="container-fluid frame-title" style="width: 1480px;">
                 <h1>Name your trip</h1>
@@ -13,14 +13,18 @@
                                v-model="itineraryName"
                                placeholder="Your itinerary name"
                                class="itinerary-input form-control" />
+                        <input type="text"
+                               v-model="descriptionName"
+                               placeholder="Your description"
+                               class="itinerary-input form-control" />
                     </form>
                 </div>
             </div>
 
             <div class="container-fluid frame-button px-5">
                 <button class="button back" @click="goBack" >Back</button>
-                <button type="submit" @click="addTour" 
-                        @submit.prevent="finishItinerary"
+                <button 
+                        @click="finishItinerary"
                         class="button next-button">Create</button>
             </div>
         </div>
@@ -45,12 +49,29 @@ export default {
 
 <script setup>
 import CreateTripViewModel from '../../viewModels/Create_Trip_ViewModel/CreateTripViewModel';
+import CreateTrip from '../../viewModels/CreateTripViewModel';
+
+
 const {
-    itineraryName, finishItinerary, addTour
-} = CreateTripViewModel();
+    descriptionName,
+    itineraryName, 
+    finishItinerary,
+} = CreateTrip();
+
 </script>
 
 <style scoped>
+.container-fluid-1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
 .frame-title{
     display: flex;
     flex-direction: column;

@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid">
+    <div class="container-fluid-1">
         <div class="container-fluid">
             <div class="container-fluid">
                 <div class="container-fluid">
@@ -13,7 +13,7 @@
                             <Item v-for="(place, index) in destinations" :key="index"
                                 :imageUrl="place.images[0]?.url"
                                 :name="place.name"
-                                :rating="generateStars(place.rating)"
+                                :stars="generateStars(place.rating)"
                                 :id="place.id"
                                 @click="togglePickStatus(place.id)"/>
                         </div>
@@ -26,7 +26,7 @@
                             <Item v-for="(place, index) in restaurants" :key="index"
                                 :imageUrl="place.images[0]?.url"
                                 :name="place.name"
-                                :rating="generateStars(place.rating)"
+                                :stars="generateStars(place.rating)"
                                 :id="place.id"
                                 @click="togglePickStatus(place.id)"/>
                         </div>
@@ -39,7 +39,7 @@
                             <Item v-for="(place, index) in hotels" :key="index"
                                 :imageUrl="place.images[0]?.url"
                                 :name="place.name"
-                                :rating="generateStars(place.rating)"
+                                :stars="generateStars(place.rating)"
                                 :id="place.id"
                                 @click="togglePickStatus(place.id)"/>
                         </div>
@@ -49,72 +49,75 @@
                         <button class="button back" @click="goBack" >Back</button>
                         <button class="button next" @click="goNext" >Next</button>
                     </div>
-                    <Float_Button class="float-button"
-                                  :selectedCount="selectedCount"
-                                  :totalItems="totalItems"/>
+                    <!-- Pick All Toggle -->
+                    <div class="container frame">
+                        <div class="float-button">
+                            <!-- <label class="toggle-switch">
+                                <input type="checkbox" v-model="isAllSelected" @change="selectAll">
+                                <span class="slider"></span>
+                            </label>
+                            <label class="select-all-label">{{ isAllSelected ? 'Deselect All' : 'Select All' }}</label> -->
+                            <label class="count-label">({{ selectedPlace.length }}/{{ places.length }})</label>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    
 </template>
 
-<script>
-import Scroll_Bar_Component from '../Scroll_Bar_Component.vue';
-import Item from './Item.vue';
-import Float_Button from './Float_Button.vue';
-export default {
-    name: "Page_4",
-    components: {
-        Item, Scroll_Bar_Component, Float_Button
-    },
-    methods: {
-        // Method for 'Back' button (to go to the previous page)
-        goBack() {
-            this.$router.push({name: 'Page_3'}); // This will take the user to the previous page in the history
-        },
-        // Method for 'Next' button (to navigate to the next page)
-        goNext() {
-            this.$router.push({ name: 'Page_5' }); // Replace 'next-page' with the name of your target route
-        },
-    }
-}
-</script>
-
 <script setup>
-import CreateTripViewModel from '../../viewModels/Create_Trip_ViewModel/CreateTripViewModel';
 import { useTripStore } from '@/store/useTripStore';
-import { ref, computed, onMounted, watch } from 'vue';
+import { ref, computed, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import CreateTrip from '../../viewModels/CreateTripViewModel';
+import GenerateStars from '../../viewModels/generate_ratingViewModel';
+import Item from './Item.vue';
 
+const router = useRouter();
 const tripStore = useTripStore();
-const {
-    selectedDestination,
-    searchQuery,
-    suggestedDestinations,
-    searchDestinations,
-    generateStars,
-    places, hotels, restaurants, destinations,
-    filteredDestinations,
-    filteredHotels,
-    filteredRestaurants,
-    togglePickStatus,
-    fetchDestinationsData,
-    totalItems, selectedCount,
-} = CreateTripViewModel();
 
+const {
+    getPlaceData,
+    destinations,
+    hotels,
+    restaurants,
+    places,
+    togglePickStatus,
+    updateDestinations,
+    selectedPlace,
+    isAllSelected,
+    selectAll,
+} = CreateTrip();
+
+const { generateStars } = GenerateStars();
 
 onMounted(async () => {
-    // await fetchCityDetailsData();
-    await fetchDestinationsData();
-    // await fetchTags();
+    await getPlaceData();
 });
 
-watch(tripStore.selectedTags, async () => {
-    await fetchDestinationsData();
-});
+const goBack = () => {
+    router.push({ name: 'Page_3' });
+};
+
+const goNext = () => {
+    updateDestinations();
+    router.push({ name: 'Page_5' });
+};
 </script>
 
 <style scoped>
+.container-fluid-1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
 .frame-title{
     margin-top: 50px;
     color: #13357B;
@@ -174,9 +177,62 @@ button:hover {
     color: #EDF6F9
 }
 .float-button {
-    position: fixed;
-    bottom: 0px;
-    left: 105px;
-    z-index: 99;
+    display: flex;
+    padding: 15px;
+    background-color: #13357B;
+    border-radius: 10px;
+    box-shadow: 0px -5px 10px rgba(19, 53, 123, 0.25);
+    gap: 20px;
+    width: 200px;
+    align-items: center;
+    justify-content: center;
+    position: fixed; /* Fix the position of the button */
+    bottom: 100px; /* Set the margin from the bottom of the screen */
+    left: 50%; /* Center the button horizontally */
+    transform: translateX(-50%); /* Adjust for centering */
+}
+.toggle-switch {
+    position: relative;
+    display: inline-block;
+    width: 80px;
+    height: 34px;
+}
+.toggle-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #EDF6F9;
+    transition: .4s;
+    border-radius: 34px;
+}
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: #0077b6;
+    transition: .4s;
+    border-radius: 50%;
+}
+input:checked + .slider {
+    background-color: #a3bcf9;
+}
+input:checked + .slider:before {
+    transform: translateX(45px);
+}
+label {
+    color: #EDF6F9;
+    font-size: 18px;
+    font-weight: 900;
 }
 </style>

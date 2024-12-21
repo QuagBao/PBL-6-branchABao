@@ -3,9 +3,7 @@
         <h1 class="title">{{ name_of_page }}</h1>
         <div class="container-fluid position-relative">
             <!-- Input search -->
-            <input class="form-control" type="text" :placeholder="name" 
-            :value="modelValue"  @keydown.enter="$emit('enter')"
-            @input="$emit('update:modelValue', $event.target.value)" >
+            <input class="form-control" type="text" :placeholder="name" v-model="searchQuery">
             
             <!-- Danh sách kết quả -->
             <div v-if="results.length" class="search-results" :class="{'show': results.length > 0}">
@@ -69,14 +67,10 @@ const selectResult = (result) => {
     gap: 50px;
 }
 .search .title {
-    color: #EDF6F9;
+    color: #034141;
     font-size: 2.5rem;
     font-weight: 700;
     text-align: center;
-}
-.form-control::placeholder,
-.form-control:focus{
-    color: #13357B;
 }
 .form-control {
     display: block;
@@ -87,9 +81,14 @@ const selectResult = (result) => {
     font-weight: 400;
     line-height: 1.5;
     color: #13357B;
-    background-color: #EDF6F9;
+    background-color: #caf0f8;
     border-radius: 40px;
 }
+.form-control::placeholder,
+.form-control:focus{
+    color: #04173b;
+}
+
 input:focus, input:hover {
   outline: none;
   background-color: #caf0f8;

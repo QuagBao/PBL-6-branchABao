@@ -1,7 +1,7 @@
 <template>
-    <div class="container-fluid">
+    <div class="container-fluid-1">
         <div class="container-fluid">
-            <div class="container-fluid frame-title" style="width: 1480px;">
+            <div class="container-fluid frame-title" style="width: 100vw;">
                 <h1>Continue planning your trip</h1>
                 <h5>Save your selections and get inspired with more more guidance</h5>
             </div>
@@ -62,16 +62,18 @@ export default {
 }
 </script>
 
-<script setup>
-import CreateTripViewModel from '../../viewModels/Create_Trip_ViewModel/CreateTripViewModel';
-const {
-    topics,
-    selectedTopics,
-    toggleTopic
-} = CreateTripViewModel();
-</script>
-
 <style scoped>
+.container-fluid-1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
 .frame-title{
     display: flex;
     flex-direction: column;

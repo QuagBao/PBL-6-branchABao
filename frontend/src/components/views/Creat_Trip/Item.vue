@@ -15,7 +15,7 @@
                 {{ name }}
             </div>
             <div class="rating">
-                <img v-for="star in rating" :key="star" :src="star" alt="Circle" class="star"/>
+                <img v-for="star in stars" :key="star" :src="star" alt="Circle" class="star"/>
             </div>
         </div>
     </div>
@@ -32,7 +32,7 @@ export default {
     props: {
         imageUrl: String,
         name: String,
-        rating: Number,
+        stars: Array,
         id: Number,
     },
 }
