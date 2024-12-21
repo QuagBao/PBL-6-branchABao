@@ -27,13 +27,13 @@ export default function (topicName) {
         topicId.value = 2;
         break;
       case 'great-food':
-        topicId.value = 9;
+        topicId.value = 1;
         break;
       case 'must-see-attraction':
         topicId.value = 5;
         break;
       case 'shopping':
-        topicId.value = 1;
+        topicId.value = 9;
         break;
       default:
         topicId.value = 11;
