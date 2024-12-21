@@ -72,7 +72,7 @@
                         <div class="title-content">
                             <p class="p-5 things-to-do">Things to do</p>
                             <div class="container-fluid context">
-                                <Cards v-for="(item, index) in filteredDestinations"
+                                <Cards v-for="(item, index) in destinations"
                                         :key="index"
                                         :destID="item.id"
                                         :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
@@ -88,7 +88,7 @@
                         <div class="row title-content">
                             <p class="p-5 restaurants">Restaurants</p>
                             <div class="container-fluid context">
-                                <Cards v-for="(item, index) in filteredRestaurants"
+                                <Cards v-for="(item, index) in restaurants"
                                         :key="index"
                                         :destID="item.id"
                                         :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
@@ -104,7 +104,7 @@
                         <div class="row title-content">
                             <p class="p-5 resorts">Resort & Hotels</p>
                             <div class="container-fluid context">
-                                <Cards v-for="(item, index) in filteredHotels"
+                                <Cards v-for="(item, index) in hotels"
                                         :key="index"
                                         :destID="item.id"
                                         :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
@@ -169,9 +169,6 @@
         isDestinationsLoading,
         isHotelsLoading,
         isRestaurantsLoading,
-        filteredDestinations,
-        filteredHotels,
-        filteredRestaurants,
         fetchAllData,
     } = destinationViewModel(cityId);
 
