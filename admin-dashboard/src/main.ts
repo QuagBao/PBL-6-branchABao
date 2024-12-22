@@ -5,13 +5,13 @@ import store from "./store";
 import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 import "@fortawesome/fontawesome-free/css/all.css";
+import VueApexCharts from 'vue3-apexcharts';
 
 const app = createApp(App);
 
 app.use(store);
 app.use(router);
 app.use(Toast, {
-  // Các tùy chọn cấu hình cho thông báo, ví dụ:
   position: "top-right",
   timeout: 5000,
   closeOnClick: true,
@@ -26,4 +26,5 @@ app.use(Toast, {
   rtl: false,
 });
 
+app.use(VueApexCharts);
 app.mount("#app");
