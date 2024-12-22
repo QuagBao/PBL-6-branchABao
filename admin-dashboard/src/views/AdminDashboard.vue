@@ -1,7 +1,24 @@
 <template>
-  <div class="container">
-    <h2 class="text-center my-4">City Ratings Overview</h2>
-    <canvas id="cityChart"></canvas>
+  <div class="dashboard-container">
+    <div class="stats-container">
+      <!-- Container chung cho City Destinations và Tag Distribution -->
+      <div class="charts-container">
+        <div class="chart-card">
+          <h2 class="chart-title">City Destinations Overview</h2>
+          <canvas id="destinationChart"></canvas>
+        </div>
+        <div class="chart-card">
+          <h2 class="chart-title">Tag Distribution</h2>
+          <canvas id="tagChart" class="pie-chart"></canvas>
+        </div>
+      </div>
+    </div>
+    
+    <!-- City Ratings Chart (100% width) -->
+    <div class="chart-card">
+      <h2 class="chart-title">City Ratings Overview</h2>
+      <canvas id="cityChart"></canvas>
+    </div>
   </div>
 </template>
 
@@ -9,21 +26,43 @@
 import { ref, onMounted } from 'vue';
 import AdminController from '../controllers/AdminController';
 import Chart from 'chart.js/auto';
-const { getRatingsOfCities } = AdminController();
+
+const { getRatingsOfCities, rateNumberOfDestOfCities, getNumDestByTags } = AdminController();
 const cityRatings = ref([]);
+const cityDestinations = ref([]);
+const tagData = ref([]);
 
 const fetchCityRatings = async () => {
   try {
     const data = await getRatingsOfCities();
-    cityRatings.value = data;
-    drawChart();
+    cityRatings.value = data;  // Display all data, not limited to top 20
+    drawRatingChart();
   } catch (error) {
     console.error('Error fetching city ratings:', error);
   }
 };
 
+const fetchCityDestinations = async () => {
+  try {
+    const data = await rateNumberOfDestOfCities();
+    cityDestinations.value = data;  // Display all cities
+    drawDestinationChart();
+  } catch (error) {
+    console.error('Error fetching city destinations:', error);
+  }
+};
 
-const drawChart = () => {
+const fetchTagData = async () => {
+  try {
+    const data = await getNumDestByTags();
+    tagData.value = data;
+    drawTagChart();
+  } catch (error) {
+    console.error('Error fetching tag data:', error);
+  }
+};
+
+const drawRatingChart = () => {
   const ctx = document.getElementById('cityChart').getContext('2d');
   const labels = cityRatings.value.map(city => city.city_name);
   const averageRatings = cityRatings.value.map(city => city.average_rating);
@@ -34,100 +73,197 @@ const drawChart = () => {
       labels,
       datasets: [
         {
-          type: 'bar',
+          type: 'line',
           label: 'Average Rating',
           data: averageRatings,
-          backgroundColor: 'rgba(54, 162, 235, 0.6)',
-          borderColor: 'rgba(54, 162, 235, 1)',
-          borderWidth: 1,
+          backgroundColor: 'rgba(31, 188, 26, 0.2)',
+          borderColor: 'rgba(31, 188, 26, 1)',
+          borderWidth: 2,
+          fill: true,
+          tension: 0.4
         },
         {
-          type: 'line',
+          type: 'bar',
           label: 'Total Reviews',
           data: reviewCounts,
-          borderColor: '#42b983',
-          borderWidth: 2,
-          fill: false,
+          backgroundColor: 'rgba(54, 162, 235, 0.6)',
+          borderColor: 'rgba(54, 162, 235, 1)',
+          borderWidth: 1
         },
       ],
     },
     options: {
       responsive: true,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top'
+        }
+      },
       scales: {
+        x: {
+          grid: {
+            display: false
+          }
+        },
         y: {
-          beginAtZero: true,
+          grid: {
+            display: false
+          },
+          beginAtZero: true
         },
       },
     },
   });
 };
 
-onMounted(fetchCityRatings);
+const drawDestinationChart = () => {
+  const ctx = document.getElementById('destinationChart').getContext('2d');
+  const labels = cityDestinations.value.map(city => city.city_name);
+  const numberOfDestinations = cityDestinations.value.map(city => city.number_of_destinations);
+
+  new Chart(ctx, {
+    data: {
+      labels,
+      datasets: [
+        {
+          type: 'bar',
+          label: 'Number of Destinations',
+          data: numberOfDestinations,
+          backgroundColor: '#1d5e02',
+          borderColor: '#1d5e02',
+          borderWidth: 1
+        }
+      ],
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'top'
+        }
+      },
+      scales: {
+        x: {
+          grid: {
+            display: false
+          }
+        },
+        y: {
+          grid: {
+            display: false
+          },
+          beginAtZero: true
+        },
+      },
+    },
+  });
+};
+
+const drawTagChart = () => {
+  const ctx = document.getElementById('tagChart').getContext('2d');
+  const labels = tagData.value.slice(0, 12).map(tag => tag.name);
+  const data = tagData.value.slice(0, 12).map(tag => tag.destination_count);
+
+  const backgroundColors = [
+    '#FF6384', '#FF9F40', '#FFCD56', '#4BC0C0', '#36A2EB', '#9966FF', '#C9CBCF', '#FF5733', 
+    '#FF914D', '#FFC300', '#FF5733', '#C70039'
+  ];
+
+  new Chart(ctx, {
+    type: 'pie',
+    data: {
+      labels,
+      datasets: [
+        {
+          data,
+          backgroundColor: backgroundColors,  // Đặt màu sắc cho từng tag trong pie chart
+          borderWidth: 1
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          display: true,
+          position: 'right',  // Đặt legend sang bên phải
+          labels: {
+            boxWidth: 20, // Độ rộng của hộp màu bên cạnh label
+            padding: 15, // Khoảng cách giữa các mục trong legend
+            font: {
+              size: 12,  // Kích thước font cho các label
+              family: 'Arial', // Font chữ của label
+            }
+          }
+        }
+      }
+    }
+  });
+};
+
+onMounted(() => {
+  fetchCityRatings();
+  fetchCityDestinations();
+  fetchTagData();
+});
 </script>
 
 <style scoped>
-.dashboard-intro {
+.dashboard-container {
+  margin: 0 auto;
+  padding: 20px;
+  background: #f4f6f9;
+  border-radius: 8px;
+  width: 100%;
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+.stats-container {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  gap: 20px;
+}
+
+.charts-container {
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
   width: 100%;
-  height: 100%;
-  text-align: center;
-  background: linear-gradient(to right, #2e3b4e, #42b983);
-  color: #fff;
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
-.welcome-title {
-  font-size: 2.5rem;
-  margin-bottom: 20px;
-  animation: fadeIn 1s ease forwards;
-}
-
-.description {
-  font-size: 1.2rem;
-  margin-bottom: 30px;
-  opacity: 0;
-  animation: fadeIn 1s ease forwards 0.5s;
-}
-
-.get-started {
-  padding: 10px 20px;
-  background-color: #007bff;
-  color: #fff;
-  border: none;
-  border-radius: 5px;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background-color 0.3s, transform 0.2s;
-}
-
-.get-started:hover {
-  background-color: #0056b3;
-  transform: scale(1.05);
-}
-
-.container {
-  max-width: 800px;
-  margin: 20px auto;
-  background: #fff;
+.chart-card {
   padding: 20px;
+  background: #fff;
   border-radius: 8px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  flex-grow: 1;
 }
 
-/* Keyframes for fadeIn animation */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-20px);
+.chart-title {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  text-align: center;
+  color: #333;
+}
+
+.pie-chart {
+  max-width: 700px;
+  max-height: 700px;
+  width: 70%;
+  height: auto;
+  margin: 0 auto;
+}
+
+/* To ensure responsiveness */
+@media (max-width: 768px) {
+  .charts-container {
+    flex-direction: column;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+  .chart-card {
+    width: 100%;
   }
 }
 </style>
