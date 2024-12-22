@@ -4,6 +4,7 @@ import { useTripStore } from '@/store/useTripStore';
 import { fetchDestinationsByCity_Tag } from '../models/destinationModel';
 import SignInModel from '../models/SignInModel';
 import { addTour } from '../models/TourModel';
+import { addTrip } from '../models/TripModel';
 
 export default function () {
     const tripStore = useTripStore();
@@ -134,14 +135,16 @@ export default function () {
       await loadUser();
       tripStore.setUserId(user.value.id);
       console.log('All Data:', tripStore.getAllInformation());
-      const tour = {
-        name: tripStore.name,
-        description: tripStore.description,
-        user_id: tripStore.userId,
-        city_id: tripStore.cityId,
-        destination_ids: tripStore.listDestination,
-      }
-      await addTour(tour);
+      // const tour = {
+      //   name: tripStore.name,
+      //   description: tripStore.description,
+      //   user_id: tripStore.userId,
+      //   city_id: tripStore.cityId,
+      //   destination_ids: tripStore.listDestination,
+      // }
+      // await addTour(tour);
+
+      await addTrip(tripStore.name, tripStore.selectedMonth, tripStore.selectedLength, tripStore.userId, tripStore.listDestination);
 
     }
 
