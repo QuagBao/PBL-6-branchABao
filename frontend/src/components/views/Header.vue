@@ -36,7 +36,7 @@
             <div class="nav-item dropdown">
               <button class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Trips</button>
               <div class="dropdown-menu m-0">
-                <button class="dropdown-item" @click="handleButtonClick('myTrips', '/my-trips')">My Trips</button>
+                <button class="dropdown-item" @click="handleButtonClick('myTrips', '/Trip')">My Trips</button>
                 <button class="dropdown-item" @click="handleButtonClick('startNewTrip', '/Create_Trip')">Create a new trip</button>
                 <button class="dropdown-item" @click="handleButtonClick('createAITrip', '/create-ai-trip')">Create a new trip by AI</button>
               </div>

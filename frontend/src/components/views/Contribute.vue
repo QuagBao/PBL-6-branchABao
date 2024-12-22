@@ -41,22 +41,18 @@
         </div>
         <!-- Review -->
         <div class="frame-review">
-            <div class="search-bar-container">
-                <div class="search-bar">
-                    <input type="text" class="search-input" placeholder="Search for reviews">
-                    <button class="icon-search">
-                        <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M11 6C13.7614 6 16 8.23858 16 11M16.6588 16.6549L21 21M19 11C19 15.4183 15.4183 19 11 19C6.58172 19 3 15.4183 3 11C3 6.58172 6.58172 3 11 3C15.4183 3 19 6.58172 19 11Z" stroke="#currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </button>
-                </div>
+            <div class="filter-bar-container">
+                <select v-model="selectedRating" @change="filterComments" class="filter-select">
+                    <option value="">All Ratings</option>
+                    <option v-for="n in 5" :key="n" :value="n">{{ n }} Stars</option>
+                </select>
             </div>
 
-            <div v-if="commentList && commentList.length > 0" class="container-fluid comment-list">
-                <div v-for="comment in commentList" :key="comment.id" class="comment"  >
+            <div v-if="filteredComments.length > 0" class="container-fluid comment-list">
+                <div v-for="comment in filteredComments" :key="comment.id" class="comment">
                     <A_Comment :imageUrl="comment.user?.userInfo?.image?.url || ''"
                                 :userName="comment.user?.username || 'Unknown User'"
-                                :stars= "generateStars(comment.rating)"
+                                :stars="generateStars(comment.rating)"
                                 :title="comment.title"
                                 :date_comment="comment.date_create"
                                 :comment="comment.content"
@@ -68,58 +64,41 @@
             </div>
         </div>
     </div>
-
 </template>
+
 <script setup>
-import { computed } from 'vue';
+import { ref, computed } from 'vue';
 import generateViewModel from '../viewModels/generate_ratingViewModel';
-// Lấy hàm tạo vòng tròn (circle)
 const { generateStars } = generateViewModel();
 import A_Comment from './A_Comment.vue';
 
 const writeReview = (id) => {
-        window.location.assign(`/Review/Write/${id}`);
-    };
+    window.location.assign(`/Review/Write/${id}`);
+};
 const uploadPicture = (id) => {
     window.location.assign(`/Review/Upload/${id}`);
 };
-// Khai báo các props
-defineProps({
 
-  rating: {
-    type: Number,
-    required: true,
-  },
-  ratings: {
-    type: Object,
-    default: () => ({}),
-  },
-  stars: {
-    type: Array,
-    required: true,
-  },
-  commentList: {
-    type: Array,
-    required: true,
-  },
-  destination_id:{
-    type: Number,
-    required: true,
-  },
-  user:{
-    type: Number,
-    required: true,
-  },
-  description: {
-    type: String,
-    required: false,
-  },
-  canReview: {
-    type: Boolean,
-  }
-  
-  
+const props = defineProps({
+  rating: { type: Number, required: true },
+  ratings: { type: Object, default: () => ({}) },
+  stars: { type: Array, required: true },
+  commentList: { type: Array, required: true },
+  destination_id: { type: Number, required: true },
+  user: { type: Number, required: true },
+  description: { type: String, required: false },
+  canReview: { type: Boolean }
 });
+
+const selectedRating = ref('');
+const filteredComments = computed(() => {
+    if (!selectedRating.value) return props.commentList;
+    return props.commentList.filter(comment => comment.rating === parseInt(selectedRating.value));
+});
+
+const filterComments = () => {
+    console.log('Filtering comments with rating: ', selectedRating.value);
+};
 </script>
 
 <style scoped>
@@ -260,4 +239,22 @@ input:focus{
     font-size: 18px;
     color: #24478f;
 }
+
+.filter-bar-container {
+    display: flex;
+    margin-bottom: 20px;
+}
+.filter-select {
+    padding: 10px 20px;
+    border-radius: 25px;
+    border: 2px solid #13357B;
+    color: #13357B;
+    background-color: #fff;
+    outline: none;
+}
+.filter-select:focus {
+    background-color: #caf0f8;
+    box-shadow: 0px 5px 10px rgba(19, 53, 123, 0.25);
+}
+
 </style>
