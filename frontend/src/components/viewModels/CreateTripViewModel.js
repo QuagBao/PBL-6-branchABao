@@ -1,5 +1,4 @@
 import { ref, onMounted, watch, nextTick } from 'vue';
-import { fetchDestinationsByCity, addTour as addTourAPI } from '../models/CreateTripModel';
 import { getTags } from '../models/TagModel';
 import { useTripStore } from '@/store/useTripStore';
 import { fetchDestinationsByCity_Tag } from '../models/destinationModel';

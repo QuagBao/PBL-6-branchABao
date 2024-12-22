@@ -51,11 +51,6 @@ export default {
 };
 </script>
 
-<script setup>
-import CreateTripViewModel from '../../viewModels/Create_Trip_ViewModel/CreateTripViewModel';
-
-const { itineraryName, finishItinerary, tourid } = CreateTripViewModel();
-</script>
 
 
 <style scoped>

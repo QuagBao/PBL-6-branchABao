@@ -50,7 +50,7 @@
                             :key="tag.id">
                     <button class="button-item" 
                             :class="{ selected: selectedIndex === tag.id }" 
-                            @click="selectButton(tag.id)">
+                            @click="selectTag(tag.id)">
                         {{ tag.name }}
                     </button>
                 </SwiperSlide>
@@ -59,7 +59,7 @@
     </div>
 
     <div class="container-fluid content"
-        v-for="(item, index) in filteredDestinations" :key="index">
+        v-for="(item, index) in destinations" :key="index">
         <div class="container">
             <Topic_Item_2 :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
                           :index="index+1"
@@ -93,18 +93,24 @@ const route = useRoute();
 const topicName = route.params.topic;
 const {
     destinations,
-    cities,
-    selectedIndex, selectButton,
-    truncatedDescription,
-    loadCities,
     tags,
+    cities,
     selectedCityId,
+    selectedIndex,
     dropdownVisibleRegion,
-    filteredDestinations,
+    loading,
+    truncatedDescription,
+    selectButton,
+    selectCity,
     selectedCityName,
     toggleDropDownRegion,
-    selectCity,
+    fetchFilteredDestinations,
 } = destinationViewModel(topicName);
+const selectTag = async (tag_id) => {
+    selectButton(tag_id)
+    await fetchFilteredDestinations();
+    console.log(destinations);
+};
 const {
     generateStars,
   } = generateViewModel();

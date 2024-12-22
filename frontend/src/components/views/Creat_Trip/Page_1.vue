@@ -31,7 +31,6 @@
 <script setup>
 import { ref } from 'vue';
 import useLiveSearch from '../../viewModels/LiveSearchViewModel.js';
-import CreateTripViewModel from '../../viewModels/Create_Trip_ViewModel/CreateTripViewModel.js';
 import CreateTrip from '../../viewModels/CreateTripViewModel';
 import { useTripStore } from '@/store/useTripStore';
 import { useRouter } from 'vue-router';
@@ -39,12 +38,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 const tripStore = useTripStore();
-const {
-    searchQuery,
-    suggestedDestinations,
-    selectDestination,
-    selectedDestination
-} = CreateTripViewModel();
+const searchQuery = ref('');
 
 const{
     data,

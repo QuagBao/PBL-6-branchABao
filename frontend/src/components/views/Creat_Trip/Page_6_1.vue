@@ -48,7 +48,6 @@ export default {
 </script>
 
 <script setup>
-import CreateTripViewModel from '../../viewModels/Create_Trip_ViewModel/CreateTripViewModel';
 import CreateTrip from '../../viewModels/CreateTripViewModel';
 
 
