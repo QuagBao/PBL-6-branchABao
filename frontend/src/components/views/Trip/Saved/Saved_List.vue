@@ -1,6 +1,6 @@
 <template>
     <div class="frame-filter d-flex justify-content-between align-items-center">
-        <span>21 items</span>
+        <span> {{ trip?.trip_destinations.length }} items</span>
         <div class="dropdown">
             <button class="filter-button" data-bs-toggle="dropdown">
                 <svg width="30px" height="30px" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
@@ -19,65 +19,100 @@
                 Filter
             </button>
             <div class="nav-item dropdown-menu">
-                <button class="dropdown-item" href="#">Things to do</button>
-                <button class="dropdown-item" href="#">Restaurants</button>
-                <button class="dropdown-item" href="#">Resorts & Hotels</button>
+                <button class="dropdown-item" @click="filterCategory('thingstodo')">Things to do</button>
+                <button class="dropdown-item" @click="filterCategory('restaurants')">Restaurants</button>
+                <button class="dropdown-item" @click="filterCategory('hotels')">Resorts & Hotels</button>
             </div>
         </div>
     </div>
     <div class="frame things-to-do">
         <div class="title">
             <h2>Things to do</h2>
-            <button class="button">
+            <button class="button" @click="toggleSection('thingstodo')">
                 <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </button>
         </div>
-        <Saved_Item></Saved_Item>
-        <Saved_Item></Saved_Item>
-        <Saved_Item></Saved_Item>
-        <Saved_Item></Saved_Item>
+        <div v-show="showThingstodo">
+            <Saved_Item 
+                v-for="thingtodo in thingtodos" 
+                :key="thingtodo.id" 
+                :place="thingtodo"
+                @click="navigateToDetailPlace(thingtodo.id)"
+            />
+        </div>
     </div>
     <div class="frame restaurants">
         <div class="title">
             <h2>Restaurants</h2>
-            <button class="button">
+            <button class="button" @click="toggleSection('restaurants')">
                 <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </button>
         </div>
-        <Saved_Item></Saved_Item>
-        <Saved_Item></Saved_Item>
-        <Saved_Item></Saved_Item>
-        <Saved_Item></Saved_Item>
+        <div v-show="showRestaurants">
+            <Saved_Item 
+                v-for="restaurant in restaurants" 
+                :key="restaurant.id" 
+                :place="restaurant"
+                @click="navigateToDetailRestaurant(restaurant.restaurant_id)"
+            />
+        </div>
     </div>
     <div class="frame hotels">
         <div class="title">
             <h2>Place to stay</h2>
-            <button class="button">
+            <button class="button" @click="toggleSection('hotels')">
                 <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </button>
         </div>
-        <Saved_Item></Saved_Item>
-        <Saved_Item></Saved_Item>
-        <Saved_Item></Saved_Item>
-        <Saved_Item></Saved_Item>
+        <div v-show="showHotels">
+            <Saved_Item 
+                v-for="hotel in hotels" 
+                :key="hotel.id" 
+                :place="hotel"
+                @click="navigateToDetailHotel(hotel.hotel_id)"
+            />
+        </div>
     </div>
 </template>
 
-<script>
-import Saved_Item from './Saved_Item.vue';
-export default {
-    name: "Saved_List",
-    components: {
-        Saved_Item
-    }
+<script setup>
+import { ref, computed } from 'vue'
+import Saved_Item from './Saved_Item.vue'
+
+const props = defineProps({
+  trip: Object
+})
+
+const thingtodos = computed(() => props.trip?.destinations.filter(d => !d.restaurant_id && !d.hotel_id) || [])
+const hotels = computed(() => props.trip?.destinations.filter(d => !d.restaurant_id && d.hotel_id) || [])
+const restaurants = computed(() => props.trip?.destinations.filter(d => d.restaurant_id) || [])
+
+const navigateToDetailPlace = id => window.location.assign(`/Detail/Place/${id}`);
+const navigateToDetailRestaurant = id => window.location.assign(`/Detail/Restaurant/${id}`);
+const navigateToDetailHotel = id => window.location.assign(`/Detail/Hotel/${id}`);
+
+const showThingstodo = ref(true);
+const showRestaurants = ref(true);
+const showHotels = ref(true);
+
+const toggleSection = (section) => {
+    if (section === 'thingstodo') showThingstodo.value = !showThingstodo.value;
+    if (section === 'restaurants') showRestaurants.value = !showRestaurants.value;
+    if (section === 'hotels') showHotels.value = !showHotels.value;
+}
+const filterCategory = (category) => {
+    showThingstodo.value = category === 'thingstodo';
+    showRestaurants.value = category === 'restaurants';
+    showHotels.value = category === 'hotels';
 }
 </script>
+
 
 <style scoped>
 .frame-filter{

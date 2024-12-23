@@ -62,3 +62,52 @@ export async function addDestToTrip(trip_id, destination_id) {
     }
 }
 
+export async function getTrip() {
+    try {
+  
+      // Gửi yêu cầu để lấy danh sách tour
+      const response = await axios.get(
+        "https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/trip/"
+      );
+  
+      return response.data.map((trip) => ({
+        id: trip.id,
+        name: trip.name,
+        month_time: trip.month_time,
+        duration: trip.duration,
+        user_id: trip.user_id,
+        isAI: trip.city_id,
+        trip_destinations: trip.trip_destinations,
+      }));
+    } catch (error) {
+      console.error("Error fetching trip:", error);
+      return []; // Hoặc bạn có thể xử lý khác tùy ý
+    }
+  }
+
+  export async function getTripByID(tripId) {
+    try {
+  
+      // Gửi yêu cầu để lấy danh sách tour
+      const response = await axios.get(
+        `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/trip/${tripId}`
+      );
+      const trip = response.data;
+  
+      return {
+        id: trip.id,
+        name: trip.name,
+        month_time: trip.month_time,
+        duration: trip.duration,
+        user_id: trip.user_id,
+        isAI: trip.city_id,
+        trip_destinations: trip.trip_destinations,
+      };
+    } catch (error) {
+      console.error("Error fetching trip:", error);
+      return []; // Hoặc bạn có thể xử lý khác tùy ý
+    }
+  }
+
+  
+
