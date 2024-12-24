@@ -3,19 +3,15 @@
         <div class="container-fluid">
             <div class="container-fluid frame-title" style="width: 1480px;">
                 <h1>Name your trip</h1>
-                <h5>Organize your saves and create a custom itinerary</h5>
+                <h5>Organize your saves and create a itinerary trip by AI</h5>
             </div>
 
             <div class="container frame-name">
                 <div class="container-fluid">
-                    <form class="search-container" @submit.prevent="finishItinerary">
+                    <form class="search-container" @submit.prevent="finishItineraryAI">
                         <input type="text"
                                v-model="itineraryName"
                                placeholder="Your itinerary name"
-                               class="itinerary-input form-control" />
-                        <input type="text"
-                               v-model="descriptionName"
-                               placeholder="Your description"
                                class="itinerary-input form-control" />
                     </form>
                 </div>
@@ -24,7 +20,7 @@
             <div class="container-fluid frame-button px-5">
                 <button class="button back" @click="goBack" >Back</button>
                 <button 
-                        @click="finishItinerary"
+                        @click="finishItineraryAI"
                         class="button next-button">Create</button>
             </div>
         </div>
@@ -32,7 +28,6 @@
 </template>
 
 <script>
-import Scroll_Bar_Component from '../Scroll_Bar_Component.vue';
 export default {
     name: "Page_6_1",
     methods: {
@@ -52,9 +47,8 @@ import CreateTrip from '../../viewModels/CreateTripViewModel';
 
 
 const {
-    descriptionName,
     itineraryName, 
-    finishItinerary,
+    finishItineraryAI,
 } = CreateTrip();
 
 </script>

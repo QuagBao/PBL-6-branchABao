@@ -9,7 +9,10 @@ export const useTripStore = defineStore('trip', {
         selectedLength: 1,
         selectedMonth: null,
         selectedTags:  [],
+        listPlace: [],
         listDestination: [],
+        listHotel: [],
+        listRestaurant: [],
         userId: 4,
         description: '',
         ids_destination: '',
@@ -36,7 +39,15 @@ export const useTripStore = defineStore('trip', {
         setSelectTags(tags) {
             this.selectedTags = [...tags]; // Gán trực tiếp mảng mới
         },
-
+        setListPlace(listPlace) {
+            this.listPlace = [...listPlace];
+        },
+        setListHotel(listHotel) {
+            this.listHotel = [...listHotel];
+        },
+        setListRestaurant(listRestaurant) {
+            this.listRestaurant = [...listRestaurant];
+        },
         setListDestination(listDestination) {
             this.listDestination = [...listDestination];
         },
@@ -55,6 +66,9 @@ export const useTripStore = defineStore('trip', {
                 selectedLength: this.selectedLength,
                 selectedMonth: this.selectedMonth,
                 selectedTags: this.selectedTags,
+                listPlace: this.listPlace,
+                listHotel: this.listHotel,
+                listRestaurant: this.listRestaurant,
                 listDestination: this.listDestination,
                 userId: this.userId,
                 description: this.description,

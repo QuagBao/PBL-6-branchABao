@@ -1,16 +1,12 @@
 <template>
-    <div class="container-fluid">
+    <div class="container-fluid-1">
         <div class="container-fluid">
             <div class="container-fluid frame-title" style="width: 1480px;">
                 <h1>Trip Saved</h1>
                 <h5>Your selections have been saved to a trip.</h5>
             </div>
 
-            <div class="container">
-                <div class="container frame-name">
-                    <Trips_Item class="custom"/>
-                </div>
-            </div>
+            
 
             <div class="container-fluid frame-button px-5 py-2">
                 <button class="button back" @click="goBack" >Back</button>
@@ -22,44 +18,54 @@
 
 <script>
 import Scroll_Bar_Component from '../Scroll_Bar_Component.vue';
-import Trips_Item from '../Profile_Page/Trips_Item.vue';
-import Trips_Item_no_date from '../Profile_Page/Trips_Item_no_date.vue';
+
 
 export default {
-    name: "Page_7_1",
-    components: {
-        Trips_Item,
-        Trips_Item_no_date  
+    name: "Page_7",
+    props: {
+        id: {
+            type: String, // Params luôn là string, cần ép kiểu nếu cần
+            required: true
+        }
+    },
+    mounted() {
+        console.log('ID received via params:', this.id); // Kiểm tra giá trị ID
     },
     methods: {
-        // Method for 'Back' button (to go to the previous page)
         goBack() {
-            this.$router.push({ name: 'Page_5' }); // Navigate to Page_5
+            this.$router.push({ name: 'Page_5' });
         },
-        // Method for 'View' button (navigate to Tour detail with dynamic id)
         goView() {
-            if (this.tourid) {
-                this.$router.push({ path: `/Tour/${this.tourid}` }); // Navigate to Tour with the given id
+            if (this.id) {
+                this.$router.push({ path: `/Trip/${this.id}` });
             } else {
-                console.error("Tour ID is not defined");
+                console.error("Trip ID is not defined");
             }
         },
     },
-    props: {
-        tourid: Number, // Add tourid as a prop to use it in this script
-    }
 };
 </script>
 
 
 
 <style scoped>
+.container-fluid-1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
 .frame-title{
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    margin-top: 50px;
+    justify-content: top; 
+    margin-top: -300px;
     color: #00B4D8;
 }
 .frame-title h1{

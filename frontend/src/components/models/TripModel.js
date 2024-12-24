@@ -110,4 +110,105 @@ export async function getTrip() {
   }
 
   
+  export async function addTripByAi(name, month_time, duration, user_id, thing_to_do_ids, hotel_ids, restaurant_ids) {
+    try {
+        // 1. Call API to build trip by AI
+        const buildResponse = await fetch(
+            `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/trip/build?trip_day=${duration}`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    hotel_ids: hotel_ids,
+                    thingtodo_ids: thing_to_do_ids,
+                    restaurant_ids: restaurant_ids
+                })
+            }
+        );
+
+        if (!buildResponse.ok) {
+            throw new Error('Failed to build trip by AI');
+        }
+
+        const buildData = await buildResponse.json();
+
+        // 2. Create the trip
+        const tripResponse = await fetch(
+            'https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/trip/',
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: name,
+                    month_time: month_time,
+                    duration: duration,
+                    user_id: user_id,
+                    isAI: false
+                })
+            }
+        );
+
+        if (!tripResponse.ok) {
+            throw new Error('Failed to create trip');
+        }
+
+        const tripData = await tripResponse.json();
+        const trip_id = tripData.id;
+
+        // 3. Prepare destinations array
+        const destinations = [];
+
+        Object.entries(buildData.daily_schedule).forEach(([dayKey, destinationsList], dayIndex) => {
+            destinationsList.forEach((destination_id, order) => {
+                // Skip last destination of each day
+                if (order === destinationsList.length - 1) return;
+
+                destinations.push({
+                    destination_id,
+                    trip_id,
+                    order,
+                    day: dayIndex + 1
+                });
+            });
+        });
+
+        buildData.hotels.forEach((hotel_id, order) => {
+            destinations.push({
+                destination_id: hotel_id,
+                trip_id,
+                order,
+                day: 0
+            });
+        });
+
+        // 4. Add destinations
+        for (const destination of destinations) {
+            const destinationResponse = await fetch(
+                'https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/trip/add_destination',
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(destination)
+                }
+            );
+
+            if (!destinationResponse.ok) {
+                throw new Error('Failed to add destination');
+            }
+        }
+
+        return { success: true, message: 'Trip created successfully', data: trip_id };
+    } catch (error) {
+        console.error('Error adding tour:', error);
+        return { success: false, message: 'Failed to add tour' };
+    }
+}
+
+  
 

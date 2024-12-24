@@ -72,7 +72,7 @@ const selectedMonthIndex = ref(null);
 
 // Computed properties
 const allMonths = computed(() => dateViewModel.getAllMonthNames());
-const numberLength = ref(0);
+const numberLength = ref(1);
 const monthChoose = ref(0);
 
 // Methods

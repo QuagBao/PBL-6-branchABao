@@ -986,7 +986,7 @@ export async function fetchDestinationsByUser(userId) {
 export async function fetchDestinationsByCity_Tag(city_id, tags) {
   try {
     const url = new URL(
-      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/by_tags?limit=30`
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/by_tags?limit=50`
     );
     url.searchParams.append("city_id", city_id);
     for (const tag of tags) {
@@ -1028,7 +1028,7 @@ export async function fetchDestinationsByCity_Tag(city_id, tags) {
 export async function fetchDestinationsByTag(tags) {
   try {
     const url = new URL(
-      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/by_tags?limit=30`
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/by_tags?limit=50`
     );
     for (const tag of tags) {
       url.searchParams.append("tag_ids", tag);

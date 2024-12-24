@@ -138,7 +138,11 @@ const routes = [
   { path: '/Create_Trip/Page_5', name: 'Page_5', component: Page_5 },
   { path: '/Create_Trip/Page_6_1', name: 'Page_6_1', component: Page_6_1 },
   { path: '/Create_Trip/Page_6_2', name: 'Page_6_2', component: Page_6_2 },
-  { path: '/Create_Trip/Page_7', name: 'Page_7', component: Page_7 },
+  {
+    path: '/Create_Trip/Page_7/:id',
+    name: 'Page_7',
+    component: Page_7,
+  },
   
   // Detail Trip
   { path: '/Trip/:id', name: 'DetailTrip', component: Detail_Trip },

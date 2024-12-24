@@ -15,7 +15,7 @@
                                 :name="place.name"
                                 :stars="generateStars(place.rating)"
                                 :id="place.id"
-                                @click="togglePickStatus(place.id)"/>
+                                @click="togglePickStatus(place.id, 'destination')"/>
                         </div>
                     </div>
                     <div class="container-fluid line"></div>
@@ -28,7 +28,7 @@
                                 :name="place.name"
                                 :stars="generateStars(place.rating)"
                                 :id="place.id"
-                                @click="togglePickStatus(place.id)"/>
+                                @click="togglePickStatus(place.id, 'restaurant')"/>
                         </div>
                     </div>
                     <div class="container-fluid line"></div>
@@ -41,7 +41,7 @@
                                 :name="place.name"
                                 :stars="generateStars(place.rating)"
                                 :id="place.id"
-                                @click="togglePickStatus(place.id)"/>
+                                @click="togglePickStatus(place.id, 'hotel')"/>
                         </div>
                     </div>
 
