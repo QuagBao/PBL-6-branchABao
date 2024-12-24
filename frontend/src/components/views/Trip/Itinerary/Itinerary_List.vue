@@ -1,130 +1,231 @@
 <template>
     <div class="frame-day">        
-        <button class="day nav-link">Day 1</button>
-        <button class="day nav-link">Day 2</button>
-        <button class="day nav-link">Day 3</button>
-        <button class="day nav-link">Day 4</button>
-        <button class="day nav-link">Day 5</button>
-        <button class="day nav-link">Day 6</button>
-        <button class="day nav-link">Day 7</button>
+        <button class="day nav-link" v-if="day_1.length > 0" @click="toggleDay(1)">Day 1</button>
+        <button class="day nav-link" v-if="day_2.length > 0" @click="toggleDay(2)">Day 2</button>
+        <button class="day nav-link" v-if="day_3.length > 0" @click="toggleDay(3)">Day 3</button>
+        <button class="day nav-link" v-if="day_4.length > 0" @click="toggleDay(4)">Day 4</button>
+        <button class="day nav-link" v-if="day_5.length > 0" @click="toggleDay(5)">Day 5</button>
+        <button class="day nav-link" v-if="day_6.length > 0" @click="toggleDay(6)">Day 6</button>
+        <button class="day nav-link" v-if="day_7.length > 0" @click="toggleDay(7)">Day 7</button>
+        <button class="day nav-link" v-if="day_0.length > 0" @click="toggleDay(8)">Place to stay</button>
     </div>
-    <div class="frame-count d-flex justify-content-between align-items-center">
-        <div class="count">
-            <p class="count-text">7 /12 saved items have been added</p>
-        </div>
-        <button class="button">
-            <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <g id="Edit / Edit_Pencil_Line_01">
-                    <path id="Vector" d="M4 20.0001H20M4 20.0001V16.0001L12 8.00012M4 20.0001L8 20.0001L16 12.0001M12 8.00012L14.8686 5.13146L14.8704 5.12976C15.2652 4.73488 15.463 4.53709 15.691 4.46301C15.8919 4.39775 16.1082 4.39775 16.3091 4.46301C16.5369 4.53704 16.7345 4.7346 17.1288 5.12892L18.8686 6.86872C19.2646 7.26474 19.4627 7.46284 19.5369 7.69117C19.6022 7.89201 19.6021 8.10835 19.5369 8.3092C19.4628 8.53736 19.265 8.73516 18.8695 9.13061L18.8686 9.13146L16 12.0001M12 8.00012L16 12.0001" stroke="#13357B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </g>
-            </svg>
-            Edit
-        </button>
-    </div>
-    <div class="frame-list d-flex flex-column gap-5">
-        <div class="item-days d-flex flex-column gap-3">
+    <div class="frame-list d-flex flex-column gap-5" v-if="day_1.length > 0">
+        <div class="item-days d-flex flex-column gap-3" v-if="day_1.length > 0">
             <div class="title">
                 <h2>Day 1</h2>
-                <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" @click="toggleDay(1)">
                     <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
-            <div class="frame-items d-flex flex-column gap-3">
-                <Itinerary_Item/>
-                <Itinerary_Item/>
-                <Itinerary_Item/>
+            <div class="frame-items d-flex flex-column gap-3" v-if="visibleDays[1]">
+                <Itinerary_Item
+                    v-for="destination in day_1"
+                    :key="destination.id"
+                    :destination="destination"
+                    @click="navigate(destination)"
+                />
             </div>
         </div>
-        <div class="item-days d-flex flex-column gap-3">
+        <div class="item-days d-flex flex-column gap-3" v-if="day_2.length > 0">
             <div class="title">
                 <h2>Day 2</h2>
-                <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" @click="toggleDay(2)">
                     <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
-            <div class="frame-items d-flex flex-column gap-3">
-                <Itinerary_Item/>
-                <Itinerary_Item/>
-                <Itinerary_Item/>
+            <div class="frame-items d-flex flex-column gap-3" v-if="visibleDays[2]">
+                <Itinerary_Item
+                    v-for="destination in day_2"
+                    :key="destination.id"
+                    :destination="destination"
+                    @click="navigate(destination)"
+                />
             </div>
         </div>
-        <div class="item-days d-flex flex-column gap-3">
+        <div class="item-days d-flex flex-column gap-3" v-if="day_3.length > 0">
             <div class="title">
                 <h2>Day 3</h2>
-                <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" @click="toggleDay(3)">
                     <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
-            <div class="frame-items d-flex flex-column gap-3">
-                <Itinerary_Item/>
-                <Itinerary_Item/>
-                <Itinerary_Item/>
+            <div class="frame-items d-flex flex-column gap-3" v-if="visibleDays[3]">
+                <Itinerary_Item
+                    v-for="destination in day_3"
+                    :key="destination.id"
+                    :destination="destination"
+                    @click="navigate(destination)"
+                />
             </div>
         </div>
-        <div class="item-days d-flex flex-column gap-3">
+        <div class="item-days d-flex flex-column gap-3" v-if="day_4.length > 0">
             <div class="title">
                 <h2>Day 4</h2>
-                <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" @click="toggleDay(4)">
                     <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
-            <div class="frame-items d-flex flex-column gap-3">
-                <Itinerary_Item/>
-                <Itinerary_Item/>
-                <Itinerary_Item/>
+            <div class="frame-items d-flex flex-column gap-3" v-if="visibleDays[4]">
+                <Itinerary_Item
+                    v-for="destination in day_4"
+                    :key="destination.id"
+                    :destination="destination"
+                    @click="navigate(destination)"
+                />
             </div>
         </div>
-        <div class="item-days d-flex flex-column gap-3">
+        <div class="item-days d-flex flex-column gap-3" v-if="day_5.length > 0">
             <div class="title">
                 <h2>Day 5</h2>
-                <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" @click="toggleDay(5)">
                     <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
-            <div class="frame-items d-flex flex-column gap-3">
-                <Itinerary_Item/>
-                <Itinerary_Item/>
-                <Itinerary_Item/>
+            <div class="frame-items d-flex flex-column gap-3" v-if="visibleDays[5]">
+                <Itinerary_Item
+                    v-for="destination in day_5"
+                    :key="destination.id"
+                    :destination="destination"
+                    @click="navigate(destination)"
+                />
             </div>
         </div>
-        <div class="item-days d-flex flex-column gap-3">
+        <div class="item-days d-flex flex-column gap-3" v-if="day_6.length > 0">
             <div class="title">
                 <h2>Day 6</h2>
-                <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" @click="toggleDay(6)">
                     <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
-            <div class="frame-items d-flex flex-column gap-3">
-                <Itinerary_Item/>
-                <Itinerary_Item/>
-                <Itinerary_Item/>
+            <div class="frame-items d-flex flex-column gap-3" v-if="visibleDays[6]">
+                <Itinerary_Item
+                    v-for="destination in day_6"
+                    :key="destination.id"
+                    :destination="destination"
+                    @click="navigate(destination)"
+                />
             </div>
         </div>
-        <div class="item-days d-flex flex-column gap-3">
+        <div class="item-days d-flex flex-column gap-3" v-if="day_7.length > 0">
             <div class="title">
                 <h2>Day 7</h2>
-                <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" @click="toggleDay(7)">
                     <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
-            <div class="frame-items d-flex flex-column gap-3">
-                <Itinerary_Item/>
-                <Itinerary_Item/>
-                <Itinerary_Item/>
+            <div class="frame-items d-flex flex-column gap-3" v-if="visibleDays[7]">
+                <Itinerary_Item
+                    v-for="destination in day_7"
+                    :key="destination.id"
+                    :destination="destination"
+                    @click="navigate(destination)"
+                />
             </div>
         </div>
+        <div class="item-days d-flex flex-column gap-3" v-if="day_0.length > 0">
+            <div class="title">
+                <h2>Place to stay</h2>
+                <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" @click="toggleDay(8)">
+                    <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </div>
+            <div class="frame-items d-flex flex-column gap-3" v-if="visibleDays[8]">
+                <Itinerary_Item
+                    v-for="destination in day_0"
+                    :key="destination.id"
+                    :destination="destination"
+                    @click="navigate(destination)"
+                />
+            </div>
+        </div>
+    </div>
+    <div v-else>
+        <h2 class="title">No itinerary yet</h2>
     </div>
     
 </template>
 
-<script>
+<script setup>
+import { ref, computed } from 'vue';
 import Itinerary_Item from './Itinerary_Item.vue';
-export default {    
-    name: "Itinerary_List",
-    components: {
-        Itinerary_Item
+
+const props = defineProps({
+  trip: Object
+});
+
+const day_0 = ref([]);
+const day_1 = ref([]);
+const day_2 = ref([]);
+const day_3 = ref([]);
+const day_4 = ref([]);
+const day_5 = ref([]);
+const day_6 = ref([]);
+const day_7 = ref([]);
+
+const visibleDays = ref({1: true, 2: true, 3: true, 4: true, 5: true, 6: true, 7: true, 8: true});
+
+const toggleDay = (day) => {
+    visibleDays.value[day] = !visibleDays.value[day];
+};
+
+const sortDestinations = () => {
+    if (props.trip && props.trip.destinations) {
+        props.trip.destinations.forEach(destination => {
+            switch (destination.day) {
+                case 0:
+                    day_0.value.push(destination);
+                    break;
+                case 1:
+                    day_1.value.push(destination);
+                    break;
+                case 2:
+                    day_2.value.push(destination);
+                    break;
+                case 3:
+                    day_3.value.push(destination);
+                    break;
+                case 4:
+                    day_4.value.push(destination);
+                    break;
+                case 5:
+                    day_5.value.push(destination);
+                    break;
+                case 6:
+                    day_6.value.push(destination);
+                    break;
+                case 7:
+                    day_7.value.push(destination);
+                    break;
+            }
+        });
+
+        day_0.value.sort((a, b) => a.order - b.order);
+        day_1.value.sort((a, b) => a.order - b.order);
+        day_2.value.sort((a, b) => a.order - b.order);
+        day_3.value.sort((a, b) => a.order - b.order);
+        day_4.value.sort((a, b) => a.order - b.order);
+        day_5.value.sort((a, b) => a.order - b.order);
+        day_6.value.sort((a, b) => a.order - b.order);
+        day_7.value.sort((a, b) => a.order - b.order);
+    }
+};
+
+sortDestinations();
+
+const navigate = (destination) => {
+    if(destination.hotel_id!= null){
+        navigateToDetailHotel(destination.hotel_id);
+    }
+    else if(destination.restaurant_id!= null){
+        navigateToDetailRestaurant(destination.restaurant_id);
+    }
+    else{
+        navigateToDetailPlace(destination.id);
     }
 }
+const navigateToDetailPlace = (id) => window.location.assign(`/Detail/Place/${id}`);
+const navigateToDetailRestaurant = (restaurant_id) => window.location.assign(`/Detail/Restaurant/${restaurant_id}`);
+const navigateToDetailHotel = (hotel_id) => window.location.assign(`/Detail/Hotel/${hotel_id}`);
 </script>
 
 <style scoped>

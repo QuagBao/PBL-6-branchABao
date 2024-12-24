@@ -9,45 +9,39 @@
         </div>
 
         <div class="container-fluid-1">
-            <button>
+            <button @click="navigateToBuildTrip">
                 <svg width="50px" height="50px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M6 12H18M12 6V18" stroke="#currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
                 Create a new trip
-            </button>
-        
-            <button>
-                <svg width="50px" height="50px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M4.20404 15C3.43827 15.5883 3 16.2714 3 17C3 19.2091 7.02944 21 12 21C16.9706 21 21 19.2091 21 17C21 16.2714 20.5617 15.5883 19.796 15M12 6.5V11.5M9.5 9H14.5M18 9.22222C18 12.6587 15.3137 15.4444 12 17C8.68629 15.4444 6 12.6587 6 9.22222C6 5.78578 8.68629 3 12 3C15.3137 3 18 5.78578 18 9.22222Z" stroke="#currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                Build a trip with AI
             </button>    
         </div>
 
         <div class="list-trip-items">
-            <Tours_Item
-                v-for="tour in tours"
-                :key="tour.id"
-                :tour="tour"
-                @click="navigateToDetailTour(tour.id)"
+            <Trips_Item
+            v-for="trip in trips"
+                :key="trip.id"
+                :trip="trip"
+                @click="navigateToDetailTrip(trip.id)"
             />
-            <Trips_Item/>
-            <Trips_Item_no_date/>
         </div>
     </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import TourViewModel from '../../viewModels/TourViewModel';
-const { loadTourByUserId } = TourViewModel();
-const tours = ref([]);
+import TripViewModel from '../../viewModels/TripViewModel';
+const { fetchTripByUser } = TripViewModel();
+const trips = ref([]);
 onMounted(async () => {
-    tours.value = await loadTourByUserId();
+    trips.value = await fetchTripByUser();
 });
-const navigateToDetailTour = (tour_id) =>{
-        window.location.assign(`/tour/${tour_id}`);
+const navigateToDetailTrip = (trip_id) =>{
+        window.location.assign(`/Trip/${trip_id}`);
 };
+const navigateToBuildTrip = () => {
+    window.location.assign('/Create_Trip/');
+}
 </script>
 
 <script>
