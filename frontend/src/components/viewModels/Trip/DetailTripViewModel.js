@@ -15,6 +15,9 @@ export default function (tripId) {
             const destinations = await Promise.all(
                 selectedTrip.trip_destinations.map(async (tripDestination) => {
                     const destination = await getDestinationById(tripDestination.destination_id);
+                    destination.trip_id = tripDestination.trip_id;
+                    destination.order = tripDestination.order;
+                    destination.day = tripDestination.day;
                     return destination; // Trả về thông tin destination
                 })
             );
