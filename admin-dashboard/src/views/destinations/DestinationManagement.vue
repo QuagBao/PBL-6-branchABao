@@ -1,164 +1,187 @@
 <template>
-    <div class="destination-management">
-      <h2>Destination Management</h2>
-      <div class="table-container">
-        <button class="action-button add-button" @click="showCreateForm">
-          Add New Destination
-        </button>
-        <table class="destination-table">
-          <thead>
-            <tr>
-              <th>Destination Name</th>
-              <th>User Create</th>
-              <th>City</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="destination in paginatedDestinations"
-              :key="destination.id"
-            >
-              <td>{{ destination.name }}</td>
-              <td>{{ getUserName(destination.user_id) }}</td>
-              <td v-if="destination.address">
-                {{ getCityName(destination.address.city_id) }}
-              </td>
-              <td v-else>N/A</td>
-              <td>
-                <div class="dropdown">
-                  <button 
-                    class="action-button dropdown-toggle"
-                    @click="toggleDropdown(destination.id)"
+  <div class="destination-management">
+    <h2>Destination Management</h2>
+    <div class="table-container">
+      <!-- Thanh tìm kiếm -->
+      <div class="search-container">
+        <input
+          type="text"
+          v-model="searchQuery"
+          placeholder="Search by destination name..."
+          class="search-input"
+        />
+      </div>
+
+      <button class="action-button add-button" @click="showCreateForm">
+        Add New Destination
+      </button>
+
+      <table class="destination-table">
+        <thead>
+          <tr>
+            <th>Destination Name</th>
+            <th>User Create</th>
+            <th>City</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="destination in paginatedDestinations"
+            :key="destination.id"
+          >
+            <td>{{ destination.name }}</td>
+            <td>{{ getUserName(destination.user_id) }}</td>
+            <td v-if="destination.address">
+              {{ getCityName(destination.address.city_id) }}
+            </td>
+            <td v-else>N/A</td>
+            <td>
+              <div class="dropdown">
+                <button
+                  class="action-button dropdown-toggle"
+                  @click="toggleDropdown(destination.id)"
+                >
+                  <span class="icon">☰</span>
+                </button>
+                <div class="dropdown-menu" v-if="activeDropdown === destination.id">
+                  <button
+                    class="dropdown-item"
+                    @click="showDetail(destination.id)"
                   >
-                    <span class="icon">☰</span>
+                    <i class="icon-update"></i> Detail
                   </button>
-                  <div class="dropdown-menu" v-if="activeDropdown === destination.id">
-                    <button
-                      class="dropdown-item"
-                      @click="showDetail(destination.id)"
-                    >
-                      <i class="icon-update"></i> Detail
-                    </button>
-                    <button
-                      class="dropdown-item"
-                      @click="deleteDestination(destination.id)"
-                    >
-                      <i class="icon-delete"></i> Delete
-                    </button>
-                  </div>
-                  
+                  <button
+                    class="dropdown-item"
+                    @click="deleteDestination(destination.id)"
+                  >
+                    <i class="icon-delete"></i> Delete
+                  </button>
                 </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="pagination">
-          <button :disabled="currentPage === 1" @click="prevPage" class="pagination-button">
-            <span>&lt;</span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Phân trang -->
+      <div class="pagination">
+        <button :disabled="currentPage === 1" @click="prevPage" class="pagination-button">
+          <span>&lt;</span>
+        </button>
+        <div class="pagination-numbers">
+          <button 
+            v-for="page in visiblePages" 
+            :key="page" 
+            @click="goToPage(page)" 
+            :class="{ 'active': currentPage === page }"
+          >
+            {{ page }}
           </button>
-          <div class="pagination-numbers">
-            <button 
-              v-for="page in visiblePages" 
-              :key="page" 
-              @click="goToPage(page)" 
-              :class="{ 'active': currentPage === page }"
-            >
-              {{ page }}
-            </button>
-            <span v-if="totalPages > maxVisiblePages && currentPage < totalPages - 2">...</span>
-            <button 
-              v-if="totalPages > maxVisiblePages" 
-              @click="goToPage(totalPages)" 
-              :class="{ 'active': currentPage === totalPages }"
-            > 
-              {{ totalPages }}
-            </button>
-          </div>
-          <button :disabled="currentPage === totalPages" @click="nextPage" class="pagination-button">
-            <span>&gt;</span>
+          <span v-if="totalPages > maxVisiblePages && currentPage < totalPages - 2">...</span>
+          <button 
+            v-if="totalPages > maxVisiblePages" 
+            @click="goToPage(totalPages)" 
+            :class="{ 'active': currentPage === totalPages }"
+          > 
+            {{ totalPages }}
           </button>
         </div>
+        <button :disabled="currentPage === totalPages" @click="nextPage" class="pagination-button">
+          <span>&gt;</span>
+        </button>
       </div>
     </div>
-  </template>
-  
-  <script setup>
-  import { ref, onMounted, computed } from 'vue';
-  import DestinationManagementController from '@/controllers/DestinationManagementController';
-  
-  const destinations = ref([]);
-  const cities = ref([]);
-  const users = ref([]);
-  const activeDropdown = ref(null);
-  
-  const itemsPerPage = 5;
-  const currentPage = ref(1);
-  
-  const {
-    fetchDestinations,
-    deleteDestination,
-    fetchCities,
-    fetchUsers,
-  } = DestinationManagementController();
-  
-  // Load data
-  const loadDestinations = async () => {
-    destinations.value = await fetchDestinations();
-  };
-  
-  const loadCity = async () => {
-    cities.value = await fetchCities();
-  };
-  
-  const loadUsers = async () => {
-    users.value = await fetchUsers();
-  };
-  
-  onMounted(() => {
-    loadUsers();
-    loadCity();
-    loadDestinations();
-  });
-  
-  const getCityName = (city_id) => {
-    const city = cities.value.find((c) => c.id === city_id);
-    return city ? city.name : 'Unknown City';
-  };
-  
-  const getUserName = (user_id) => {
-    const user = users.value.find((c) => c.id === user_id);
-    return user ? user.username : 'Unknown User';
-  };
-  
-  // Form actions
-  const showCreateForm = () => {
-    window.location.assign(`/destinations/create`);
-  };
-  
-  
-  const showDetail = async (destinationID) => {
-    window.location.assign(`/destinations/${destinationID}`);
-  };
-  
-  // Pagination
-  const paginatedDestinations = computed(() => {
-    const startIndex = (currentPage.value - 1) * itemsPerPage;
-    return destinations.value.slice(startIndex, startIndex + itemsPerPage);
-  });
-  
-  const totalPages = computed(() =>
-    Math.ceil(destinations.value.length / itemsPerPage)
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted, computed } from 'vue';
+import DestinationManagementController from '@/controllers/DestinationManagementController';
+
+const destinations = ref([]);
+const cities = ref([]);
+const users = ref([]);
+const activeDropdown = ref(null);
+
+const itemsPerPage = 5;
+const currentPage = ref(1);
+const searchQuery = ref(''); // Biến tìm kiếm
+
+const {
+  fetchDestinations,
+  deleteDestination,
+  fetchCities,
+  fetchUsers,
+} = DestinationManagementController();
+
+// Load data
+const loadDestinations = async () => {
+  destinations.value = await fetchDestinations();
+};
+
+const loadCity = async () => {
+  cities.value = await fetchCities();
+};
+
+const loadUsers = async () => {
+  users.value = await fetchUsers();
+};
+
+onMounted(() => {
+  loadUsers();
+  loadCity();
+  loadDestinations();
+});
+
+const getCityName = (city_id) => {
+  const city = cities.value.find((c) => c.id === city_id);
+  return city ? city.name : 'Unknown City';
+};
+
+const getUserName = (user_id) => {
+  const user = users.value.find((c) => c.id === user_id);
+  return user ? user.username : 'Unknown User';
+};
+
+// Form actions
+const showCreateForm = () => {
+  window.location.assign(`/destinations/create`);
+};
+
+const showDetail = async (destinationID) => {
+  window.location.assign(`/destinations/${destinationID}`);
+};
+
+// Live Search (Tìm kiếm)
+const filteredDestinations = computed(() => {
+  if (!searchQuery.value) {
+    return destinations.value;
+  }
+  return destinations.value.filter(destination =>
+    destination.name.toLowerCase().includes(searchQuery.value.toLowerCase())
   );
-  
-  const prevPage = () => {
-    if (currentPage.value > 1) currentPage.value--;
-  };
-  
-  const nextPage = () => {
-    if (currentPage.value < totalPages.value) currentPage.value++;
-  };
-  const toggleDropdown = (destinationId) => {
+});
+
+// Pagination (Phân trang)
+const paginatedDestinations = computed(() => {
+  const startIndex = (currentPage.value - 1) * itemsPerPage;
+  return filteredDestinations.value.slice(startIndex, startIndex + itemsPerPage);
+});
+
+const totalPages = computed(() =>
+  Math.ceil(filteredDestinations.value.length / itemsPerPage)
+);
+
+const prevPage = () => {
+  if (currentPage.value > 1) currentPage.value--;
+};
+
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) currentPage.value++;
+};
+
+const toggleDropdown = (destinationId) => {
   activeDropdown.value = activeDropdown.value === destinationId ? null : destinationId;
 };
 
@@ -176,7 +199,7 @@ const visiblePages = computed(() => {
   if (pages[0] !== 1) {
     pages.unshift(1); // Thêm trang 1 nếu không nằm trong dải hiển thị
   }
-  
+
   if (pages[pages.length - 1] !== totalPages.value) {
     pages.push(totalPages.value); // Thêm trang cuối nếu không nằm trong dải hiển thị
   }
@@ -187,7 +210,7 @@ const visiblePages = computed(() => {
 const goToPage = (page) => {
   currentPage.value = page;
 };
-  </script>
+</script>
   
   
   <style scoped>
@@ -928,6 +951,25 @@ const goToPage = (page) => {
 .dropdown-item:hover {
   background: #0056b3;
   color: white;
+}
+
+.search-container {
+  margin-bottom: 20px;
+  text-align: right;
+}
+
+.search-input {
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  width: 300px;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: #1877f2;
+  box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
 }
   </style>
   

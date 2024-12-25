@@ -16,7 +16,7 @@
                                          :src="star" alt="star" /> 
                                 </div>
                                 <span class="reviews">
-                                    {{ restaurant.numOfReviews }} Reviews
+                                    {{ restaurant.review_count }} Reviews
                                 </span>
                                 <div class="frame-button d-flex gap-3 align-items-center">
                                     <button v-if="token && restaurant.user_id == user?.id" 
@@ -53,7 +53,15 @@
                                     <div class="details-grid">
                                         <div class="detail-item">
                                             <h5>PRICE RANGE</h5>
-                                            <p>${{ restaurant.price_bottom || 0 }} - ${{ restaurant.price_top || "N/A" }}</p>
+                                            <p v-if="restaurant.price_bottom === 0 && restaurant.price_top === 0">
+                                                    0 VND
+                                            </p>
+                                            <p v-else-if="(restaurant.price_bottom > 1000 || restaurant.price_top > 1000) && (restaurant.price_bottom % 100 === 0 || restaurant.price_top % 100 === 0)">
+                                                    {{ formatPrice(restaurant.price_bottom) }} VND - {{ formatPrice(restaurant.price_top) }} VND
+                                            </p>
+                                            <p v-else>
+                                                    {{ formatPrice(restaurant.price_bottom) }} USD - {{ formatPrice(restaurant.price_top) }} USD
+                                            </p>
                                         </div>
                                         <div class="detail-item">
                                             <h5>SPECIAL DIETS</h5>
@@ -133,6 +141,10 @@
 const navigateToUpdateRestaurant = (id) => {
   window.location.assign(`/Business/Restaurant/Update/${id}`);
 };
+
+const formatPrice = (value) => {
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
   // Các hàm hoặc logic bổ sung có thể được thêm vào nếu cần
 </script>

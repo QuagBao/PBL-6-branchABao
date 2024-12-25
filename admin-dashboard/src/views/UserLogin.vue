@@ -71,57 +71,65 @@ export default {
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 100%;
-  background: linear-gradient(to right, #2e3b4e, #42b983);
+  height: 100vh;
+  background: linear-gradient(to right, #beb3ac, #0a44e4);
   color: #fff;
   border-radius: 8px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  padding: 20px;
 }
 
 .login-title {
-  font-size: 2rem;
+  font-size: 2.5rem;
   margin-bottom: 20px;
+  font-weight: bold;
+  color: #ffffff;
 }
 
 .login-input {
   width: 100%;
   max-width: 400px;
-  padding: 10px;
+  padding: 15px;
   margin: 10px 0;
   border: none;
   border-radius: 5px;
   outline: none;
   font-size: 1rem;
-  transition: background-color 0.3s;
+  transition: background-color 0.3s, box-shadow 0.3s;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
 }
 
 .login-input::placeholder {
-  color: #cfd8dc;
+  color: #c8e6c9;
 }
 
 .login-input:focus {
-  background-color: rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 2px solid #66bb6a;
+  box-shadow: 0 0 10px rgba(102, 187, 106, 0.5);
 }
 
 .login-button {
-  padding: 10px 20px;
-  background-color: #007bff;
+  padding: 15px 30px;
+  background-color: #388e3c;
   color: #fff;
   border: none;
   border-radius: 5px;
-  font-size: 1rem;
+  font-size: 1.2rem;
   cursor: pointer;
   transition: background-color 0.3s, transform 0.2s;
+  margin-top: 20px;
 }
 
 .login-button:hover {
-  background-color: #0056b3;
+  background-color: #2e7d32;
   transform: scale(1.05);
 }
 
 .error-message {
   color: #ff4d4d;
   margin-top: 10px;
-  font-size: 0.9rem;
+  font-size: 1rem;
 }
 </style>

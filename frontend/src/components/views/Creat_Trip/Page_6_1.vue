@@ -1,14 +1,14 @@
 <template>
-    <div class="container-fluid">
+    <div class="container-fluid-1">
         <div class="container-fluid">
             <div class="container-fluid frame-title" style="width: 1480px;">
                 <h1>Name your trip</h1>
-                <h5>Organize your saves and create a custom itinerary</h5>
+                <h5>Organize your saves and create a itinerary trip by AI</h5>
             </div>
 
             <div class="container frame-name">
                 <div class="container-fluid">
-                    <form class="search-container" @submit.prevent="finishItinerary">
+                    <form class="search-container" @submit.prevent="finishItineraryAI">
                         <input type="text"
                                v-model="itineraryName"
                                placeholder="Your itinerary name"
@@ -19,8 +19,8 @@
 
             <div class="container-fluid frame-button px-5">
                 <button class="button back" @click="goBack" >Back</button>
-                <button type="submit" @click="addTour" 
-                        @submit.prevent="finishItinerary"
+                <button 
+                        @click="finishItineraryAI"
                         class="button next-button">Create</button>
             </div>
         </div>
@@ -28,7 +28,6 @@
 </template>
 
 <script>
-import Scroll_Bar_Component from '../Scroll_Bar_Component.vue';
 export default {
     name: "Page_6_1",
     methods: {
@@ -44,13 +43,28 @@ export default {
 </script>
 
 <script setup>
-import CreateTripViewModel from '../../viewModels/Create_Trip_ViewModel/CreateTripViewModel';
+import CreateTrip from '../../viewModels/CreateTripViewModel';
+
+
 const {
-    itineraryName, finishItinerary, addTour
-} = CreateTripViewModel();
+    itineraryName, 
+    finishItineraryAI,
+} = CreateTrip();
+
 </script>
 
 <style scoped>
+.container-fluid-1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
 .frame-title{
     display: flex;
     flex-direction: column;
@@ -72,8 +86,10 @@ const {
 .search-container {
     display: flex;
     align-items: center;
+    flex-direction: column;
     justify-content: center;
     margin-top: 100px;
+    gap: 20px;
 }
 .itinerary-input{
     flex: 1;

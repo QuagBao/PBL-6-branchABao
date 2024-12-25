@@ -52,6 +52,7 @@ const Page_7 = () => import('./components/views/Creat_Trip/Page_7.vue');
 
 // Detail Trip
 const Detail_Trip = () => import('./components/views/Trip/Detail_Trip.vue');
+const Trip_List = () => import('./components/views/Trip/Trip_List.vue');
 
 //Dashboard_For_Company
 const Dashboard_For_Company = () => import('./components/views/Dashboard_For_Company/dashboard_for_company.vue')
@@ -136,10 +137,15 @@ const routes = [
   { path: '/Create_Trip/Page_5', name: 'Page_5', component: Page_5 },
   { path: '/Create_Trip/Page_6_1', name: 'Page_6_1', component: Page_6_1 },
   { path: '/Create_Trip/Page_6_2', name: 'Page_6_2', component: Page_6_2 },
-  { path: '/Create_Trip/Page_7', name: 'Page_7', component: Page_7 },
+  {
+    path: '/Create_Trip/Page_7/:id',
+    name: 'Page_7',
+    component: Page_7,
+  },
   
   // Detail Trip
-  { path: '/DetailTrip', name: 'DetailTrip', component: Detail_Trip },
+  { path: '/Trip/:id', name: 'DetailTrip', component: Detail_Trip },
+  { path: '/Trip', name: 'Trip', component: Trip_List },
   
   // Topic_List
   { path: '/Topic/:topic', name: 'Topic_List', component: Topic_List },

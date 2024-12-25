@@ -9,55 +9,86 @@
         <div class="container ">
           <Form_Search class="search-form" :name="'Attraction, activities or destination'" />
         </div>
+      </div>
+      <h2 class="title-result">Result for: {{ searchQuery }}</h2>
+      <div class="row title-content">
+        <div class="container-fluid context">
+          <div class="row">
+            <Cards_City
+              v-for="(item, index) in cities"
+              :key="index"
+              :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
+              :name="item.name"
+              :description="item.description"
+              @click="navigateToDestination(item.id)"
+            />
+          </div>
+        </div>
+      </div>
+      <!-- Things to do Section -->
+      <div class="row title-content">
+        <div class="container-fluid context">
+          <div class="row">
+            <Cards
+              v-for="(item, index) in destinations"
+              :key="index"
+              :destID="item.id"
+              :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
+              :name="item.name"
+              :description="item.description"
+              :rating="item.rating"
+              :stars="generateStars(item.rating)"
+              :ratingCount="item.review_count"
+              :tags="item.tag"
+              @click="navigateToDetailPlace(item.id)"
+            />
+          </div>
+        </div>
+      </div>
 
-        <div class="container-fluid results py-5 d-flex flex-column gap-5">
-          <div class="frame-cities d-flex flex-column gap-3">
-            <p class="title city">Cities</p>
-            <div class="container context">
-              <Cards_City v-for="(item, index) in cities"
-                    :key="index"
-                    :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
-                    :name="item.name"
-                    :description="item.description"
-                    @click="navigateToDestination(item.id)" />
-            </div>
+      <!-- Restaurants Section -->
+      <div class="row title-content">
+        <div class="container-fluid context">
+          <div class="row">
+            <Cards
+              v-for="(item, index) in restaurants"
+              :key="index"
+              :destID="item.id"
+              :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
+              :name="item.name"
+              :description="item.description"
+              :rating="item.rating"
+              :stars="generateStars(item.rating)"
+              :ratingCount="item.review_count"
+              :tags="item.tag"
+              @click="navigateToDetailRestaurant(item.restaurant_id)"
+            />
           </div>
-          <div class="frame-things-to-do d-flex flex-column gap-3 py-5">
-            <p class="title city">Things to do</p>
-            <div class="container context">
-              <Cards_City v-for="(item, index) in destinations"
-                    :key="index"
-                    :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
-                    :name="item.name"
-                    :description="item.description"
-                    @click="navigateToDestination(item.id)" />
-            </div>
-          </div>
-          <div class="frame-things-to-do d-flex flex-column gap-3 py-5">
-            <p class="title city">Restaurants</p>
-            <div class="container context">
-              <Cards_City v-for="(item, index) in restaurants"
-                    :key="index"
-                    :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
-                    :name="item.name"
-                    :description="item.description"
-                    @click="navigateToDestination(item.id)" />
-            </div>
-          </div>
-          <div class="frame-things-to-do d-flex flex-column gap-3 py-5">
-            <p class="title city">Resorts & Hotels</p>
-            <div class="container context">
-              <Cards_City v-for="(item, index) in hotels"
-                    :key="index"
-                    :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
-                    :name="item.name"
-                    :description="item.description"
-                    @click="navigateToDestination(item.id)" />
-            </div>
+        </div>
+      </div>
+
+      <!-- Resort & Hotels Section -->
+      <div class="row title-content">
+        <div class="container-fluid context">
+          <div class="row">
+            <Cards
+              v-for="(item, index) in hotels"
+              :key="index"
+              :destID="item.id"
+              :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
+              :name="item.name"
+              :description="item.description"
+              :rating="item.rating"
+              :stars="generateStars(item.rating)"
+              :ratingCount="item.review_count"
+              :tags="item.tag"
+              @click="navigateToDetailHotel(item.hotel_id)"
+            />
           </div>
         </div>
       </div>
     </div>
+  </div>
 </template>
 
 <script setup>
@@ -127,6 +158,14 @@ export default {
   font-size: 30px;
   font-weight: 900;
 }
+.title-result {
+  color: #13357B;
+  font-size: 25px;
+  font-weight: 900;
+  margin-bottom: 10px; /* Giảm khoảng cách giữa tiêu đề và phần cards */
+  margin-top: 50px;
+}
+
 .context {
   display: flex;
   flex-direction: column;

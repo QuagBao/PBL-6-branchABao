@@ -7,10 +7,12 @@
             <div class="container-fluid p-2 overall-info">
                 <div class="row">
                     <div class="container-fluid col-8">
-                        <p class="item-number">{{index}}.</p>
-                        <p class="item-name">{{ name }}</p>
+                        <div class="item-container">
+                            <p class="item-number">{{index}}.</p>
+                            <p class="item-name">{{ name }}</p>
+                        </div>
                         <div class="location">
-                            <svg width="50px" height="50px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path fill-rule="evenodd" clip-rule="evenodd" d="M12.2848 18.9935C12.1567 19.0875 12.0373 19.1728 11.9282 19.2493C11.8118 19.1721 11.6827 19.0833 11.5427 18.9832C10.8826 18.5109 10.0265 17.8176 9.18338 16.9529C7.45402 15.1792 6 12.9151 6 10.5C6 7.18629 8.68629 4.5 12 4.5C15.3137 4.5 18 7.18629 18 10.5C18 12.8892 16.4819 15.1468 14.6893 16.9393C13.8196 17.8091 12.9444 18.5099 12.2848 18.9935ZM19.5 10.5C19.5 16.5 12 21 12 21C11.625 21 4.5 16.5 4.5 10.5C4.5 6.35786 7.85786 3 12 3C16.1421 3 19.5 6.35786 19.5 10.5ZM13.5 10.5C13.5 11.3284 12.8284 12 12 12C11.1716 12 10.5 11.3284 10.5 10.5C10.5 9.67157 11.1716 9 12 9C12.8284 9 13.5 9.67157 13.5 10.5ZM15 10.5C15 12.1569 13.6569 13.5 12 13.5C10.3431 13.5 9 12.1569 9 10.5C9 8.84315 10.3431 7.5 12 7.5C13.6569 7.5 15 8.84315 15 10.5Z" fill="#13357B"/>
                             </svg>
                             <p class="location-name">{{ location }}</p>
@@ -31,7 +33,7 @@
                 </div> 
             </div>
             <div class="container-fluid p-2 description">
-                <svg class="bling" width="50px" height="50px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                <svg class="bling" width="1.25vw" height="1.25vw" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                     <title>bling_line</title>
                     <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                         <g id="Editor" transform="translate(-144.000000, 0.000000)" fill-rule="nonzero">
@@ -131,44 +133,51 @@ export default {
     box-shadow: 5px 5px 10px rgba(19, 53, 123, 0.25);
     margin-top: 10px;
     width: 100%;
-    height: 480px;
+    height: 250px;
     object-fit: cover;
 }
-.item-number{
-    font-size: 30px;
+.item-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
-.item-name{
-    font-size: 30px;
+
+.item-number {
+    font-size: 1.75vw;
+}
+
+.item-name {
+    font-size: 1.75vw;
     font-weight: bold;
 }
 .location {
     display: flex;
     align-items: stretch;
-    font-size: 25px;
+    font-size: 1.5vw;
     text-decoration: underline #13357B;
     text-underline-offset: 10px;
     gap: 15px;
     margin-left: -10px;
 }
 .save {
-    margin-top: 50px;
+    margin-top: 10px;
 }
 .rating-icon{
     display: flex;
-    font-size: 25px;
+    font-size: 1.25vw;
     align-items: center;
     margin-left: 20px;
 }
 .rating-icon img{
-    width: 30px;
+    width: 1.25vw;
 }
 .rating-icon span{
-    margin-left: 20px;
+    margin-left: 1vw;
 }
 .description{
     display: flex;
     margin-left: 20px;
-    margin-top: 20px;
+    margin-top: 10px;
     gap: 20px;
     align-items: flex-start;
 }
@@ -176,29 +185,29 @@ export default {
     transform: rotate(180deg);
 }
 .item-description{
-    font-size: 25px;
-    padding-right: 80px;
+    font-size: 1.25vw;
+    padding-right: 3vw;
 }
 .quick-fact-title p{
-    font-size: 22px;
+    font-size: 1.3vw;
     font-weight: bold;
-    margin: 15px 0 0 10px;
+    margin: 10px 0 0 10px;
 }
 .fact{
     display: flex;
-    margin: 20px 0;
+    margin: 10px 0;
     align-items: center;
     justify-content: space-between;
 }
 .tags, .price{
     padding: 10px 20px;
-    min-width: 450px;
+    min-width: 40%;
     display: flex;
     gap: 10px;
     align-items: center;
     border-radius: 30px;
     background-color: #CAF0F8;
-    font-size: 20px;
+    font-size: 1vw;
 }
 .tags svg #icon{
     fill: #13357B;

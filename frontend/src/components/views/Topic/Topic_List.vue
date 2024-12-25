@@ -62,38 +62,27 @@
                     </div> 
                 </div>
 
-                <div class="container-fluid content"
-                    v-for="(item, index) in filteredDestinations" :key="index">
-                    <div class="container" v-if="index === 0">
-                        <Topic_Item_1 :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
-                                    :index="index+1"
-                                    :destID="item.id"
-                                    :name="item.name"
-                                    :location="getCity(item.address.city_id).name"
-                                    :stars="generateStars(item.rating)"
-                                    :reviewNumber="item?.numOfReviews || 0"
-                                    :description="truncatedDescription(item.description)"
-                                    :tags="item.tags"
-                                    :price="item.price_bottom"
-                                    @click="navigate(item)"/>
-                    </div>
-                    <div v-else class="container">
-                        <Topic_Item_2 :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
-                                    :index="index+1"
-                                    :destID="item.id"
-                                    :name="item.name"
-                                    :location="getCity(item.address.city_id).name"
-                                    :stars="generateStars(item.rating)"
-                                    :reviewNumber="item?.numOfReviews || 0"
-                                    :description="truncatedDescription(item.description)"
-                                    :tags="item.tags"
-                                    :price="item.price_bottom"
-                                    @click="navigate(item)"/>
-                    </div>
-                </div>
-            </div>
+    <div v-if="loading">
+        <div class="skeleton-loader" v-for="n in 10" :key="n"></div>
+    </div>
+
+    <div v-else class="container-fluid content"
+        v-for="(item, index) in destinations" :key="index">
+        <div class="container">
+            <Topic_Item_2 :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
+                          :index="index+1"
+                          :destID="item.id"
+                          :name="item.name"
+                          :location="getCity(item.address.city_id).name"
+                          :stars="generateStars(item.rating)"
+                          :reviewNumber="item?.review_count || 0"
+                          :description="truncatedDescription(item.description)"
+                          :tags="item.tags"
+                          :price="item.price_bottom"
+                          @click="navigate(item)"/>
         </div>
     </div>
+
 </template>
 
 <script setup>
@@ -101,29 +90,39 @@ import destinationViewModel from '../../viewModels/Topic_ListViewModel';
 import generateViewModel from '../../viewModels/generate_ratingViewModel';
 import { useRoute } from 'vue-router';
 import { ref, onMounted, computed } from 'vue';
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/scrollbar';
+const modules = [Navigation, Pagination, Scrollbar, A11y];
 const route = useRoute();
 const topicName = route.params.topic;
 const {
     destinations,
-    cities,
-    selectedIndex, selectButton,
-    truncatedDescription,
-    loadCities,
     tags,
+    cities,
     selectedCityId,
+    selectedIndex,
     dropdownVisibleRegion,
-    filteredDestinations,
+    loading,
+    truncatedDescription,
+    selectButton,
+    selectCity,
     selectedCityName,
     toggleDropDownRegion,
-    selectCity,
+    fetchFilteredDestinations,
 } = destinationViewModel(topicName);
+const selectTag = async (tag_id) => {
+    selectButton(tag_id)
+    await fetchFilteredDestinations();
+};
 const {
     generateStars,
   } = generateViewModel();
 const getCity = (city_id) => {
     return cities.value.find(city => city.id === city_id);
 };
-
 const navigate = (destination) => {
     if(destination.hotel_id!= null){
         navigateToDetailHotel(destination.hotel_id);
@@ -138,7 +137,6 @@ const navigate = (destination) => {
 const navigateToDetailPlace = (id) => window.location.assign(`/Detail/Place/${id}`);
 const navigateToDetailRestaurant = (restaurant_id) => window.location.assign(`/Detail/Restaurant/${restaurant_id}`);
 const navigateToDetailHotel = (hotel_id) => window.location.assign(`/Detail/Hotel/${hotel_id}`);
-
 </script>
 
 <script>
@@ -200,6 +198,7 @@ export default {
 }
 .dropdown-button{
     min-width: 200px;
+    min-width: 200px;
     padding: 10px;
     border-radius: 30px;
     border: none;
@@ -251,7 +250,8 @@ export default {
 }
 
 .content{
-    margin-bottom: 50px
+    margin-bottom: 50px;
+    width: 70%;
 }
 .swiper {
     width: 100%;
@@ -291,5 +291,20 @@ export default {
     background-color: #13357B;
     color: #EDF6F9;
 }
+.skeleton-loader {
+    height: 200px;
+    margin: 10px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+}
 
+@keyframes skeleton-loading {
+    from {
+        background-position: 200% 0;
+    }
+    to {
+        background-position: -200% 0;
+    }
+}
 </style>

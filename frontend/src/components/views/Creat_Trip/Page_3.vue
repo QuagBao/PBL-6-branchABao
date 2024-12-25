@@ -1,15 +1,15 @@
 <template>
-    <div class="container-fluid">
+    <div class="container-fluid-1">
         <div class="container-fluid p-2">
             <div class="container-fluid frame-title" style="width: 1480px;">
                 <h1>Tell us what you’re interested in</h1>
                 <h5>Select all that apply</h5>
             </div>
             <div class="container frame-items">
-                <button v-for="(topic,index) in topics" :key="index" 
+                <button v-for="topic in topics" :key="topic.id" 
                         class="item"
-                        :class="{ 'selected': selectedTopics.includes(topic) }"
-                        @click="toggleTopic(topic)">
+                        :class="{ 'selected': selectTags.includes(topic.id) }"
+                        @click="toggleTopic(topic.id)">
                     {{ topic.name }}
                 </button>
             </div>
@@ -21,38 +21,41 @@
     </div>
 </template>
 
-<script>
-import Scroll_Bar_Component from '../Scroll_Bar_Component.vue';
-import Calendar from './Calendar.vue';
-export default {
-    name: "Page_3",
-    components: {
-        Calendar,
-    },
-    
-    methods: {
-        // Method for 'Back' button (to go to the previous page)
-        goBack() {
-            this.$router.push({name: 'Page_2_1'}); // This will take the user to the previous page in the history
-        },
-        // Method for 'Next' button (to navigate to the next page)
-        goNext() {
-            this.$router.push({ name: 'Page_4' }); // Replace 'next-page' with the name of your target route
-        },
-    }
-}
-</script>
-
 <script setup>
-import CreateTripViewModel from '../../viewModels/Create_Trip_ViewModel/CreateTripViewModel';
-const {
-    topics,
-    selectedTopics,
-    toggleTopic
-} = CreateTripViewModel();
+import { onMounted, ref } from 'vue';
+import CreateTrip from '../../viewModels/CreateTripViewModel'
+import { useRouter } from 'vue-router';
+const router = useRouter();
+
+const topics = ref([]);
+const { getTopics, toggleTopic, selectTags, updateTopics } = CreateTrip();
+onMounted(async () => {
+    topics.value = await getTopics();
+});
+
+const goBack = () => {
+    router.push({ name: 'Page_2_1' });
+};
+
+const goNext = () => {
+    updateTopics();
+    router.push({ name: 'Page_4' });
+};
+
 </script>
 
 <style scoped>
+.container-fluid-1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
 .frame-title{
     display: flex;
     flex-direction: column;

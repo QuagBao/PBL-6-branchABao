@@ -1,5 +1,5 @@
-import { ref, computed, onMounted } from 'vue';
-import { fetchDestinationsByTag } from '../models/TopicModel';
+import { ref, watch, onMounted, computed } from 'vue';
+import { fetchDestinationsByTag, fetchDestinationsByCity_Tag, getTagById } from '../models/destinationModel';
 import { fetchCities } from '../models/CityModel';
 import { getTags } from '../models/TagModel';
 
@@ -8,113 +8,111 @@ export default function (topicName) {
   const destinations = ref([]);
   const tags = ref([]);
   const cities = ref([]);
+  const selectedCityId = ref(null);
+  const selectedIndex = ref(0);
+  const dropdownVisibleRegion = ref(false);
+  const loading = ref(false); // Trạng thái loading
 
-  // Các button và lựa chọn từ Model
-  const selectedIndex = ref(null); // Biến lưu chỉ mục duy nhất của nút đang được chọn
-
-  const selectButton = (index) => {
-    const actualIndex = index; // Tính chỉ số thực tế trong mảng buttons
-    if (selectedIndex.value === actualIndex) {
-      selectedIndex.value = null; // Nếu nhấn lại nút đã được chọn, bỏ chọn nó
-    } else {
-      selectedIndex.value = actualIndex; // Cập nhật nút mới được chọn
+  // Xác định topicId
+  const setTopicId = () => {
+    switch (topicName) {
+      case 'culture': topicId.value = 2; break;
+      case 'great-food': topicId.value = 1; break;
+      case 'must-see-attraction': topicId.value = 5; break;
+      case 'shopping': topicId.value = 9; break;
+      default: topicId.value = 11; break;
     }
   };
-  // Khi component được mount, tải dữ liệu
-  onMounted(async () => {
-    switch (topicName) {
-      case 'culture':
-        topicId.value = 2;
-        break;
-      case 'great-food':
-        topicId.value = 9;
-        break;
-      case 'must-see-attraction':
-        topicId.value = 5;
-        break;
-      case 'shopping':
-        topicId.value = 1;
-        break;
-      default:
-        topicId.value = 11;
-        break;
+
+  // Hàm tải dữ liệu điểm đến
+  const fetchFilteredDestinations = async () => {
+    loading.value = true;
+    try {
+      let data = [];
+      console.log('selectedIndex:', selectedIndex.value);
+      if (selectedCityId.value && selectedIndex.value != 0) {
+        console.log('function 1');
+        data = await fetchDestinationsByCity_Tag(selectedCityId.value, [topicId.value, selectedIndex.value]);
+      } else if (selectedCityId.value) {
+        console.log('function 2');
+        data = await fetchDestinationsByCity_Tag(selectedCityId.value, [topicId.value]);
+      } else if (selectedIndex.value != 0) {
+        console.log('function 3');
+        data = await fetchDestinationsByTag([topicId.value, selectedIndex.value]);
+      } else {
+        console.log('function 4');
+        data = await fetchDestinationsByTag([topicId.value]);
+      }
+
+      // Thêm tags vào mỗi điểm đến
+      for (const destination of data) {
+        destination.tags = await getTagById(destination.id);
+      }
+
+      // Sắp xếp kết quả theo mức độ phổ biến
+      destinations.value = data.sort((a, b) => b.popularity_score - a.popularity_score);
+
+    } catch (error) {
+      console.error('Lỗi tải dữ liệu:', error);
+    } finally {
+      loading.value = false;
     }
-    const fetchedDestinations = await fetchDestinationsByTag(topicId.value);
+  };
 
-    // Sắp xếp theo popularity_score giảm dần
-    destinations.value = fetchedDestinations.sort((a, b) => b.popularity_score - a.popularity_score);
+  // Theo dõi sự thay đổi để gọi hàm tự động
+  watch(selectedCityId, fetchFilteredDestinations);
+
+  // Tải dữ liệu khi component được mount
+  onMounted(async () => {
+    setTopicId();
+    await fetchFilteredDestinations(); // Gọi dữ liệu ban đầu
     tags.value = await getTags();
-    cities.value = await loadCities();
-
+    cities.value = await fetchCities();
   });
 
+  // Hàm chọn thành phố
+  const selectCity = (cityId) => {
+    selectedCityId.value = cityId;
+    dropdownVisibleRegion.value = false;
+  };
 
-  // Hàm rút gọn mô tả sau 25 từ
+  // Hàm chọn tag
+  const selectButton = (index) => {
+    selectedIndex.value = selectedIndex.value === index ? 0 : index;
+    
+  };
+
+  // Rút gọn mô tả
   const truncatedDescription = (description) => {
     const words = description.split(' ');
-    if (words.length > 25) {
-      return words.slice(0, 25).join(' ') + '...';
-    }
-    return description;
+    return words.length > 25 ? words.slice(0, 25).join(' ') + '...' : description;
   };
 
-  const loadCities = async () => {
-    try {
-        const cities = await fetchCities();
-        return cities;
-    } catch (error) {
-        console.error('Error getting city list:', error);
-        return [];
-    }
-};
-const selectedCityId = ref(null); // Giá trị mặc định (null = tất cả tours)
-const dropdownVisibleRegion = ref(false); // Trạng thái hiển thị dropdown
-// Danh sách tours được lọc theo `selectedCityId`
-const filteredDestinations = computed(() => {
-  // Lọc theo thành phố và tag (nếu có)
-  return destinations.value.filter(destination => {
-      const matchesCity = selectedCityId.value
-          ? destination.address.city_id === selectedCityId.value
-          : true;
+  // Lấy tên thành phố
 
-      const matchesTag = selectedIndex.value !== null
-          ? destination.tags.some(tag => tag.id === selectedIndex.value)
-          : true;
-
-      return matchesCity && matchesTag;
-  });
-});
-
-// Tên thành phố hiển thị trên nút dropdown
-const selectedCityName = computed(() => {
+  const selectedCityName = computed(() => {
     if (!selectedCityId.value) return 'Việt Nam';
     const city = cities.value.find(c => c.id === selectedCityId.value);
     return city ? city.name : 'Việt Nam';
 });
 
-// Toggle trạng thái dropdown
-const toggleDropDownRegion = () => {
+  const toggleDropDownRegion = () => {
     dropdownVisibleRegion.value = !dropdownVisibleRegion.value;
-};
-
-// Chọn thành phố
-const selectCity = (cityId) => {
-    selectedCityId.value = cityId; // Cập nhật ID thành phố được chọn
-    dropdownVisibleRegion.value = false; // Đóng dropdown
-};
+  };
 
   return {
-    cities,
     destinations,
-    selectedIndex, selectButton,
-    truncatedDescription,
-    loadCities,
     tags,
+    cities,
     selectedCityId,
+    selectedIndex,
     dropdownVisibleRegion,
-    filteredDestinations,
+    loading,
+    truncatedDescription,
+    selectButton,
+    selectCity,
     selectedCityName,
     toggleDropDownRegion,
-    selectCity,
+    fetchFilteredDestinations, // Cho phép gọi thủ công nếu cần
   };
 }

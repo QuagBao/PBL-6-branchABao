@@ -1,81 +1,91 @@
 <template>
-    <div class="destination-management">
-      <h2>Review Management</h2>
-      <div class="table-container">
-        <table class="destination-table">
-          <thead>
-            <tr>
-              <th>Destination Name</th>
-              <th>User Create</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr
-              v-for="destination in paginatedReviews"
-              :key="destination.id"
-            >
-              <td>{{ destination.name }}</td>
-              <td>{{ getUserName(destination.user_id) }}</td>
-              <td>
-                <button
-                  class="action-button view-button"
-                  @click="getReviewByDesId(destination.id)"
-                >
-                  <i class="icon-update"></i> Detail Review
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="pagination">
-          <button :disabled="currentPage === 1" @click="prevPage" class="pagination-button">
-            <span>&lt;</span>
-          </button>
-          <div class="pagination-numbers">
-            <button 
-              v-for="page in visiblePages" 
-              :key="page" 
-              @click="goToPage(page)" 
-              :class="{ 'active': currentPage === page }"
-            >
-              {{ page }}
-            </button>
-            <span v-if="totalPages > maxVisiblePages && currentPage < totalPages - 2">...</span>
-            <button 
-              v-if="totalPages > maxVisiblePages" 
-              @click="goToPage(totalPages)" 
-              :class="{ 'active': currentPage === totalPages }"
-            > 
-              {{ totalPages }}
-            </button>
-          </div>
-          <button :disabled="currentPage === totalPages" @click="nextPage" class="pagination-button">
-            <span>&gt;</span>
-          </button>
-        </div>
+  <div class="destination-management">
+    <h2>Review Management</h2>
+    <div class="header-container">
+      <div class="search-container">
+        <input
+          type="text"
+          v-model="searchQuery"
+          placeholder="Search by destination name..."
+          class="search-input"
+        />
       </div>
     </div>
-  </template>
+    <div class="table-container">
+      <table class="destination-table">
+        <thead>
+          <tr>
+            <th>Destination Name</th>
+            <th>User Create</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr
+            v-for="destination in paginatedReviews"
+            :key="destination.id"
+          >
+            <td>{{ destination.name }}</td>
+            <td>{{ getUserName(destination.user_id) }}</td>
+            <td>
+              <button
+                class="action-button view-button"
+                @click="getReviewByDesId(destination.id)"
+              >
+                <i class="icon-update"></i> Detail Review
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="pagination">
+        <button :disabled="currentPage === 1" @click="prevPage" class="pagination-button">
+          <span>&lt;</span>
+        </button>
+        <div class="pagination-numbers">
+          <button 
+            v-for="page in visiblePages" 
+            :key="page" 
+            @click="goToPage(page)" 
+            :class="{ 'active': currentPage === page }"
+          >
+            {{ page }}
+          </button>
+          <span v-if="totalPages > maxVisiblePages && currentPage < totalPages - 2">...</span>
+          <button 
+            v-if="totalPages > maxVisiblePages" 
+            @click="goToPage(totalPages)" 
+            :class="{ 'active': currentPage === totalPages }"
+          > 
+            {{ totalPages }}
+          </button>
+        </div>
+        <button :disabled="currentPage === totalPages" @click="nextPage" class="pagination-button">
+          <span>&gt;</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</template>
+
   
-  <script setup>
+<script setup>
 import ReviewManagementController from "@/controllers/ReviewManagementController";
 import { ref, onMounted, computed } from "vue";
 
 const destinations = ref([]);
 const cities = ref([]);
 const users = ref([]);
+const searchQuery = ref(""); // Khai báo biến cho thanh tìm kiếm
 
 const itemsPerPage = 5;
 const currentPage = ref(1);
-
 
 const {
   fetchCities,
   fetchUsers,
   fetchDestinations,
 } = ReviewManagementController();
-
 
 const loadDestinations = async () => {
   destinations.value = await fetchDestinations();
@@ -93,8 +103,19 @@ onMounted(loadUsers);
 onMounted(loadCity);
 onMounted(loadDestinations);
 
+// Lọc destinations theo tên
+const filteredDestinations = computed(() => {
+  if (!searchQuery.value) {
+    return destinations.value;
+  }
+
+  return destinations.value.filter((destination) =>
+    destination.name.toLowerCase().includes(searchQuery.value.toLowerCase())
+  );
+});
+
 const getReviewByDesId = async (destinationID) => {
-  window.location.assign('/reviews/' + destinationID);
+  window.location.assign("/reviews/" + destinationID);
 };
 
 const getCityName = (city_id) => {
@@ -107,15 +128,14 @@ const getUserName = (user_id) => {
   return user ? user.username : "Unknown User";
 };
 
-
-
+// Phân trang cho danh sách review
 const paginatedReviews = computed(() => {
   const startIndex = (currentPage.value - 1) * itemsPerPage;
-  return destinations.value.slice(startIndex, startIndex + itemsPerPage);
+  return filteredDestinations.value.slice(startIndex, startIndex + itemsPerPage);
 });
 
 const totalPages = computed(() =>
-  Math.ceil(destinations.value.length / itemsPerPage)
+  Math.ceil(filteredDestinations.value.length / itemsPerPage)
 );
 
 const prevPage = () => {
@@ -140,7 +160,7 @@ const visiblePages = computed(() => {
   if (pages[0] !== 1) {
     pages.unshift(1); // Thêm trang 1 nếu không nằm trong dải hiển thị
   }
-  
+
   if (pages[pages.length - 1] !== totalPages.value) {
     pages.push(totalPages.value); // Thêm trang cuối nếu không nằm trong dải hiển thị
   }
@@ -826,5 +846,36 @@ const goToPage = (page) => {
   .no-data .action-buttons {
     justify-content: flex-end;
   }
+
+  .header-container {
+  display: flex;
+  justify-content: space-between; /* Chia đều không gian giữa 2 phần tử */
+  align-items: center; /* Căn chỉnh theo chiều dọc */
+  width: 100%;
+}
+
+.search-container {
+  margin-bottom: 20px;
+  text-align: right;
+  width: 40%; /* Điều chỉnh chiều rộng của thanh tìm kiếm */
+  margin-left: auto; /* Tự động căn trái để thanh tìm kiếm nằm bên phải */
+  margin-right: 20px;
+}
+
+
+
+.search-input {
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  width: 300px;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: #1877f2;
+  box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+}
   </style>
   

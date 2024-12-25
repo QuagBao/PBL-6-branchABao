@@ -9,7 +9,10 @@
             <div class="contaner-fluid frame-overall">
                 <div class="contaner-fluid frame-1 d-flex flex-column gap-5">
                     <!-- Images -->
-                    <div class="overall">
+                    <div v-if="loading">
+                        <div class="skeleton-loader" v-for="n in 10" :key="n"></div>
+                    </div>
+                    <div v-else class="overall">
                         <div class="image-container">
                             <div class="base"></div>
                             <img :src="city?.images?.[0]?.url || '/blue-image.jpg'" alt="City 1" class="img-fluid">
@@ -21,22 +24,29 @@
                             </div>
                         </div>
                     </div>
-                    <div class="container-fluid py-2">
-                        <div class="title px-5 mx-4">
-                            <h3>Explore popular experiences</h3>
-                            <p>See what other travelers like to do, based on ratings</p>
+                    <div class="container-fluid d-flex flex-column gap-5 ">
+                        <div v-if="loading">
+                            <div class="skeleton-loader" v-for="n in 10" :key="n"></div>
                         </div>
-                        <div class="container-fluid mx-2 frame-button">
-                            <div class="list-button d-flex gap-3 justify-content-flex-start flex-wrap px-5 py-4">
-                                <button class="button-category d-flex align-items-center justify-content-around gap-1" v-for="item in buttons" :key="item.id"  
-                                        :class="{ selected: selectedIndices.includes(item.id) }" 
-                                        @click="selectButton(item.id)">
-                                    <img :src="svgIcons[item.id-1]" alt="icon" class="icon">
-                                    {{ item.name }}
-                                </button>
-                            </div>
+                        <div v-else class="container-fluid btn-catagory d-flex justify-content-center">
+                            <Swiper class="swiper"
+                                    :slides-per-view="4"
+                                    :spaceBetween="10"
+                                    :scrollbar="{ draggable: true }"
+                                    :modules="modules">
+                                <SwiperSlide v-for="item in buttons" :key="item.id">
+                                    <button class="button-category" 
+                                            :class="{ selected: selectedIndices.includes(item.id) }" 
+                                            @click="selectButton(item.id)">
+                                        {{ item.name }}
+                                    </button>
+                                </SwiperSlide>
+                            </Swiper>
                         </div>
-                        <div class="title-content mx-3">
+                        <div v-if="loadingDestinations">
+                            <div class="skeleton-loader" v-for="n in 10" :key="n"></div>
+                        </div>
+                        <div v-else class=" title-content">
                             <p class="title p-5">Top Attraction in {{ city?.name || 'Loading...' }}</p>
                             <div class="container-fluid list-items-1">
                                 <Info_Card v-for="(item, index) in filteredDestinations"
@@ -45,7 +55,7 @@
                                             :imageUrl="item.images[0].url||'/blue-image.jpg'"
                                             :name="item.name"
                                             :stars="generateStars(item.rating)"
-                                            :review-number="item.numOfReviews"
+                                            :review-number="item.review_count"
                                             :tags="item.tag"
                                             :description="item.description"
                                             @click="navigateToDetailPlace(item.id)"/>
@@ -101,10 +111,15 @@ const {
     truncatedDescription,
 } = destinationViewModel(cityId);
 
-onMounted(() => {
-    fetchCityDetailsData();
-    fetchDestinationsData();
-    fetchTags();
+const loading = ref(true);
+const loadingDestinations = ref(true);
+
+onMounted(async () => {
+    await fetchCityDetailsData();
+    await fetchTags();
+    loading.value = false;
+    await fetchDestinationsData();
+    loadingDestinations.value = false;
 });
 
 const {
@@ -223,10 +238,33 @@ const navigateToDetailPlace = (id) => {
 .button-category.selected {
     background-color: #8ecae6;
 }
-.icon {
-    width: 20px;
-    height: 20px;
-    color: #13357B !important;
+.skeleton-loader {
+    height: 200px;
+    margin: 10px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+    from {
+        background-position: 200% 0;
+    }
+    to {
+        background-position: -200% 0;
+    }
+}
+</style>
+
+<style>
+.swiper .swiper-scrollbar {
+    background-color: #EDF6F9 !important;
+    border: 1px solid #13357B !important;
+    height: 6px !important;
+}
+
+.swiper .swiper-scrollbar-drag {
+    background-color: #13357B !important;
 }
 </style>
 

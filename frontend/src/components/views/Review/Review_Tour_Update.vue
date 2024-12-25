@@ -49,6 +49,7 @@
                 :enableTime="false"
                 @update:modelValue="onDateChange"
                 class="calendar"
+                disabled
               />
             </div>
           </div>

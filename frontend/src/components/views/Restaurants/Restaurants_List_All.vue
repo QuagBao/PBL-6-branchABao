@@ -108,7 +108,10 @@
                   </div>
                 </div>
               </div>
-              <div class="list-restaurants">
+              <div v-if="loading">
+                <div class="skeleton-loader" v-for="n in 10" :key="n"></div>
+              </div>
+              <div v-else class="list-restaurants">
                 <Card_Item  v-for="(item, index) in restaurants"
                             :key="index"
                             :destID="item.id"
@@ -116,7 +119,7 @@
                             :name="item.name"
                             :stars="generateStars(item.rating)"
                             :rating="item.rating"
-                            :reviewNumber="item.numOfReviews"
+                            :reviewNumber="item.review_count"
                             :tags="item.tag"
                             @click="navigateToDetailRestaurant(item.restaurant_id)" />
               </div>
@@ -153,15 +156,21 @@ const {
     handleCheckboxChange,
 } = destinationViewModel();
 
+const loading = ref(true);
+
 onMounted(async () => {
+    loading.value = true;
     await filterRestaurants();
+    loading.value = false;
   });
 
   watch(
   [save_option_cuisine, save_option_meal, save_option_special_diet, save_option_feature],
   async () => {
     // Gọi hàm async bên trong mà không trả về Promise từ callback
+    loading.value = true;
     await filterRestaurants();
+    loading.value = false;
   }
 );
 
@@ -371,6 +380,22 @@ const navigateToDetailRestaurant = (restaurant_id) =>{
 }
 .filter-item.active .icon {
     background-image: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23E7C6FF'><path d='M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+}
+.skeleton-loader {
+    height: 200px;
+    margin: 10px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+    from {
+        background-position: 200% 0;
+    }
+    to {
+        background-position: -200% 0;
+    }
 }
 </style>
 

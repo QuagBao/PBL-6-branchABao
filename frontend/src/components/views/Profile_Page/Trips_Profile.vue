@@ -4,78 +4,54 @@
             <p>My Trips</p>
         </div>
 
-        <div class="d-flex justify-content-around gap-5 py-3">
-            <button>
+        <div class="container-fluid-1">
+            <button @click="navigateToBuildTrip">
                 <svg width="50px" height="50px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M6 12H18M12 6V18" stroke="#currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
                 Create a new trip
-            </button>
-        
-            <button>
-                <svg width="50px" height="50px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M4.20404 15C3.43827 15.5883 3 16.2714 3 17C3 19.2091 7.02944 21 12 21C16.9706 21 21 19.2091 21 17C21 16.2714 20.5617 15.5883 19.796 15M12 6.5V11.5M9.5 9H14.5M18 9.22222C18 12.6587 15.3137 15.4444 12 17C8.68629 15.4444 6 12.6587 6 9.22222C6 5.78578 8.68629 3 12 3C15.3137 3 18 5.78578 18 9.22222Z" stroke="#currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                Build a trip with AI
             </button>    
         </div>
 
-        <div class="sort"> 
-            <div class="frame-sort d-flex gap-3 align-items-baseline">
-                Sort by:
-                <div class="custom-select d-flex flex-column">
-                    <div class="select-selected d-flex" @click="toggleDropdown">
-                        <div class="option d-flex flex-column">
-                            {{ selectedOption }}
-                        </div>
-                        <div class="icon">
-                            <svg class="dropdown-icon" width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </div>
-                    </div>
-                    
-                    <ul v-if="isOpen" class="select-items">
-                        <li v-for="option in options" :key="option" @click="selectOption(option)">{{ option }}</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
         <div class="list-trip-items">
-            <Tours_Item v-for="tour in tours"
-                        :key="tour.id"
-                        :tour="tour"
-                        @click="navigateToDetailTour(tour.id)" />
-            <Trips_Item/>
-            <Trips_Item_no_date/>
+            <Trips_Item
+            v-for="trip in trips"
+                :key="trip.id"
+                :trip="trip"
+                @click="navigateToDetailTrip(trip.id)"
+            />
         </div>
     </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
-import TourViewModel from '../../viewModels/TourViewModel';
-const { loadTourByUserId } = TourViewModel();
-const tours = ref([]);
+import TripViewModel from '../../viewModels/TripViewModel';
+const { fetchTripByUser } = TripViewModel();
+const trips = ref([]);
 onMounted(async () => {
-    tours.value = await loadTourByUserId();
+    trips.value = await fetchTripByUser();
 });
-const navigateToDetailTour = (tour_id) =>{
-        window.location.assign(`/tour/${tour_id}`);
+const navigateToDetailTrip = (trip_id) =>{
+        window.location.assign(`/Trip/${trip_id}`);
 };
+const navigateToBuildTrip = () => {
+    window.location.assign('/Create_Trip/');
+}
 </script>
 
 <script>
     import Trips_Item from './Trips_Item.vue';
+    import Header from '../Header.vue';
     import Trips_Item_no_date from './Trips_Item_no_date.vue';
     import Tours_Item from './Tours_Item.vue';
+    import Top_Button from '../Top_Button.vue';
 import { onMounted } from 'vue';
 export default {
     name: "Trips_Profile", 
     components: {
         Trips_Item, Trips_Item_no_date, 
-        Tours_Item,
+        Tours_Item, Header, Top_Button
     },
     data() {
         return {

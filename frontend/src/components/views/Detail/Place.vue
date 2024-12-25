@@ -19,7 +19,7 @@
                                         </div>
                                     </div>
                                     <div class="reviews">
-                                        {{ destination.numOfReviews }} Reviews
+                                        {{ destination.review_count }} Reviews
                                     </div>
                                 </div>
 
@@ -64,7 +64,17 @@
                                         <div class="container-fluid line-divide"></div>
 
                                         <div class="container-fluid price" style="font-size: 25px;">
-                                            <p style="font-weight: 700;">Price from: <span style="font-weight: 700;">$ {{ destination.price_bottom }} - $ {{ destination.price_top }} </span> </p>
+                                            <p style="font-weight: 700;">Price from: 
+                                                <span v-if="destination.price_bottom === 0 && destination.price_top === 0">
+                                                    0 VND
+                                                </span>
+                                                <span v-else-if="(destination.price_bottom > 1000 || destination.price_top > 1000) && (destination.price_bottom % 100 === 0 || destination.price_top % 100 === 0)">
+                                                    {{ formatPrice(destination.price_bottom) }} VND - {{ formatPrice(destination.price_top) }} VND
+                                                </span>
+                                                <span v-else>
+                                                    {{ formatPrice(destination.price_bottom) }} USD - {{ formatPrice(destination.price_top) }} USD
+                                                </span>
+                                            </p>
                                         </div>
                                     </div>
                                 </div>
@@ -132,6 +142,10 @@ const navigateToCreateHotel = (id) => {
 const navigateToCreateRestaurant = (id) => {
   window.location.assign(`/Business/Restaurant/Add/${id}`);
 };
+
+const formatPrice = (value) => {
+    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+}
 
   // Các hàm hoặc logic bổ sung có thể được thêm vào nếu cần
 </script>

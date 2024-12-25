@@ -5,7 +5,11 @@
         <Top_Button v-if="cityDetails" :cityID="cityDetails.id"/>
     </div>
 
-    <div class="container-fluid">
+    <div v-if="loading">
+        <div class="skeleton-loader" v-for="n in 10" :key="n"></div>
+    </div>
+
+    <div v-else class="container-fluid">
         <div class="container-fluid">
             <div class="container-fluid overall-frame">
                 <div class="container-fluid frame">
@@ -68,7 +72,7 @@
                         <div class="title-content">
                             <p class="p-5 things-to-do">Things to do</p>
                             <div class="container-fluid context">
-                                <Cards v-for="(item, index) in filteredDestinations"
+                                <Cards v-for="(item, index) in destinations"
                                         :key="index"
                                         :destID="item.id"
                                         :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
@@ -84,7 +88,7 @@
                         <div class="title-content">
                             <p class="p-5 restaurants">Restaurants</p>
                             <div class="container-fluid context">
-                                <Cards v-for="(item, index) in filteredRestaurants"
+                                <Cards v-for="(item, index) in restaurants"
                                         :key="index"
                                         :destID="item.id"
                                         :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
@@ -100,7 +104,7 @@
                         <div class="title-content">
                             <p class="p-5 resorts">Resort & Hotels</p>
                             <div class="container-fluid context">
-                                <Cards v-for="(item, index) in filteredHotels"
+                                <Cards v-for="(item, index) in hotels"
                                         :key="index"
                                         :destID="item.id"
                                         :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
@@ -161,17 +165,17 @@
         isDestinationsLoading,
         isHotelsLoading,
         isRestaurantsLoading,
-        filteredDestinations,
-        filteredHotels,
-        filteredRestaurants,
         fetchAllData,
     } = destinationViewModel(cityId);
+
+    const loading = ref(true);
 
     // Lifecycle Hook to Fetch Data on Mount
     onMounted(async () => {
         await fetchCityDetailsData();
         await fetchDestinationsData();
         await fetchTags();
+        loading.value = false;
     });
 
     watch(selectedIndices, async () => {
@@ -318,7 +322,32 @@
 :deep(.custom .carousel-control-prev .carousel-control-prev-icon) {
     margin-left: -8.5vw; /* Giá trị mới */
 }
-:deep(.custom .carousel-header) {
-    margin-top: 150px;
+.skeleton-loader {
+    height: 200px;
+    margin: 10px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+    from {
+        background-position: 200% 0;
+    }
+    to {
+        background-position: -200% 0;
+    }
+}
+</style>
+
+<style>
+.swiper .swiper-scrollbar {
+    background-color: #EDF6F9 !important;
+    border: 1px solid #13357B !important;
+    height: 8px !important;
+}
+
+.swiper .swiper-scrollbar-drag {
+    background-color: #13357B !important;
 }
 </style>

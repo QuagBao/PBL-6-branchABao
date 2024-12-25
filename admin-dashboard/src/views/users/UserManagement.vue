@@ -1,123 +1,141 @@
 <template>
-    <div class="user-management">
-      <h2>User Management</h2>
-      <div class="table-container">
+  <div class="user-management">
+    <h2>User Management</h2>
+    <div class="table-container">
+      <!-- Thanh tìm kiếm -->
+       <div class="header-container">
         <button class="action-button add-button" @click="showAddUserForm">
           Add User
         </button>
-        <table class="user-table">
-          <thead>
-            <tr>
-              <th>Username</th>
-              <th>Email</th>
-              <th>Description</th>
-              <th>Phone Number</th>
-              <th>Address</th>
-              <th>Role</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="user in paginatedUsers" :key="user.id">
-              <td>{{ user.username }}</td>
-              <td>{{ user.email }}</td>
-              <td v-if="user.userInfo && user.userInfo.description">
-                {{ user.userInfo.description }}
-              </td>
-              <td v-else>N/A</td>
-              <td v-if="user.userInfo && user.userInfo.phone_number">
-                {{ user.userInfo.phone_number }}
-              </td>
-              <td v-else>N/A</td>
-              <td v-if="user.userInfo && user.userInfo.address">
-                {{ user.userInfo.address.street }},
-                {{ user.userInfo.address.ward }},
-                {{ user.userInfo.address.district }},
-                {{ getCityName(user.userInfo.address.city_id) }}
-              </td>
-              <td v-else>N/A</td>
-              <td>{{ user.role }}</td>
-              <td>{{ user.status }}</td>
-              <td>
-                <div class="dropdown">
-                  <button 
-                    class="action-button dropdown-toggle"
-                    @click="toggleDropdown(user.id)"
+        <div class="search-container">
+          <input
+            type="text"
+            v-model="searchQuery"
+            placeholder="Search by username, email, or phone number..."
+            class="search-input"
+          />
+        </div>
+        
+       </div>
+
+      
+
+      <table class="user-table">
+        <thead>
+          <tr>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Description</th>
+            <th>Phone Number</th>
+            <th>Address</th>
+            <th>Role</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="user in paginatedUsers" :key="user.id">
+            <td>{{ user.username }}</td>
+            <td>{{ user.email }}</td>
+            <td v-if="user.userInfo && user.userInfo.description">
+              {{ user.userInfo.description }}
+            </td>
+            <td v-else>N/A</td>
+            <td v-if="user.userInfo && user.userInfo.phone_number">
+              {{ user.userInfo.phone_number }}
+            </td>
+            <td v-else>N/A</td>
+            <td v-if="user.userInfo && user.userInfo.address">
+              {{ user.userInfo.address.street }},
+              {{ user.userInfo.address.ward }},
+              {{ user.userInfo.address.district }},
+              {{ getCityName(user.userInfo.address.city_id) }}
+            </td>
+            <td v-else>N/A</td>
+            <td>{{ user.role }}</td>
+            <td>{{ user.status }}</td>
+            <td>
+              <div class="dropdown">
+                <button
+                  class="action-button dropdown-toggle"
+                  @click="toggleDropdown(user.id)"
+                >
+                  <span class="icon">☰</span>
+                </button>
+                <div class="dropdown-menu" v-if="activeDropdown === user.id">
+                  <button
+                    class="dropdown-item"
+                    v-if="user.userInfo"
+                    @click="showUpdateForm(user.id)"
                   >
-                    <span class="icon">☰</span>
+                    Edit user info
                   </button>
-                  <div class="dropdown-menu" v-if="activeDropdown === user.id">
-                    <button
-                      class="dropdown-item"
-                      v-if="user.userInfo"
-                      @click="showUpdateForm(user.id)"
-                    >
-                      Edit user info
-                    </button>
-                    <button
-                      class="dropdown-item"
-                      v-else
-                      @click="showCreateForm(user.id)"
-                    >
-                      Create user info
-                    </button>
-                    <button
-                      class="dropdown-item"
-                      @click="changeStatus(user.id)"
-                    >
-                      Change user status
-                    </button>
-                    <button
-                      class="dropdown-item"
-                      @click="deleteInfo(user.userInfo.id)"
-                    >
-                      Delete user info
-                    </button>
-                  </div>
+                  <button
+                    class="dropdown-item"
+                    v-else
+                    @click="showCreateForm(user.id)"
+                  >
+                    Create user info
+                  </button>
+                  <button
+                    class="dropdown-item"
+                    @click="changeStatus(user.id)"
+                  >
+                    Change user status
+                  </button>
+                  <button
+                    class="dropdown-item"
+                    @click="deleteInfo(user.userInfo.id)"
+                  >
+                    Delete user info
+                  </button>
                 </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <div class="pagination">
-          <button :disabled="currentPage === 1" @click="prevPage" class="pagination-button">
-            <span>&lt;</span>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- Phân trang -->
+      <div class="pagination">
+        <button :disabled="currentPage === 1" @click="prevPage" class="pagination-button">
+          <span>&lt;</span>
+        </button>
+        <div class="pagination-numbers">
+          <button 
+            v-for="page in visiblePages" 
+            :key="page" 
+            @click="goToPage(page)" 
+            :class="{ 'active': currentPage === page }"
+          >
+            {{ page }}
           </button>
-          <div class="pagination-numbers">
-            <button 
-              v-for="page in visiblePages" 
-              :key="page" 
-              @click="goToPage(page)" 
-              :class="{ 'active': currentPage === page }"
-            >
-              {{ page }}
-            </button>
-            <span v-if="totalPages > maxVisiblePages && currentPage < totalPages - 2">...</span>
-            <button 
-              v-if="totalPages > maxVisiblePages" 
-              @click="goToPage(totalPages)" 
-              :class="{ 'active': currentPage === totalPages }"
-            > 
-              {{ totalPages }}
-            </button>
-          </div>
-          <button :disabled="currentPage === totalPages" @click="nextPage" class="pagination-button">
-            <span>&gt;</span>
+          <span v-if="totalPages > maxVisiblePages && currentPage < totalPages - 2">...</span>
+          <button 
+            v-if="totalPages > maxVisiblePages" 
+            @click="goToPage(totalPages)" 
+            :class="{ 'active': currentPage === totalPages }"
+          > 
+            {{ totalPages }}
           </button>
         </div>
+        <button :disabled="currentPage === totalPages" @click="nextPage" class="pagination-button">
+          <span>&gt;</span>
+        </button>
       </div>
     </div>
-  </template>
-  
-  <script setup>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, onMounted } from 'vue';
 import UserManagementController from "@/controllers/UserManagementController";
-import { ref, computed, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { useToast } from "vue-toastification";
 
 const users = ref([]);
 const cities = ref([]);
+const searchQuery = ref(''); // Biến tìm kiếm
 const currentPage = ref(1);
 const itemsPerPage = 5;
 const activeDropdown = ref(null);
@@ -157,12 +175,25 @@ onMounted(async () => {
   await loadUsers();
 });
 
-const paginatedUsers = computed(() => {
-  const startIndex = (currentPage.value - 1) * itemsPerPage;
-  return users.value.slice(startIndex, startIndex + itemsPerPage);
+// Live Search (Tìm kiếm)
+const filteredUsers = computed(() => {
+  if (!searchQuery.value) {
+    return users.value;
+  }
+  return users.value.filter(user =>
+    user.username.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    user.email.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
+    (user.userInfo && user.userInfo.phone_number && user.userInfo.phone_number.includes(searchQuery.value))
+  );
 });
 
-const totalPages = computed(() => Math.ceil(users.value.length / itemsPerPage));
+// Pagination (Phân trang)
+const paginatedUsers = computed(() => {
+  const startIndex = (currentPage.value - 1) * itemsPerPage;
+  return filteredUsers.value.slice(startIndex, startIndex + itemsPerPage);
+});
+
+const totalPages = computed(() => Math.ceil(filteredUsers.value.length / itemsPerPage));
 
 const prevPage = () => {
   if (currentPage.value > 1) currentPage.value--;
@@ -224,6 +255,7 @@ const goToPage = (page) => {
 };
 </script>
 
+
   
   <style scoped>
   * {
@@ -252,7 +284,7 @@ const goToPage = (page) => {
   }
   
   .table-container {
-    max-height: 70vh;
+    max-height: 80vh;
     overflow-y: auto;
   }
   
@@ -578,5 +610,38 @@ const goToPage = (page) => {
   background: #0056b3;
   color: white;
 }
+.header-container {
+  display: flex;
+  justify-content: space-between; /* Chia đều không gian giữa 2 phần tử */
+  align-items: center; /* Căn chỉnh theo chiều dọc */
+  width: 100%;
+}
+
+.search-container {
+  margin-bottom: 20px;
+  text-align: right;
+  width: 40%; /* Điều chỉnh chiều rộng của thanh tìm kiếm */
+  margin-left: auto; /* Tự động căn trái để thanh tìm kiếm nằm bên phải */
+  margin-right: 20px;
+}
+
+
+
+.search-input {
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  width: 300px;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: #1877f2;
+  box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+}
+
+
+
   </style>
   

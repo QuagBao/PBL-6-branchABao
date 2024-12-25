@@ -1,85 +1,123 @@
 <template>
-    <div class="container-fluid">
-        <div class="container-fluid p-2">
+    <div class="container-fluid-1">
+        <div class="container-fluid">
             <div class="container-fluid frame-title" style="width: 1480px;">
-                <svg fill="#currentColor" width="60px" height="60px" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M 14 3 C 12.90625 3 12 3.90625 12 5 L 12 6 L 9 6 L 9 5 L 7 5 L 7 6 L 5 6 C 3.90625 6 3 6.90625 3 8 L 3 24 C 3 25.09375 3.90625 26 5 26 L 27 26 C 28.09375 26 29 25.09375 29 24 L 29 8 C 29 6.90625 28.09375 6 27 6 L 25 6 L 25 5 L 23 5 L 23 6 L 20 6 L 20 5 C 20 3.90625 19.09375 3 18 3 Z M 14 5 L 18 5 L 18 6 L 14 6 Z M 5 8 L 27 8 L 27 24 L 25 24 L 25 9 L 23 9 L 23 24 L 9 24 L 9 9 L 7 9 L 7 24 L 5 24 Z"/>
-                </svg>
-                <h1>My trip</h1>
+                <h1>Name your trip</h1>
+                <h5>Organize your saves and create a custom your trip</h5>
             </div>
-            <div class="container title-save d-flex flex-column gap-1">
-                <h4>Save to trip</h4>
-                <Trip_List/>
+
+            <div class="container frame-name">
+                <div class="container-fluid">
+                    <form class="search-container" @submit.prevent="finishItinerary">
+                        <input type="text"
+                               v-model="itineraryName"
+                               placeholder="Your itinerary name"
+                               class="itinerary-input form-control" />
+                    </form>
+                </div>
             </div>
+
             <div class="container-fluid frame-button px-5">
                 <button class="button back" @click="goBack" >Back</button>
-                <button class="button back" @click="goCreate" >Create a trip</button>
+                <button 
+                        @click="finishItinerary"
+                        class="button next-button">Create</button>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import Scroll_Bar_Component from '../Scroll_Bar_Component.vue';
-import Trip_List from '../Trip/Trip_List.vue';
 export default {
     name: "Page_6_2",
-    components: {
-        Trip_List
-    },
     methods: {
         // Method for 'Back' button (to go to the previous page)
         goBack() {
             this.$router.push({name: 'Page_5'}); // This will take the user to the previous page in the history
         },
         goCreate() {
-            this.$router.push({name: 'Page_6_1'}); // This will take the user to the previous page in the history
-        },
+            this.$router.push({name: 'Page_7'});
+        }
     }
 }
 </script>
 
 <script setup>
-import CreateTripViewModel from '../../viewModels/Create_Trip_ViewModel/CreateTripViewModel';
+import CreateTrip from '../../viewModels/CreateTripViewModel';
+
+
 const {
-    itineraryName, finishItinerary
-} = CreateTripViewModel();
+    itineraryName, 
+    finishItinerary,
+} = CreateTrip();
+
 </script>
 
 <style scoped>
+.container-fluid-1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
 .frame-title{
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     margin-top: 50px;
     color: #00B4D8;
-    gap: 20px;
-    padding-left: 20px;
 }
 .frame-title h1{
     font-weight: 900;
     font-size: 60px;
 }
-.frame-title svg{
-    fill: #00B4D8;
-}
-.title-save{
-    margin-top: 40px;
+.frame-title h5{
     color: #13357B;
-    padding: 0 0 0 25px;
 }
-.title-save h4{
-    font-weight: 900;
-    font-size: 30px;
+.frame-name{
+    margin-top: 150px;
 }
-.frame-save{
-    margin-top: 50px;
+.search-container {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    margin-top: 100px;
+    gap: 20px;
+}
+.itinerary-input{
+    flex: 1;
+    padding: 1.5vh;
+    height: 80px;
+    border: 1px solid #00B4D8;
+    border-radius: 100px;
+    background-color: #CAF0F8;
+    color: #13357B;
+    padding-left: 50px;
+    font-size: 25px;
+}
+.itinerary-input::placeholder {
+    color: #00B4D8;
+    opacity: 0.7;
+}
+.itinerary-input:focus {
+    background-color: #90e0ef;
+}
+.itinerary-input:focus::placeholder {
+    color: #13357B;
 }
 .frame-button {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: 50px;
+    margin-top: 200px;
+    margin-bottom: 66.8px;
 }
 .button {
     padding: 10px 50px;

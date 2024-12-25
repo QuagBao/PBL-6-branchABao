@@ -1,5 +1,5 @@
 <template>
-    <div class="container-fluid">
+    <div class="container-fluid-1">
         <div class="container-fluid p-2">
             <div class="container-fluid frame-title" style="width: 1480px;">
                 <h1>When are you going?</h1>
@@ -47,9 +47,6 @@
                     </div>
                 </div>
             </div>
-            <div class="container-fluid frame-dates">
-                <p @click="exactDates">Enter exact dates</p>
-            </div>
             <div class="container-fluid frame-button px-5 py-2">
                 <button class="button back" @click="goBack" >Back</button>
                 <button class="button next" @click="goNext" >Next</button>
@@ -58,77 +55,74 @@
     </div>
 </template>
 
-<script>
+<script setup>
+import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
 import Scroll_Bar_Component from '../Scroll_Bar_Component.vue';
 import DateViewModel from '@/components/viewModels/Create_Trip_ViewModel/date_ViewModel';
 import { useTripStore } from '@/store/useTripStore';
+import CreateTrip from '@/components/viewModels/CreateTripViewModel';
 
-export default {
-    name: "Page_2_1",
-    data() {
-        return {
-            dateViewModel: new DateViewModel(),
-            selectedMonthIndex: null, //Lưu chỉ mục của tháng được chọn
-        };
-    },
-    computed: {
-        allMonths() {
-            return this.dateViewModel.getAllMonthNames();
-        },
-        numberLength () {
-            return this.dateViewModel.getSelectedDays();
-        }
-    },
-    methods: {
-        // Xử lý khi người dùng chọn tháng
-        selectMonth(index) {
-            const tripStore = useTripStore();
-            this.selectedMonthIndex = index;
-            this.dateViewModel.setSelectedMonth(index);
+const dateViewModel = new DateViewModel();
+const tripStore = useTripStore();
+const router = useRouter();
 
-            // Cập nhật tháng vào store
-            const monthName = this.allMonths[index];
-            tripStore.setSelectedMonth(monthName);
-            console.log('Selected Month in Store:', tripStore.selectedMonth);
-        },
-        // Method for 'Back' button (to go to the previous page)
-        goBack() {
-            this.$router.push({name: 'Page_1'}); // This will take the user to the previous page in the history
-        },
-        // Method for 'Next' button (to navigate to the next page)
-        goNext() {
-            this.$router.push({ name: 'Page_3' }); // Replace 'next-page' with the name of your target route
-        },
-        exactDates() {
-            this.$router.push({name: 'Page_2'});
-        },
-        decreaseLength() {
-            const tripStore = useTripStore();
-            let currentLength = this.dateViewModel.getSelectedDays();
-            if (currentLength > 1) {
-                this.dateViewModel.setSelectedDays(currentLength - 1);
-                // Cập nhật độ dài chuyến đi vào store
-                tripStore.setSelectLength(currentLength - 1);
-                console.log('Selected Length in Store:', tripStore.selectedLength);
-            }
-            console.log(currentLength);
-        },
-        increaseLength() {
-            const tripStore = useTripStore();
-            let currentLength = this.dateViewModel.getSelectedDays();
-            if (currentLength < 7) {
-                this.dateViewModel.setSelectedDays(currentLength + 1);
-                // Cập nhật độ dài chuyến đi vào store
-                tripStore.setSelectLength(currentLength + 1);
-                console.log('Selected Length in Store:', tripStore.selectedLength);
-            }
-            console.log(currentLength);
-        },
-    }
-}
+// Reactive state
+const selectedMonthIndex = ref(null);
+
+// Computed properties
+const allMonths = computed(() => dateViewModel.getAllMonthNames());
+const numberLength = ref(1);
+const monthChoose = ref(0);
+
+// Methods
+const selectMonth = (index) => {
+    selectedMonthIndex.value = index;
+    dateViewModel.setSelectedMonth(index);
+
+    // Cập nhật tháng vào store
+    const monthName = allMonths.value[index];
+    monthChoose.value = monthName;
+};
+
+const { data , updateDetails } = CreateTrip();
+
+const goBack = () => {
+    router.push({ name: 'Page_1' });
+};
+
+const goNext = () => {
+    updateDetails(monthChoose.value, numberLength.value);
+    router.push({ name: 'Page_3' });
+};
+
+const exactDates = () => {
+    router.push({ name: 'Page_2' });
+};
+
+const decreaseLength = () => {
+    numberLength.value = numberLength.value - 1;
+    console.log(numberLength.value);
+};
+
+const increaseLength = () => {
+    numberLength.value = numberLength.value + 1;
+    console.log(numberLength.value);
+};
 </script>
 
 <style scoped>
+.container-fluid-1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
 .frame-title{
     display: flex;
     flex-direction: column;
@@ -171,6 +165,7 @@ export default {
     .button {
     padding: 10px 50px;
     border: none;
+    margin-bottom: 100px;
     border-radius: 30px;
     background-color: #00B4D8;
     color: #EDF6F9;

@@ -1,5 +1,5 @@
 import { ref, computed, onMounted, watch } from 'vue';
-import { fetchDestinationsByCity, fetchHotelsByCity, fetchRestaurantsByCity } from '../models/destinationModel';
+import { fetchDestinationsByCity, fetchDestinationsByCity_Tag, fetchHotelsByCity, fetchRestaurantsByCity } from '../models/destinationModel';
 import { fetchCityDetails } from '../models/CityModel';
 import { getTags as fetchTagsAPI } from '../models/TagModel';
 
@@ -47,26 +47,14 @@ export default function (cityId) {
   const fetchDestinationsData = async () => {
     isDestinationsLoading.value = true;
     try {
-      let place;
-      // Nếu đã có dữ liệu, chỉ lọc lại; nếu chưa, gọi API
-      if (destinations.value.length || hotels.value.length || restaurants.value.length) {
-        place = [...destinations.value, ...hotels.value, ...restaurants.value];
-      } else {
-        place = await fetchDestinationsByCity(cityId);
-      }
-      place.value = place.sort((a, b) => b.popularity_score - a.popularity_score);
+      let place = await fetchDestinationsByCity_Tag(cityId, selectedIndices.value);
+      place = place.sort((a, b) => b.popularity_score - a.popularity_score);
 
-      // Lọc dữ liệu theo tags
-      const filteredPlace = filterItems(place);
 
       // Phân loại dữ liệu
       destinations.value = place.filter(destination => destination.hotel_id === null && destination.restaurant_id === null);
       hotels.value = place.filter(destination => destination.hotel_id !== null);
       restaurants.value = place.filter(destination => destination.restaurant_id !== null);
-
-      filteredDestinations.value = filteredPlace.filter(destination => destination.hotel_id === null && destination.restaurant_id === null);
-      filteredHotels.value = filteredPlace.filter(destination => destination.hotel_id !== null);
-      filteredRestaurants.value = filteredPlace.filter(destination => destination.restaurant_id !== null);
       
     } catch (error) {
       console.error('Error fetching destinations:', error);

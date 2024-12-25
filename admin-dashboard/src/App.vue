@@ -1,7 +1,7 @@
 <template>
-  <div id="app">
+  <div id="app" :class="{ 'login-layout': isLoginPage }">
     <!-- Sidebar on the left -->
-    <aside class="sidebar">
+    <aside v-if="!isLoginPage" class="sidebar">
       <ul>
         <li>
           <router-link
@@ -70,7 +70,7 @@
     </aside>
 
     <!-- Top Navigation -->
-    <header class="top-nav">
+    <header v-if="!isLoginPage" class="top-nav">
       <div class="auth-section">
         <template v-if="!loggedInUser">
           <router-link to="/login" class="auth-button login-button">
@@ -95,20 +95,24 @@
   </div>
 </template>
 
+
 <script>
+import { ref, onMounted, onBeforeUnmount, computed, watch } from "vue";
+import { useRouter, useRoute } from "vue-router";
 import AuthController from "./controllers/AuthController";
-import { ref, onMounted, onBeforeUnmount } from "vue";
-import { useRouter } from "vue-router";
 
 export default {
   name: "App",
   setup() {
     const router = useRouter();
-    const viewKey = ref(Date.now()); // Unique key for router-view to refresh
+    const route = useRoute();
+    const viewKey = ref(Date.now());
     const { logout, loggedInUser } = AuthController();
     let checkUserInterval = null;
 
-    // Function to load user from sessionStorage if available
+    // Kiểm tra trang login
+    const isLoginPage = computed(() => route.path === "/login");
+
     const loadUserFromSession = () => {
       const savedUser = sessionStorage.getItem("user");
       if (savedUser) {
@@ -116,24 +120,23 @@ export default {
       }
     };
 
-    // Set up a 5-second interval to recheck loggedInUser
     onMounted(() => {
-      loadUserFromSession(); // Initial load
+      loadUserFromSession();
       checkUserInterval = setInterval(() => {
         const token = sessionStorage.getItem("token");
         if (!token) {
           logout();
         }
         loadUserFromSession();
-      }, 5000); // Repeat every 5 seconds
+      }, 5000);
     });
 
     onBeforeUnmount(() => {
-      clearInterval(checkUserInterval); // Clear interval on component unmount
+      clearInterval(checkUserInterval);
     });
 
     const refreshView = () => {
-      viewKey.value = Date.now(); // Update key to force router-view refresh
+      viewKey.value = Date.now();
     };
 
     const handleLogout = () => {
@@ -141,14 +144,21 @@ export default {
     };
 
     const handleNavigation = () => {
-      refreshView(); // Refresh view on navigation
+      refreshView();
     };
 
     const isActive = (route) => {
       return router.currentRoute.value.path === route;
     };
 
-    return { loggedInUser, handleLogout, handleNavigation, isActive, viewKey };
+    return {
+      loggedInUser,
+      handleLogout,
+      handleNavigation,
+      isActive,
+      viewKey,
+      isLoginPage, // Thêm biến kiểm tra login
+    };
   },
 };
 </script>
@@ -304,17 +314,36 @@ export default {
   transform: scale(1.05);
 }
 
-/* Main content area styling */
+.login-layout {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, #f8f9fb, #e6e8eb);
+}
+
 .main-content {
   position: fixed;
   top: 50px;
   left: 15%;
   width: 85%;
   height: calc(100vh - 50px);
-  padding: 0px;
+  padding: 0;
   background: linear-gradient(145deg, #f8f9fb, #e6e8eb);
-  border-radius: 0px;
   overflow-y: auto;
+}
+
+/* Style riêng cho trang đăng nhập */
+.login-layout .main-content {
+  position: static;
+  width: 100vw;
+  height: 100vh;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(145deg, #f8f9fb, #e6e8eb);
 }
 
 /* General icon styling */

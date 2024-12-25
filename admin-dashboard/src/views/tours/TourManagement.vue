@@ -1,80 +1,91 @@
 <template>
-    <div class="tour-management">
-      <h2>Tour Management</h2>
-      <div class="table-container">
-        <button class="action-button add-button" @click="showCreateForm">
-          Add New Tour
-        </button>
-        <table class="tour-table">
-          <thead>
-            <tr>
-              <th>Tour Name</th>
-              <th>User Create</th>
-              <th>City</th>
-              <th>Duration</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="tour in paginatedTours" :key="tour.id">
-              <td>{{ tour.name }}</td>
-              <td>{{ getUserName(tour.user_id) }}</td>
-              <td>{{ getCityName(tour.city_id) }}</td>
-              <td>{{ tour.duration }}</td>
-              <td>
-                <div class="dropdown">
-                  <button 
-                    class="action-button dropdown-toggle"
-                    @click="toggleDropdown(tour.id)"
-                  >
-                    ☰
+  <div class="tour-management">
+    <h2>Tour Management</h2>
+    <div class="header-container">
+      <button class="action-button add-button" @click="showCreateForm">
+        Add New Tour
+      </button>
+      <div class="search-container">
+        <input
+          type="text"
+          v-model="searchQuery"
+          placeholder="Search by tour name or user create..."
+          class="search-input"
+        />
+      </div>
+      
+    </div>
+    <div class="table-container">
+      <table class="tour-table">
+        <thead>
+          <tr>
+            <th>Tour Name</th>
+            <th>User Create</th>
+            <th>City</th>
+            <th>Duration</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="tour in paginatedTours" :key="tour.id">
+            <td>{{ tour.name }}</td>
+            <td>{{ getUserName(tour.user_id) }}</td>
+            <td>{{ getCityName(tour.city_id) }}</td>
+            <td>{{ tour.duration }}</td>
+            <td>
+              <div class="dropdown">
+                <button 
+                  class="action-button dropdown-toggle"
+                  @click="toggleDropdown(tour.id)"
+                >
+                  ☰
+                </button>
+                <div class="dropdown-menu" v-if="activeDropdown === tour.id">
+                  <button class="dropdown-item" @click="showUpdateForm(tour.id)">
+                    Update Tour
                   </button>
-                  <div class="dropdown-menu" v-if="activeDropdown === tour.id">
-                    <button class="dropdown-item" @click="showUpdateForm(tour.id)">
-                      Update Tour
-                    </button>
-                    <button class="dropdown-item" @click="showDetail(tour.id)">
-                      Show Detail
-                    </button>
-                    <button class="dropdown-item" @click="deleteTour(tour.id)">
-                      Delete Tour
-                    </button>
-                  </div>
+                  <button class="dropdown-item" @click="showDetail(tour.id)">
+                    Show Detail
+                  </button>
+                  <button class="dropdown-item" @click="deleteTour(tour.id)">
+                    Delete Tour
+                  </button>
                 </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
 
-        <div class="pagination">
-          <button :disabled="currentPage === 1" @click="prevPage" class="pagination-button">
-            <span>&lt;</span>
+      <div class="pagination">
+        <button :disabled="currentPage === 1" @click="prevPage" class="pagination-button">
+          <span>&lt;</span>
+        </button>
+        <div class="pagination-numbers">
+          <button 
+            v-for="page in visiblePages" 
+            :key="page" 
+            @click="goToPage(page)" 
+            :class="{ 'active': currentPage === page }"
+          >
+            {{ page }}
           </button>
-          <div class="pagination-numbers">
-            <button 
-              v-for="page in visiblePages" 
-              :key="page" 
-              @click="goToPage(page)" 
-              :class="{ 'active': currentPage === page }"
-            >
-              {{ page }}
-            </button>
-            <span v-if="totalPages > maxVisiblePages && currentPage < totalPages - 2">...</span>
-            <button 
-              v-if="totalPages > maxVisiblePages" 
-              @click="goToPage(totalPages)" 
-              :class="{ 'active': currentPage === totalPages }"
-            >
-              {{ totalPages }}
-            </button>
-          </div>
-          <button :disabled="currentPage === totalPages" @click="nextPage" class="pagination-button">
-            <span>&gt;</span>
+          <span v-if="totalPages > maxVisiblePages && currentPage < totalPages - 2">...</span>
+          <button 
+            v-if="totalPages > maxVisiblePages" 
+            @click="goToPage(totalPages)" 
+            :class="{ 'active': currentPage === totalPages }"
+          >
+            {{ totalPages }}
           </button>
         </div>
+        <button :disabled="currentPage === totalPages" @click="nextPage" class="pagination-button">
+          <span>&gt;</span>
+        </button>
       </div>
     </div>
-  </template>
+  </div>
+</template>
 
 <script setup>
 import TourManagementController from "@/controllers/TourManagementController";
@@ -87,6 +98,7 @@ const cities = ref([]);
 const currentPage = ref(1);
 const itemsPerPage = 5;
 const activeDropdown = ref(null);
+const searchQuery = ref(""); // Khai báo biến cho thanh tìm kiếm
 
 const {
   fetchTours,
@@ -141,12 +153,29 @@ const showDetail = async (tourID) => {
   window.location.assign(`/tours/${tourID}`);
 };
 
-const paginatedTours = computed(() => {
-  const startIndex = (currentPage.value - 1) * itemsPerPage;
-  return tours.value.slice(startIndex, startIndex + itemsPerPage);
+// Lọc tour theo tên và người tạo
+const filteredTours = computed(() => {
+  if (!searchQuery.value) {
+    return tours.value;
+  }
+
+  return tours.value.filter((tour) => {
+    const userName = getUserName(tour.user_id).toLowerCase();
+    const tourName = tour.name.toLowerCase();
+    return (
+      userName.includes(searchQuery.value.toLowerCase()) ||
+      tourName.includes(searchQuery.value.toLowerCase())
+    );
+  });
 });
 
-const totalPages = computed(() => Math.ceil(tours.value.length / itemsPerPage));
+// Paginate tours
+const paginatedTours = computed(() => {
+  const startIndex = (currentPage.value - 1) * itemsPerPage;
+  return filteredTours.value.slice(startIndex, startIndex + itemsPerPage);
+});
+
+const totalPages = computed(() => Math.ceil(filteredTours.value.length / itemsPerPage));
 
 const prevPage = () => {
   if (currentPage.value > 1) currentPage.value--;
@@ -979,6 +1008,37 @@ const toggleDropdown = (tourId) => {
 .dropdown-item:hover {
   background: #0056b3;
   color: white;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between; /* Chia đều không gian giữa 2 phần tử */
+  align-items: center; /* Căn chỉnh theo chiều dọc */
+  width: 100%;
+}
+
+.search-container {
+  margin-bottom: 20px;
+  text-align: right;
+  width: 40%; /* Điều chỉnh chiều rộng của thanh tìm kiếm */
+  margin-left: auto; /* Tự động căn trái để thanh tìm kiếm nằm bên phải */
+  margin-right: 20px;
+}
+
+
+
+.search-input {
+  padding: 8px 12px;
+  border-radius: 4px;
+  border: 1px solid #ddd;
+  font-size: 14px;
+  width: 300px;
+  outline: none;
+}
+
+.search-input:focus {
+  border-color: #1877f2;
+  box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
 }
   </style>
   

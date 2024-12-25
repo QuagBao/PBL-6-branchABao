@@ -1,28 +1,25 @@
 <template>
     <div class="container-fluid cards">
         <div class="row p-2">
-            <div class="col-sm-12 p-2 img-location">
+            <div class="col-sm-12 p-2 img-location position-relative">
                 <img :src="imageUrl" alt="pic" class="img-location"/>
-            </div>
-            <div class="col-sm-12 p-2">
-                <div class="btn-heart"> 
+                <div class="position-absolute" style="top: 15px; right: 15px;">
                     <btn_Select :id="id"/>
                 </div>
-            </div>   
+            </div>
         </div>
         <div class="container-fluid frame-rating">
             <div class="name-of-location">
                 {{ name }}
             </div>
             <div class="rating">
-                <img v-for="star in rating" :key="star" :src="star" alt="Circle" class="star"/>
+                <img v-for="star in stars" :key="star" :src="star" alt="Circle" class="star"/>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-
 import btn_Select from './btn_Select.vue';
 export default {
     name: "Item",
@@ -32,11 +29,10 @@ export default {
     props: {
         imageUrl: String,
         name: String,
-        rating: Number,
+        stars: Array,
         id: Number,
     },
 }
-
 </script>
 
 <style scoped>
@@ -45,10 +41,6 @@ img {
     height: 250px;
     object-fit: cover;
     border-radius: 20px;
-}
-.btn-heart{
-    display: flex;
-    margin: -250px 0px 0 355px;
 }
 .rating img {
     width: 18px;

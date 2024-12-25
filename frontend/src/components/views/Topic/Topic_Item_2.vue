@@ -1,23 +1,25 @@
 <template>
     <div class="container-fluid">
         <div class="container-fluid top-item">
-            <div class="image-container p-2">
+            <div class="image-container col-1 p-2">
                 <img :src="imageUrl" alt="Image" class="image">
             </div>
-            <div class="container-fluid">
+            <div class="container-fluid col-8 p-2">
                 <div class="container-fluid p-2 overall-info">
                     <div class="row">
                         <div class="container-fluid col">
-                            <p class="item-number">{{index}}.</p>
-                            <p class="item-name">{{ name }}</p>
+                            <div class="item-container">
+                                <p class="item-number">{{index}}.</p>
+                                <p class="item-name">{{ name }}</p>
+                            </div>
                             <div class="location">
-                                <svg width="50px" height="50px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd" clip-rule="evenodd" d="M12.2848 18.9935C12.1567 19.0875 12.0373 19.1728 11.9282 19.2493C11.8118 19.1721 11.6827 19.0833 11.5427 18.9832C10.8826 18.5109 10.0265 17.8176 9.18338 16.9529C7.45402 15.1792 6 12.9151 6 10.5C6 7.18629 8.68629 4.5 12 4.5C15.3137 4.5 18 7.18629 18 10.5C18 12.8892 16.4819 15.1468 14.6893 16.9393C13.8196 17.8091 12.9444 18.5099 12.2848 18.9935ZM19.5 10.5C19.5 16.5 12 21 12 21C11.625 21 4.5 16.5 4.5 10.5C4.5 6.35786 7.85786 3 12 3C16.1421 3 19.5 6.35786 19.5 10.5ZM13.5 10.5C13.5 11.3284 12.8284 12 12 12C11.1716 12 10.5 11.3284 10.5 10.5C10.5 9.67157 11.1716 9 12 9C12.8284 9 13.5 9.67157 13.5 10.5ZM15 10.5C15 12.1569 13.6569 13.5 12 13.5C10.3431 13.5 9 12.1569 9 10.5C9 8.84315 10.3431 7.5 12 7.5C13.6569 7.5 15 8.84315 15 10.5Z" fill="#13357B"/>
                                 </svg>
                                 <p class="location-name">{{ location }}</p>
                             </div>
                         </div>
-                        <div class="container-fluid col-4 p-2">
+                        <div class="container-fluid col-2 p-2">
                             <div class="container save">
                                 <btn_heart :destID="destID" />
                             </div>
@@ -32,7 +34,7 @@
                     </div> 
                 </div>
                 <div class="container-fluid p-2 description">
-                    <svg class="bling" width="50px" height="50px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                    <svg class="bling" width="20px" height="20px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                         <title>bling_line</title>
                         <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                             <g id="Editor" transform="translate(-144.000000, 0.000000)" fill-rule="nonzero">
@@ -51,7 +53,7 @@
                 <div class="container-fluid quick-fact-title"><p>Quick Fact</p></div>
                     <div class="container-fluid fact">
                         <div class="tags">
-                            <svg width="40px" height="40px" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" 
+                            <svg width="20px" height="20px" viewBox="0 0 512 512" version="1.1" xmlns="http://www.w3.org/2000/svg" 
                                 xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <title>tag-filled</title>
                                 <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
@@ -66,7 +68,7 @@
                             </span>
                         </div>
                         <div class="price">
-                            <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <svg width="20px" height="20px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M19 7.24997H18.75V4.99997C18.7474 4.53665 18.5622 4.09305 18.2345 3.76543C17.9069 3.43781 17.4633 3.25259 17 3.24997C16.9207 3.23552 16.8393 3.23552 16.76 3.24997L4.86 7.24997H4.75H4.59L4.42 7.30997H4.28L4.12 7.39997L4 7.56997L3.86 7.68997L3.75 7.78997L3.63 7.93997C3.598 7.96867 3.57097 8.00246 3.55 8.03997C3.51288 8.09779 3.47948 8.15791 3.45 8.21997L3.39 8.32997C3.36216 8.40179 3.33878 8.47526 3.32 8.54997C3.3245 8.5865 3.3245 8.62344 3.32 8.65997C3.30967 8.77307 3.30967 8.88687 3.32 8.99997V19C3.3221 19.4515 3.49765 19.8849 3.81034 20.2106C4.12303 20.5364 4.54895 20.7295 5 20.75H19C19.4633 20.7473 19.9069 20.5621 20.2345 20.2345C20.5622 19.9069 20.7474 19.4633 20.75 19V8.99997C20.7474 8.53665 20.5622 8.09305 20.2345 7.76543C19.9069 7.43781 19.4633 7.25259 19 7.24997ZM17.08 4.75997C17.1293 4.77814 17.1719 4.81078 17.2022 4.85362C17.2325 4.89646 17.2492 4.94748 17.25 4.99997V7.24997H9.62L17.08 4.75997ZM19.25 19C19.25 19.0663 19.2237 19.1299 19.1768 19.1767C19.1299 19.2236 19.0663 19.25 19 19.25H5C4.9337 19.25 4.87011 19.2236 4.82322 19.1767C4.77634 19.1299 4.75 19.0663 4.75 19V8.99997C4.75 8.93367 4.77634 8.87008 4.82322 8.82319C4.87011 8.77631 4.9337 8.74997 5 8.74997H19C19.0663 8.74997 19.1299 8.77631 19.1768 8.82319C19.2237 8.87008 19.25 8.93367 19.25 8.99997V19Z" fill="#13357B"/>
                                 <path d="M16.5 15.25C17.1904 15.25 17.75 14.6904 17.75 14C17.75 13.3096 17.1904 12.75 16.5 12.75C15.8096 12.75 15.25 13.3096 15.25 14C15.25 14.6904 15.8096 15.25 16.5 15.25Z" fill="#000000"/>
                             </svg>
@@ -110,7 +112,7 @@ export default {
 <style scoped>
 .top-item{
     color: #13357B;
-    margin-top: 100px;
+    margin-top: 10px;
     border-radius: 30px;
     box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);
     display: flex;
@@ -121,24 +123,39 @@ export default {
     transition: 0.75s ease-in-out;
     background-color: #8ecae6;
 }
+.image-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 30%;
+    gap: 10px;
+}
 .image {
     border-radius: 20px;
     box-shadow: 5px 5px 5px rgba(19, 53, 123, 0.5);
-    width: 450px;
-    height: 500px;
+    width: 100%;
+    height: 250px;
     object-fit: cover;
 }
-.item-number{
-    font-size: 25px;
+.item-container {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 10px;
 }
-.item-name{
-    font-size: 25px;
+
+.item-number {
+    font-size: 1.5vw;
+}
+
+.item-name {
+    font-size: 1.5vw;
     font-weight: bold;
 }
 .location {
     display: flex;
     align-items: stretch;
-    font-size: 20px;
+    font-size: 1vw;
     text-decoration: underline #13357B;
     text-underline-offset: 10px;
     gap: 15px;
@@ -146,18 +163,18 @@ export default {
 }
 .save {
     display: flex;
-    margin-top:15px;
+    margin-top:10px;
 }
 .rating-icon{
     display: flex;
-    font-size: 25px;
+    font-size: 1vw;
     align-items: center;
 }
 .rating-icon img{
-    width: 30px;
+    width: 1vw;
 }
 .rating-icon span{
-    margin-left: 20px;
+    margin-left: 10px;
 }
 .description{
     display: flex;
@@ -167,10 +184,10 @@ export default {
     transform: rotate(180deg);
 }
 .item-description{
-    font-size: 20px;
+    font-size: 1vw;
 }
 .quick-fact-title p{
-    font-size: 22px;
+    font-size: 1.1vw;
     font-weight: bold;
     margin-top: 15px;
 }
@@ -182,15 +199,19 @@ export default {
 }
 .tags, .price{
     padding: 10px 20px;
-    min-width: 300px;
+    min-width: 46%;
     display: flex;
     gap: 10px;
     align-items: center;
     border-radius: 30px;
     background-color: #CAF0F8;
-    font-size: 16px;
+    font-size: 0.8vw;
 }
 .tags svg #icon{
     fill: #13357B;
+}
+.col, .item-container {
+    padding-top: 0; /* Giảm khoảng cách padding trên */
+    padding-bottom: 0; /* Giảm khoảng cách padding dưới */
 }
 </style>

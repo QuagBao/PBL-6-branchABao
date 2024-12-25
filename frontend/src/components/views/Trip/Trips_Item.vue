@@ -34,11 +34,10 @@ export default {
 <style scoped>
 
 .trip-item {
-    display: grid;
-    grid-template-columns: 40% 60%;
+    display: flex;
     margin: 20px 0;
     background-color: #CAF0F8;
-    width: 100%;
+    width: 99%;
     color: #13357B;
     border-radius: 10px;
     outline: 2px solid #13357B;
@@ -57,6 +56,21 @@ img{
     object-fit: cover;
     border-radius: 10px;
 }
+
+.ava {
+    display: flex;
+    margin-top: -13px;
+    margin-left: -0.8px;
+    margin-bottom: -3px;    
+}
+.col-sm-11{
+    display: grid;
+    width: 100%;
+    align-items: center;
+    margin-left: 220px;
+    margin-top: -200px;
+}
+
 .name-of-trip span{
     font-size: 30px;
     font-weight: 800;

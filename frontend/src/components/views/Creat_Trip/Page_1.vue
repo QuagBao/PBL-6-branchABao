@@ -1,142 +1,223 @@
 <template>
-    <div class="container-fluid">
-        <div class="container-fluid">
-            <div class="container-fluid">
-                <div class="container-fluid">
-                    <div class="container-fluid">
-                        <div class="container-fluid frame-search">
-                            <Input class="custom-search"
-                                    :name_of_page="'Where do you want to go?'"
-                                    :name="'Choose a city or town'" v-model="searchQuery"
-                                    @enter="handleSearch"/>
-                        </div>
-                        <div class="container-fluid frame-item">
-                            <div class="container-fluid item" :key="index"
-                                v-for="(destination, index) in suggestedDestinations.slice(0, 4)">
-                                <Img_Card :imageUrl="destination.images[0]" 
-                                        :name="destination.name"
-                                        @click="selectDestination(destination.id, destination.name)"/>
-                            </div>
-                        </div>
-                        <div class="container-fluid frame-button">
-                            <button @click="goNext" class="next">Next</button>
-                        </div>
+    <div class="container-fluid-1">
+        <div class="frame-search">
+            <div class="container-fluid search">
+                <h1 class="title">Where do you want to go?</h1>
+                <div class="container-fluid position-relative">
+                    <!-- Input search -->
+                    <input class="form-control" type="text" placeholder="Choose a city or town" v-model="searchQuery">
+
+                    <!-- Danh sách kết quả -->
+                    <div v-if="result_citys.length" class="search-results" :class="{'show': result_citys.length > 0}">
+                        <ul>
+                            <li 
+                                v-for="result in result_citys" 
+                                :key="result.id" 
+                                @click="selectResult(result)"
+                            >
+                                {{ result.name }}
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
+        <div class="frame-button">
+            <button @click="goNext" class="next">Next</button>
+        </div>
     </div>
-    
 </template>
 
-<script>
-import Input from '../Input.vue';
-import Img_Card from '../Img_Card.vue';
-import Scroll_Bar_Component from '../Scroll_Bar_Component.vue';
-export default {
-    name: "Create_Trip",
-    components: {
-        Input, Img_Card
-    }, 
-    methods: {
-        goNext () {
-            this.$router.push({ name: 'Page_2_1' });
-        }
-    }
-}
-
-</script>
-
 <script setup>
-import CreateTripViewModel from '../../viewModels/Create_Trip_ViewModel/CreateTripViewModel';
-import router from '@/router';
+import { ref } from 'vue';
+import useLiveSearch from '../../viewModels/LiveSearchViewModel.js';
+import CreateTrip from '../../viewModels/CreateTripViewModel';
 import { useTripStore } from '@/store/useTripStore';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
 
 const tripStore = useTripStore();
+const searchQuery = ref('');
 
-const {
-    searchQuery,
-    suggestedDestinations,
-    selectDestination,
-    selectedDestination
-} = CreateTripViewModel();
+const{
+    data,
+    updateCity,
+} = CreateTrip();
 
-// Hàm xử lý khi nhấn Enter trong input
-const handleSearch = () => {
-    if (!searchQuery.value) {
-        alert('Please enter a search query.');
-        return;
-    }
+const { result_citys } = useLiveSearch(searchQuery);
 
-    // Tìm destination khớp với searchQuery
-    const matchedDestination = suggestedDestinations.value.find(
-        city => city.name.toLowerCase().trim() === searchQuery.value.toLowerCase().trim()
-    );
-
-    if (matchedDestination) {
-        // Lưu kết quả vào selectedDestination
-        selectDestination(matchedDestination.id, matchedDestination.name);
-        tripStore.setSelectedDestination(selectedDestination.value);
-        const test = tripStore.selectedDestination
-        console.log('Selected Destination:', test);
-        console.log('Selected Destination:', tripStore.selectedDestination);
-        console.log('Selected Destination:', selectedDestination.value);
-    } else {
-        alert('No matching destination found.');
-    }
+const performSearch = (query = null) => {
+    updateCity(query);
 };
 
+const selectResult = (result) => {
+    performSearch(result);
+    searchQuery.value = result.name;
+};
+
+const goNext = () => {
+    router.push({ name: 'Page_2_1' });
+};
 </script>
 
 <style scoped>
-.frame-search{
+.container-fluid-1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+}
+.frame-search {
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-top: 60px;
-}
-/* Custom style for Form_Search in this component */
-/* Use :deep to apply styles inside Form_Search component */
-:deep(.custom-search .form-control) {
-    background-color: #CAF0F8; /* Change input background color */
-    font-size: 20px;
-}
-:deep(.custom-search .form-control::placeholder) {
-    color: #00B4D8;
-    font-size: 20px;
-}
-/* Customize the title text color */
-:deep(.custom-search .title) {
-    font-size: 60px;
-    color: #00B4D8; /* Dark green color */
-}
-:deep(.custom-search button) {
-    opacity: 0;
-}
-.frame-item {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
+    flex: 1;
     width: 100%;
-    margin-top: 50px;
+}
+.custom-search .form-control {
+    background-color: #EDF6F9;
+    font-size: 20px;
+    border-radius: 40px;
+    padding: 15px 20px;
+    border: none;
+    width: 60%;
+    max-width: 600px;
+}
+.custom-search .form-control::placeholder {
+    color: #13357B;
+    font-size: 18px;
 }
 .frame-button {
     display: flex;
-    align-items: center;
     justify-content: right;
-    margin-top: 50px;
-    margin-bottom: 40px;
+    width: 100%;
+    padding: 20px;
+    margin-bottom: 200px;
+    margin-right: 100px;
 }
 button {
     padding: 10px 50px;
     border: none;
     border-radius: 30px;
-    background-color: #00B4D8;
-    color: #EDF6F9;
+    background-color: #EDF6F9;
+    color: #00B4D8;
+    font-size: 16px;
     cursor: pointer;
     transition: background-color 0.3s ease;
     box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.2);
 }
 button:hover {
     background-color: #13357B;
+    color: #EDF6F9;
+}
+.search{
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+}
+.search .title {
+  color: #034141;
+  font-size: 2.5rem;
+  font-weight: 700;
+  text-align: center;
+}
+.form-control {
+    display: block;
+    width: 100%;
+    padding: 1.5rem 1.5rem 1.5rem 3rem ;
+    border: 0;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #13357B;
+    background-color: #caf0f8;
+    border-radius: 40px;
+}
+.form-control::placeholder,
+.form-control:focus{
+    color: #04173b;
+}
+input:focus, input:hover {
+  outline: none;
+  background-color: #caf0f8;
+  color: #13357B;
+  padding-left: 3rem;
+}
+.btn-primary {
+    top : 50%;
+    right: 25px;
+    transform: translateY(-50%);
+    box-shadow: inset 0 0 0 0 #13357B;  
+    border-radius: 50rem;
+    font-weight: 600;
+    transition: all 0.5s;
+    position: absolute;
+    color: #EDF6F9;
+    background-color: #13357B;
+    border: 0;
+    border-color: #13357B;
+    padding: .5rem 1.5rem;
+    margin-right: .5rem;
+    display: inline-block;
+    line-height: 1.5;
+}
+
+.search-results {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    z-index: 1000;
+    max-height: 200px;
+    overflow-y: auto;
+    margin-top: 10px;
+    padding: 10px;
+    
+    /* Hiệu ứng đổ xuống */
+    opacity: 0;
+    transform: translateY(-10px);
+    animation: slideDown 0.3s ease-out forwards;
+}
+
+.search-results.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Animation: Đổ xuống */
+@keyframes slideDown {
+    0% {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.search-results ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.search-results li {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.search-results li:hover {
+    background-color: #f0f0f0;
 }
 </style>
+
