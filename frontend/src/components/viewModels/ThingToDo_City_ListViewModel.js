@@ -49,18 +49,19 @@ export default function (cityId) {
             place = [...destinations.value];
         } else {
             place = await fetchDestinationsByCity(cityId);
+            for (let destination of place) {
+              try {
+                  const tags = await getTagById(destination.id); // Giả sử hàm getTagById đã tồn tại
+                  destination.tags = tags; // Gán tags vào destination
+              } catch (error) {
+                  console.error(`Error fetching tags for destination ${destination.id}:`, error);
+                  destination.tags = []; // Gán mảng rỗng nếu gọi API thất bại
+              }
+          }
         }
 
         // Gọi API để lấy tags cho từng destination
-        for (let destination of place) {
-            try {
-                const tags = await getTagById(destination.id); // Giả sử hàm getTagById đã tồn tại
-                destination.tags = tags; // Gán tags vào destination
-            } catch (error) {
-                console.error(`Error fetching tags for destination ${destination.id}:`, error);
-                destination.tags = []; // Gán mảng rỗng nếu gọi API thất bại
-            }
-        }
+        
 
         // Lọc dữ liệu theo tags
         const filteredPlace = filterItems(place);
