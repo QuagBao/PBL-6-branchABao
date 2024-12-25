@@ -5,7 +5,11 @@
         <Top_Button v-if="cityDetails" :cityID="cityDetails.id"/>
     </div>
 
-    <div class="container-fluid">
+    <div v-if="loading">
+        <div class="skeleton-loader" v-for="n in 10" :key="n"></div>
+    </div>
+
+    <div v-else class="container-fluid">
         <div class="container-fluid">
             <div class="container-fluid">
                 <div class="container-fluid">
@@ -172,11 +176,14 @@
         fetchAllData,
     } = destinationViewModel(cityId);
 
+    const loading = ref(true);
+
     // Lifecycle Hook to Fetch Data on Mount
     onMounted(async () => {
         await fetchCityDetailsData();
         await fetchDestinationsData();
         await fetchTags();
+        loading.value = false;
     });
 
     watch(selectedIndices, async () => {
@@ -320,6 +327,22 @@ body{
 }
 :deep(.custom .carousel-control-prev .carousel-control-prev-icon) {
     margin-left: -10vw; /* Giá trị mới */
+}
+.skeleton-loader {
+    height: 200px;
+    margin: 10px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+    from {
+        background-position: 200% 0;
+    }
+    to {
+        background-position: -200% 0;
+    }
 }
 </style>
 
