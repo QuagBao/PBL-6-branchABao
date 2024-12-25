@@ -109,12 +109,10 @@ export default function(restaurantID) {
   
   const initializePage = async () => {
     try {
-      
       await loadRestaurant();      // Đợi loadRestaurant hoàn tất
       await getAllcomments();      // Sau đó gọi getAllcomments
       await loadUsersForComments(); // Cuối cùng là loadUsersForComments
       await fetchRatingDistribution(restaurant.value.id);
-      console.log("Can review: ",canReview.value);
   
       isLoading.value = true; // Chuyển trạng thái sang loaded khi hoàn thành
     } catch (error) {
