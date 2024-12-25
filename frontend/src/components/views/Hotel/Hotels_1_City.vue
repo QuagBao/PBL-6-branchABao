@@ -85,7 +85,10 @@
                   </div>
                 </div>
               </div>
-              <div class="list-hotels">
+              <div v-if="loading">
+                <div class="skeleton-loader" v-for="n in 10" :key="n"></div>
+              </div>
+              <div v-else class="list-hotels">
                 <Card_Item  v-for="(item, index) in hotels"
                             :key="index"
                             :destID="item.id"
@@ -133,8 +136,11 @@ const {
     save_option_hotel_star,
     handleCheckboxChange,
 } = destinationViewModel(cityId);
+
+const loading = ref(true);
 onMounted(async () => {
     await filterHotels();
+    loading.value = false;
   });
 
   watch(
@@ -344,6 +350,22 @@ const navigateToDetailHotel = (hotel_id) => {
 }
 .filter-item.active .icon {
     background-image: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23E7C6FF'><path d='M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>");
+}
+.skeleton-loader {
+    height: 200px;
+    margin: 10px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+    from {
+        background-position: 200% 0;
+    }
+    to {
+        background-position: -200% 0;
+    }
 }
 </style>
 
