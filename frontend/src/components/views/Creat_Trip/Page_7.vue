@@ -22,11 +22,10 @@ import Scroll_Bar_Component from '../Scroll_Bar_Component.vue';
 
 export default {
     name: "Page_7",
-    props: {
-        id: {
-            type: String, // Params luôn là string, cần ép kiểu nếu cần
-            required: true
-        }
+    data() {
+        return {
+            id: this.$route.params.id // Lấy ID từ route params
+        };
     },
     mounted() {
         console.log('ID received via params:', this.id); // Kiểm tra giá trị ID
