@@ -13,10 +13,15 @@ export default function () {
   const attractions = ref([]);
   const cities = ref([]);
   const liked = ref({});
+  const loading = ref(true);
+  const loadingCities = ref(true);
 
   onMounted(async () => {
-    attractions.value = await fetchAttractions();
     cities.value = await fetchCities();
+    loadingCities.value = false;
+    attractions.value = await fetchAttractions();
+    
+    loading.value = false;
   });
 
   const currentIndexCity = ref(0);
@@ -74,5 +79,7 @@ export default function () {
     nextAttraction,
     heartFull,
     heartEmpty,
+    loading,
+    loadingCities,
   };
 }

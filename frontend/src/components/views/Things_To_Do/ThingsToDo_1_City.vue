@@ -9,7 +9,10 @@
             <div class="contaner-fluid">
                 <div class="contaner-fluid frame-1 d-flex flex-column gap-5">
                     <!-- Images -->
-                    <div class="overall">
+                    <div v-if="loading">
+                        <div class="skeleton-loader" v-for="n in 10" :key="n"></div>
+                    </div>
+                    <div v-else class="overall">
                         <div class="image-container">
                             <div class="base"></div>
                             <img :src="city?.images?.[0]?.url || '/blue-image.jpg'" alt="City 1" class="img-fluid">
@@ -22,7 +25,10 @@
                         </div>
                     </div>
                     <div class="container-fluid d-flex flex-column gap-5 ">
-                        <div class="container-fluid btn-catagory d-flex justify-content-center">
+                        <div v-if="loading">
+                            <div class="skeleton-loader" v-for="n in 10" :key="n"></div>
+                        </div>
+                        <div v-else class="container-fluid btn-catagory d-flex justify-content-center">
                             <Swiper class="swiper"
                                     :slides-per-view="4"
                                     :spaceBetween="10"
@@ -37,7 +43,10 @@
                                 </SwiperSlide>
                             </Swiper>
                         </div>
-                        <div class=" title-content">
+                        <div v-if="loadingDestinations">
+                            <div class="skeleton-loader" v-for="n in 10" :key="n"></div>
+                        </div>
+                        <div v-else class=" title-content">
                             <p class="title p-5">Top Attraction in {{ city?.name || 'Loading...' }}</p>
                             <div class="container-fluid list-items-1">
                                 <Info_Card v-for="(item, index) in filteredDestinations"
@@ -97,10 +106,15 @@ const {
     truncatedDescription,
 } = destinationViewModel(cityId);
 
-onMounted(() => {
-    fetchCityDetailsData();
-    fetchDestinationsData();
-    fetchTags();
+const loading = ref(true);
+const loadingDestinations = ref(true);
+
+onMounted(async () => {
+    await fetchCityDetailsData();
+    await fetchTags();
+    loading.value = false;
+    await fetchDestinationsData();
+    loadingDestinations.value = false;
 });
 
 const {
@@ -206,6 +220,22 @@ const navigateToDetailPlace = (id) => {
 .button-category.selected {
     background-color: #13357B;
     color: #EDF6F9;
+}
+.skeleton-loader {
+    height: 200px;
+    margin: 10px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+    from {
+        background-position: 200% 0;
+    }
+    to {
+        background-position: -200% 0;
+    }
 }
 </style>
 

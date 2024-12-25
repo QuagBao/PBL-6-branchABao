@@ -19,8 +19,11 @@
                             </div>
                         </div>
                     </div>
+                    <div v-if="loadingCities">
+                        <div class="skeleton-loader" v-for="n in 10" :key="n"></div>
+                    </div>
 
-                    <div class="container-fluid content d-flex gap-5">
+                    <div v-else class="container-fluid content d-flex gap-5">
                         <div class="title-content d-flex flex-column gap-4">
                             <p class="top-destinations">
                                 Top destinations in Viet Nam
@@ -41,8 +44,11 @@
                                 </button>
                             </div>
                         </div>
+                        <div v-if="loading">
+                            <div class="skeleton-loader" v-for="n in 10" :key="n"></div>
+                        </div>
 
-                        <div class="title-content d-flex flex-column gap-4">
+                        <div v-else class="title-content d-flex flex-column gap-4">
                             <p class="top-attractions">
                                 Top attractions in Viet Nam
                             </p>
@@ -52,7 +58,7 @@
                                         :destID="item.id"
                                         :imageUrl="item.images[0]?.url|| '/blue-image.jpg'"
                                         :name="item.name"
-                                        :rating="generateStars(item.rating)"
+                                        :stars="generateStars(item.rating)"
                                         :review-number="item.review_count"
                                         :tags="item.tag"
                                         @click="navigateToDetailPlace(item.id)"/>
@@ -78,6 +84,8 @@ const {
     searchQuery,
     cities, visibleCities, prevCity, nextCity,
     attractions, visibleAttraction, prevAttraction, nextAttraction,
+    loading,
+    loadingCities,
 } = destinationViewModel();
 
 const {
@@ -147,11 +155,11 @@ const navigateToThingsCity = (id) => {
 }
 .list-items-1 {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 40px;
-    align-items: center;
+    grid-template-columns: repeat(3, 1fr); /* 3 cột, mỗi cột có kích thước bằng nhau */
+    gap: 40px; /* Khoảng cách giữa các phần tử */
+    align-items: center; /* Căn giữa theo chiều dọc */
+    justify-items: center; /* Căn giữa theo chiều ngang */
     width: 100%;
-    height: 100%;
 }
 .carousel-control-prev,
 .carousel-control-next {
@@ -171,6 +179,22 @@ const navigateToThingsCity = (id) => {
     width: 30px;
     height: 30px;
     align-items: center;
+}
+.skeleton-loader {
+    height: 200px;
+    margin: 10px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+    from {
+        background-position: 200% 0;
+    }
+    to {
+        background-position: -200% 0;
+    }
 }
 </style>
 
