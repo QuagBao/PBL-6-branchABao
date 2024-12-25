@@ -1,10 +1,10 @@
 <template>
-    <div class="container-fluid list-favourite-items">
-        <Favourite_Item
-            v-for="destID in likes"
-            :key="destID"
-            :destID="destID"
-        />
+    <div class="container-fluid frame-items">
+        <div class="list-favourite-items">
+            <Favourite_Item v-for="destID in likes"
+                            :key="destID"
+                            :destID="destID" />
+        </div>
     </div>
   </template>
 
@@ -31,12 +31,15 @@ export default {
 </script>
 
 <style scoped>
+.frame-items {
+    margin-top: 50px;
+    margin-bottom: 50px;
+}
 .list-favourite-items {
     display: grid;
-    gap: 20px;
-    grid-template-columns: repeat(3, 1fr);
+    column-gap: 10%;
+    row-gap: 1%;
+    grid-template-columns: repeat(2, 1fr);
     align-items: center;
-    width: 100%;
-    height: 100%;
 }
 </style>

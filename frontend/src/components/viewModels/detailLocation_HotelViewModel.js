@@ -48,7 +48,6 @@ export default function(hotelID) {
       console.log(hotel.value);
       city.value = await fetchCityDetails(hotel.value.address.city_id);
       images.value = hotel.value.images;
-
     } catch (error) {
       console.error("Có lỗi xảy ra khi lấy dữ liệu khách sạn:", error);
     }

@@ -3,96 +3,61 @@
     <Header />
     <Top_Button />
   </div>
+    <div class="container-fluid p-5">
+      <div class="row content-1 d-flex 
+            flex-column justify-content-center gap-5">
+        <div class="container ">
+          <Form_Search class="search-form" :name="'Attraction, activities or destination'" />
+        </div>
 
-  <div class="main-container">
-    <div class="container content">
-      <div class="container-fluid search">
-        <div class="container-search">
-          <Form_Search :name="'Attraction, activities or destination'" />
-        </div>
-      </div>
-      <div class="row title-content">
-        <p class="p-5 city">Cities</p>
-        <div class="container-fluid context">
-          <div class="row">
-            <Cards_City
-              v-for="(item, index) in cities"
-              :key="index"
-              :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
-              :name="item.name"
-              :description="item.description"
-              @click="navigateToDestination(item.id)"
-            />
+        <div class="container-fluid results py-5 d-flex flex-column gap-5">
+          <div class="frame-cities d-flex flex-column gap-3">
+            <p class="title city">Cities</p>
+            <div class="container context">
+              <Cards_City v-for="(item, index) in cities"
+                    :key="index"
+                    :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
+                    :name="item.name"
+                    :description="item.description"
+                    @click="navigateToDestination(item.id)" />
+            </div>
           </div>
-        </div>
-      </div>
-      <!-- Things to do Section -->
-      <div class="row title-content">
-        <p class="p-5 things-to-do">Things to do</p>
-        <div class="container-fluid context">
-          <div class="row">
-            <Cards
-              v-for="(item, index) in destinations"
-              :key="index"
-              :destID="item.id"
-              :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
-              :name="item.name"
-              :description="item.description"
-              :rating="item.rating"
-              :stars="generateStars(item.rating)"
-              :ratingCount="item.numOfReviews"
-              :tags="item.tag"
-              @click="navigateToDetailPlace(item.id)"
-            />
+          <div class="frame-things-to-do d-flex flex-column gap-3 py-5">
+            <p class="title city">Things to do</p>
+            <div class="container context">
+              <Cards_City v-for="(item, index) in destinations"
+                    :key="index"
+                    :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
+                    :name="item.name"
+                    :description="item.description"
+                    @click="navigateToDestination(item.id)" />
+            </div>
           </div>
-        </div>
-      </div>
-
-      <!-- Restaurants Section -->
-      <div class="row title-content">
-        <p class="p-5 restaurants">Restaurants</p>
-        <div class="container-fluid context">
-          <div class="row">
-            <Cards
-              v-for="(item, index) in restaurants"
-              :key="index"
-              :destID="item.id"
-              :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
-              :name="item.name"
-              :description="item.description"
-              :rating="item.rating"
-              :stars="generateStars(item.rating)"
-              :ratingCount="item.numOfReviews"
-              :tags="item.tag"
-              @click="navigateToDetailRestaurant(item.restaurant_id)"
-            />
+          <div class="frame-things-to-do d-flex flex-column gap-3 py-5">
+            <p class="title city">Restaurants</p>
+            <div class="container context">
+              <Cards_City v-for="(item, index) in restaurants"
+                    :key="index"
+                    :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
+                    :name="item.name"
+                    :description="item.description"
+                    @click="navigateToDestination(item.id)" />
+            </div>
           </div>
-        </div>
-      </div>
-
-      <!-- Resort & Hotels Section -->
-      <div class="row title-content">
-        <p class="p-5 resorts">Resort & Hotels</p>
-        <div class="container-fluid context">
-          <div class="row">
-            <Cards
-              v-for="(item, index) in hotels"
-              :key="index"
-              :destID="item.id"
-              :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
-              :name="item.name"
-              :description="item.description"
-              :rating="item.rating"
-              :stars="generateStars(item.rating)"
-              :ratingCount="item.numOfReviews"
-              :tags="item.tag"
-              @click="navigateToDetailHotel(item.hotel_id)"
-            />
+          <div class="frame-things-to-do d-flex flex-column gap-3 py-5">
+            <p class="title city">Resorts & Hotels</p>
+            <div class="container context">
+              <Cards_City v-for="(item, index) in hotels"
+                    :key="index"
+                    :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
+                    :name="item.name"
+                    :description="item.description"
+                    @click="navigateToDestination(item.id)" />
+            </div>
           </div>
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script setup>
@@ -147,61 +112,25 @@ export default {
 </script>
 
 <style scoped>
-.main-container {
-  display: flex;
-  flex-direction: column; /* Sắp xếp các phần tử theo chiều dọc */
-  padding: 20px;
-  width: 100%; /* Đảm bảo chiều rộng của main là 100% */
-}
-
-.header-container {
-  display: flex;
-  flex-direction: column; /* Sắp xếp các phần tử theo chiều dọc */
-  z-index: 1;
-  width: 100%; /* Đảm bảo chiều rộng của header là 100% */
-}
-
-.container {
-  display: flex;
-  flex-direction: column;  /* Sắp xếp các phần tử con theo chiều dọc */
-  width: 100%; /* Đảm bảo chiều rộng của container là 100% */
-  background-color: none;
-  padding: 20px;
-  margin-top: 160px;
-}
-
-.container-search {
-  display: flex;
-  flex-direction: column;  /* Sắp xếp các phần tử con theo chiều dọc */
-  width: 90vw; /* Đảm bảo chiều rộng của container-search là 100% */
-  background-color: #4996ee;
-  padding: 20px;
+.search-form {
+  margin-top: 120px;
+  padding: 1rem .5rem;
   border-radius: 50px;
+  background-color: #13357B;
+  width: 100%;
+  width: 75vw;
 }
-
-.title-content {
-  color: #13357B;
-  font-size: 25px;
+.results {
+  color:#13357B;
+}
+.title {
+  font-size: 30px;
   font-weight: 900;
-  margin-bottom: 10px; /* Giảm khoảng cách giữa tiêu đề và phần cards */
 }
-
 .context {
   display: flex;
-  flex-direction: column; /* Đảm bảo các card được sắp xếp theo chiều dọc */
-  width: 100%; /* Đảm bảo chiều rộng của context là 100% */
-}
-
-.row {
-  display: flex;
-  flex-direction: column; /* Sắp xếp các phần tử theo chiều dọc */
-  gap: 20px; /* Khoảng cách giữa các card */
-  width: 90vw;
-}
-
-.cards {
-  margin-bottom: 20px; /* Tạo không gian giữa các card */
-  width: 100%; /* Đảm bảo chiều rộng của card là 100% */
+  flex-direction: column;
+  gap: 20px;
 }
 </style>
 

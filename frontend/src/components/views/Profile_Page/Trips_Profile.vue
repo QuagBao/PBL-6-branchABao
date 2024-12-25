@@ -1,10 +1,10 @@
 <template>
-    <div class="container-fluid ">
-        <div class="row">
+    <div class="frame-trip">
+        <div class="container py-5">
             <p>My Trips</p>
         </div>
 
-        <div class="container-fluid-1">
+        <div class="d-flex justify-content-around gap-5 py-3">
             <button>
                 <svg width="50px" height="50px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M6 12H18M12 6V18" stroke="#currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -20,33 +20,33 @@
             </button>    
         </div>
 
-        <div class="sort row">
-            Sort by: 
-            <div class="custom-select">
-                <div class="select-selected row" @click="toggleDropdown">
-                    <div class="col-sm-8">
-                        {{ selectedOption }}
+        <div class="sort"> 
+            <div class="frame-sort d-flex gap-3 align-items-baseline">
+                Sort by:
+                <div class="custom-select d-flex flex-column">
+                    <div class="select-selected d-flex" @click="toggleDropdown">
+                        <div class="option d-flex flex-column">
+                            {{ selectedOption }}
+                        </div>
+                        <div class="icon">
+                            <svg class="dropdown-icon" width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
                     </div>
-                    <div class="col-sm-4">
-                        <svg class="dropdown-icon" width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                        </svg>
-                    </div>
+                    
+                    <ul v-if="isOpen" class="select-items">
+                        <li v-for="option in options" :key="option" @click="selectOption(option)">{{ option }}</li>
+                    </ul>
                 </div>
-                
-                <ul v-if="isOpen" class="select-items">
-                    <li v-for="option in options" :key="option" @click="selectOption(option)">{{ option }}</li>
-                </ul>
             </div>
         </div>
 
         <div class="list-trip-items">
-            <Tours_Item
-                v-for="tour in tours"
-                :key="tour.id"
-                :tour="tour"
-                @click="navigateToDetailTour(tour.id)"
-            />
+            <Tours_Item v-for="tour in tours"
+                        :key="tour.id"
+                        :tour="tour"
+                        @click="navigateToDetailTour(tour.id)" />
             <Trips_Item/>
             <Trips_Item_no_date/>
         </div>
@@ -99,40 +99,23 @@ export default {
 </script>
 
 <style scoped>
-.container-fluid{
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+.frame-trip {
     width: 100%;
-    height: 100%;
 }
-
-.row p {
+.container p {
     color: #13357B;
     font-size: 40px;
     font-weight: 900;
 }
 
-.container-fluid-1 {
-    /* width: 100%; */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-left: 0px;
-    padding: 10px 5px;
-    gap: 10px;
-}
-
 .sort{
-    display: flex;
-    margin: 20px 0 0 950px;
-    color: #13357B;
+    display: grid;
+    grid-template-columns: 60% 40%; 
 }
 
-.custom-select {
-    display: inline-block;
-    margin: -36px 0 0 70px;
-    width: 80%;
+.frame-sort {
+    grid-column: 2/3;
+    color: #13357B;
 }
 
 .select-selected {
@@ -140,20 +123,19 @@ export default {
     background-color: #EDF6F9;
     border-radius: 10px;
     cursor: pointer;
-    color: #13357B;
     stroke: #13357B;
     border: 1px solid #13357B;
-    box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.3);
+    box-shadow: 0 2px 6px -1px rgba(19, 53, 123, .07), 0 6px 18px -1px rgba(19, 53, 123, .04) !important;
 }
 
 .select-selected:hover{
     background-color: #13357B;
     stroke: #CAF0F8;
 }
-.select-selected:hover .col-sm-8{
+.select-selected:hover{
     color: #CAF0F8;
 }
-.select-selected .col-sm-8{
+.select-selected{
     font-weight: bold;
 }
 .select-items {
@@ -199,13 +181,11 @@ button {
     cursor: pointer;
     flex: 1; /* Để hai nút cách đều và chiếm cùng một khoảng rộng */
 }
-
 button:hover {
     background-color: #13357B;
     color: #CAF0F8;
     stroke: #CAF0F8;
 }
-
 .list-trip-items{
     display: flex;
     flex-direction: column;

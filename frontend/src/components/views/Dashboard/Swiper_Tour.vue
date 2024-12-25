@@ -2,13 +2,14 @@
     <div class="tour">
         <div class="container">
             <Swiper :slidesPerView="3"
-                    :spaceBetween="50"
+                    :spaceBetween="60"
                     :pagination="{ clickable: true }"
                     :navigation="true"
                     :modules="modules"
+                    :draggable="false"
                     class="mySwiper">
-                <SwiperSlide class="tour-item"v-for="(tour, index) in tours" 
-                            :key="tours.id" @click="showDetail(tours)">
+                <SwiperSlide class="tour-item swiper-slide"v-for="(tour, index) in tours" 
+                            :key="tour.id" @click="showDetail(tours)">
                     <div class="tour-img">
                         <img v-if="tour.destinations.find(dest => dest.images && dest.images.length)?.images[0]" 
                             :src="tour.destinations.find(dest => dest.images && dest.images.length)?.images[0].url" 
@@ -35,14 +36,14 @@
                                     preserveAspectRatio="xMidYMid">
                                     <path d="M30.000,32.000 L2.000,32.000 C0.897,32.000 -0.000,31.103 -0.000,30.000 L-0.000,5.000 C-0.000,3.897 0.897,3.000 2.000,3.000 L10.000,3.000 L10.000,1.000 C10.000,0.448 10.448,-0.000 11.000,-0.000 C11.552,-0.000 12.000,0.448 12.000,1.000 L12.000,3.000 L20.000,3.000 L20.000,1.000 C20.000,0.448 20.448,-0.000 21.000,-0.000 C21.552,-0.000 22.000,0.448 22.000,1.000 L22.000,3.000 L30.000,3.000 C31.103,3.000 32.000,3.897 32.000,5.000 L32.000,30.000 C32.000,31.103 31.103,32.000 30.000,32.000 ZM22.000,5.000 L22.000,6.000 C22.000,6.552 21.552,7.000 21.000,7.000 C20.448,7.000 20.000,6.552 20.000,6.000 L20.000,5.000 L12.000,5.000 L12.000,6.000 C12.000,6.552 11.552,7.000 11.000,7.000 C10.448,7.000 10.000,6.552 10.000,6.000 L10.000,5.000 L2.000,5.000 L2.000,30.000 L29.997,30.000 L30.000,5.000 L22.000,5.000 ZM25.000,24.000 L23.000,24.000 C22.448,24.000 22.000,23.552 22.000,23.000 L22.000,21.000 C22.000,20.448 22.448,20.000 23.000,20.000 L25.000,20.000 C25.552,20.000 26.000,20.448 26.000,21.000 L26.000,23.000 C26.000,23.552 25.552,24.000 25.000,24.000 ZM25.000,16.000 L23.000,16.000 C22.448,16.000 22.000,15.552 22.000,15.000 L22.000,13.000 C22.000,12.448 22.448,12.000 23.000,12.000 L25.000,12.000 C25.552,12.000 26.000,12.448 26.000,13.000 L26.000,15.000 C26.000,15.552 25.552,16.000 25.000,16.000 ZM17.000,24.000 L15.000,24.000 C14.448,24.000 14.000,23.552 14.000,23.000 L14.000,21.000 C14.000,20.448 14.448,20.000 15.000,20.000 L17.000,20.000 C17.552,20.000 18.000,20.448 18.000,21.000 L18.000,23.000 C18.000,23.552 17.552,24.000 17.000,24.000 ZM17.000,16.000 L15.000,16.000 C14.448,16.000 14.000,15.552 14.000,15.000 L14.000,13.000 C14.000,12.448 14.448,12.000 15.000,12.000 L17.000,12.000 C17.552,12.000 18.000,12.448 18.000,13.000 L18.000,15.000 C18.000,15.552 17.552,16.000 17.000,16.000 ZM9.000,24.000 L7.000,24.000 C6.448,24.000 6.000,23.552 6.000,23.000 L6.000,21.000 C6.000,20.448 6.448,20.000 7.000,20.000 L9.000,20.000 C9.552,20.000 10.000,20.448 10.000,21.000 L10.000,23.000 C10.000,23.552 9.552,24.000 9.000,24.000 ZM9.000,16.000 L7.000,16.000 C6.448,16.000 6.000,15.552 6.000,15.000 L6.000,13.000 C6.000,12.448 6.448,12.000 7.000,12.000 L9.000,12.000 C9.552,12.000 10.000,12.448 10.000,13.000 L10.000,15.000 C10.000,15.552 9.552,16.000 9.000,16.000 Z"/>
                                 </svg>
-                                {{ tour.name }}
+                                {{ Math.floor(tour.duration/24) }} days
                             </small>
                         </div>
                     </div>
 
                     <div class="tour-content bg-light">
                         <div class="p-4 pb-0">
-                            <h5 class="tour-location" style="margin-bottom: 15px;">{{ getCityName(tour.city_id) }}</h5>
+                            <h5 class="tour-location" style="margin-bottom: 15px;">{{ tour.name }}</h5>
                             <div class="mb-3 rating">
                                 <small class='text-uppercase number-rating'>{{ tour.rating }}</small>
                                 <div class="col">
@@ -56,7 +57,7 @@
                         </div>
                         <div class="row bg-primary rounded-bottom mx-0">
                             <div class="col-6 text-start py-4 px-4">
-                                <button class="readmore px-4">Read more</button>
+                                <button class="readmore px-4" @click="navigateToDetailTour(tour.id)">Read more</button>
                             </div>
                             <div></div>
                         </div>
@@ -72,19 +73,24 @@
     const{
         tours, visibleTours, prevTour, nextTour,generateStars, getCityName,
     } = dashboardViewModel;
+    const navigateToDetailTour = (tour_id) => {
+    window.location.assign(`/tour/${tour_id}`);
+};
 
 </script>
 <script>
 // Import Swiper Vue.js components
 import { Swiper, SwiperSlide } from 'swiper/vue';
-
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 // Import Swiper styles
 import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/scrollbar';
 
 import 'swiper/css/pagination';
 
 // import required modules
-import { Pagination, Navigation } from 'swiper/modules';
+const modules = [Navigation, Pagination, Scrollbar, A11y];
 
 export default {
     components: {
@@ -119,7 +125,7 @@ export default {
 }
 img {
     width: 100%;
-    height: 250px;
+    height: 200px;
     object-fit: cover;
 }
 .tour .tour-item .tour-img .tour-info {
@@ -197,6 +203,31 @@ img {
     padding: 10px 20px;
     border-radius: 10px;
     transition: 0.5s;
+}
+:deep(.swiper-button-next),
+:deep(.swiper-button-prev) {
+    color: #13357B !important;
+    border: none;
+    position: absolute;
+    margin-top: -30px;
+    cursor: pointer;
+}
+:deep(.swiper-pagination) {
+    position: relative;
+    margin-top: 30px;
+}
+:deep(.swiper-pagination-bullet-active) {
+    background-color: #13357B !important;
+}
+:deep(.swiper-pagination-bullet) {
+    background-color: #8ecae6;
+    opacity: 1 !important;
+}
+
+.mySwiper {
+    width: 100%;
+    position: relative;
+    padding: 0 60px;
 }
 </style>
   

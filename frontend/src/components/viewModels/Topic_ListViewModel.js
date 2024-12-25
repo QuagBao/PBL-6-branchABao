@@ -1,81 +1,53 @@
 import { ref, computed, onMounted } from 'vue';
-import ThingtodoModel from '../models/Topic_ListModel';
+import { fetchDestinationsByTag } from '../models/TopicModel';
+import { fetchCities } from '../models/CityModel';
+import { getTags } from '../models/TagModel';
 
-export default function () {
-  const model = ThingtodoModel();
-
-  const isMenuVisible = ref(false);
-  const toggleMenu = () => {
-    isMenuVisible.value = !isMenuVisible.value;
-  };
+export default function (topicName) {
+  const topicId = ref(null);
+  const destinations = ref([]);
+  const tags = ref([]);
+  const cities = ref([]);
 
   // Các button và lựa chọn từ Model
-  const buttons = ref(model.buttons);
   const selectedIndex = ref(null); // Biến lưu chỉ mục duy nhất của nút đang được chọn
 
   const selectButton = (index) => {
-    const actualIndex = currentIndexButton.value + index; // Tính chỉ số thực tế trong mảng buttons
+    const actualIndex = index; // Tính chỉ số thực tế trong mảng buttons
     if (selectedIndex.value === actualIndex) {
       selectedIndex.value = null; // Nếu nhấn lại nút đã được chọn, bỏ chọn nó
     } else {
       selectedIndex.value = actualIndex; // Cập nhật nút mới được chọn
     }
   };
-
-  const currentIndexButton = ref(0);
-  const visibleButtons = computed(() => {
-    return buttons.value.slice(currentIndexButton.value, currentIndexButton.value + 3);
-  });
-
-  const prevButton = () => {
-    if (currentIndexButton.value > 0) {
-      currentIndexButton.value--;
-    }
-  };
-
-  const nextButton = () => {
-    if (currentIndexButton.value < buttons.value.length - 4) {
-      currentIndexButton.value++;
-    }
-  };
-
-  const entertainments = ref([]);
-  const liked = ref({});
-
   // Khi component được mount, tải dữ liệu
   onMounted(async () => {
-    entertainments.value = await model.fetchEntertainments();
+    switch (topicName) {
+      case 'culture':
+        topicId.value = 2;
+        break;
+      case 'great-food':
+        topicId.value = 9;
+        break;
+      case 'must-see-attraction':
+        topicId.value = 5;
+        break;
+      case 'shopping':
+        topicId.value = 1;
+        break;
+      default:
+        topicId.value = 11;
+        break;
+    }
+    const fetchedDestinations = await fetchDestinationsByTag(topicId.value);
+
+    // Sắp xếp theo popularity_score giảm dần
+    destinations.value = fetchedDestinations.sort((a, b) => b.popularity_score - a.popularity_score);
+    tags.value = await getTags();
+    cities.value = await loadCities();
+
   });
 
-  // Hàm tạo các sao cho phần đánh giá
-  const generateStars = (rating) => {
-    return model.generateStars(rating);
-  };
-
-  // Lấy URL cho ảnh
-  const getImageUrl = (imageUrl) => {
-    return new URL(imageUrl, import.meta.url).href;
-  };
-
-  // Thích hoặc bỏ thích
-  const toggleLikeStatus = (id) => {
-    liked.value[id] = !liked.value[id];
-    console.log(`Item ID: ${id}, Liked: ${liked.value[id]}`);
-  };
-
-  // Cập nhật cho chức năng chọn tỉnh thành
-  const regions = ref(model.regions); // Danh sách tỉnh thành từ model
-  const selectedRegion = ref(model.selectedRegion); // Tỉnh thành hiện tại
-  const dropdownVisible = ref(false); // Hiển thị/ẩn dropdown
-
-  const toggleDropdown = () => {
-    dropdownVisible.value = !dropdownVisible.value;
-  };
-
-  const selectRegion = (region) => {
-    selectedRegion.value = region;
-    dropdownVisible.value = false; // Ẩn dropdown sau khi chọn
-  };
 
   // Hàm rút gọn mô tả sau 25 từ
   const truncatedDescription = (description) => {
@@ -86,33 +58,63 @@ export default function () {
     return description;
   };
 
+  const loadCities = async () => {
+    try {
+        const cities = await fetchCities();
+        return cities;
+    } catch (error) {
+        console.error('Error getting city list:', error);
+        return [];
+    }
+};
+const selectedCityId = ref(null); // Giá trị mặc định (null = tất cả tours)
+const dropdownVisibleRegion = ref(false); // Trạng thái hiển thị dropdown
+// Danh sách tours được lọc theo `selectedCityId`
+const filteredDestinations = computed(() => {
+  // Lọc theo thành phố và tag (nếu có)
+  return destinations.value.filter(destination => {
+      const matchesCity = selectedCityId.value
+          ? destination.address.city_id === selectedCityId.value
+          : true;
+
+      const matchesTag = selectedIndex.value !== null
+          ? destination.tags.some(tag => tag.id === selectedIndex.value)
+          : true;
+
+      return matchesCity && matchesTag;
+  });
+});
+
+// Tên thành phố hiển thị trên nút dropdown
+const selectedCityName = computed(() => {
+    if (!selectedCityId.value) return 'Việt Nam';
+    const city = cities.value.find(c => c.id === selectedCityId.value);
+    return city ? city.name : 'Việt Nam';
+});
+
+// Toggle trạng thái dropdown
+const toggleDropDownRegion = () => {
+    dropdownVisibleRegion.value = !dropdownVisibleRegion.value;
+};
+
+// Chọn thành phố
+const selectCity = (cityId) => {
+    selectedCityId.value = cityId; // Cập nhật ID thành phố được chọn
+    dropdownVisibleRegion.value = false; // Đóng dropdown
+};
+
   return {
-    isMenuVisible,
-    toggleMenu,
-
-    buttons,
-    visibleButtons,
-    prevButton,
-    nextButton,
-    selectedIndex,
-    selectButton,
-    currentIndexButton,
-    entertainments,
-    generateStars,
-    getImageUrl,
-    liked,
-    toggleLikeStatus,
-    heartFull: model.heartFull,
-    heartEmpty: model.heartEmpty,
-
-    // Các biến và hàm cho chức năng chọn tỉnh thành
-    regions, // Danh sách tỉnh thành
-    selectedRegion, // Tỉnh thành hiện tại
-    dropdownVisible, // Trạng thái dropdown
-    toggleDropdown, // Hàm bật/tắt dropdown
-    selectRegion, // Hàm chọn tỉnh thành
-
-    // Hàm rút gọn mô tả
-    truncatedDescription
+    cities,
+    destinations,
+    selectedIndex, selectButton,
+    truncatedDescription,
+    loadCities,
+    tags,
+    selectedCityId,
+    dropdownVisibleRegion,
+    filteredDestinations,
+    selectedCityName,
+    toggleDropDownRegion,
+    selectCity,
   };
 }

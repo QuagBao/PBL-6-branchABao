@@ -6,8 +6,8 @@
   
     <div class="container-fluid">
       <div class="container-fluid">
-        <div class="container-fluid">
-          <div class="container-fluid">
+        <div class="container-fluid frame-overall">
+          <div class="container-fluid overall">
             <div class="container-fluid frame-image-search">
               <img src="@/assets/images/tms-hotel-da-nang-beach.jpg" alt="City 1" class="img-fluid" />
               <div class="container-fluid search">
@@ -176,8 +176,15 @@ const navigateToDetailHotel = (hotel_id) => {
 </script>
 
 <style scoped>
+.frame-overall {
+    display: grid;
+    grid-template-columns: 5% 90% 5%;
+}
+.overall {
+    grid-column: 2/3;
+}
 .img-fluid {
-    margin-top: 200px;
+    margin-top: 150px;
     width: 100vw;
     padding: 0px;
     height: 600px;
@@ -208,34 +215,33 @@ const navigateToDetailHotel = (hotel_id) => {
 }
 .left-panel{
     position: sticky;
-    top: 160px;
+    top: 140px;
 }
 .filter-section {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 20px;
+    gap: 10px;
     width: 100%;
     margin-top: 0px;
-    padding: 30px;
+    padding: 15px;
     border-radius: 25px;
-    box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);
+    box-shadow: 0 2px 6px -1px rgba(19, 53, 123, .07), 0 6px 18px -1px rgba(19, 53, 123, .04) !important;
 }
 .filter-item {
     position: sticky;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 20px 20px;
+    padding: 15px 20px;
     background-color: #CAF0F8;
-    box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);
+    box-shadow: 0 2px 6px -1px rgba(19, 53, 123, .3), 0 6px 18px -1px rgba(19, 53, 123, .04) !important;
     color: #13357B;
     font-weight: bold;
     cursor: pointer;
     border-radius: 15px;
     transition: background-color 0.3s;
-    gap: 50px;
-    font-size: 25px;
+    font-size: 20px;
     width: 100%;
 }
 .filter-item svg{
@@ -270,14 +276,14 @@ const navigateToDetailHotel = (hotel_id) => {
 }
 .option{
     display: flex;
-    padding: 20px;
+    padding: 10px;
     gap: 10px;
     background-color: #EDF6F9;
     border-radius: 10px;
 }
 .option label{
     color: #13357B;
-    font-size: 20px;
+    font-size: 17px;
 }
 .option input[type="checkbox"]  {
     appearance: none;
@@ -332,8 +338,8 @@ const navigateToDetailHotel = (hotel_id) => {
 }
 
 .icon {
-    width: 30px;
-    height: 30px;
+    width: 25px;
+    height: 25px;
     background-image: url("data:image/svg+xml;charset=UTF-8,<svg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%2313357B'><path d='M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/></svg>");
     background-repeat: no-repeat;
     background-size: contain;

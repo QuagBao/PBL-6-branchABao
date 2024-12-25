@@ -91,6 +91,7 @@ export async function getTourByUserId(userID) {
       duration: tour.duration,
       user_id: tour.user_id,
       city_id: tour.city_id,
+      cityName: tour.cityName,
       destinations: tour.destinations,
       rating: tour.rating,
       numOfReviews: tour.numOfReviews,
@@ -151,7 +152,7 @@ export async function addTour(tour) {
 
 export async function deleteTour(tourID) {
   try {
-    const token = sessionStorage.getItem("token");
+    const token = sessionStorage.getItem("access_token");
     if (!token) throw new Error("No token found");
 
     const response = await axios.delete(

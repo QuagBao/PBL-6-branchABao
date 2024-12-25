@@ -7,15 +7,14 @@ export default class ProfileViewModel {
 
         //Tabs Button
         this.tabsMap = new Map([
-            ['Activity Feed', new groupTag_Models('Activity Feed', 'Activity_Feed')],
             ['Trips', new groupTag_Models('Trips', 'Trips_Profile')],
             ['Reviews', new groupTag_Models('Reviews', 'Reviews_Profile')],
             ['My Favourites', new groupTag_Models('My Favourites', 'Favourite_Profile')],
-            ['Account Settings', new groupTag_Models('Account Settings', 'Setting_Profile')],
+            ['Change Information', new groupTag_Models('Change Information', 'Setting_Profile')],
         ]);
 
         // Current Tab
-        this.currentTab = this.tabsMap.get('Activity Feed');
+        this.currentTab = this.tabsMap.get('Trips');
         this.currentTab.active = true; // Set firstTab is active default
 
         // Token

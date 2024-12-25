@@ -1,10 +1,8 @@
 <template>
-    <div class="container-fluid">
+    <div class="content d-flex flex-column ">
         <!-- Info User Post like username activity, date post, avatar -->
-        <div class="user-info">
-            <div class="avatar">
-                <img :src="user?.user_info.image ? user.user_info.image.url : '/blue-image.jpg'" alt="Avatar" class="ava"/>
-            </div>
+        <div class="user-info p-3">
+            <img :src="user?.user_info.image ? user.user_info.image.url : '/blue-image.jpg'" alt="Avatar" class="ava"/>
             <div class="activity">
                 <p>{{ user?.username }}</p>
                 <span>wrote a review</span>
@@ -15,7 +13,7 @@
         </div>
 
         <!-- Rating If is a review-->
-        <div class="rating">
+        <div class="rating d-flex mx-3">
             <div v-for="(star, index) in generateStars(review?.rating)" :key="index">
                         <img :src="star" alt="Star" class="star"/>
             </div>
@@ -23,21 +21,19 @@
 
         <!-- Title and Context Review -->
         <div class="title-content">
-            <div class="title">
-                <button class="title-text">
+            <div class="title py-2 p-3">
+                <p class="title-text">
                     {{ review?.title }}
-                </button>
-            </div>
-            
-            <div class="context">
-                <p class="text-break">
-                    {{ review?.content }}
                 </p>
             </div>
+            <span class="d-flex flex-wrap p-3">
+                {{ review?.content }}
+            </span>
+            <div class="info-location p-3">
+                <tag_location_review :destID="review?.destination_id" :tourID="review?.tour_id"/>
+            </div>
         </div>
-        <div class="info-location">
-            <tag_location_review :destID="review?.destination_id" :tourID="review?.tour_id"/>
-        </div>
+        
     </div>
 </template>
 
@@ -74,112 +70,53 @@ export default {
 </script>
 
 <style scoped>
-.container-fluid{
-    display: grid;
-    gap: 10px;
-    width: 90%;
-    height: 100%;
+.content {
+    width: 65.8vw;
     border-radius: 15px;
     box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.3);
     z-index: 2;
 }
 
 .user-info{
-    width: 100%;
-    height: 100%;
     display: grid;
-    gap: 10px;
+    grid-template-columns: 8% 90%;
+    grid-template-areas: "avatar activity"  
+                         "avatar date-post";
     align-items: center;
     color: #13357B;
     z-index: 5;
 }
 
-.user-info .avatar{
+.user-info .ava{
+    grid-area: avatar;
     width: 60px;
     height: 60px;
-    margin-left: 10px;
-    margin-top:10px;
-    z-index: 5;
-}
-
-.user-info .avatar img{
-    width: 60px;
-    height: 60px;
-    z-index: 5;
+    border-radius: 50%;
 }
 .activity{
+    grid-area: activity;
     display: flex;
-    align-items: center;
-    width: 100%;   
     gap:10px;
-    margin-top: -70px;
 }
 .user-info .activity p{
     font-weight: 700;
-    margin: -40px 0 0 100px;
-}
-.user-info .activity span{
-    margin: -40px 0 0 10px;
 }
 
 .user-info .date-post{
-    margin: -60px 0 0 100px;
-}
-.rating{
-    display: flex;
-    margin: 0px 0 0 10px;
+    grid-area: date-post;
 }
 
 .rating img{
     width: 20px;
     height: 20px;
-    margin-right: 2px;
 }
 
 .title-content{
-    margin-left: 10px;
-    margin-top: 10px;
-    margin-bottom: 10px;
     color:#13357B;
-}
-
-.title-content .title{
-    margin-left: -5px;
-    margin-top: 15px;
-    margin-bottom: 15px;
-}
-.title-content .title button{
-    color: #13357B;
-    background: none;
-    border: none;
-}
-.title-content .title button:hover{
-    color: #00B4D8;
 }
 .title-content .title .title-text{
     font-size: 20px;
     font-weight: 700;
     text-decoration: underline;
-}
-.title-content .context{
-    margin-bottom: 20px;
-}
-.read-more{
-    text-align: left;
-    margin-bottom: 10px;
-    margin-top: -20px;
-    color: #13357B;
-    background: none;
-    border: none;
-    font-size: 18px;
-    font-weight: 700;
-    text-decoration: underline;
-}
-.read-more:hover{
-    color: #00B4D8;
-}
-.info-location{
-    width: 100%;
-    margin: 15px 0 15px 10px;
 }
 </style>

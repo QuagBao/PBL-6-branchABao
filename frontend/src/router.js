@@ -65,8 +65,8 @@ const List_Tour = () => import('./components/views/Tour/List/List_Tour.vue');
 
 
 // Test UI
-const test   = () => import('./components/views/Map/Map.vue'); 
-const test1 = () => import('./components/views/Dashboard_For_Company/Service.vue');
+const test   = () => import('./components/views/Business/Business_Tour/List_Destination.vue'); 
+const test1 = () => import('./components/views/Map/Map_Component.vue');
 const test2 = () => import('./components/views/Chart/Chart.vue');
 const test3 = () => import('./components/views/Tour/List/Tour_Item.vue');
 
@@ -79,11 +79,11 @@ const addHotel = () => import('./components/views/Business/Business_Hotel_Add.vu
 const updateHotel = () => import('./components/views/Business/Business_Hotel_Update.vue');
 const addRestaurant = () => import('./components/views/Business/Business_Restaurant_Add.vue');
 const updateRestaurant = () => import('./components/views/Business/Business_Restaurant_Update.vue');
-
+const destinationView = () => import('./components/views/Business/Business_Destination.vue');
+const tourView = () => import('./components/views/Business/Business_Tour/Business_Tour_List.vue');
+const tourEditView = () => import('./components/views/Business/Business_Tour/Business_Tour_Edit.vue');
 //Search
 const search = () => import('./components/views/Search/Search.vue');
-
-
 
 // Routes configuration
 const routes = [
@@ -142,7 +142,7 @@ const routes = [
   { path: '/DetailTrip', name: 'DetailTrip', component: Detail_Trip },
   
   // Topic_List
-  { path: '/Topic_List', name: 'Topic_List', component: Topic_List },
+  { path: '/Topic/:topic', name: 'Topic_List', component: Topic_List },
   
   // Detail_Tour
   { path: '/Tour/:id', name: 'Detail_Tour', component: Detail_Tour },
@@ -151,7 +151,7 @@ const routes = [
   { path: '/Tour', name: 'List_Tour', component: List_Tour },
   
   // Business
-  { path: '/Business/Home', name: 'Dashboard_For_Company', component: Dashboard_For_Company },
+  { path: '/Business', name: 'Dashboard_For_Company', component: Dashboard_For_Company },
   { path: '/Business/Destination/Add', name: 'AddDestination', component: addDestination },
   { path: '/Business/Destination/Update/:id', name: 'UpdateDestination', component: updateDestination },
   { path: '/Business/Hotel/Add/:id', name: 'AddHotel', component: addHotel },
@@ -159,6 +159,9 @@ const routes = [
   { path: '/Business/Restaurant/Add/:id', name: 'AddRestaurant', component: addRestaurant },
   { path: '/Business/Restaurant/Update/:id', name: 'UpdateRestaurant', component: updateRestaurant },
   { path: '/Business/Restaurant/Update/:id', name: 'UpdateRestaurant', component: updateRestaurant },
+  { path: '/Business/Destination', name: 'DestinationView', component: destinationView },
+  { path: '/Business/Tour', name: 'tourView', component: tourView },
+  { path: '/Business/Tour/Update/:id', name: 'tourEditView', component: tourEditView },
   
   // Search
   { 

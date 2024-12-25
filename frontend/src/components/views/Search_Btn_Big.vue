@@ -130,9 +130,9 @@ button {
     top: 100%;
     left: 0;
     right: 0;
-    background-color: white;
+    background-color:#EDF6F9;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 15px;
     z-index: 1000;
     max-height: 200px;
     overflow-y: auto;
@@ -141,7 +141,7 @@ button {
     
     /* Hiệu ứng đổ xuống */
     opacity: 0;
-    transform: translateY(-10px);
+    transform: translateY(100px);
     animation: slideDown 0.3s ease-out forwards;
 }
 
@@ -169,11 +169,14 @@ button {
 }
 
 .search-results li {
-    padding: 8px;
+    padding: 10px 35px;
     cursor: pointer;
+    border-radius: 10px;
 }
 
 .search-results li:hover {
-    background-color: #f0f0f0;
+    background-color: #CAF0F8;
 }
+
+:deep(.scrool)
 </style>

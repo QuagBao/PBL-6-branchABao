@@ -1,38 +1,19 @@
 <template>
-    <div class="container-fluid cards">
-      <!-- Image Section (30% width) -->
-      <div class="row p-2">
-        <div class="col-sm-3 p-2 img-location">
-          <img :src="imageUrl" alt="pic" class="img-location" />
-        </div>
-  
-        <!-- Content Section (60% width) -->
-        <div class="col-sm-6 p-2 content-section">
-          <!-- Location Name and Category -->
-          <div class="name-category p-2">
-            <h3>{{ name }}</h3>
-          </div>
-  
-  
-          <!-- Description Section -->
-          <div class="description p-2">
-            <p>{{ description }}</p>
-          </div>
-        </div>
-  
-        <!-- Heart Icon Section (10% width) -->
-        <div class="col-sm-3 p-2">
-          <div class="btn-heart">
-            <btn_heart />
-          </div>
-        </div>
+    <div class="cards">
+      <div class="frame-image">
+        <img :src="imageUrl" alt="pic" class="img-location" />
+      </div>
+      <div class="name">
+        <h3>{{ name }}</h3>
+      </div>
+      <div class="description">
+        <p>{{ description }}</p>
+      </div>
+      <div class="heart">
+        <btn_heart class="custom" />
       </div>
     </div>
-  </template>
-  
-  
-  
-  
+  </template>  
   <script>
   import btn_heart from '../btn_heart.vue';
   
@@ -49,7 +30,54 @@
   }
   </script>
   
-  <style scoped>
+<style scoped>
+.cards {
+  display: grid;
+  grid-template-columns: 30% 40% 10%;
+  gap:5%;
+  grid-template-rows: auto;
+  grid-template-areas: "image name heart"
+                       "image description heart-1";
+  background-color: #EDF6F9;
+  padding: 15px;
+  box-shadow: 0 2px 6px -1px rgba(19, 53, 123, .1), 0 6px 18px -1px rgba(19, 53, 123, .08) !important;
+  border-radius: 30px;
+  transition: 0.75s ease-in-out;
+  cursor: pointer;
+  font-size: 18px;
+}
+.cards:hover {
+  background-color: #8ecae6;
+}
+.frame-image {
+  grid-area: image;
+}
+.img-location {
+  width: 100%;
+  object-fit: cover;
+  border-radius: 15px;
+}
+.name {
+  grid-area: name;
+  align-content: center;
+}
+h3 {
+  font-weight: 900;
+}
+.description {
+  grid-area: description;
+  align-content: flex-start;
+}
+.heart {
+  grid-area: heart;
+}
+.custom {
+  width: 80px;
+  height: 80px;
+}
+</style>
+
+  <!-- <style scoped>
   .container-fluid {
     display: block;
     color: #13357B;
@@ -150,4 +178,4 @@
   }
   </style>
   
-
+ -->

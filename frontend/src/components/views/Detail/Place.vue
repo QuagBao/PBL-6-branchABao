@@ -6,10 +6,10 @@
 
     <div class="container-fluid">
         <div class="container-fluid">
-            <div class="container-fluid">
-                <div class="container-fluid">
+            <div class="container-fluid frame-overall">
+                <div class="container-fluid overall">
                     <div class="container-fluid info-place">
-                        <div class="container-fluid d-flex gap-5" v-if="isLoading">
+                        <div class="container-fluid top-info" v-if="isLoading">
                             <div class="information">
                                 <div class="container name-of-place">{{ destination.name }}</div>
                                 <div class="container rating-review">
@@ -69,11 +69,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="carousel">
-                                <div class="container carousel-container">
-                                    <Carousel class="custom" :currentImage="currentImage" :images="images"/>
-                                </div>
-                            </div>  
+                            <Carousel class="custom" :currentImage="currentImage" :images="images"/>
                         </div>
                         <div class="container-fluid contribute">
                             <Contribute :rating="destination.rating"
@@ -158,10 +154,20 @@ export default {
 </script>
 
 <style scoped>
+.frame-overall {
+    display: grid;
+    grid-template-columns: 5% 90% 5%;
+}
+.overall {
+    grid-column: 2/3;
+}
+.top-info {
+    display: grid;
+    grid-template-columns: 35% 60%;
+    gap: 8%;
+    margin-top: 150px;
+}
 .information{
-    flex: 0 0 30%; /* 30% of row */
-    max-width: 30%;
-    margin-top: 200px;
     color: #13357B;
 }
 .name-of-place{
@@ -190,7 +196,7 @@ export default {
     text-align: justify;
     padding: 20px;
     border-radius: 15px;
-    box-shadow: 0px 5px 15px rgba(19,53,123,0.25);
+    box-shadow: 0 2px 6px -1px rgba(19, 53, 123, .3), 0 6px 18px -1px rgba(19, 53, 123, .04) !important;
 }
 .context{
     display: flex;
@@ -215,21 +221,14 @@ export default {
 .read-more-or-less:hover{
     color: #729AE9;
 }
-.carousel {
-  flex: 0 0 65%; 
-  max-width: 66%;
-  height: auto;
-  margin-left: 3%;
-}
-.carousel-container{
-    display: flex;
-    width: 100%;
-}
 :deep(.custom .carousel-control-next .carousel-control-next-icon) {
-    margin-right: -4.5vw; /* Giá trị mới */
+    margin-right: -3.2vw; /* Giá trị mới */
 }
 :deep(.custom .carousel-control-prev .carousel-control-prev-icon) {
-    margin-left: -4.5vw; /* Giá trị mới */
+    margin-left: -3.2vw; /* Giá trị mới */
+}
+:deep(.custom .carousel-header){
+    margin-top: 0px;
 }
 .duration{
     display: flex;

@@ -7,8 +7,8 @@
     <Carousel_For_Dashboard/>
     
     <div class="container-fluid">
-        <div class="container-fluid">
-            <div class="container-fluid">
+        <div class="container-fluid frame-overall">
+            <div class="container-fluid overall">
                 <div class="container-fluid search-btn">
                     <Search_Btn_Big/>
                 </div>
@@ -18,9 +18,6 @@
                             <h5 class="section-title px-3 ">Destination</h5>
                             <h1 class="mb-0">Popular Destination</h1>
                         </div>
-                        <div class="container-fluid control-button">
-                            <Control_Button/>
-                        </div>
                     </div>
 
                     <div class="container tag">
@@ -28,15 +25,27 @@
                             <Tag_Button/>
                         </div>
                     </div>        
-                    <div class="container-fluid list-items">
-                        <div class="item" v-for="(city, index) in visibleCities" 
-                            :key="city.id">
-                            <Img_Card_2  :condition="city.images && city.images.length > 0" 
-                                        :imageUrl = 'city.images[0]'
-                                        :name_picture="city.name"
-                                        :name="city.name"
-                                        @click="navigateToDestination(goToDestination(city.id))"/>
+                    <div class="container-fluid destination-list">
+                        <button class="control-button owl-prev" @click="prevSlide">
+                            <svg class="bi bi-arrow-left" width="25" height="25" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M7.68473 7.33186C8.07526 6.94134 8.07526 6.30817 7.68473 5.91765C7.29421 5.52712 6.66105 5.52712 6.27052 5.91765L1.60492 10.5832C0.823873 11.3643 0.823872 12.6306 1.60492 13.4117L6.27336 18.0801C6.66388 18.4706 7.29705 18.4706 7.68757 18.0801C8.0781 17.6896 8.0781 17.0564 7.68757 16.6659L4.02154 12.9998L22 12.9998C22.5523 12.9998 23 12.5521 23 11.9998C23 11.4476 22.5523 10.9998 22 10.9998L4.01675 10.9998L7.68473 7.33186Z"/>
+                            </svg>
+                        </button>
+                        <div class="list-items">
+                            <div class="item" v-for="(city, index) in visibleCities" 
+                                :key="city.id">
+                                <Img_Card_2  :condition="city.images && city.images.length > 0" 
+                                            :imageUrl = 'city.images[0]'
+                                            :name_picture="city.name"
+                                            :name="city.name"
+                                            @click="navigateToDestination(goToDestination(city.id))"/>
+                            </div>
                         </div>
+                        <button class="control-button owl-next" @click="nextSlide">
+                            <svg class="bi bi-arrow-right" width="25px" height="25px" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M16.3153 16.6681C15.9247 17.0587 15.9247 17.6918 16.3153 18.0824C16.7058 18.4729 17.339 18.4729 17.7295 18.0824L22.3951 13.4168C23.1761 12.6357 23.1761 11.3694 22.3951 10.5883L17.7266 5.9199C17.3361 5.52938 16.703 5.52938 16.3124 5.91991C15.9219 6.31043 15.9219 6.9436 16.3124 7.33412L19.9785 11.0002L2 11.0002C1.44772 11.0002 1 11.4479 1 12.0002C1 12.5524 1.44772 13.0002 2 13.0002L19.9832 13.0002L16.3153 16.6681Z"/>
+                            </svg>
+                        </button>
                     </div>
                 </div>
                 <div class="container-fluid frame topic">
@@ -53,6 +62,7 @@
                             <Img_Card  :condition="topic.imageUrl"
                                         :imageUrl = 'topic.imageUrl'
                                         :name_picture="topic.name"
+                                        @click="navigateToTopic(topic.path)"
                                         :name="topic.name"/>
                         </div>
                     </div>
@@ -96,6 +106,10 @@ const navigateToDestination = (id) => {
   window.location.assign(`/Destination/${id}`);
 };
 
+const navigateToTopic = (topic) => {
+  window.location.assign(`/Topic/${topic}`);
+};
+
 const handleScroll = () => {
   isTopButtonVisible.value = window.scrollY > 300;
 };
@@ -132,16 +146,21 @@ onUnmounted(() => {
 </script>
 
 <style scoped>
+.frame-overall {
+    display: grid;
+    grid-template-columns: 5% 90% 5%;
+}
+.overall {
+    grid-column: 2/3;
+}
 .search-btn {
     margin-top: -65px;
-    margin-bottom: 100px;
     width: 95%;
 }
 
 .section-title {
     position: relative;
     display: inline-block;
-    gap: 50px;
     color: #13357B;
     text-transform: uppercase;  
     font-weight: 700;
@@ -194,17 +213,41 @@ h1 {
     align-items: center;
     color: #13357B;
 }
-.control-button {
-    position: relative;
+.destination-list {
+    display: grid;
+    grid-template-columns: 5% 85% 5%;
     align-items: center;
     justify-content: center;
-    top: -45px;
-    z-index: 1;
-    flex: 1;
+    justify-items: center;
+    width: 100%;
+    height: 100%;
 }
+.control-button {
+    align-items: center;
+    justify-content: center;
+    width: 55px;
+    height: 55px;
+    border: 2px solid #13357B;
+    border-radius: 50%;
+    transition: .5s;
+    background-color: #EDF6F9;
+    fill: #EDF6F9
+}
+.control-button button {
+    padding: 10px 20px;
+}
+.control-button:hover {
+    background-color: #13357B;
+}
+.control-button svg {
+    fill: #13357B;
+}
+.control-button:hover svg {
+    fill: #EDF6F9;
+}
+
 .tag-button {
     position: relative;
-
     flex: 1;
     z-index: 10;
 }
@@ -218,6 +261,13 @@ h1 {
     align-items: center;
     width: 100%;
     height: 100%;
+}
+
+.list-items-topic {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: center;
+    width: 100%;
 }
 
 </style>

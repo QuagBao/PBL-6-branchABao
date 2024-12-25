@@ -6,8 +6,8 @@
 
     <div class="container-fluid">
         <div class="container-fluid">
-            <div class="container-fluid">
-                <div class="container-fluid">
+            <div class="container-fluid frame-overall">
+                <div class="container-fluid overall">
                     <!-- Images -->
                     <div class="container-fluid frame-base-image">
                         <img src="@/assets/images/thingstodo_2.avif" alt="City 1" class="img-fluid">
@@ -114,8 +114,15 @@ const navigateToThingsCity = (id) => {
 </script>
 
 <style scoped>
+.frame-overall {
+    display: grid;
+    grid-template-columns: 5% 90% 5%;
+}
+.overall {
+    grid-column: 2/3;
+}
 .img-fluid {
-    margin-top: 200px;
+    margin-top: 150px;
     width: 100vw;
     height: 600px;
     border-radius: 20px;

@@ -1,72 +1,21 @@
 <script>
-// import HelloWorld from './components/HelloWorld.vue'
-// import TheWelcome from './components/TheWelcome.vue'
-// import AutoComplete from './components/AutoComplete.vue';
-import AutoComplete from './Auto_Complete.vue';
 import MapComponent from './Map_Component.vue';
 import { ref, defineComponent } from 'vue';
 export default defineComponent ({
   components: {
-    AutoComplete,
     MapComponent
   },
   setup() {
-    const location = ref([105.85242472181584, 21.029579719995272]);
+    const location = ref([108.23970942970374, 16.0475275245935]);
 
-    // Hàm cập nhật vị trí
-    const updateLocation = (newLocation) => {
-      location.value = [newLocation.lng, newLocation.lat];
-    };
-
-    // Trả về các biến và hàm cho template
-    return { location, updateLocation };
+    return { location };
   }
 });
 </script>
-
 <template>
-  <!-- <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
-
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
-
-  <main>
-    <TheWelcome />
-  </main> -->
   <div>
-    <AutoComplete @location-selected="updateLocation" />
-    <MapComponent :selectedLocation="location" />
+    <MapComponent :selectedLocations="[[108.22219989597711, 16.03931241040142], 
+                                      [108.23940902229407, 16.04757907839837],
+                                      [108.23887302128715, 16.04546624024942]]" />
   </div>
 </template>
-
-<style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-</style>

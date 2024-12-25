@@ -16,7 +16,6 @@ import {
 import { getDestinationByTagID, getDestinations } from "@/models/DestinationManagementModel";
 
 export default function () {
-  const actionStep = ref("read");
   const toast = useToast();
 
   const fetchTags = async () => {
@@ -54,23 +53,9 @@ export default function () {
     }
   };
 
-  const showDetailTag = async (tagID) => {
-    try {
-      const tag = await getTag(tagID);
-      return tag;
-    } catch (error) {
-      toast.error("Error fetching tag:", error);
-    }
-  }; 
-
-  const createTag = () => {
-    actionStep.value = "create";
-  };
-
   const updateTag = async (tagID) => {
     try {
       const tag = await getTag(tagID);
-      actionStep.value = "update";
       return tag;
     } catch (error) {
       toast.error("Error fetching tag:", error);
@@ -80,8 +65,8 @@ export default function () {
   const confirmCreate = async (tag) => {
     try {
       await addTag(tag);
-      actionStep.value = "read";
       toast.success("Add Tag successfull");
+      window.location.assign("/tags");
     } catch (error) {
       toast.error("Error add tag:", error);
     }
@@ -89,21 +74,19 @@ export default function () {
   const confirmUpdate = async (tag) => {
     try {
       await updateTagAPI(tag);
-      actionStep.value = "read";
       toast.success("Update Tag successfull");
+      window.location.assign("/tags");
     } catch (error) {
       toast.error("Error update tag:", error);
     }
   };
 
-  const createAddDest = () => {
-    actionStep.value = "create-des";
-  };
 
   const confirmAddDest = async (tag_id, dest_id) => {
     try {
         await addTagToDestination(tag_id, dest_id);
         toast.success("Add Destination to Tags successfull");
+        window.location.assign("/tags/" + tag_id);
     } catch (error) {
         toast.error("Error Destination to Tags:", error);
     }
@@ -119,7 +102,7 @@ export default function () {
         const response = await deleteTagAPI(tagID);
         if (response.success) {
           toast.success(response.message);
-          // Trigger a data refresh instead of a page reload if possible
+          window.location.reload();
         } else {
           toast.error("Failed to delete tag:", response.message);
         }
@@ -130,18 +113,14 @@ export default function () {
   };
 
   return {
-    fetchTags,
-    getTag,
-    actionStep,
-    createTag,
-    updateTag,
     confirmCreate,
-    confirmUpdate,
-    deleteTag,
-    getDestByTagID,
-    showDetailTag,
-    createAddDest,
     confirmAddDest,
     fetchDestinations,
+    getTag,
+    getDestByTagID,
+    fetchTags,
+    deleteTag,
+    updateTag,
+    confirmUpdate,
   };
 }

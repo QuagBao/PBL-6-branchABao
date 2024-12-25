@@ -1,6 +1,6 @@
 <template>
-    <div class="group-tag">
-        <div class="btn-group" 
+    <div class="group-tag d-flex justify-content-around gap-2">
+        <div class="btn-group d-flex gap-2" 
             v-for="tab in profileViewModel.tabsMap.values()" 
             :key="tab.name">
             <button :class="{ active: tab.active }"
@@ -32,28 +32,19 @@ export default {
 
 <style scoped>
 .group-tag {
-    display: flex;
-    width: 100%;
     background-color: #EDF6F9;
-    align-items: center;
-    justify-content: space-around; /* Cách đều các nút */
+    align-items: center;/* Cách đều các nút */
     box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.3);
     padding: 15px 0px;
     margin-bottom: 20px;
     border-radius: 10px;
-    gap: 10px;
     z-index: 15;
-}
-
-.btn-group {
-    flex: 1;
-    display: flex;
-    justify-content: center;
+    width: 100%;
 }
 
 .btn-group button {
-    width: 230px;
-    padding: 10px 20px;
+    width: 150px;
+    padding: 10px 0px;
     background-color: #EDF6F9;
     color: #13357B;
     border: none;

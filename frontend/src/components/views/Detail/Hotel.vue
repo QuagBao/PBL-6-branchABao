@@ -6,8 +6,8 @@
     <div class="container-fluid">
         <div class="container-fluid">
             <div class="container-fluid">
-                <div class="container-fluid">
-                    <div class="container-fluid">
+                <div class="container-fluid frame-overall">
+                    <div class="container-fluid overall">
                         <div class="information d-flex flex-column gap-2">
                             <div class="name-of-place">{{ hotel.name }}</div>
                             <div class="rating-review d-flex gap-3 align-items-center ">
@@ -47,7 +47,7 @@
                                     </div>
                                     <div class="frame phone">
                                         <i class="icon-location"></i>
-                                        <p v-if="hotel.hotel.website">
+                                        <p v-if="hotel.hotel.website" class="text-truncate">
                                             <a :href="hotel.hotel.website" target="_blank" rel="noopener noreferrer">
                                                 {{ hotel.hotel.website }}
                                             </a>
@@ -158,6 +158,13 @@ export default {
 </script>
 
 <style scoped>
+.frame-overall {
+    display: grid;
+    grid-template-columns: 5% 90% 5%;
+}
+.overall {
+    grid-column: 2/3;
+}
 .information{
     margin-top: 180px;
     margin-bottom: -160px;
@@ -185,10 +192,10 @@ export default {
     color: #729AE9;
 }
 :deep(.custom .carousel-control-next .carousel-control-next-icon) {
-    margin-right: -10.3vw; /* Giá trị mới */
+    margin-right: -8.4vw; /* Giá trị mới */
 }
 :deep(.custom .carousel-control-prev .carousel-control-prev-icon) {
-    margin-left: -10.3vw; /* Giá trị mới */
+    margin-left: -8.4vw; /* Giá trị mới */
 }
 .info-hotel {
     display: grid;
@@ -213,7 +220,8 @@ export default {
     margin-bottom: 20px;
 }
 .frame{
-    display: flex;
+    display: grid;
+    grid-template-columns: 5% 90%;
     gap:15px;
 }
 .icon-location::before {

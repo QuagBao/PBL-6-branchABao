@@ -55,6 +55,7 @@ export default function () {
     const loadUser = async (userId) => {    
         try {
             const user = await getUserById(userId);
+            console.log("User: ",user);
             return user;
         } catch (error) {
             console.error('Error getting user:', error);
@@ -68,6 +69,7 @@ export default function () {
             const token = sessionStorage.getItem('access_token');
           if(token){
             const userResult = await signInModel.fetchCurrentUser(token);
+            console.log("User Logined: ",userResult);
             if(userResult.success){
               return userResult.user;
             } else {

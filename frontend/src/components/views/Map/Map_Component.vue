@@ -1,15 +1,17 @@
 <template>
-    <div id="map" style="width: 80%; height: 50vh;"></div>
+    <div class="map-container">
+        <div id="map"></div>
+    </div>
 </template>
 
 <script>
-import maplibregl from 'maplibre-gl'; // Nhớ cài đặt maplibre-gl
+import maplibregl from 'maplibre-gl';
 
 export default {
     props: {
-        selectedLocation: {
+        selectedLocations: {
             type: Array,
-            default: () => [105.85242472181584, 21.029579719995272]
+            default: () => [] // Danh sách các địa điểm
         }
     },
     data() {
@@ -17,122 +19,136 @@ export default {
             map: null,
             apiUrl: 'https://rsapi.goong.io',
             mapUrl: 'https://tiles.goong.io/assets/',
-            apiKey: 'ArPlUISaEBAdJFTABi9dcNGcue8WQ4cOAuGcNoBE', // your API key
-            mapKey: 'tLyW2vk0aY3yfQLu8ZPy986mAgaW8igMYufv3BLY', // your map key
-            center: [105.85242472181584, 21.029579719995272], // Kinh độ, vĩ độ
-            zoom: 17, // Độ zoom mặc định
-            radiusInMeters: 100,
+            apiKey: 'ArPlUISaEBAdJFTABi9dcNGcue8WQ4cOAuGcNoBE',
+            mapKey: 'tLyW2vk0aY3yfQLu8ZPy986mAgaW8igMYufv3BLY',
+            zoom: 16 // Độ zoom mặc định
         };
     },
     mounted() {
         this.initMap();
     },
     watch: {
-        selectedLocation: 'moveToLocation'
+        selectedLocations: {
+            handler(newLocations) {
+                if (this.map) {
+                    this.addMarkers(newLocations);
+                }
+            },
+            immediate: true
+        }
     },
     methods: {
         initMap() {
+            const defaultCenter = this.selectedLocations[0];
+
             this.map = new maplibregl.Map({
                 container: 'map',
                 style: `${this.mapUrl}goong_map_web.json?api_key=${this.mapKey}`,
-                center: this.selectedLocation,
+                center: defaultCenter, // Tâm bản đồ mặc định
                 zoom: this.zoom
             });
 
             this.map.on('load', () => {
-                const lngLat = [...this.selectedLocation];
-                this.moveToLocation(lngLat);
+                if (this.selectedLocations.length > 0) {
+                    this.addMarkers(this.selectedLocations);
+                }
             });
         },
-        moveToLocation(newLocation) {
-            this.map.flyTo({
-                center: newLocation,
-                essential: true
+        addMarkers(locations) {
+            // Xóa tất cả các marker cũ
+            this.removeLayer('markers-layer');
+            this.removeSource('markers-source');
+
+            const features = locations.map((location, index) => ({
+                type: 'Feature',
+                geometry: {
+                    type: 'Point',
+                    coordinates: location
+                },
+                properties: {
+                    id: index + 1 // Số thứ tự
+                }
+            }));
+
+            const geojsonData = {
+                type: 'FeatureCollection',
+                features: features
+            };
+
+            this.map.addSource('markers-source', {
+                type: 'geojson',
+                data: geojsonData
             });
-            this.addMarkerAndCircleAround(newLocation);
+
+            features.forEach((feature, index) => {
+                const markerId = `marker-${index + 1}`; // Số thứ tự
+                // Tạo marker SVG với số thứ tự
+                const svgElement = `
+                    <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M19.0074 5.02083C17.2556 3.14583 14.6793 2 12 2C9.3207 2 6.74444 3.04167 4.99259 5.02083C3.54989 6.6875 2.82854 8.77083 3.03464 10.8542C3.03464 11.2708 3.13769 11.6875 3.24074 12C4.16819 16.375 8.9085 20.2292 10.9695 21.6875C11.2786 21.8958 11.5878 22 12 22C12.4122 22 12.7214 21.8958 13.0305 21.6875C14.9885 20.2292 19.8318 16.375 20.7593 12C20.8623 11.6875 20.8623 11.2708 20.9654 10.8542C21.1715 8.77083 20.4501 6.6875 19.0074 5.02083ZM12 13.9792C10.4542 13.9792 9.1146 12.7292 9.1146 11.0625C9.1146 9.39583 10.3512 8.14583 12 8.14583C13.6488 8.14583 14.8854 9.39583 14.8854 11.0625C14.8854 12.7292 13.5458 13.9792 12 13.9792Z" fill="#13357B"/>
+                        <text x="12" y="20" font-size="8" fill="#EDF6F9" text-anchor="middle" font-family="Roboto">
+                            ${feature.properties.id}
+                        </text>    
+                    </svg>
+                `;
+                const canvas = document.createElement('canvas');
+                canvas.width = 30;
+                canvas.height = 30;
+                const ctx = canvas.getContext('2d');
+                const svgBase64 = `data:image/svg+xml;base64,${btoa(svgElement)}`;
+                const img = new Image();
+                img.src = svgBase64;
+                img.onload = () => {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+                    if (!this.map.hasImage(markerId)) {
+                        this.map.addImage(markerId, {
+                            width: canvas.width,
+                            height: canvas.height,
+                            data: imageData.data
+                        });
+                    }
+
+                    this.map.addLayer({
+                        id: `marker-layer-${feature.properties.id}`,
+                        type: 'symbol',
+                        source: 'markers-source',
+                        layout: {
+                            'icon-image': markerId,
+                            'icon-size': 1.5,
+                            'icon-anchor': 'bottom'
+                        },
+                        filter: ['==', 'id', feature.properties.id]
+                    });
+                };
+            });
         },
         removeLayer(layerId) {
             if (this.map.getLayer(layerId)) {
                 this.map.removeLayer(layerId);
             }
         },
-        addMarker(lngLat) {
-            new maplibregl.Marker()
-                .setLngLat(lngLat)
-                .addTo(this.map);
-        },
-        addMarkerAndCircleAround(lngLat) {
-
-            // Xóa vòng tròn cũ nếu có
-            this.removeLayer('circle');
-
-            // Tạo dữ liệu cho vòng tròn
-            const circleData = {
-                'type': 'FeatureCollection',
-                'features': [{
-                    'type': 'Feature',
-                    'geometry': {
-                        'type': 'Polygon',
-                        'coordinates': [[
-                            [lngLat[0] - 0.0002, lngLat[1] + 0.0005], // Điểm dưới trái
-                            [lngLat[0] + 0.0002, lngLat[1] + 0.0005], // Điểm dưới phải
-                            [lngLat[0], lngLat[1] - 0.0002], // Điểm đỉnh
-                            [lngLat[0] - 0.0002, lngLat[1] + 0.0005] // Quay lại điểm đầu
-                        ]]
-                    }
-                }]
-            };
-
-            // Kiểm tra xem nguồn đã tồn tại chưa trước khi thêm
-            if (this.map.getSource('circle')) {
-                this.map.removeSource('circle');
+        removeSource(sourceId) {
+            if (this.map.getSource(sourceId)) {
+                this.map.removeSource(sourceId);
             }
-
-            // Thêm source cho vòng tròn
-            this.map.addSource('circle', {
-                'type': 'geojson',
-                'data': circleData
-            });
-
-            // Thêm layer cho vòng tròn
-            this.map.addLayer({
-                id: 'circle',
-                type: 'fill',
-                source: 'circle',
-                paint: {
-                    'fill-color': '#FF0000', // Màu của mũi tên
-                    'fill-opacity': 1 // Độ trong suốt
-                }
-            });
-
-            // Di chuyển đến vị trí mới
-            this.map.flyTo({ center: lngLat, zoom: this.zoom }); // Bạn có thể điều chỉnh zoom ở đây
-        },
-        drawCircle(center, radius) {
-            const points = 64; // Số điểm để vẽ vòng tròn
-            const coords = [];
-
-            for (let i = 0; i <= points; i++) {
-                const angle = (i / points) * 2 * Math.PI; // Tính toán góc
-                const dx = radius * Math.cos(angle); // Tính toán độ dịch chuyển theo kinh độ
-                const dy = radius * Math.sin(angle); // Tính toán độ dịch chuyển theo vĩ độ
-                coords.push([
-                    center[0] + dx / 111320, // Kinh độ
-                    center[1] + dy / 110574  // Vĩ độ
-                ]);
-            }
-            coords.push(coords[0]); // Đảm bảo vòng tròn khép kín
-
-            return coords;
         }
     }
 };
 </script>
 
 <style>
+.map-container {
+    width: 100%;
+    height: 100%;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
 #map {
     width: 100%;
     height: 100vh;
-    /* Chiều cao của bản đồ */
 }
 </style>
