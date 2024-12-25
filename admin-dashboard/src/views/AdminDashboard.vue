@@ -76,19 +76,21 @@ const drawRatingChart = () => {
           type: 'line',
           label: 'Average Rating',
           data: averageRatings,
-          backgroundColor: 'rgba(31, 188, 26, 0.2)',
+          backgroundColor: 'rgba(31, 188, 26, 0.1)',
           borderColor: 'rgba(31, 188, 26, 1)',
           borderWidth: 2,
           fill: true,
-          tension: 0.4
+          tension: 0.4,
+          yAxisID: 'y1', // Gắn với trục y1 bên trái
         },
         {
           type: 'bar',
           label: 'Total Reviews',
           data: reviewCounts,
-          backgroundColor: 'rgba(54, 162, 235, 0.6)',
-          borderColor: 'rgba(54, 162, 235, 1)',
-          borderWidth: 1
+          backgroundColor: 'rgba(14, 14, 235, 0.6)',
+          borderColor: 'rgba(14, 14, 235, 1)',
+          borderWidth: 1,
+          yAxisID: 'y2', // Gắn với trục y2 bên phải
         },
       ],
     },
@@ -97,25 +99,44 @@ const drawRatingChart = () => {
       plugins: {
         legend: {
           display: true,
-          position: 'top'
-        }
+          position: 'top',
+        },
       },
       scales: {
         x: {
           grid: {
-            display: false
-          }
-        },
-        y: {
-          grid: {
-            display: false
+            display: false,
           },
-          beginAtZero: true
+        },
+        y1: {
+          type: 'linear',
+          position: 'left',
+          grid: {
+            display: false,
+          },
+          title: {
+            display: true,
+            text: 'Average Rating',
+          },
+          beginAtZero: true,
+        },
+        y2: {
+          type: 'linear',
+          position: 'right',
+          grid: {
+            drawOnChartArea: false, // Không vẽ lưới của trục y2 để tránh trùng lặp
+          },
+          title: {
+            display: true,
+            text: 'Number of Reviews',
+          },
+          beginAtZero: true,
         },
       },
     },
   });
 };
+
 
 const drawDestinationChart = () => {
   const ctx = document.getElementById('destinationChart').getContext('2d');
@@ -252,7 +273,7 @@ onMounted(() => {
 .pie-chart {
   max-width: 700px;
   max-height: 700px;
-  width: 70%;
+  width: 100%;
   height: auto;
   margin: 0 auto;
 }

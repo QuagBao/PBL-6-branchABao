@@ -9,7 +9,7 @@ const routes = [
   },
   {
     path: "/",
-    redirect: "/dashboard", // Chuyển hướng về Dashboard khi vào trang gốc
+    redirect: "/login", // Chuyển hướng về Dashboard khi vào trang gốc
   },
   {
     path: "/dashboard",
