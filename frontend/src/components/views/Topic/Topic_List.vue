@@ -3,7 +3,7 @@
         <Header/>
         <Top_Button/>
     </div>  
-    
+
     <div class="container-fluid row select-topic">
         <div class="container-fluid col frame-select-location">
             <button 
@@ -24,11 +24,9 @@
             </button>
             <!-- Dropdown danh sách các lựa chọn -->
             <div class="dropdown-list" v-if="dropdownVisibleRegion">
-                <!-- Tùy chọn tất cả tours -->
                 <button class="dropdown-item" @click="selectCity(null)">
                     Việt Nam
                 </button>
-                <!-- Tùy chọn các thành phố -->
                 <button 
                     class="dropdown-item" 
                     v-for="city in cities" 
@@ -58,7 +56,11 @@
         </div> 
     </div>
 
-    <div class="container-fluid content"
+    <div v-if="loading">
+        <div class="skeleton-loader" v-for="n in 10" :key="n"></div>
+    </div>
+
+    <div v-else class="container-fluid content"
         v-for="(item, index) in destinations" :key="index">
         <div class="container">
             <Topic_Item_2 :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
@@ -67,7 +69,7 @@
                           :name="item.name"
                           :location="getCity(item.address.city_id).name"
                           :stars="generateStars(item.rating)"
-                          :reviewNumber="item?.numOfReviews || 0"
+                          :reviewNumber="item?.review_count || 0"
                           :description="truncatedDescription(item.description)"
                           :tags="item.tags"
                           :price="item.price_bottom"
@@ -84,7 +86,6 @@ import { useRoute } from 'vue-router';
 import { ref, onMounted, computed } from 'vue';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
-// Import Swiper styles
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/scrollbar';
@@ -109,7 +110,6 @@ const {
 const selectTag = async (tag_id) => {
     selectButton(tag_id)
     await fetchFilteredDestinations();
-    console.log(destinations);
 };
 const {
     generateStars,
@@ -117,7 +117,6 @@ const {
 const getCity = (city_id) => {
     return cities.value.find(city => city.id === city_id);
 };
-
 const navigate = (destination) => {
     if(destination.hotel_id!= null){
         navigateToDetailHotel(destination.hotel_id);
@@ -132,7 +131,6 @@ const navigate = (destination) => {
 const navigateToDetailPlace = (id) => window.location.assign(`/Detail/Place/${id}`);
 const navigateToDetailRestaurant = (restaurant_id) => window.location.assign(`/Detail/Restaurant/${restaurant_id}`);
 const navigateToDetailHotel = (hotel_id) => window.location.assign(`/Detail/Hotel/${hotel_id}`);
-
 </script>
 
 <script>
@@ -264,5 +262,21 @@ export default {
 .button-item.selected {
     background-color: #13357B;
     color: #EDF6F9;
+}
+.skeleton-loader {
+    height: 200px;
+    margin: 10px;
+    background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+    from {
+        background-position: 200% 0;
+    }
+    to {
+        background-position: -200% 0;
+    }
 }
 </style>

@@ -986,7 +986,7 @@ export async function fetchDestinationsByUser(userId) {
 export async function fetchDestinationsByCity_Tag(city_id, tags) {
   try {
     const url = new URL(
-      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/by_tags?limit=50`
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/by_tags?limit=80`
     );
     url.searchParams.append("city_id", city_id);
     for (const tag of tags) {
@@ -1028,7 +1028,7 @@ export async function fetchDestinationsByCity_Tag(city_id, tags) {
 export async function fetchDestinationsByTag(tags) {
   try {
     const url = new URL(
-      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/by_tags?limit=50`
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/by_tags?limit=80`
     );
     for (const tag of tags) {
       url.searchParams.append("tag_ids", tag);
@@ -1067,3 +1067,17 @@ export async function fetchDestinationsByTag(tags) {
     return [];
   }
 };
+
+export async function getTagById(destinationID) {
+  try {
+    const response = await axios.get(
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/${destinationID}/get_tags_byid`
+    );
+
+    const final = response.data;
+    return final.tags;
+  } catch (error) {
+    console.error("Error fetching restaurant:", error);
+    return []; // Hoặc bạn có thể xử lý khác tùy ý
+  }
+}

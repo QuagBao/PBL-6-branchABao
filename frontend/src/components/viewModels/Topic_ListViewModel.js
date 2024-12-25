@@ -1,5 +1,5 @@
 import { ref, watch, onMounted, computed } from 'vue';
-import { fetchDestinationsByTag, fetchDestinationsByCity_Tag } from '../models/destinationModel';
+import { fetchDestinationsByTag, fetchDestinationsByCity_Tag, getTagById } from '../models/destinationModel';
 import { fetchCities } from '../models/CityModel';
 import { getTags } from '../models/TagModel';
 
@@ -43,8 +43,15 @@ export default function (topicName) {
         console.log('function 4');
         data = await fetchDestinationsByTag([topicId.value]);
       }
+
+      // Thêm tags vào mỗi điểm đến
+      for (const destination of data) {
+        destination.tags = await getTagById(destination.id);
+      }
+
       // Sắp xếp kết quả theo mức độ phổ biến
       destinations.value = data.sort((a, b) => b.popularity_score - a.popularity_score);
+
     } catch (error) {
       console.error('Lỗi tải dữ liệu:', error);
     } finally {
