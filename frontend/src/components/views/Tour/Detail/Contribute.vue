@@ -23,19 +23,22 @@
                 </div>
             </div>
             <div class="container-fluid type-rating">
-                <div class="rating-row" 
-                    v-for="(ratingInfo, label) in ratings" :key="label">
-                    <div class="col rating-label">{{ label }}</div>
-                    <div class="col-3 rating-bar-container">
-                        <div class="rating-bar"
-                            :style="{ width: ratingInfo.percentage + '%' }">
-                            
+                <div class="row" v-for="(ratingInfo, label) in ratings" :key="label">
+                    <!-- Rating Row -->
+                    <div class="col-10 d-flex align-items-center">
+                    <!-- Rating Label -->
+                        <div class="col-5 rating-label">{{ label }}</div>
+                        <!-- Rating Bar Container -->
+                        <div class="col-5 rating-bar-container">
+                            <div class="rating-bar" :style="{ width: ratingInfo.percentage + '%' }">
+                            </div>
                         </div>
-                        
                     </div>
-                    <span class="count-rating">{{ ratingInfo.count }}</span>
+                    <!-- Count Rating -->
+                    <div class="col-2 count-rating">{{ ratingInfo.count }}</div>
                 </div>
             </div>
+
         </div>
         <!-- Review -->
         <div class="frame-review">

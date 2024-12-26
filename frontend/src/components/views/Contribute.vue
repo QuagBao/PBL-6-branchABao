@@ -24,15 +24,22 @@
                 </div>
             </div>
             <div class="container-fluid type-rating">
-                <div class="rating-row" 
-                    v-for="(ratingInfo, label) in ratings" :key="label">
-                    <div class="col rating-label">{{ label }}</div>
-                    <div class="col-3 rating-bar-container">
-                        <div class="rating-bar"
-                            :style="{ width: ratingInfo.percentage + '%' }">
+                <div class="container-fluid type-rating">
+                <div class="row" v-for="(ratingInfo, label) in ratings" :key="label">
+                    <!-- Rating Row -->
+                    <div class="col-10 d-flex align-items-center">
+                    <!-- Rating Label -->
+                        <div class="col-5 rating-label">{{ label }}</div>
+                        <!-- Rating Bar Container -->
+                        <div class="col-5 rating-bar-container">
+                            <div class="rating-bar" :style="{ width: ratingInfo.percentage + '%' }">
+                            </div>
                         </div>
                     </div>
+                    <!-- Count Rating -->
+                    <div class="col-2 count-rating">{{ ratingInfo.count }}</div>
                 </div>
+            </div>
             </div>
             <div class="description-container" v-if="description">
                 <h3 class="description-title">About the Place</h3>
@@ -255,6 +262,11 @@ input:focus{
 .filter-select:focus {
     background-color: #caf0f8;
     box-shadow: 0px 5px 10px rgba(19, 53, 123, 0.25);
+}
+.count-rating {
+    font-size: 20px;
+    font-weight: 800;
+    
 }
 
 </style>
