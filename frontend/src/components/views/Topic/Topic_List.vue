@@ -62,24 +62,27 @@
                     </div> 
                 </div>
 
-    <div v-if="loading">
-        <div class="skeleton-loader" v-for="n in 10" :key="n"></div>
-    </div>
+                <div v-if="loading">
+                    <div class="skeleton-loader" v-for="n in 10" :key="n"></div>
+                </div>
 
-    <div v-else class="container-fluid content"
-        v-for="(item, index) in destinations" :key="index">
-        <div class="container">
-            <Topic_Item_2 :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
-                          :index="index+1"
-                          :destID="item.id"
-                          :name="item.name"
-                          :location="getCity(item.address.city_id).name"
-                          :stars="generateStars(item.rating)"
-                          :reviewNumber="item?.review_count || 0"
-                          :description="truncatedDescription(item.description)"
-                          :tags="item.tags"
-                          :price="item.price_bottom"
-                          @click="navigate(item)"/>
+                <div v-else class="container-fluid content"
+                    v-for="(item, index) in destinations" :key="index">
+                    <div class="container">
+                        <Topic_Item_2 :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
+                            :index="index+1"
+                            :destID="item.id"
+                            :name="item.name"
+                            :location="getCity(item.address.city_id).name"
+                            :stars="generateStars(item.rating)"
+                            :reviewNumber="item?.review_count || 0"
+                            :description="truncatedDescription(item.description)"
+                            :tags="item.tags"
+                            :price="item.price_bottom"
+                            @click="navigate(item)"/>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

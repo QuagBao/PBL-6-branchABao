@@ -20,6 +20,7 @@
     "nouislider": "^15.8.1",
     "pinia": "^2.3.0",
     "swiper": "^11.1.14",
+    "v-slick-carousel": "^0.5.0",
     "vue": "^3.4.29",
     "vue-chartjs": "^5.3.2",
     "vue-router": "^4.4.5",
