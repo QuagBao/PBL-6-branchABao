@@ -30,7 +30,7 @@ export default function () {
     const selectedPlace = ref([]);
     const selectedHotel = ref([]);
     const selectedRestaurant = ref([]);
-    const selecyedDestination = ref([]);
+    const selectedDestination = ref([]);
     const isAllSelected = ref(false);
 
     const itineraryName = ref('');
@@ -82,46 +82,58 @@ export default function () {
       }
     }
 
-    const togglePickStatus = (place, type) => {
-      const index = selectedPlace.value.findIndex(t => t === place);
-      if (index === -1) {
-        selectedPlace.value.push(place); // Thêm topic nếu chưa có
-        if (type === 'hotel') {
-          selectedHotel.value.push(place);
-        }
-        if (type === 'restaurant') {
-          selectedRestaurant.value.push(place);
-        }
-        if (type === 'destination') {
-          selecyedDestination.value.push(place);
-        }
-      } else {
-        selectedPlace.value.splice(index, 1); // Xóa topic nếu đã tồn tại
-        if (type === 'hotel') {
-          selectedHotel.value.splice(index, 1);
-        }
-        if (type === 'restaurant') {
-          selectedRestaurant.value.splice(index, 1);
-        }
-        if (type === 'destination') {
-          selecyedDestination.value.splice(index, 1);
-      }
-    }
-  };
+    const picked = ref({});
+    const pickFull = new URL('@/assets/svg/tick.svg', import.meta.url).href;
+    const pickEmpty = new URL('@/assets/svg/plus-svgrepo-com.svg', import.meta.url).href;
 
-    const selectAll = () => {
-      // Chuyển đổi giá trị của isAllSelected
-      isAllSelected.value = !isAllSelected.value;
+const togglePickStatus = (place, type) => {
+  const index = selectedPlace.value.findIndex(t => t === place);
+  picked.value[place] = !picked.value[place];
+  if (index === -1) {
+    selectedPlace.value.push(place); // Thêm topic nếu chưa có
+    if (type === 'hotel') {
+      selectedHotel.value.push(place);
+    }
+    if (type === 'restaurant') {
+      selectedRestaurant.value.push(place);
+    }
+    if (type === 'destination') {
+      selectedDestination.value.push(place);
+    }
+  } else {
+    selectedPlace.value.splice(index, 1); // Xóa topic nếu đã tồn tại
+    if (type === 'hotel') {
+      selectedHotel.value = selectedHotel.value.filter(id => id !== place);
+    }
+    if (type === 'restaurant') {
+      selectedRestaurant.value = selectedRestaurant.value.filter(id => id !== place);
+    }
+    if (type === 'destination') {
+      selectedDestination.value = selectedDestination.value.filter(id => id !== place);
+    }
+  }
+};
+
+const selectAll = (newvalue) => {
+  // Chuyển đổi giá trị của isAllSelected
   
-      // Kiểm tra xem isAllSelected có true hay không
-      if (isAllSelected.value) {
-          // Lấy toàn bộ place.id nếu isAllSelected là true
-          selectedPlace.value = places.map(place => place.id);
-      } else {
-          // Xóa toàn bộ nếu isAllSelected là false
-          selectedPlace.value = [];
-      }
-  };
+  // Kiểm tra xem isAllSelected có true hay không
+  if (newvalue) {
+      // Lấy toàn bộ place.id nếu isAllSelected là true
+      selectedPlace.value = places.value.map(place => place.id);
+      selectedHotel.value = places.value.filter(place => place.hotel_id !== null && place.restaurant_id == null).map(place => place.id);
+      selectedDestination.value = places.value.filter(place => place.hotel_id == null && place.restaurant_id == null).map(place => place.id);
+      selectedRestaurant.value = places.value.filter(place => place.restaurant_id !== null).map(place => place.id);
+      picked.value = Object.fromEntries(places.value.map(place => [place.id, true])); // Đánh dấu tất cả là picked
+  } else {
+      // Xóa toàn bộ nếu isAllSelected là false
+      selectedPlace.value = [];
+      selectedHotel.value = [];
+      selectedDestination.value = [];
+      selectedRestaurant.value = [];
+      picked.value = {}; // Đặt lại tất cả là không picked
+  }
+};
 
     
   
@@ -129,7 +141,7 @@ export default function () {
       tripStore.setListPlace(selectedPlace.value);
       tripStore.setListHotel(selectedHotel.value);
       tripStore.setListRestaurant(selectedRestaurant.value);
-      tripStore.setListDestination(selecyedDestination.value);
+      tripStore.setListDestination(selectedDestination.value);
       console.log('All Data:', tripStore.getAllInformation());
     }
 
@@ -235,5 +247,8 @@ export default function () {
       descriptionName,
       finishItinerary,
       finishItineraryAI,
+      picked,
+      pickFull,
+      pickEmpty,
     };
   }

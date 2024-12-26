@@ -5,7 +5,7 @@
 </template>
 
 <script setup>
-import CreateTripViewModel from '@/components/viewModels/Create_Trip_ViewModel/CreateTripViewModel';
+import CreateTripViewModel from '@/components/viewModels/CreateTripViewModel';
 const {
     togglePickStatus, picked, pickEmpty, pickFull 
 } = CreateTripViewModel();

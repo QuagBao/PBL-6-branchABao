@@ -52,11 +52,11 @@
                     <!-- Pick All Toggle -->
                     <div class="container frame">
                         <div class="float-button">
-                            <!-- <label class="toggle-switch">
-                                <input type="checkbox" v-model="isAllSelected" @change="selectAll">
+                            <label class="toggle-switch">
+                                <input type="checkbox" v-model="isAllSelected">
                                 <span class="slider"></span>
                             </label>
-                            <label class="select-all-label">{{ isAllSelected ? 'Deselect All' : 'Select All' }}</label> -->
+                            <label class="select-all-label">{{ isAllSelected ? 'Deselect All' : 'Select All' }}</label>
                             <label class="count-label">({{ selectedPlace.length }}/{{ places.length }})</label>
                         </div>
                     </div>
@@ -68,7 +68,7 @@
 
 <script setup>
 import { useTripStore } from '@/store/useTripStore';
-import { ref, computed, onMounted } from 'vue';
+import { ref, computed, onMounted, watch } from 'vue';
 import { useRouter } from 'vue-router';
 import CreateTrip from '../../viewModels/CreateTripViewModel';
 import GenerateStars from '../../viewModels/generate_ratingViewModel';
@@ -88,6 +88,7 @@ const {
     selectedPlace,
     isAllSelected,
     selectAll,
+    picked
 } = CreateTrip();
 
 const { generateStars } = GenerateStars();
@@ -104,6 +105,10 @@ const goNext = () => {
     updateDestinations();
     router.push({ name: 'Page_5' });
 };
+
+watch(isAllSelected, (newValue) => {
+    selectAll(newValue);
+});
 </script>
 
 <style scoped>
@@ -183,7 +188,7 @@ button:hover {
     border-radius: 10px;
     box-shadow: 0px -5px 10px rgba(19, 53, 123, 0.25);
     gap: 20px;
-    width: 200px;
+    width: 400px;
     align-items: center;
     justify-content: center;
     position: fixed; /* Fix the position of the button */
@@ -197,11 +202,13 @@ button:hover {
     width: 80px;
     height: 34px;
 }
+
 .toggle-switch input {
     opacity: 0;
     width: 0;
     height: 0;
 }
+
 .slider {
     position: absolute;
     cursor: pointer;
@@ -213,6 +220,7 @@ button:hover {
     transition: .4s;
     border-radius: 34px;
 }
+
 .slider:before {
     position: absolute;
     content: "";
@@ -224,12 +232,15 @@ button:hover {
     transition: .4s;
     border-radius: 50%;
 }
+
 input:checked + .slider {
     background-color: #a3bcf9;
 }
+
 input:checked + .slider:before {
     transform: translateX(45px);
 }
+
 label {
     color: #EDF6F9;
     font-size: 18px;
