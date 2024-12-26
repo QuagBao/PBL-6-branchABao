@@ -17,12 +17,7 @@ export async function fetchDestinationsByCity(cityId) {
       duration: destination.duration,
       description: destination.description,
       date_create: destination.date_create,
-      address: {
-        city_id: destination.address.city_id,
-        district: destination.address.district,
-        ward: destination.address.ward,
-        street: destination.address.street,
-      },
+      address: destination.address,
       hotel_id: destination.hotel_id,
       hotel: destination.hotel,
       restaurant_id: destination.restaurant_id,

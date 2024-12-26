@@ -4,9 +4,9 @@
         <Top_Button v-if="cityId" :cityID="parseInt(cityId, 10)"/>
     </div>
 
-    <div class="contaner-fluid">
+    <div class="contaner-fluid-1">
         <div class="contaner-fluid">
-            <div class="contaner-fluid frame-overall">
+            <div class="contaner-fluid">
                 <div class="contaner-fluid frame-1 d-flex flex-column gap-5">
                     <!-- Images -->
                     <div v-if="loading">
@@ -28,20 +28,15 @@
                         <div v-if="loading">
                             <div class="skeleton-loader" v-for="n in 10" :key="n"></div>
                         </div>
-                        <div v-else class="container-fluid btn-catagory d-flex justify-content-center">
-                            <Swiper class="swiper"
-                                    :slides-per-view="4"
-                                    :spaceBetween="10"
-                                    :scrollbar="{ draggable: true }"
-                                    :modules="modules">
-                                <SwiperSlide v-for="item in buttons" :key="item.id">
-                                    <button class="button-category" 
-                                            :class="{ selected: selectedIndices.includes(item.id) }" 
-                                            @click="selectButton(item.id)">
-                                        {{ item.name }}
-                                    </button>
-                                </SwiperSlide>
-                            </Swiper>
+                        <div v-else class="container-fluid mx-2 frame-button">
+                            <div class="list-button d-flex gap-3 justify-content-flex-start flex-wrap px-5 py-4">
+                                <button class="button-category d-flex align-items-center justify-content-around gap-1" v-for="item in buttons" :key="item.id"  
+                                        :class="{ selected: selectedIndices.includes(item.id) }" 
+                                        @click="selectButton(item.id)">
+                                    <img :src="svgIcons[item.id-1]" alt="icon" class="icon">
+                                    {{ item.name }}
+                                </button>
+                            </div>
                         </div>
                         <div v-if="loadingDestinations">
                             <div class="skeleton-loader" v-for="n in 10" :key="n"></div>
@@ -52,7 +47,7 @@
                                 <Info_Card v-for="(item, index) in filteredDestinations"
                                             :key="index"
                                             :destID="item.id"
-                                            :imageUrl="item.images[0].url||'/blue-image.jpg'"
+                                            :imageUrl="item.images[0]?.url||'/blue-image.jpg'"
                                             :name="item.name"
                                             :stars="generateStars(item.rating)"
                                             :review-number="item.review_count"
@@ -71,25 +66,23 @@
 <script setup>
 import destinationViewModel from '../../viewModels/ThingToDo_City_ListViewModel';
 import generateViewModel from '../../viewModels/generate_ratingViewModel';
-import TagViewModel from '../../viewModels/Tag_ViewModel/TagViewModel';
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
 import { Swiper, SwiperSlide } from 'swiper/vue';
 import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+import TagViewModel from '../../viewModels/Tag_ViewModel/TagViewModel';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 
-// Khởi tạo ViewModels
-const tagViewModel = new TagViewModel();
-const svgIcons = tagViewModel.getSvgIcons();
-
 const modules = [Navigation, Pagination, Scrollbar, A11y];
 
 const route = useRoute();
 const cityId = route.params.id; // Lấy cityId từ route params
+const tagViewModel = new TagViewModel();
+const svgIcons = tagViewModel.getSvgIcons();
 
 const {
     isMenuVisible,
@@ -151,16 +144,20 @@ const navigateToDetailPlace = (id) => {
 </script>
 
 <style scoped>
-.frame-overall {
-    display: grid;
-    grid-template-columns: 5% 90% 5%;
-}
-.frame-1 {
-    grid-column: 2/3;
+.container-fluid-1 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
 }
 .overall{
     display: flex;
-    margin-top: 150px;
+    margin-top: 200px;
     color: #13357B;
 }
 .image-container{
@@ -168,49 +165,40 @@ const navigateToDetailPlace = (id) => {
 }
 .base{
     margin: 0 0 0 90px;
-    min-width: 600px;
-    min-height: 600px;
+    min-width: 38vw;
+    min-height: 38vw;
     background-color: #D5DEF7;
 }
 .img-fluid {
     position: absolute;
     margin: 25px 0 0 115px;
-    width: 600px;
+    width: 40vw;
     padding: 0px;
-    height: 550px;
+    height: 38vw;
     box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);
 }
 .text-container{
     gap: 50px;
-    font-size: 30px;
+    font-size: 2vw;
 }
 .text-container h1{
-    font-size: 35px;
+    font-size: 3.5vw;
     font-weight: 900;
 }
 .title-content {
-    margin-bottom: 30px;
+    margin-bottom: 2vw;
 }
 .title-content p{
     color: #13357B;
-    font-size: 25px;
+    font-size: 2vw;
     font-weight: 900;
-}
-.title h3 {
-    font-weight: 900;
-    font-size: 30px;
-    color: #13357B;
-}
-.title p {
-    color: #13357B;
-    font-size: 17px;
 }
 .list-items-1 {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     gap: 30px;
     align-items: center;
-    width: 95%;
+    width: 80vw;
     height: 100%;
 }
 .frame-button{
@@ -219,9 +207,7 @@ const navigateToDetailPlace = (id) => {
 }
 .list-button{
     grid-column: 2/3;
-    place-items: center;
 }
-
 .button-category{
     color: #13357B;
     width: fit-content;
@@ -232,11 +218,27 @@ const navigateToDetailPlace = (id) => {
     background-color: #EDF6F9;
     transition: background-color 0.3s ease;
 }
+.icon {
+    width: 20px;
+    height: 20px;
+    color: #13357B !important;
+}
 .button-category:hover {
-    background-color: #CAF0F8;
+    background-color: #0077b6;
+    color: #EDF6F9 
 }     
 .button-category.selected {
-    background-color: #8ecae6;
+    background-color: #13357B;
+    color: #EDF6F9;
+}
+.content {
+    margin-bottom: 30px;
+}
+:deep(.custom .carousel-control-next .carousel-control-next-icon) {
+    margin-right: -8.5vw; /* Giá trị mới */
+}
+:deep(.custom .carousel-control-prev .carousel-control-prev-icon) {
+    margin-left: -8.5vw; /* Giá trị mới */
 }
 .skeleton-loader {
     height: 200px;
@@ -267,5 +269,3 @@ const navigateToDetailPlace = (id) => {
     background-color: #13357B !important;
 }
 </style>
-
-
