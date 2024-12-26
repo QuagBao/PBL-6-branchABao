@@ -3,9 +3,11 @@ import { fetchCities } from '../models/CityModel';
 import { fetchTours, getTourById, getTourByCityId, getTourByUserId } from '../models/TourModel';
 import { getUserById } from '../models/UserModel';
 import { getReviewByTourId } from '../models/ReviewModel.js';
+import generateViewModel from './generate_ratingViewModel'; 
 import SignInModel from '../models/SignInModel';
 
 export default function () {
+    const { fetchRatingTour, ratings} = generateViewModel();
     const loadCities = async () => {
         try {
             const cities = await fetchCities();
@@ -141,5 +143,7 @@ export default function () {
         loadReviewByTourId,
         loadCurrentUser,
         loadTourByUserId,
+        fetchRatingTour,
+        ratings
     }
 }

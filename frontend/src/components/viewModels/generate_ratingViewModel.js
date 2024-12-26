@@ -1,5 +1,6 @@
 import { ref, computed, onMounted } from 'vue';
 import { getDestinationRatingStatic } from '../models/destinationModel.js';
+import { getTourRatingStatic } from '../models/TourModel.js';
 export default function () {
     class RatingModel {
         constructor(excellent, veryGood, medium, bad, terrible) {
@@ -125,6 +126,56 @@ export default function () {
     }
   };
 
+  const fetchRatingTour = async (tourID) => {
+    try {
+      // Lấy dữ liệu từ API
+      ratingDistribution.value = await getTourRatingStatic(tourID);
+  
+      // Tổng số lượng rating
+      const total = Object.values(ratingDistribution.value).reduce(
+        (sum, count) => sum + count,
+        0
+      );
+  
+      // Lưu chi tiết vào ratingDistributionDetail
+      ratings.value = {
+        Excellent: {
+          count: ratingDistribution.value.Excellent,
+          percentage: total
+            ? ((ratingDistribution.value.Excellent / total) * 100).toFixed(2)
+            : "0.00",
+        },
+        VeryGood: {
+          count: ratingDistribution.value.VeryGood,
+          percentage: total
+            ? ((ratingDistribution.value.VeryGood / total) * 100).toFixed(2)
+            : "0.00",
+        },
+        Medium: {
+          count: ratingDistribution.value.Medium,
+          percentage: total
+            ? ((ratingDistribution.value.Medium / total) * 100).toFixed(2)
+            : "0.00",
+        },
+        Bad: {
+          count: ratingDistribution.value.Bad,
+          percentage: total
+            ? ((ratingDistribution.value.Bad / total) * 100).toFixed(2)
+            : "0.00",
+        },
+        Terrible: {
+          count: ratingDistribution.value.Terrible,
+          percentage: total
+            ? ((ratingDistribution.value.Terrible / total) * 100).toFixed(2)
+            : "0.00",
+        },
+      };
+    } catch (error) {
+      console.error("Error fetching rating details:", error);
+      ratings.value = null; // Xử lý khi có lỗi
+    }
+  };
+
 
 
       return {
@@ -137,5 +188,6 @@ export default function () {
         halfStar,
         emptyStar,
         fetchRatingDistribution,
+        fetchRatingTour,
       }
 }

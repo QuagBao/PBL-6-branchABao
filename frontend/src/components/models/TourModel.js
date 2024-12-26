@@ -168,3 +168,30 @@ export async function deleteTour(tourID) {
     return { success: false, message: "Failed to deleting tour" };
   }
 }
+
+export async function getTourRatingStatic(tourID) {
+  try {
+    const response = await axios.get(
+      `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/tour/rating-distribution/${tourID}`
+    );
+
+    const distribution = response.data;
+
+    return {
+      Excellent: distribution["5"] || 0,
+      VeryGood: distribution["4"] || 0,
+      Medium: distribution["3"] || 0,
+      Bad: distribution["2"] || 0,
+      Terrible: distribution["1"] || 0,
+    };
+  } catch (error) {
+    console.error("Error fetching rating distribution:", error);
+    return {
+      Excellent: 0,
+      VeryGood: 0,
+      Medium: 0,
+      Bad: 0,
+      Terrible: 0,
+    }; // Giá trị mặc định nếu có lỗi
+  }
+}

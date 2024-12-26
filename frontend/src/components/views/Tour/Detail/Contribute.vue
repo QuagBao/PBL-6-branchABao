@@ -14,6 +14,28 @@
             <div class="container-fluid evaluate p-2">
                 <h1 style="font-weight: 900;">Evaluate</h1>
             </div>
+            <div class="rating">
+                <h2>{{ rating }}</h2>
+                <div class="circle-container">
+                    <div v-for="(star, index) in stars" :key="index">
+                        <img :src="star" alt="Star" class="star"/>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid type-rating">
+                <div class="rating-row" 
+                    v-for="(ratingInfo, label) in ratings" :key="label">
+                    <div class="col rating-label">{{ label }}</div>
+                    <div class="col-3 rating-bar-container">
+                        <div class="rating-bar"
+                            :style="{ width: ratingInfo.percentage + '%' }">
+                            
+                        </div>
+                        
+                    </div>
+                    <span class="count-rating">{{ ratingInfo.count }}</span>
+                </div>
+            </div>
         </div>
         <!-- Review -->
         <div class="frame-review">
@@ -23,7 +45,6 @@
                     <option v-for="n in 5" :key="n" :value="n">{{ n }} Stars</option>
                 </select>
             </div>
-
             <div v-if="commentList && commentList.length > 0" class="container-fluid comment-list">
                 <div v-for="comment in filteredComments" :key="comment.id" class="comment"  >
                     <A_Comment :imageUrl="comment.user?.userInfo?.image?.url || ''"
@@ -55,22 +76,13 @@ const writeReview = (id) => {
 
 // Khai báo các props
 const props = defineProps({
-    commentList: {
-        type: Array,
-        required: true,
-    },
-    tour_id: {
-        type: Number,
-        required: true,
-    },
-    user: {
-        type: Number,
-        required: true,
-    },
-    description: {
-        type: String,
-        required: false,
-    },
+  rating: { type: Number, required: true },
+  ratings: { type: Object, default: () => ({}) },
+  stars: { type: Array, required: true },
+  commentList: { type: Array, required: true },
+  tour_id: { type: Number, required: true },
+  user: { type: Number, required: true },
+  canReview: { type: Boolean }
 });
 
 // Bộ lọc đánh giá
@@ -238,5 +250,10 @@ input:focus{
 .filter-select:focus {
     background-color: #caf0f8;
     box-shadow: 0px 5px 10px rgba(19, 53, 123, 0.25);
+}
+.count-rating {
+    font-size: 20px;
+    font-weight: 800;
+    
 }
 </style>

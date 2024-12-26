@@ -77,6 +77,9 @@
                         <div class="frame-contribute">
                             <Contribute :commentList="reviews"
                                         :tour_id="Number(tourID)"
+                                        :ratings="ratings || {}"
+                                        :rating="tour?.rating"
+                                        :stars="generateStars(tour?.rating)"
                                         :user="user?.id||0"/>
                                         
                         </div>
@@ -104,6 +107,8 @@ const {
     loadUser,
     loadReviewByTourId,
     loadCurrentUser,
+    fetchRatingTour,
+    ratings
 } = TourViewModel();
 
 const {
@@ -162,6 +167,7 @@ onMounted(async () => {
 
         });
     }
+    await fetchRatingTour(tourID);
 });
 
 const getCity = (city_id) => {
