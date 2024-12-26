@@ -26,20 +26,35 @@
             >
               Home
             </button>
-            <button
+            <div class="nav-item dropdown" v-if="role === 'business'">
+              <button class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Tour Packages</button>
+              <div class="dropdown-menu dropdown-menu-end m-0">
+                <button class="dropdown-item" @click="handleButtonClick('myTrips', '/business/tour')">All Packages</button>
+                <button class="dropdown-item" @click="handleButtonClick('startNewTrip', '//business/tour/add')">Add New Package</button>
+              </div>
+            </div>
+            <button v-else
               class="nav-item nav-link"
               :class="{ active: state.activeButton === 'tour' }"
               @click="handleButtonClick('tour', '/tour')"
             >
               Tour Proposal
             </button>
-            <div class="nav-item dropdown">
+            <div class="nav-item dropdown" v-if="role === 'business'">
+              <button class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Places</button>
+              <div class="dropdown-menu dropdown-menu-end m-0">
+                <button class="dropdown-item" @click="handleButtonClick('allPlace', '/business/destination')">All Places</button>
+                <button class="dropdown-item" @click="handleButtonClick('newPlace', '/business/destination/add')">Add New Place</button>
+              </div>
+            </div>
+            <div class="nav-item dropdown" v-else>
               <button class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Trips</button>
               <div class="dropdown-menu m-0">
                 <button class="dropdown-item" @click="handleButtonClick('myTrips', '/Trip')">My Trips</button>
                 <button class="dropdown-item" @click="handleButtonClick('startNewTrip', '/Create_Trip')">Create a new trip</button>
               </div>
             </div>
+
 
             <div class="nav-item dropdown">
               <button class="nav-link dropdown-toggle user" data-bs-toggle="dropdown">
@@ -48,7 +63,8 @@
                 </svg>
               </button>
               <div class="dropdown-menu dropdown-menu-end m-0">
-                <button class="dropdown-item" @click="handleButtonClick('profile', '/Profile_Page')">My Profile</button>
+                <button class="dropdown-item" @click="handleButtonClick('profile', '/Profile_Page')" v-if="role === 'business'">Settings</button>
+                <button class="dropdown-item" @click="handleButtonClick('profile', '/Profile_Page')" v-else>My Profile</button>
                 <button class="dropdown-item" @click="handleLogout">Logout</button>
               </div>
             </div>
