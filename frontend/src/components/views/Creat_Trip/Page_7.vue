@@ -1,15 +1,12 @@
 <template>
     <div class="container-fluid-1">
         <div class="container-fluid">
-            <div class="container-fluid frame-title" style="width: 1480px;">
+            <div class="container-fluid frame-title text-center" style="width: 100vw;">
                 <h1>Trip Saved</h1>
                 <h5>Your selections have been saved to a trip.</h5>
             </div>
 
-            
-
-            <div class="container-fluid frame-button px-5 py-2">
-                <button class="button back" @click="goBack" >Back</button>
+            <div class="container-fluid frame-button d-flex justify-content-center py-2">
                 <button type="submit" @click="goView" class="button next-button">View trip</button>
             </div>
         </div>
@@ -18,7 +15,6 @@
 
 <script>
 import Scroll_Bar_Component from '../Scroll_Bar_Component.vue';
-
 
 export default {
     name: "Page_7",
@@ -31,9 +27,6 @@ export default {
         console.log('ID received via params:', this.id); // Kiểm tra giá trị ID
     },
     methods: {
-        goBack() {
-            this.$router.push({ name: 'Page_5' });
-        },
         goView() {
             if (this.id) {
                 this.$router.push({ path: `/Trip/${this.id}` });
@@ -44,8 +37,6 @@ export default {
     },
 };
 </script>
-
-
 
 <style scoped>
 .container-fluid-1 {
@@ -64,33 +55,19 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: top; 
-    margin-top: -300px;
     color: #00B4D8;
 }
 .frame-title h1{
     font-weight: 900;
-    font-size: 60px;
+    font-size: 4vw;
 }
 .frame-title h5{
     color: #13357B;
 }
-.frame-name{
-    display: flex;
-    flex-direction: column;
-    margin-top: 50px;
-    justify-content: center;
-    align-items: center;
-}
-:deep(.custom .ava) {
-    margin-top: -10px;
-    margin-bottom: -9.5px;
-    margin-left: 2.5px;
-}
 .frame-button {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    margin-top: 50px;
+    justify-content: center;
     margin-bottom: 45px;
 }
 .button {

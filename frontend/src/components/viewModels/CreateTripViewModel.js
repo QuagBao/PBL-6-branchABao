@@ -75,7 +75,7 @@ export default function () {
       try{
         places.value = await fetchDestinationsByCity_Tag(tripStore.cityId, tripStore.selectedTags);
         destinations.value = places.value.filter(destination => destination.hotel_id === null && destination.restaurant_id === null);
-        hotels.value = places.value.filter(destination => destination.hotel_id !== null);
+        hotels.value = places.value.filter(destination => destination.hotel_id !== null && destination.restaurant_id === null);
         restaurants.value = places.value.filter(destination => destination.restaurant_id !== null);
       } catch (error) {
         console.error('An error occurred while getting place data:', error);
@@ -190,8 +190,8 @@ export default function () {
       tripStore.setUserId(user.value.id);
       console.log('All Data:', tripStore.getAllInformation());
       if(tripStore.listRestaurant.length >= tripStore.selectedLength){
-        // const result =  await addTripByAi(tripStore.name, tripStore.selectedMonth, tripStore.selectedLength, tripStore.userId, tripStore.listDestination, tripStore.listHotel, tripStore.listRestaurant);
-        const result =  await addTripByAi(tripStore.name, tripStore.selectedMonth, tripStore.selectedLength, tripStore.userId, [2253 ,1800], [3,4,5], [128 , 1919 ,1909]);
+        const result =  await addTripByAi(tripStore.name, tripStore.selectedMonth, tripStore.selectedLength, tripStore.userId, tripStore.listDestination, tripStore.listHotel, tripStore.listRestaurant);
+        //const result =  await addTripByAi(tripStore.name, tripStore.selectedMonth, tripStore.selectedLength, tripStore.userId, [2253 ,1800], [3,4,5], [128 , 1919 ,1909]);
         if(result.success){
           toast.success('Your trip has been created successfully');
           const tripId = result.data;

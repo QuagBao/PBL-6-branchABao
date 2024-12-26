@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid-1">
         <div class="container-fluid">
-            <div class="container-fluid frame-title" style="width: 1480px;">
+            <div class="container-fluid frame-title" style="width: 100vw;">
                 <h1>Name your trip</h1>
                 <h5>Organize your saves and create a custom your trip</h5>
             </div>
