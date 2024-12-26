@@ -78,7 +78,7 @@ const goNext = () => {
     align-items: center;
     justify-content: center;
     flex: 1;
-    width: 100%;
+    width: 80%;
 }
 .custom-search .form-control {
     background-color: #EDF6F9;

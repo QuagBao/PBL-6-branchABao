@@ -79,12 +79,12 @@ export default {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 50px;
+    margin-top: 30px;
     color: #00B4D8;
 }
 .frame-title h1{
     font-weight: 900;
-    font-size: 60px;
+    font-size: 4vw;
 }
 .frame-title h5{
     color: #13357B;
@@ -123,7 +123,7 @@ h3{
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-top: 76px;
+    margin-top: 50px;
     margin-bottom: 35px;
 }
 .button {

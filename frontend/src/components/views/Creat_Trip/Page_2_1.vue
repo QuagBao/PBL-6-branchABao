@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid-1">
         <div class="container-fluid p-2">
-            <div class="container-fluid frame-title" style="width: 1480px;">
+            <div class="container-fluid frame-title" style="width: 100vw;">
                 <h1>When are you going?</h1>
                 <h5>Choose month and trip length</h5>
             </div>
@@ -128,12 +128,12 @@ const increaseLength = () => {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 50px;
+    margin-top: 30px;
     color: #00B4D8;
 }
 .frame-title h1{
     font-weight: 900;
-    font-size: 60px;
+    font-size: 4vw;
 }
 .frame-title h5{
     color: #13357B;
@@ -142,8 +142,9 @@ const increaseLength = () => {
     margin-top: 50px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(3, 80px);
-    gap: 50px;
+    grid-template-rows: repeat(3, 50px);
+    width : 80vw;
+    gap: 30px;
 }
 .item {
     border-radius: 50px;
@@ -160,12 +161,11 @@ const increaseLength = () => {
     align-items: center;
     justify-content: space-between;
     margin-top: 20px;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 }
     .button {
     padding: 10px 50px;
     border: none;
-    margin-bottom: 100px;
     border-radius: 30px;
     background-color: #00B4D8;
     color: #EDF6F9;

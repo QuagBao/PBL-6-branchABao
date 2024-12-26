@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid-1">
         <div class="container-fluid p-2">
-            <div class="container-fluid frame-title" style="width: 1480px;">
+            <div class="container-fluid frame-title" style="width: 100vw;">
                 <h1>Tell us what you’re interested in</h1>
                 <h5>Select all that apply</h5>
             </div>
@@ -61,12 +61,12 @@ const goNext = () => {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    margin-top: 50px;
+    margin-top: 30px;
     color: #00B4D8;
 }
 .frame-title h1{
     font-weight: 900;
-    font-size: 60px;
+    font-size: 4vw;
 }
 .frame-title h5{
     color: #13357B;
@@ -75,8 +75,9 @@ const goNext = () => {
     margin-top: 50px;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: repeat(3, 80px);
-    gap: 50px;
+    grid-template-rows: repeat(3, 50px);
+    gap: 30px;
+    width: 80vw;
 }
 .item {
     border-radius: 50px;
