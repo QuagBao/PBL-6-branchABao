@@ -11,12 +11,13 @@
 
     <div v-else class="container-fluid">
         <div class="container-fluid">
-            <div class="container-fluid">
-                <div class="container-fluid">
+            <div class="container-fluid overall-frame">
+                <div class="container-fluid frame">
                     <!-- Carousel Section -->
                     <Carousel class="custom" :currentImage="currentImage" :images="images"/>
-
-                    <!-- Save Button Section -->
+                    <div class="container">
+                        <Search_Btn_Big class="search"/>
+                    </div>
                     <!-- Discover Info Section -->
                      <div class="container-fluid">
                         <div class="container-fluid">
@@ -56,20 +57,15 @@
                     
                     <!-- Category Buttons & Content Section -->
                     <div class="container-fluid content">
-                        <div class="container btn-catagory">
-                            <Swiper class="swiper"
-                                :slides-per-view="4"
-                                :spaceBetween="10"
-                                :scrollbar="{ draggable: true }"
-                                :modules="modules">
-                                <SwiperSlide v-for="item in buttons" :key="item.id">
-                                    <button class="button-category" 
-                                            :class="{ selected: selectedIndices.includes(item.id) }" 
-                                            @click="selectButton(item.id)">
-                                        {{ item.name }}
-                                    </button>
-                                </SwiperSlide>
-                            </Swiper>
+                        <div class="container-fluid mx-2 frame-button">
+                            <div class="list-button d-flex gap-3 justify-content-flex-start flex-wrap px-5 py-4">
+                                <button class="button-category d-flex align-items-center justify-content-around gap-1" v-for="item in buttons" :key="item.id"  
+                                        :class="{ selected: selectedIndices.includes(item.id) }" 
+                                        @click="selectButton(item.id)">
+                                    <img :src="svgIcons[item.id-1]" alt="icon" class="icon">
+                                    {{ item.name }}
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Things to do Section -->
@@ -89,7 +85,7 @@
                         </div>
 
                         <!-- Restaurants Section -->
-                        <div class="row title-content">
+                        <div class="title-content">
                             <p class="p-5 restaurants">Restaurants</p>
                             <div class="container-fluid context">
                                 <Cards v-for="(item, index) in restaurants"
@@ -105,7 +101,7 @@
                         </div>
 
                         <!-- Resort & Hotels Section -->
-                        <div class="row title-content">
+                        <div class="title-content">
                             <p class="p-5 resorts">Resort & Hotels</p>
                             <div class="container-fluid context">
                                 <Cards v-for="(item, index) in hotels"
@@ -130,17 +126,13 @@
     import { ref, computed, onMounted, watch } from 'vue';
     import destinationViewModel from '../../viewModels/destinationViewModel.js';
     import generate_ratingViewModel from '@/components/viewModels/generate_ratingViewModel.js';
+    import TagViewModel from '../../viewModels/Tag_ViewModel/TagViewModel';
     import { useRoute } from 'vue-router';
-    import { Swiper, SwiperSlide } from 'swiper/vue';
-    import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
 
-    import 'swiper/css';
-    import 'swiper/css/navigation';
-    import 'swiper/css/pagination';
-    import 'swiper/css/scrollbar';
+    // Khởi tạo ViewModels
+    const tagViewModel = new TagViewModel();
+    const svgIcons = tagViewModel.getSvgIcons();
 
-    const modules = [Navigation, Pagination, Scrollbar, A11y];
-    
     // Route Params
     const route = useRoute();
     const cityId = route.params.id;
@@ -203,37 +195,39 @@
     import Header from '../Header.vue';
     import Scroll_Bar_Component from '../Scroll_Bar_Component.vue'; 
     import Top_Button from '../Top_Button.vue';
-    import Btn_Save from './Btn_Save.vue';
     import Cards from './Cards.vue';
     import Carousel from '../Carousel.vue';
+    import Search_Btn_Big from '../Search_Btn_Big.vue';
 
     export default {
         name: "Destination_View",
         components: {
             Header, Scroll_Bar_Component, Top_Button,
-            Btn_Save, Cards, Carousel,
+            Search_Btn_Big, Cards, Carousel,
         }
     }
 </script>
 
 <style scoped>
-*,*::before,*::after{
-    box-sizing: border-box;
+.overall-frame{
+    display: grid;
+    grid-template-columns: 5% 90% 5%;
 }
-body{
-    background-color: #EDF6F9;
-    justify-content: center; /* Căn giữa theo chiều ngang */
-    align-items: center; /* Căn giữa theo chiều dọc */
+.frame {
+    grid-column: 2/3;
+    place-items: center;
 }
-.header-container {
-    display: flex;
-    flex-direction: column; /* Sắp xếp theo chiều dọc */
-    z-index: 1;
-    width: 100%;
+:deep(.search .position-relative){ 
+    padding: 1rem;
+    background-color: #13357B;
 }
-.save{
+.search {
+    position: relative;
+    top: -63px;
+    width: 80%;
     display: flex;
     justify-content: center;
+    align-items: center;
 }
 
 .info-destination{
@@ -284,33 +278,33 @@ body{
     display: grid;
     grid-template-columns: repeat(3, 1fr);
     align-items: center;
+    place-items: center;
     width: 100%;
     height: 100%;
     gap:30px;
 }
-.swiper {
-    width: 100%;
-    max-width: 1450px; /* Set a max-width to ensure enough space for 3 slides */
+.frame-button{
+    display: grid;
+    grid-template-columns: 5% 90% 5%;
 }
-
-.swiper-slide {
-    color: #13357B;
-    background-color: #EDF6F9;
-    text-align: center;
-    margin: 20px 0; 
+.list-button{
+    grid-column: 2/3;
 }
-
 .button-category{
     color: #13357B;
-    width: 80%;
-    padding: 8px 16px;
+    width: fit-content;
+    padding: 10px 15px;
     border: 1px solid #13357B;
     border-radius: 40px;
     cursor: pointer;
     background-color: #EDF6F9;
     transition: background-color 0.3s ease;
 }
-
+.icon {
+    width: 20px;
+    height: 20px;
+    color: #13357B !important;
+}
 .button-category:hover {
     background-color: #0077b6;
     color: #EDF6F9 
@@ -323,10 +317,10 @@ body{
     margin-bottom: 30px;
 }
 :deep(.custom .carousel-control-next .carousel-control-next-icon) {
-    margin-right: -10vw; /* Giá trị mới */
+    margin-right: -8.5vw; /* Giá trị mới */
 }
 :deep(.custom .carousel-control-prev .carousel-control-prev-icon) {
-    margin-left: -10vw; /* Giá trị mới */
+    margin-left: -8.5vw; /* Giá trị mới */
 }
 .skeleton-loader {
     height: 200px;

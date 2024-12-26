@@ -3,58 +3,64 @@
         <Header/>
         <Top_Button/>
     </div>  
+    
+    <div class="container-fluid">
+        <div class="container-fluid frame-overall">
+            <div class="container-fluid overall">
+                <div class="container-fluid row select-topic">
+                    <div class="container-fluid col frame-select-location">
+                        <button 
+                            class="dropdown-button" 
+                            :class="{ 'active': dropdownVisibleRegion }" 
+                            @click="toggleDropDownRegion">
+                            {{ selectedCityName }}
+                            <span class="arrow" :class="{ 'up': dropdownVisibleRegion }">
+                                <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 
+                                        14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 
+                                        12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 
+                                        14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" 
+                                        stroke="#currentColor" stroke-width="1.5" stroke-linecap="round" 
+                                        stroke-linejoin="round" />
+                                </svg>
+                            </span>
+                        </button>
+                        <!-- Dropdown danh sách các lựa chọn -->
+                        <div class="dropdown-list" v-if="dropdownVisibleRegion">
+                            <!-- Tùy chọn tất cả tours -->
+                            <button class="dropdown-item" @click="selectCity(null)">
+                                Việt Nam
+                            </button>
+                            <!-- Tùy chọn các thành phố -->
+                            <button 
+                                class="dropdown-item" 
+                                v-for="city in cities" 
+                                :key="city.id" 
+                                @click="selectCity(city.id)">
+                                {{ city.name }}
+                            </button>
+                        </div>
+                    </div>
 
-    <div class="container-fluid row select-topic">
-        <div class="container-fluid col frame-select-location">
-            <button 
-                class="dropdown-button" 
-                :class="{ 'active': dropdownVisibleRegion }" 
-                @click="toggleDropDownRegion">
-                {{ selectedCityName }}
-                <span class="arrow" :class="{ 'up': dropdownVisibleRegion }">
-                    <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 
-                            14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 
-                            12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 
-                            14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" 
-                            stroke="#currentColor" stroke-width="1.5" stroke-linecap="round" 
-                            stroke-linejoin="round" />
-                    </svg>
-                </span>
-            </button>
-            <!-- Dropdown danh sách các lựa chọn -->
-            <div class="dropdown-list" v-if="dropdownVisibleRegion">
-                <button class="dropdown-item" @click="selectCity(null)">
-                    Việt Nam
-                </button>
-                <button 
-                    class="dropdown-item" 
-                    v-for="city in cities" 
-                    :key="city.id" 
-                    @click="selectCity(city.id)">
-                    {{ city.name }}
-                </button>
-            </div>
-        </div>
-
-        <div class="container-fluid col frame-select-topic">
-            <Swiper class="swiper"
-                :slides-per-view="4"
-                :spaceBetween="10"
-                :pagination="{ clickable: true }"
-                :navigation="true"
-                :modules="modules">
-                <SwiperSlide class="swiper-slide" v-for="tag in tags" 
-                            :key="tag.id">
-                    <button class="button-item" 
-                            :class="{ selected: selectedIndex === tag.id }" 
-                            @click="selectTag(tag.id)">
-                        {{ tag.name }}
-                    </button>
-                </SwiperSlide>
-            </Swiper>
-        </div> 
-    </div>
+                    <div class="container-fluid col frame-select-topic">
+                        <Swiper class="swiper"
+                            :slides-per-view="3"
+                            :spaceBetween="70"
+                            :pagination="{ clickable: true }"
+                            :navigation="true"
+                            :draggable="false"
+                            :modules="modules">
+                            <SwiperSlide class="swiper-slide" v-for="tag in tags" 
+                                        :key="tag.id">
+                                <button class="button-item" 
+                                        :class="{ selected: selectedIndex === tag.id }" 
+                                        @click="selectButton(tag.id)">
+                                    {{ tag.name }}
+                                </button>
+                            </SwiperSlide>
+                        </Swiper>
+                    </div> 
+                </div>
 
     <div v-if="loading">
         <div class="skeleton-loader" v-for="n in 10" :key="n"></div>
@@ -137,40 +143,61 @@ const navigateToDetailHotel = (hotel_id) => window.location.assign(`/Detail/Hote
 import Header from '../../views/Header.vue';
 import Scroll_Bar_Component from '../Scroll_Bar_Component.vue';
 import Top_Button from '../Top_Button.vue';
-
 import Topic_Item_1 from './Topic_Item_1.vue';
 import Topic_Item_2 from './Topic_Item_2.vue';
+import { Swiper, SwiperSlide } from 'swiper/vue';
+import { Navigation, Pagination, Scrollbar, A11y } from 'swiper/modules';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/scrollbar';
+
+const modules = [Navigation, Pagination, Scrollbar, A11y];
+
 export default {
     name: "Topic_List",
     components: {
         Header, Scroll_Bar_Component, Top_Button,
-        Topic_Item_1,
+        Topic_Item_1, Swiper,
+        SwiperSlide,
+    }, 
+    setup() {
+        return {
+            modules,
+        };
     }
 }
 </script>
 
-<style>
-
+<style scoped>
+.frame-overall {
+    display: grid;
+    grid-template-columns: 5% 90% 5%;
+}
+.overall {
+    grid-column: 2/3;
+}
 .select-topic{
-    display: flex;
+    display: grid;
+    grid-template-columns: 20% 80%;
+    gap:5%;
+    place-items: center;
     margin-top: 250px;
     align-items: center; /* Căn giữa theo chiều dọc */
 }
 .frame-select-location {
-    margin-left: 25px;
-    width: 25vw;
-    border-right: #13357B solid 2px;
     display: flex;
     align-items: center; /* Căn giữa nội dung theo chiều dọc */
 }
 
 .frame-select-topic {
-    margin-left: 25px;
     width: 70vw;
     display: flex;
     align-items: center; /* Căn giữa nội dung theo chiều dọc */
 }
 .dropdown-button{
+    min-width: 200px;
     min-width: 200px;
     padding: 10px;
     border-radius: 30px;
@@ -228,24 +255,25 @@ export default {
 }
 .swiper {
     width: 100%;
-    max-width: 1000px; /* Set a max-width to ensure enough space for 3 slides */
+    padding: 0 60px;/* Set a max-width to ensure enough space for 3 slides */
 }
 
 .swiper-slide {
     color: #13357B;
-    display: flex;
-    justify-content: space-around;
     margin: 20px 0;
+
 }
-::v-deep(.swiper-button-next),
-::v-deep(.swiper-button-prev) {
+:deep(.swiper-button-next),
+:deep(.swiper-button-prev) {
     color: #13357B !important;
     border: none;
     cursor: pointer;
+    position: absolute;
+
 }
 .button-item{
     color: #13357B;
-    width: 60%;
+    width: 100%;
     padding: 15px 0px;
     border: none;
     border-radius: 40px;

@@ -3,12 +3,11 @@
     <Header />
     <Top_Button />
   </div>
-
-  <div class="main-container">
-    <div class="container content">
-      <div class="container-fluid search">
-        <div class="container-search">
-          <Form_Search :name="'Attraction, activities or destination'" />
+    <div class="container-fluid p-5">
+      <div class="row content-1 d-flex 
+            flex-column justify-content-center gap-5">
+        <div class="container ">
+          <Form_Search class="search-form" :name="'Attraction, activities or destination'" />
         </div>
       </div>
       <h2 class="title-result">Result for: {{ searchQuery }}</h2>
@@ -144,43 +143,20 @@ export default {
 </script>
 
 <style scoped>
-.main-container {
-  display: flex;
-  flex-direction: column; /* Sắp xếp các phần tử theo chiều dọc */
-  padding: 20px;
-  width: 100%; /* Đảm bảo chiều rộng của main là 100% */
-}
-
-.header-container {
-  display: flex;
-  flex-direction: column; /* Sắp xếp các phần tử theo chiều dọc */
-  z-index: 1;
-  width: 100%; /* Đảm bảo chiều rộng của header là 100% */
-}
-
-.container {
-  display: flex;
-  flex-direction: column;  /* Sắp xếp các phần tử con theo chiều dọc */
-  width: 100%; /* Đảm bảo chiều rộng của container là 100% */
-  background-color: none;
-  padding: 20px;
-  margin-top: 160px;
-}
-
-.container-search {
-  display: flex;
-  flex-direction: column;  /* Sắp xếp các phần tử con theo chiều dọc */
-  width: 90vw; /* Đảm bảo chiều rộng của container-search là 100% */
-  background-color: #4996ee;
-  padding: 20px;
+.search-form {
+  margin-top: 120px;
+  padding: 1rem .5rem;
   border-radius: 50px;
+  background-color: #13357B;
+  width: 100%;
+  width: 75vw;
 }
-
-.title-content {
-  color: #13357B;
-  font-size: 25px;
+.results {
+  color:#13357B;
+}
+.title {
+  font-size: 30px;
   font-weight: 900;
-  margin-bottom: 10px; /* Giảm khoảng cách giữa tiêu đề và phần cards */
 }
 .title-result {
   color: #13357B;
@@ -192,20 +168,8 @@ export default {
 
 .context {
   display: flex;
-  flex-direction: column; /* Đảm bảo các card được sắp xếp theo chiều dọc */
-  width: 100%; /* Đảm bảo chiều rộng của context là 100% */
-}
-
-.row {
-  display: flex;
-  flex-direction: column; /* Sắp xếp các phần tử theo chiều dọc */
-  gap: 20px; /* Khoảng cách giữa các card */
-  width: 90vw;
-}
-
-.cards {
-  margin-bottom: 20px; /* Tạo không gian giữa các card */
-  width: 100%; /* Đảm bảo chiều rộng của card là 100% */
+  flex-direction: column;
+  gap: 20px;
 }
 </style>
 

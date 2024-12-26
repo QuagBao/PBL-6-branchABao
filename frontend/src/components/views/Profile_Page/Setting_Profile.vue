@@ -39,14 +39,14 @@
             </div>
 
             <div class="col-sm-6">
-                <select
-                    v-model="currentUser.user_info.address.city_id"
-                    class="field"
-                >
-                    <option v-for="city in cities" :key="city.id" :value="city.id">
-                        {{ city.name }}
-                    </option>
-                </select>
+                <div class="container-fluid">
+                    <select v-model="currentUser.user_info.address.city_id"
+                            class="field option">
+                        <option v-for="city in cities" :key="city.id" :value="city.id">
+                            {{ city.name }}
+                        </option>
+                    </select>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -209,7 +209,16 @@ const save = async () => {
     box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.20);
     width: 90%;
 }
-
+.option {
+  /* Loại bỏ appearance mặc định */
+  appearance: none;
+  -webkit-appearance: none;
+  /* Thêm không gian cho mũi tên select (nếu cần) */
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg width='800px' height='800px' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9' stroke='%23000000' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-position: right 20px center;
+  background-repeat: no-repeat;
+  background-size: 20px;
+}
 .col-sm-6 .field::placeholder{
     color:#13357B;
 }

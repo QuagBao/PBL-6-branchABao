@@ -1,6 +1,6 @@
-export default TagModel {
-    constructor ( name, svgIcon) {
-        this.name = name;
+export default class TagModel {
+    constructor ( nameSvg, svgIcon) {
+        this.name = nameSvg;
         this.svgIcon = svgIcon;
-    } 
+    }        
 }

@@ -5,11 +5,14 @@
   font-weight: normal;
   font-family: 'Roboto';
   display: flex;
+  justify-content: center;
   place-items: center;
   align-items: center;
   background-color: #EDF6F9;
 }
-
+body {
+  background-color: #EDF6F9 !important;
+}
 a,
 .green {
   text-decoration: none;

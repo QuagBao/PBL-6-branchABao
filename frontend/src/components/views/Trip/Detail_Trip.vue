@@ -45,8 +45,6 @@
             </div>
         </div>
     </div>
-    
-    
 </template>
 <script setup>
 import DetailTrip from '@/components/viewModels/Trip/DetailTripViewModel';
@@ -90,11 +88,18 @@ export default {
 </script>
 
 <style scoped>
+.frame-overall {
+    display: grid;
+    grid-template-columns: 5% 90% 5%;
+}
+.overall {
+    grid-column: 2/3;
+}
 .frame {
-    margin: 13vw 5vw 0 5vw;
-    display: flex;
-    justify-content: space-between; 
-    gap: 20px;
+    margin-top: 13vw;
+    display: grid;
+    grid-template-columns: 60% 38.6%;
+    gap: .5%;
 }
 .frame-image {
     width: 65vw;
@@ -163,16 +168,15 @@ export default {
     border: 1px solid #13357B;
     background-color: #CAF0F8;
 }
-.map {
-    width: 25vw;
-    height: 525px;
+.frame-map {
+    border-radius: 15px;
+    background-color: #EDF6F9;
     color: #13357B;
-    box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);
-    display: flex;
-    justify-content: center;
-    align-items: center;
     border-radius: 20px;
-    font-size: 45px;
+    padding: 10px;
+    height: fit-content;
+    box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);    
+    font-size: 50px;
     position: sticky;
     top: 170px;
 }

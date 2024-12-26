@@ -2,7 +2,7 @@
     <div class="row">
         <div class="row-lg-4">
             <!-- Username -->
-            <span>{{ username }}</span>
+            <h3 class="username">{{ username }}</h3>
         </div>
         <div class="row-lg-4">
             <div class="col-lg">
@@ -57,6 +57,9 @@
     margin-left: 10px;
     margin-top: 4px;
     margin-bottom: 4px;
+}
+.username {
+    font-weight: 900px;
 }
 .row svg {
     margin-right: 10px;

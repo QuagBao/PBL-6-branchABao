@@ -1,6 +1,6 @@
 <template>
     <button>
-        <svg fill="currentColor" height="40px" width="40px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
+        <svg fill="currentColor" height="30px" width="30px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" 
             viewBox="0 0 512 512" enable-background="new 0 0 512 512" xml:space="preserve">
             <path d="M475.4,121.8H359.6l-12.2-36.6c0-20.2-16.4-36.6-36.6-36.6H201.1c-20.2,0-36.6,16.4-36.6,36.6l-12.2,36.6H36.6
                 C16.4,121.8,0,138.2,0,158.4v219.4c0,20.2,16.4,36.6,36.6,36.6h438.9c20.2,0,36.6-16.4,36.6-36.6V158.4
@@ -22,7 +22,7 @@
 <style scoped>
 button {
     display: inline;
-    width: 250px;
+    width: 230px;
     background-color: #CAF0F8;
     border: none;
     border-radius: 10px;

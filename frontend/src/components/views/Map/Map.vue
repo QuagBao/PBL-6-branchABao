@@ -1,31 +1,21 @@
 <script>
-// import HelloWorld from './components/HelloWorld.vue'
-// import TheWelcome from './components/TheWelcome.vue'
-import Auto_Complete from './Auto_Complete.vue';
 import MapComponent from './Map_Component.vue';
 import { ref, defineComponent } from 'vue';
 export default defineComponent ({
   components: {
-    Auto_Complete,
     MapComponent
   },
   setup() {
-    const location = ref([105.85242472181584, 21.029579719995272]);
+    const location = ref([108.23970942970374, 16.0475275245935]);
 
-    // Hàm cập nhật vị trí
-    const updateLocation = (newLocation) => {
-      location.value = [newLocation.lng, newLocation.lat];
-    };
-
-    // Trả về các biến và hàm cho template
-    return { location, updateLocation };
+    return { location };
   }
 });
 </script>
-
 <template>
-    <div>
-        <AutoComplete @location-selected="updateLocation" />
-        <MapComponent :selectedLocation="location" />
-    </div>
+  <div>
+    <MapComponent :selectedLocations="[[108.22219989597711, 16.03931241040142], 
+                                      [108.23940902229407, 16.04757907839837],
+                                      [108.23887302128715, 16.04546624024942]]" />
+  </div>
 </template>

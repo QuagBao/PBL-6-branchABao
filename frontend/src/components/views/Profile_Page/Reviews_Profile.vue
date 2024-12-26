@@ -1,11 +1,9 @@
 <template>
-    <div class="container-fluid reviews">
-        <Content_review 
-            v-for="review in reviewLists"
-            :key="review.id"
-            :review="review"
-            :user="user"
-        />
+    <div class="reviews">
+        <Content_review v-for="review in reviewLists"
+                        :key="review.id"
+                        :review="review"
+                        :user="user" />
     </div>
 </template>
 
@@ -40,5 +38,6 @@ export default {
     align-items: center;
     width: 100%;
     height: 100%;
+    margin-top: 70px;
 }
 </style>

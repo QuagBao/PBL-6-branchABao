@@ -1,81 +1,150 @@
 <template>
-<!-- <Bar id="my-chart-id"
-     :options="chartOptions"
-     :data="chartData" /> -->
-
-    <canvas id="myChart" height="400" width="500"></canvas>
+    <canvas id="myChart" height="550" width="600px"></canvas>
 </template>
 
-<!-- <script>
-import { Bar } from 'vue-chartjs'
-import { Chart as ChartJS, Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale } from 'chart.js'
-
-ChartJS.register(Title, Tooltip, Legend, BarElement, CategoryScale, LinearScale)
-
-export default {
-name: 'BarChart',
-components: { Bar },
-    data() {
-        return {
-            chartData: {
-                labels: [ 'January', 'February', 'March', 'April', 'May', 'June', 
-                        'July', 'August', 'September', 'October', 'November', 'December' ],
-                datasets: [ { data: [40, 20, 12, 40, 20, 12, 
-                        40, 20, 12, 40, 20, 12] } ]
-            },
-            chartOptions: {
-                responsive: true
-            }
-        }
-    }
-}
-</script> -->
-
 <script setup>
-import { onMounted } from 'vue';
+import { onMounted, watch } from 'vue';
 import Chart from 'chart.js/auto';
 
-const labels = [ 'January', 'February', 'March', 'April', 'May', 'June', 
-                'July', 'August', 'September', 'October', 'November', 'December' ];
-
-const data = {
-    labels: labels,
-    datasets: [{
-        label: 'My First dataset',
-        backgroundColor: '#8ecae6',
-        borderColor: '#8ecae6',
-        data: [ 400, 200, 120, 400, 50, 102, 
-        440, 220, 412, 240, 320, 102 ],
-        type: 'bar',
-        order: 1
+const props = defineProps({
+    rating1: {
+        type: Array,
+        required: true,
+        default: () => []
     },
-    {
-        label: 'My Second dataset',
-        backgroundColor: '#13357B',
-        borderColor: '#13357B',
-        data: [ 50, 12, 24, 52, 32, 13,
-        100, 120, 204, 502, 302, 103 ],
-        type: 'line',
-        tension: 0.25
-    }]
-};
+    rating2: {
+        type: Array,
+        required: true,
+        default: () => []
+    },
+    rating3: {
+        type: Array,
+        required: true,
+        default: () => []
+    },
+    rating4: {
+        type: Array,
+        required: true,
+        default: () => []
+    },
+    rating5: {
+        type: Array,
+        required: true,
+        default: () => []
+    },
+    nameOfLocation: {
+        type: String,
+        required: true,
+        default: 'Destination'
+    }
+});
 
-const config = {    
-    data: data,
-    options: {}
-};
+// Lưu instance của biểu đồ
+let chartInstance = null;
 
-onMounted(() => {
-    // const ctx = document.getElementById('myChart');
-    // new Chart(ctx, config);
-    const myChart = new Chart(
-        document.getElementById('myChart'),
-        config
-    );
-})
-// const myChart = new Chart(
-//     document.getElementById('myChart'),
-//     config
-// );
+const labels = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'June',  
+                 'July', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ];
 
+const createChart = () => {
+    const ctx = document.getElementById('myChart');
+
+    if (chartInstance) {
+        chartInstance.destroy(); //Huỷ biểu đồ cũ
+    }
+
+    chartInstance = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: '1 star',
+                backgroundColor: '#00b4d8',
+                borderColor: '#00b4d8',
+                data: props.rating1,
+            },
+            {
+                label: '2 star',
+                backgroundColor: '#0096c7',
+                borderColor: '#0096c7',
+                data: props.rating2,
+            },
+            {
+                label: '3 star',
+                backgroundColor: '#0077b6',
+                borderColor: '#0077b6',
+                data: props.rating3,
+            },
+            {
+                label: '4 star',
+                backgroundColor: '#023e8a',
+                borderColor: '#023e8a',
+                data: props.rating4,
+            },
+            {
+                label: '5 star',
+                backgroundColor: '#03045e',
+                borderColor: '#03045e',
+                data: props.rating5,
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: `Rating of ${props.nameOfLocation}`,
+                    color: '#13357B',
+                    font: {
+                        size: 20,
+                        weight: 'bold'
+                    } ,
+                },
+                legend: {
+                    labels: {
+                        color: '#13357B' // Màu chữ của chú thích (legend)
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    stacked: true,
+                    ticks: {
+                        color: '#13357B', // Màu chữ trên trục X
+                    },
+                },
+                y: {
+                    stacked: true,
+                    position: 'left',
+                    title: {
+                        display: true,
+                        text: 'Number of R ating', // Tên cho trục Y bên trái
+                        color: '#13357B',         // Màu chữ của tên trục
+                        font: {
+                            size: 12,             // Kích thước chữ
+                            weight: 'bold'        // Đậm chữ
+                        }
+                    },
+                    ticks: {
+                        color: '#13357B', // Màu chữ trên trục Y (bên trái)
+                    },
+                },
+            }
+        }
+    });
+}
+
+onMounted(createChart);
+
+watch (
+    () => [props.rating1, props.rating2, props.rating3, props.rating4, props.rating5, props.nameOfLocation],
+    createChart,
+    { deep: true }
+)
 </script>
+
+<style scoped>
+#myChart {
+    margin: 0 auto;
+    color: #13357B;
+}
+</style>

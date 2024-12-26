@@ -66,8 +66,8 @@ const List_Tour = () => import('./components/views/Tour/List/List_Tour.vue');
 
 
 // Test UI
-const test   = () => import('./components/views/Dashboard_For_Company/dashboard_for_company.vue'); 
-const test1 = () => import('./components/views/Dashboard_For_Company/Service.vue');
+const test   = () => import('./components/views/Business/Business_Tour/List_Destination.vue'); 
+const test1 = () => import('./components/views/Map/Map_Component.vue');
 const test2 = () => import('./components/views/Chart/Chart.vue');
 const test3 = () => import('./components/views/Tour/List/Tour_Item.vue');
 
@@ -81,11 +81,10 @@ const updateHotel = () => import('./components/views/Business/Business_Hotel_Upd
 const addRestaurant = () => import('./components/views/Business/Business_Restaurant_Add.vue');
 const updateRestaurant = () => import('./components/views/Business/Business_Restaurant_Update.vue');
 const destinationView = () => import('./components/views/Business/Business_Destination.vue');
-
+const tourView = () => import('./components/views/Business/Business_Tour/Business_Tour_List.vue');
+const tourEditView = () => import('./components/views/Business/Business_Tour/Business_Tour_Edit.vue');
 //Search
 const search = () => import('./components/views/Search/Search.vue');
-
-
 
 // Routes configuration
 const routes = [
@@ -167,6 +166,8 @@ const routes = [
   { path: '/Business/Restaurant/Update/:id', name: 'UpdateRestaurant', component: updateRestaurant },
   { path: '/Business/Restaurant/Update/:id', name: 'UpdateRestaurant', component: updateRestaurant },
   { path: '/Business/Destination', name: 'DestinationView', component: destinationView },
+  { path: '/Business/Tour', name: 'tourView', component: tourView },
+  { path: '/Business/Tour/Update/:id', name: 'tourEditView', component: tourEditView },
   
   // Search
   { 

@@ -117,6 +117,7 @@ img {
 }
 .cards{
     border-radius: 32px;
+    box-shadow: 0 2px 6px -1px rgba(19, 53, 123, .07), 0 6px 18px -1px rgba(19, 53, 123, .04) !important;
 }
 .cards:hover{
     cursor: pointer;

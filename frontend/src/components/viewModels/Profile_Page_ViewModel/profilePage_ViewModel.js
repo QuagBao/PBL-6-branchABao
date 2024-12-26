@@ -10,7 +10,7 @@ export default class ProfileViewModel {
             ['Trips', new groupTag_Models('Trips', 'Trips_Profile')],
             ['Reviews', new groupTag_Models('Reviews', 'Reviews_Profile')],
             ['My Favourites', new groupTag_Models('My Favourites', 'Favourite_Profile')],
-            ['Account Settings', new groupTag_Models('Account Settings', 'Setting_Profile')],
+            ['Change Information', new groupTag_Models('Change Information', 'Setting_Profile')],
         ]);
 
         // Current Tab

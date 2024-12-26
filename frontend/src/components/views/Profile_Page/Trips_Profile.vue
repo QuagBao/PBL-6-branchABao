@@ -1,6 +1,6 @@
 <template>
-    <div class="container-fluid ">
-        <div class="row">
+    <div class="frame-trip">
+        <div class="container py-5">
             <p>My Trips</p>
         </div>
 
@@ -75,40 +75,23 @@ export default {
 </script>
 
 <style scoped>
-.container-fluid{
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+.frame-trip {
     width: 100%;
-    height: 100%;
 }
-
-.row p {
+.container p {
     color: #13357B;
     font-size: 40px;
     font-weight: 900;
 }
 
-.container-fluid-1 {
-    /* width: 100%; */
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-left: 0px;
-    padding: 10px 5px;
-    gap: 10px;
-}
-
 .sort{
-    display: flex;
-    margin: 20px 0 0 950px;
-    color: #13357B;
+    display: grid;
+    grid-template-columns: 60% 40%; 
 }
 
-.custom-select {
-    display: inline-block;
-    margin: -36px 0 0 70px;
-    width: 80%;
+.frame-sort {
+    grid-column: 2/3;
+    color: #13357B;
 }
 
 .select-selected {
@@ -116,20 +99,19 @@ export default {
     background-color: #EDF6F9;
     border-radius: 10px;
     cursor: pointer;
-    color: #13357B;
     stroke: #13357B;
     border: 1px solid #13357B;
-    box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.3);
+    box-shadow: 0 2px 6px -1px rgba(19, 53, 123, .07), 0 6px 18px -1px rgba(19, 53, 123, .04) !important;
 }
 
 .select-selected:hover{
     background-color: #13357B;
     stroke: #CAF0F8;
 }
-.select-selected:hover .col-sm-8{
+.select-selected:hover{
     color: #CAF0F8;
 }
-.select-selected .col-sm-8{
+.select-selected{
     font-weight: bold;
 }
 .select-items {
@@ -175,13 +157,11 @@ button {
     cursor: pointer;
     flex: 1; /* Để hai nút cách đều và chiếm cùng một khoảng rộng */
 }
-
 button:hover {
     background-color: #13357B;
     color: #CAF0F8;
     stroke: #CAF0F8;
 }
-
 .list-trip-items{
     display: flex;
     flex-direction: column;
