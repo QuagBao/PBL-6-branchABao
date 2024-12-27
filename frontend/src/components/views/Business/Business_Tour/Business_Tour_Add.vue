@@ -118,7 +118,11 @@
                 </div>
                 <!-- Submit -->
                 <div class=" d-flex justify-content-center">
-                    <button class="container-fluid submit" type="button"
+                    <button class="container-fluid button cancel" type="button"
+                            @click="navigateListTour">
+                        Cancel
+                    </button>
+                    <button class="container-fluid button submit" type="button"
                             @click="SendAddTour">
                         Submit
                     </button>
@@ -187,6 +191,10 @@ onMounted(async () => {
     }
     
 });
+
+const navigateListTour = () => {
+    window.location.assign(`/Business/Tour`);
+}
 </script>
 
 
@@ -380,7 +388,7 @@ tbody tr:hover td{
 }
 
 /* Submit */
-.submit {
+.button {
     color: #EDF6F9;
     background-color: #4AA4D9 ;
     padding: 10px 20px;
@@ -390,7 +398,10 @@ tbody tr:hover td{
     cursor: pointer;
     margin-bottom: 50px;
 }
-.submit:hover {
+.cancel {
+    background-color: #EF3F3E;
+}
+.button:hover {
     opacity: 0.7;
 }
 </style>

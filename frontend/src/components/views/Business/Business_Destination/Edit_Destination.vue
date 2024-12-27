@@ -176,7 +176,7 @@
 
                     <div class=" d-flex justify-content-center gap-5">
                         <button class="container-fluid button cancel submit" type="button"
-                                @click="SendUpdateTour">
+                                @click="cancelUpdate">
                             Cancel
                         </button>
                         <button class="container-fluid button submit" type="button"
@@ -211,7 +211,10 @@ import { useRoute } from 'vue-router';
 const route = useRoute();
 const destinationID = route.params.id;
 
-  
+const cancelUpdate = () => {
+    window.location.assign(`/Business/Destination`);
+}
+
 const {
     cities,
     fetchCities,
