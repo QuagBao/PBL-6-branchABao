@@ -60,10 +60,9 @@
                             </SwiperSlide>
                         </Swiper>
                     </div> 
+                
                 </div>
-            </div>
-        </div>
-    </div>
+        
 
                 <div v-if="loading">
                     <div class="skeleton-loader" v-for="n in 10" :key="n"></div>

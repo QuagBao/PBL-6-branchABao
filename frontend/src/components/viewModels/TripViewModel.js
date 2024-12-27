@@ -25,9 +25,10 @@ export default function () {
         
       }
 
-    const fetchTripByUser = async () => {
+      const fetchTripByUser = async () => {
         await loadUser();
-        const trips = await getTripByUserID(user.value.id);
+        let trips = await getTripByUserID(user.value.id);
+        trips = trips.sort((a, b) => b.id - a.id);
         return trips;
     }
 
