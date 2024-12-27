@@ -43,7 +43,7 @@ export default {
 }
 
 .btn-group button {
-    width: 150px;
+    width: 200px;
     padding: 10px 0px;
     background-color: #EDF6F9;
     color: #13357B;

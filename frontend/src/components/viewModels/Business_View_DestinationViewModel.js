@@ -1,5 +1,6 @@
 import { onMounted, ref } from 'vue';
 import { fetchDestinationsByUser } from '../models/destinationModel';
+import { fetchCities as fetchCitiesAPI } from "../models/CityModel";
 import SignInModel from '../models/SignInModel';
 
 export default function() {
@@ -11,6 +12,8 @@ export default function() {
     const destinations = ref([]);
     const hotels = ref([]);
     const restaurants = ref([]);
+    const cities = ref([]);
+
     const loadDestinations = async () => {
         try {
             isLoading.value = true;
@@ -19,6 +22,8 @@ export default function() {
                 if (userResult.success) {
                     user.value = userResult.user;
                     places.value = await fetchDestinationsByUser(user.value.id);
+                    places.reverse();
+                    console.log("Places:", places.value);
                     destinations.value = places.value.filter(destination => destination.hotel_id === null && destination.restaurant_id === null);
                     hotels.value = places.value.filter(destination => destination.hotel_id !== null);
                     restaurants.value = places.value.filter(destination => destination.restaurant_id !== null);
@@ -32,13 +37,28 @@ export default function() {
             isLoading.value = false;
         }
     }
-    onMounted(() => {
-        loadDestinations();
+
+    const getCities = async () => {
+        try {
+            cities.value = await fetchCitiesAPI();
+            console.log("Cities:", cities.value);
+            
+        } catch (error) {
+            toast.error("Error fetching cities:", error);
+        }
+    };
+
+    onMounted( async() => {
+        await loadDestinations();
+        await getCities();
     });
     return {
         isLoading,
         destinations,
         hotels,
         restaurants,
+        places, 
+        getCities,
+        cities
     }
 }

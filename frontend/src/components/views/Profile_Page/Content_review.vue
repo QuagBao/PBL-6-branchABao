@@ -30,7 +30,7 @@
                 {{ review?.content }}
             </span>
             <div class="info-location p-3">
-                <tag_location_review :destID="review?.destination_id" :tourID="review?.tour_id"/>
+                <tag_location_review v-if="review?.destination_id"  :destID="review?.destination_id" :tourID="review?.tour_id"/>
             </div>
         </div>
         

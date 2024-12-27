@@ -36,8 +36,8 @@
                 </div>
             </div>
             <div class="line"></div>
-            <div class="name-of-tour">
-                <span>{{ tour?.description }}</span>
+            <div class="name-of-tour ">
+                <p class="text-truncated">{{ tour?.description }}</p>
             </div>
         </div>
     </div>
@@ -79,9 +79,9 @@ watchEffect(() => {
 <style scoped>
 .frame-item-tour {
     color: #13357B;
-    /* border: 1px solid #00b4d8; */
-    border-radius: 16px;
-    width: fit-content;
+    border-radius: 30px;
+    height: 100%;
+    width: 100%;
     box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.2);
     transition: 0.7ms ease-in-out;
 }
@@ -96,10 +96,10 @@ watchEffect(() => {
     display: flex;
 }
 .frame-image img {
-    width: 300px;
+    width: 100%;
     height: 200px;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
+    object-fit: cover;
+    aspect-ratio: 16 / 9;
 }
 .btn-heart {
     margin: 10px 0px 0 -72px;
@@ -148,5 +148,13 @@ watchEffect(() => {
 .frame-price span{
     font-size: 20px;    
     font-weight: 900
+}
+.text-truncated {
+    display: -webkit-box; /* Hiển thị như một hộp linh hoạt */
+    -webkit-line-clamp: 2; /* Giới hạn số dòng hiển thị (ở đây là 2 dòng) */
+    -webkit-box-orient: vertical; /* Hướng của hộp là dọc */
+    overflow: hidden; /* Ẩn phần nội dung vượt quá */
+    text-overflow: ellipsis; /* Thêm dấu "..." ở cuối khi bị cắt */
+    white-space: normal; /* Cho phép ngắt dòng */
 }
 </style>

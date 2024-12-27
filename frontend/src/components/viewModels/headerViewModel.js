@@ -12,7 +12,7 @@ export default function useHeaderViewModel() {
 
   // Handle scroll event to change header background
   const handleScroll = () => {
-    if (window.scrollY > 45) {
+    if (window.scrollY > 0) {
       HeaderModel.setScrollState(true);  // Update the model state
     } else {
       HeaderModel.setScrollState(false);

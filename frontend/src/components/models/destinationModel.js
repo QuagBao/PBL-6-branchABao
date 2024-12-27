@@ -969,7 +969,7 @@ export async function fetchDestinationsByUser(userId) {
       restaurant: destination.restaurant,
       tags: destination.tags,
       images: destination.images,
-      rating: destination.average_rating ? parseFloat(destination.average_rating.toFixed(1)) : null,
+      rating: destination.average_rating ? parseFloat(destination.average_rating.toFixed(1)) : 0  ,
       review_count: destination.review_count,
     }));
   } catch (error) {

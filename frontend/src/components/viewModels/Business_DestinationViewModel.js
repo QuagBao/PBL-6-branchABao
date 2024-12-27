@@ -11,7 +11,7 @@ import { fetchDestinations,
   addHotel as addHotelAPI,
   updateHotel as updateHotelAPI,
   deleteHotel as deleteHotelAPI,
- } from '../models/destinationModel';
+} from '../models/destinationModel';
 
  import { fetchCities as fetchCitiesAPI } from "../models/CityModel";
  import SignInModel from '../models/SignInModel';
@@ -85,6 +85,7 @@ export default function () {
         },
       });
     const cities = ref([]);
+    const selectedCityId = ref(0);
     const fetchCities = async () => {
         try {
           cities.value = await fetchCitiesAPI();
@@ -113,7 +114,10 @@ export default function () {
     const getDestinationById = async (id) => {
         try {
             destination.value = await getDestinationByIdAPI(id);
+            selectedCityId.value = destination.value.address.city_id;
+            console.log('Selected city:',selectedCityId.value);
         } catch (error) {
+          console.error('Error fetching destination:', error);
             toast.error("Error fetching destination:", error);
         }
     };
@@ -275,18 +279,38 @@ export default function () {
             new_images.value.splice(index, 1); // Remove new image by index
             URL.revokeObjectURL(previewNewImages.value[index]); // Giải phóng bộ nhớ của URL preview
             previewNewImages.value.splice(index, 1); // Xoá URL preview khỏi mảng
+            console.log("previewNewImages after remove:", previewNewImages.value);
           };
       
           const removeExistingImage = (id) => {
             image_ids_to_remove.value.push(id); // Add image id to removal list
-            review.value.images = review.value.images.filter(
+            destination.value.images = destination.value.images.filter(
               (img) => img.id !== id
             );
+            console.log(
+              "destination.images after remove:",
+              destination.value.images
+            )
           };
 
 
+const dropdownVisibleRegion = ref(false);
+// Đóng mở dropdown
+const toggleDropDownRegion = () => {
+  dropdownVisibleRegion.value = !dropdownVisibleRegion.value;
+};
+const selectCity = (cityId) => {
+  selectedCityId.value = cityId; // Cập nhật ID thành phố được chọn
+  destination.value.address.city_id = selectedCityId.value;
+  console.log('Selected City ID:', destination.value.address.city_id);
+  console.log('Selected City ID:', selectedCityId.value);
+  dropdownVisibleRegion.value = false; // Đóng dropdown
+};
+const selectedCityName = computed(() => {
+  const city = cities.value.find(c => c.id === selectedCityId.value);
+  return city ? city.name : 'Select City';
+});
 
-    
 
     return {
         fetchCities,
@@ -313,8 +337,10 @@ export default function () {
         handleNewImageUpload,
         removeNewImage,
         removeExistingImage,
-
+        selectedCityId,
+        dropdownVisibleRegion,
+        toggleDropDownRegion,
+        selectCity,
+        selectedCityName
     };
-    
-
 }

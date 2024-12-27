@@ -128,7 +128,6 @@ export async function updateTour(tour) {
 
 export async function addTour(tour) {
   try {
-
     const response = await axios.post(
       `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/tour/`, // sử dụng user.id làm userId
       {

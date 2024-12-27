@@ -87,6 +87,7 @@ export default function () {
                 const cityName = cityCache.value[tour.city_id] || "Unknown";
                 return { ...tour, cityName };
             });
+            tours.reverse();
             tourList.value = tours || null;
             console.log("Tours:", tourList.value);
         } catch (error) {

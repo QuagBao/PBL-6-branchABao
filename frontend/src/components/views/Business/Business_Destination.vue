@@ -11,7 +11,6 @@
                     
                     <!-- Category Buttons & Content Section -->
                     <div class="container-fluid content">
-
                         <!-- Things to do Section -->
                         <div class="title-content">
                             <p class="p-5 things-to-do">Things to do</p>
