@@ -1,20 +1,20 @@
 <template>
     <div class="frame-day">        
-        <button class="day nav-link" v-if="day_1.length > 0" @click="toggleDay(1)">Day 1</button>
-        <button class="day nav-link" v-if="day_2.length > 0" @click="toggleDay(2)">Day 2</button>
-        <button class="day nav-link" v-if="day_3.length > 0" @click="toggleDay(3)">Day 3</button>
-        <button class="day nav-link" v-if="day_4.length > 0" @click="toggleDay(4)">Day 4</button>
-        <button class="day nav-link" v-if="day_5.length > 0" @click="toggleDay(5)">Day 5</button>
-        <button class="day nav-link" v-if="day_6.length > 0" @click="toggleDay(6)">Day 6</button>
-        <button class="day nav-link" v-if="day_7.length > 0" @click="toggleDay(7)">Day 7</button>
-        <button class="day nav-link" v-if="day_0.length > 0" @click="toggleDay(8)">Place to stay</button>
+        <button class="day nav-link" v-if="day_1.length > 0" @click="filterDay(1)">Day 1</button>
+        <button class="day nav-link" v-if="day_2.length > 0" @click="filterDay(2)">Day 2</button>
+        <button class="day nav-link" v-if="day_3.length > 0" @click="filterDay(3)">Day 3</button>
+        <button class="day nav-link" v-if="day_4.length > 0" @click="filterDay(4)">Day 4</button>
+        <button class="day nav-link" v-if="day_5.length > 0" @click="filterDay(5)">Day 5</button>
+        <button class="day nav-link" v-if="day_6.length > 0" @click="filterDay(6)">Day 6</button>
+        <button class="day nav-link" v-if="day_7.length > 0" @click="filterDay(7)">Day 7</button>
+        <button class="day nav-link" v-if="day_0.length > 0" @click="filterDay(8)">Place to stay</button>
     </div>
     <div class="frame-list d-flex flex-column gap-5" v-if="day_1.length > 0">
         <div class="item-days d-flex flex-column gap-3" v-if="day_1.length > 0">
             <div class="title">
                 <h2>Day 1</h2>
                 <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" @click="toggleDay(1)">
-                    <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path :d="visibleDays[1] ? 'M5 15L12 9L19 15' : 'M19 9L12 15L5 9'" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
             <div class="frame-items d-flex flex-column gap-3" v-if="visibleDays[1]">
@@ -30,7 +30,7 @@
             <div class="title">
                 <h2>Day 2</h2>
                 <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" @click="toggleDay(2)">
-                    <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path :d="visibleDays[2] ? 'M5 15L12 9L19 15' : 'M19 9L12 15L5 9'" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
             <div class="frame-items d-flex flex-column gap-3" v-if="visibleDays[2]">
@@ -46,7 +46,7 @@
             <div class="title">
                 <h2>Day 3</h2>
                 <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" @click="toggleDay(3)">
-                    <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path :d="visibleDays[3] ? 'M5 15L12 9L19 15' : 'M19 9L12 15L5 9'" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
             <div class="frame-items d-flex flex-column gap-3" v-if="visibleDays[3]">
@@ -62,7 +62,7 @@
             <div class="title">
                 <h2>Day 4</h2>
                 <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" @click="toggleDay(4)">
-                    <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path :d="visibleDays[4] ? 'M5 15L12 9L19 15' : 'M19 9L12 15L5 9'" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
             <div class="frame-items d-flex flex-column gap-3" v-if="visibleDays[4]">
@@ -78,7 +78,7 @@
             <div class="title">
                 <h2>Day 5</h2>
                 <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" @click="toggleDay(5)">
-                    <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path :d="visibleDays[5] ? 'M5 15L12 9L19 15' : 'M19 9L12 15L5 9'" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
             <div class="frame-items d-flex flex-column gap-3" v-if="visibleDays[5]">
@@ -94,7 +94,7 @@
             <div class="title">
                 <h2>Day 6</h2>
                 <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" @click="toggleDay(6)">
-                    <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path :d="visibleDays[6] ? 'M5 15L12 9L19 15' : 'M19 9L12 15L5 9'" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
             <div class="frame-items d-flex flex-column gap-3" v-if="visibleDays[6]">
@@ -110,7 +110,7 @@
             <div class="title">
                 <h2>Day 7</h2>
                 <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" @click="toggleDay(7)">
-                    <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path :d="visibleDays[7] ? 'M5 15L12 9L19 15' : 'M19 9L12 15L5 9'" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
             <div class="frame-items d-flex flex-column gap-3" v-if="visibleDays[7]">
@@ -126,7 +126,7 @@
             <div class="title">
                 <h2>Place to stay</h2>
                 <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" @click="toggleDay(8)">
-                    <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path :d="visibleDays[8] ? 'M5 15L12 9L19 15' : 'M19 9L12 15L5 9'" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </div>
             <div class="frame-items d-flex flex-column gap-3" v-if="visibleDays[8]">
@@ -167,6 +167,15 @@ const visibleDays = ref({1: true, 2: true, 3: true, 4: true, 5: true, 6: true, 7
 const toggleDay = (day) => {
     visibleDays.value[day] = !visibleDays.value[day];
 };
+
+const filterDay = (day) => {
+    // Set all days to false
+    for (let key in visibleDays.value) {
+        visibleDays.value[key] = false;
+    }
+    // Set the selected day to true
+    visibleDays.value[day] = true;
+}
 
 const sortDestinations = () => {
     if (props.trip && props.trip.destinations) {
@@ -262,6 +271,8 @@ button:hover {
     border: 2px solid #13357B;
     font-weight: bold;
     cursor: pointer;
+    
+    
 }
 .count-text{
     margin-top: 10px;
@@ -271,6 +282,9 @@ button:hover {
     justify-content: space-between;
     cursor: pointer;
     color: #13357B;
+    pointer-events: auto;
+    z-index: 10;
+    
 }
 .frame-list {
     margin-bottom: 50px;

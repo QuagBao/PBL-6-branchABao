@@ -9,7 +9,7 @@
                         <g id="invisible_box" data-name="invisible box">
                         <rect width="48" height="48" fill="none"/>
                         </g>
-                        <g id="icons_Q2" fill="#currentColor" data-name="icons Q2">
+                        <g id="icons_Q2" fill="currentColor" data-name="icons Q2">
                         <path d="M41.8,8H21.7A6.2,6.2,0,0,0,16,4a6,6,0,0,0-5.6,4H6.2A2.1,2.1,0,0,0,4,10a2.1,2.1,0,0,0,2.2,2h4.2A6,6,0,0,0,16,16a6.2,6.2,0,0,0,5.7-4H41.8A2.1,2.1,0,0,0,44,10,2.1,2.1,0,0,0,41.8,8ZM16,12a2,2,0,1,1,2-2A2,2,0,0,1,16,12Z"/>
                         <path d="M41.8,22H37.7A6.2,6.2,0,0,0,32,18a6,6,0,0,0-5.6,4H6.2a2,2,0,1,0,0,4H26.4A6,6,0,0,0,32,30a6.2,6.2,0,0,0,5.7-4h4.1a2,2,0,1,0,0-4ZM32,26a2,2,0,1,1,2-2A2,2,0,0,1,32,26Z"/>
                         <path d="M41.8,36H24.7A6.2,6.2,0,0,0,19,32a6,6,0,0,0-5.6,4H6.2a2,2,0,1,0,0,4h7.2A6,6,0,0,0,19,44a6.2,6.2,0,0,0,5.7-4H41.8a2,2,0,1,0,0-4ZM19,40a2,2,0,1,1,2-2A2,2,0,0,1,19,40Z"/>
@@ -25,57 +25,22 @@
             </div>
         </div>
     </div>
-    <div class="frame things-to-do">
+
+    <div v-for="section in sections" :key="section.id" :class="['frame', section.className]">
         <div class="title">
-            <h2>Things to do</h2>
-            <button class="button" @click="toggleSection('thingstodo')">
+            <h2>{{ section.title }}</h2>
+            <button class="button" @click="toggleSection(section.id)">
                 <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path :d="section.show ? 'M5 15L12 9L19 15' : 'M19 9L12 15L5 9'" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                 </svg>
             </button>
         </div>
-        <div v-show="showThingstodo">
+        <div v-show="section.show">
             <Saved_Item 
-                v-for="thingtodo in thingtodos" 
-                :key="thingtodo.id" 
-                :place="thingtodo"
-                @click="navigateToDetailPlace(thingtodo.id)"
-            />
-        </div>
-    </div>
-    <div class="frame restaurants">
-        <div class="title">
-            <h2>Restaurants</h2>
-            <button class="button" @click="toggleSection('restaurants')">
-                <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </button>
-        </div>
-        <div v-show="showRestaurants">
-            <Saved_Item 
-                v-for="restaurant in restaurants" 
-                :key="restaurant.id" 
-                :place="restaurant"
-                @click="navigateToDetailRestaurant(restaurant.restaurant_id)"
-            />
-        </div>
-    </div>
-    <div class="frame hotels">
-        <div class="title">
-            <h2>Place to stay</h2>
-            <button class="button" @click="toggleSection('hotels')">
-                <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-            </button>
-        </div>
-        <div v-show="showHotels">
-            <Saved_Item 
-                v-for="hotel in hotels" 
-                :key="hotel.id" 
-                :place="hotel"
-                @click="navigateToDetailHotel(hotel.hotel_id)"
+                v-for="item in section.items" 
+                :key="item.id" 
+                :place="item"
+                @click="section.navigate(item.id)"
             />
         </div>
     </div>
@@ -89,29 +54,43 @@ const props = defineProps({
   trip: Object
 })
 
-const thingtodos = computed(() => props.trip?.destinations.filter(d => !d.restaurant_id && !d.hotel_id) || [])
-const hotels = computed(() => props.trip?.destinations.filter(d => !d.restaurant_id && d.hotel_id) || [])
-const restaurants = computed(() => props.trip?.destinations.filter(d => d.restaurant_id) || [])
+const sections = ref([
+    {
+        id: 'thingstodo',
+        title: 'Things to do',
+        className: 'things-to-do',
+        show: true,
+        items: computed(() => props.trip?.destinations.filter(d => !d.restaurant_id && !d.hotel_id) || []),
+        navigate: id => window.location.assign(`/Detail/Place/${id}`)
+    },
+    {
+        id: 'restaurants',
+        title: 'Restaurants',
+        className: 'restaurants',
+        show: true,
+        items: computed(() => props.trip?.destinations.filter(d => d.restaurant_id) || []),
+        navigate: id => window.location.assign(`/Detail/Restaurant/${id}`)
+    },
+    {
+        id: 'hotels',
+        title: 'Place to stay',
+        className: 'hotels',
+        show: true,
+        items: computed(() => props.trip?.destinations.filter(d => !d.restaurant_id && d.hotel_id) || []),
+        navigate: id => window.location.assign(`/Detail/Hotel/${id}`)
+    }
+]);
 
-const navigateToDetailPlace = id => window.location.assign(`/Detail/Place/${id}`);
-const navigateToDetailRestaurant = id => window.location.assign(`/Detail/Restaurant/${id}`);
-const navigateToDetailHotel = id => window.location.assign(`/Detail/Hotel/${id}`);
-
-const showThingstodo = ref(true);
-const showRestaurants = ref(true);
-const showHotels = ref(true);
-
-const toggleSection = (section) => {
-    if (section === 'thingstodo') showThingstodo.value = !showThingstodo.value;
-    if (section === 'restaurants') showRestaurants.value = !showRestaurants.value;
-    if (section === 'hotels') showHotels.value = !showHotels.value;
+const toggleSection = (id) => {
+    const section = sections.value.find(s => s.id === id);
+    if (section) section.show = !section.show;
 }
+
 const filterCategory = (category) => {
-    showThingstodo.value = category === 'thingstodo';
-    showRestaurants.value = category === 'restaurants';
-    showHotels.value = category === 'hotels';
+    sections.value.forEach(section => section.show = section.id === category);
 }
 </script>
+
 
 
 <style scoped>
@@ -185,6 +164,8 @@ const filterCategory = (category) => {
     background: transparent;
     border: none;
     cursor: pointer;
+    pointer-events: auto;
+    z-index: 10000;
 }
 .filter-button:hover {
     background-color: #D7DAF9;
