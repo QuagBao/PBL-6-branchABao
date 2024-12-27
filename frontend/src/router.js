@@ -64,9 +64,8 @@ const Topic_List = () => import('./components/views/Topic/Topic_List.vue');
 const Detail_Tour = () => import('./components/views/Tour/Detail/Detail_Tour.vue');
 const List_Tour = () => import('./components/views/Tour/List/List_Tour.vue');
 
-
 // Test UI
-const test   = () => import('./components/views/Business/Business_Tour/List_Destination.vue'); 
+const test   = () => import('./components/views/Business/Business_Destination_List.vue'); 
 const test1 = () => import('./components/views/Map/Map_Component.vue');
 const test2 = () => import('./components/views/Chart/Chart.vue');
 const test3 = () => import('./components/views/Tour/List/Tour_Item.vue');
@@ -80,9 +79,12 @@ const addHotel = () => import('./components/views/Business/Business_Hotel_Add.vu
 const updateHotel = () => import('./components/views/Business/Business_Hotel_Update.vue');
 const addRestaurant = () => import('./components/views/Business/Business_Restaurant_Add.vue');
 const updateRestaurant = () => import('./components/views/Business/Business_Restaurant_Update.vue');
-const destinationView = () => import('./components/views/Business/Business_Destination.vue');
+const destinationView = () => import('./components/views/Business/Business_Destination_List.vue');
 const tourView = () => import('./components/views/Business/Business_Tour/Business_Tour_List.vue');
 const tourEditView = () => import('./components/views/Business/Business_Tour/Business_Tour_Edit.vue');
+const tourAddView = () => import('./components/views/Business/Business_Tour/Business_Tour_Add.vue');
+const destUpdateView = () => import('./components/views/Business/Business_Destination/Edit_Destination.vue');
+const destAddView = () => import('./components/views/Business/Business_Destination/Add_Destination.vue');
 //Search
 const search = () => import('./components/views/Search/Search.vue');
 
@@ -158,8 +160,9 @@ const routes = [
   
   // Business
   { path: '/Business', name: 'Dashboard_For_Company', component: Dashboard_For_Company },
-  { path: '/Business/Destination/Add', name: 'AddDestination', component: addDestination },
-  { path: '/Business/Destination/Update/:id', name: 'UpdateDestination', component: updateDestination },
+  { path: '/Business/Destination/Add', name: 'destAddView', component: destAddView },
+  { path: '/Business/Destination/Update/:id', name: 'destUpdateView', component: destUpdateView },
+  
   { path: '/Business/Hotel/Add/:id', name: 'AddHotel', component: addHotel },
   { path: '/Business/Hotel/Update/:id', name: 'UpdateHotel', component: updateHotel },
   { path: '/Business/Restaurant/Add/:id', name: 'AddRestaurant', component: addRestaurant },
@@ -168,6 +171,10 @@ const routes = [
   { path: '/Business/Destination', name: 'DestinationView', component: destinationView },
   { path: '/Business/Tour', name: 'tourView', component: tourView },
   { path: '/Business/Tour/Update/:id', name: 'tourEditView', component: tourEditView },
+  { path: '/Business/Tour/Add', name: 'tourAddView', component: tourAddView },
+  
+  // { path: '/Business/Des/Add', name: 'destAddView', component: destAddView },
+  
   
   // Search
   { 

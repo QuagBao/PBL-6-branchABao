@@ -46,7 +46,7 @@
                   </div>
               </div>
               <small class='text-uppercase reviews'>{{ tour.numOfReviews }} reviews</small>
-              <p class="mb-4">{{ tour.description }}</p>
+              <p class="mb-4 text-truncate">{{ tour.description }}</p>
           </div>
           <div class="bg-primary rounded-bottom mx-0">
               <div class="text-start py-4 px-4">

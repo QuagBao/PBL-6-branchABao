@@ -6,10 +6,10 @@
         <div class="container-fluid overall">
             <div class="container-fluid p-5 top-rating d-flex justify-content-center align-items-baseline">
                 <div class="container name-of-table">
-                    <h3>All Tour</h3>
+                    <h3>My Places</h3>
                 </div>
                 <button class="btn-add d-flex justify-content-around align-items-center"
-                        @click="navigateToAddTour">
+                        @click="navigateToAddDestination">
                     <svg fill="#EDF6F9" width="20px" height="20px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                         <path d="M352 240v32c0 6.6-5.4 12-12 12h-88v88c0 6.6-5.4 12-12 12h-32c-6.6 0-12-5.4-12-12v-88h-88c-6.6 0-12-5.4-12-12v-32c0-6.6 5.4-12 12-12h88v-88c0-6.6 5.4-12 12-12h32c6.6 0 12 5.4 12 12v88h88c6.6 0 12 5.4 12 12zm96-160v352c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V80c0-26.5 21.5-48 48-48h352c26.5 0 48 21.5 48 48zm-48 346V86c0-3.3-2.7-6-6-6H54c-3.3 0-6 2.7-6 6v340c0 3.3 2.7 6 6 6h340c3.3 0 6-2.7 6-6z"/>
                     </svg>
@@ -21,10 +21,10 @@
                     <tr>
                         <th class="number">Number</th>
                         <th>Photo</th>
-                        <th>Tour Name</th>
+                        <th>Name</th>
                         <th class="city">City</th>
                         <th class="rating">Rating</th>
-                        <th class="days">No. Of Days</th>
+                        <th class="type">Type</th>
                         <th class="view">View</th>
                         <th class="edit">Edit</th>
                         <th class="delete">Delete</th>
@@ -35,17 +35,17 @@
                         <td class="number">{{ index + 1 + (currentPage - 1) * itemsPerPage }}</td>
                         <td>
                             <img class="img" 
-                                v-if="tour.destinations.find(dest => dest.images && dest.images.length)?.images[0]" 
-                                :src="tour.destinations.find(dest => dest.images && dest.images.length)?.images[0].url" 
+                                :src="tour.images[0]?.url || '/blue-image.jpg'" 
                                 :alt="tour.id">
-                            <img v-else :src="'/blue-image.jpg'" class="img">
                         </td>
                         <td>{{ tour.name }}</td>
-                        <td class="city">{{ tour.cityName }}</td>
+                        <td class="city">{{ cities.name = cities.find(city => city.id === tour.address.city_id)?.name }}</td>
                         <td class="rating">{{ tour.rating }}</td>
-                        <td class="days">{{ Math.floor(tour.duration/24) }} days</td>
+                        <td class="type">{{ tour.hotel_id !== null && tour.restaurant_id === null ? "Hotel" 
+                                             :tour.hotel_id === null && tour.restaurant_id !== null ? "Restaurant" 
+                                             :"Place" }}</td>
                         <td class="view">
-                            <button class="btn-view" @click="navigateToDetailTour(tour.id)">
+                            <button class="btn-view" @click="navigateToDetailDestination(tour)">
                                 <svg fill="currentColor" width="22px" height="22px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                                     <path d="M288 144a110.9 110.9 0 0 0 -31.2 5 55.4 55.4 0 0 1 7.2 27 56 56 0 0 1 -56 56 55.4 55.4 0 0 1 -27-7.2A111.7 111.7 0 1 0 288 144zm284.5 97.4C518.3 135.6 410.9 64 288 64S57.7 135.6 3.5 241.4a32.4 32.4 0 0 0 0 29.2C57.7 376.4 165.1 448 288 448s230.3-71.6 284.5-177.4a32.4 32.4 0 0 0 0-29.2zM288 400c-98.7 0-189.1-55-237.9-144C98.9 167 189.3 112 288 112s189.1 55 237.9 144C477.1 345 386.7 400 288 400z"/>
                                 </svg>
@@ -88,8 +88,8 @@
 </template>
 
 <script>
-import header_For_company from '../../Dashboard_For_Company/header_For_company.vue';
-import Scroll_Bar_Component from '../../Scroll_Bar_Component.vue';
+import header_For_company from '../Dashboard_For_Company/header_For_company.vue';
+import Scroll_Bar_Component from '../Scroll_Bar_Component.vue';
 export default {
     name: "Business_Tour_List",
     components: {
@@ -98,13 +98,13 @@ export default {
 }
 </script>
 <script setup>
-import homeBusiness_ViewModel from '@/components/viewModels/homeBusiness_ViewModel';
-import Business_Tour_ViewModel from '@/components/viewModels/Business_Tour_ViewModel';
+import Business_View_DestinationViewModel from '@/components/viewModels/Business_View_DestinationViewModel';
 import { ref, computed, onMounted } from 'vue';
 
 const { 
-    tourList, deleteTourByTourID
-} = homeBusiness_ViewModel();
+    isLoading, cities,
+    destinations, hotels, restaurants, places,
+} = Business_View_DestinationViewModel();
 
 const currentPage = ref(1);
 const itemsPerPage = 10;
@@ -113,25 +113,37 @@ const itemsPerPage = 10;
 const paginatedList = computed(() => {
     const start = (currentPage.value - 1) * itemsPerPage;
     const end = start + itemsPerPage;
-    return tourList.value.slice(start, end);
+    return places.value.slice(start, end);
 });
 
 // Total pages calculation
 const totalPages = computed(() => {
-    return Math.ceil(tourList.value.length / itemsPerPage);
+    return Math.ceil(places.value.length / itemsPerPage);
 });
 
-const navigateToDetailTour = (tour_id) => {
-  window.location.assign(`/tour/${tour_id}`);
+const navigateToDetailDestination = (destination) => {
+    if (destination.hotel_id !== null && destination.restaurant_id == null) {
+        window.location.assign(`/Detail/Hotel/${destination.hotel_id}`);    
+    }
+    else if (destination.hotel_id == null && destination.restaurant_id !== null) {
+        window.location.assign(`/Detail/Restaurant/${destination.restaurant_id}`);    
+    } 
+    else {
+        window.location.assign(`/Detail/Place/${destination.id}`);    
+    }
 };
 
 const navigateToEditTour = (tour_id) => {
-  window.location.assign(`/Business/Tour/Update/${tour_id}`);
+    window.location.assign(`/Business/Tour/Update/${tour_id}`);
 };
 
 const navigateToAddTour = (tour_id) => {
-  window.location.assign(`/Business/Tour/Add`);
+    window.location.assign(`/Business/Tour/Add`);
 };
+
+const navigateToAddDestination = () => {
+    window.location.assign(`/business/destination/Add`);   
+}
 </script>
 
 
@@ -173,7 +185,7 @@ th.view, td.view, th.edit, td.edit, th.delete, td.delete {
     width: 6.5%;
     text-align: center !important;
 }
-th.city, td.city, th.days, td.days  {
+th.city, td.city  {
     width: 15%;
     text-align: center !important;
 }

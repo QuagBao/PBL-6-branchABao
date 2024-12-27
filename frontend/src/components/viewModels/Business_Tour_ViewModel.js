@@ -75,6 +75,8 @@ export default function() {
      
             destinations.value = place || null;
             destinations_2.value = destinations.value;
+            console.log("Destinations:", destinations.value);
+            console.log("Destinations_2:", destinations_2.value);
             console.log("Place Update Name: ",destinations.value);
         } catch (error) {
             console.error("Error fetching destinations:", error);
@@ -154,7 +156,7 @@ export default function() {
 
     const selectedCityName = computed(() => {
         const city = cities.value.find(c => c.id === selectedCityId.value);
-        return city ? city.name : 'Chọn thành phố';
+        return city ? city.name : 'Select City';
     });
 
     const SendUpdateTour = async () => {
@@ -193,6 +195,49 @@ export default function() {
         }
     }
 
+    const SendAddTour = async () => {
+        // Kiểm tra các trường bắt buộc
+        if (!tourName.value || tourName.value.trim() === "") {
+            toast.error("Please enter the tour name.");
+            return;
+        }
+        if (!description.value || description.value.trim() === "") {
+            toast.error("Please enter the description.");
+            return;
+        }
+        if (!selectedCityId.value) {
+            toast.error("Please select a city.");
+            return;
+        }
+        if (!destListID.value || destListID.value.length === 0) {
+            toast.error("Please add at least one destination.");
+            return;
+        }
+        try {
+            console.log("Tour Name:", tourName.value);
+            console.log("Description:", description.value);
+            console.log("Selected City ID:", selectedCityId.value);
+            console.log("User ID:", user.value?.id);
+            console.log("Destinations:", destListID.value);
+            const tourObject = {
+                name: tourName.value,
+                description: description.value,
+                user_id: user.value?.id,
+                city_id: selectedCityId.value,
+                destination_ids: destListID.value
+            };
+            const tourResult = await addTour(tourObject);
+            if (tourResult && tourResult.success) {
+                toast.success("Tour added successfully!");
+            }
+            console.log("Tour result:", tourResult);
+            return tourResult;
+        } catch (error) {
+            console.error('Error getting tour:', error);
+            return [];
+        }
+    }
+
     const deleteTourByTourID = async () =>{
         try{
             console.log("User ID:", user.value?.id);
@@ -215,6 +260,6 @@ export default function() {
         toggleDropDownRegion, selectCity, selectedCityName, cityID, 
         isLoading, loadUser, loadTourbyID, loadCities, destinations_2,
         loadDestinations, destinations, removeDestination, handleAddDestination, 
-        SendUpdateTour,     
+        SendUpdateTour, SendAddTour     
     }
 }

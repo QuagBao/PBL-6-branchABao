@@ -45,7 +45,8 @@ export default function(restaurantID) {
   const loadRestaurant = async () => {
     try {
       restaurant.value = await getRestaurantById(restaurantID);
-      console.log(restaurant.value);
+      console.log("Restaurant: ",restaurant.value);
+      console.log("City ID: ",restaurant.value.id);
       city.value = await fetchCityDetails(restaurant.value.address.city_id);
       images.value = restaurant.value.images;
     } catch (error) {

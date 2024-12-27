@@ -1,21 +1,48 @@
 <script>
 import MapComponent from './Map_Component.vue';
 import { ref, defineComponent } from 'vue';
-export default defineComponent ({
+import { getMapbyID } from '../../viewModels/mapViewModel.js';
+import { onMounted } from 'vue';
+
+export default defineComponent({
   components: {
     MapComponent
   },
-  setup() {
-    const location = ref([108.23970942970374, 16.0475275245935]);
+  props: {
+    destinationID: Number,
+    required: true,
+  },
+  setup(props) {
+    const selectedLocation = ref([]);
 
-    return { location };
+    const fetchLocations = async () => {
+      try {
+        console.log('Destination ID:', props.destinationID);
+        const locations = await getMapbyID(props.destinationID);
+        if (locations.length > 0) {
+          selectedLocation.value = [[locations[0].longitude, locations[0].latitude]];
+          selectedLocation.value = JSON.parse(JSON.stringify(selectedLocation.value));
+        }
+        console.log('Selected Location:', selectedLocation.value);
+        console.log('Selected Location to MapComponent:', selectedLocation.value);
+      } catch (error) {
+        console.error('Error fetching locations:', error);
+      }
+    };
+
+    onMounted(() => {
+      fetchLocations().then(() => {
+        console.log("Selected Location to MapComponent:", selectedLocation.value);
+      });
+    });
+
+    return { selectedLocation };
   }
 });
 </script>
+
 <template>
   <div>
-    <MapComponent :selectedLocations="[[108.22219989597711, 16.03931241040142], 
-                                      [108.23940902229407, 16.04757907839837],
-                                      [108.23887302128715, 16.04546624024942]]" />
+    <MapComponent :selectedLocations="selectedLocation" />
   </div>
 </template>

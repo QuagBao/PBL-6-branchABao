@@ -2,14 +2,14 @@
     <div class="header-container">
         <header_For_company/>
     </div>
-    <div class="frame-image">
-        <img class="img" :src="images && images[0] ? images[0].url : '/blue-image.jpg'" alt="">
-    </div>
     <div class="container-fluid frame-overall">
         <div class="container-fluid overall">
             <div class="container-fluid d-flex flex-column gap-5">
+                <div class="frame-image d-flex justify-content-center">
+                    <img class="img" :src="images && images[0] ? images[0].url : '/blue-image.jpg'" alt="">
+                </div>
                 <div class="frame-input">
-                    <div class="frame-tourName-City d-flex justify-content-around">
+                    <div class="frame-tourName-City d-flex justify-content-center align-items-center">
                         <!-- Tour Name -->
                         <div class="container-fluid">
                             <div class="custom form-floating mt-3">
@@ -69,30 +69,30 @@
                     <table class="table table-responsive table-striped">
                         <thead>
                             <tr>
-                                <th>Number</th>
+                                <th class="number">Number</th>
                                 <th>Photo</th>
                                 <th>Destination Name</th>
-                                <th>Type</th>
-                                <th>Rating</th>
-                                <th>Remove</th>
+                                <th class="type">Type</th>
+                                <th class="rating">Rating</th>
+                                <th class="remove">Remove</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="(destination, index) in paginatedList" :key="index">
-                                <td> {{ index + 1 + (currentPage - 1) * itemsPerPage }} </td>
+                                <td class="number"> {{ index + 1 + (currentPage - 1) * itemsPerPage }} </td>
                                 <td>
                                     <img class="img1" :src="destination.images[0]?.url || '/blue-image.jpg'" alt="">
                                 </td>
                                 <td>{{ destination.name }}</td>
-                                <td>{{ destination.hotel_id !== null && destination.restaurant_id === null 
+                                <td class="type">{{ destination.hotel_id !== null && destination.restaurant_id === null 
                                         ? "Hotel" 
                                         : destination.hotel_id === null && destination.restaurant_id !== null
                                         ? "Restaurant" : "Place" }}</td>
-                                <td>{{ destination.average_rating != null
+                                <td class="rating">{{ destination.average_rating != null
                                         ? Number(destination.average_rating).toFixed(1)
                                         : 0 }}
                                 </td>
-                                <td>
+                                <td class="remove">
                                     <button class="btn-delete"
                                             @click="removeDestination(destination.id)">
                                         <svg fill="currentColor" width="22px" height="22px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
@@ -141,7 +141,6 @@ export default {
 }
 </script>
 <script setup>
-// import TourViewModel from '@/components/viewModels/TourViewModel';
 import Business_Tour_ViewModel from '@/components/viewModels/Business_Tour_ViewModel';
 import { ref, computed, onMounted, watch } from 'vue';
 import { useRoute } from 'vue-router';
@@ -210,21 +209,21 @@ onMounted(async () => {
 }
 .frame-overall {
     display: grid;
-    grid-template-columns: 5% 90% 5%;
+    grid-template-columns: 10% 80% 10%;
 }
 .overall {
     grid-column: 2/3;
 }
 .img {
     border-radius: 10px;
-    min-width: 60vw;
+    aspect-ratio: 27/9;
     margin: 0 auto;
     height: 300px;
     object-fit: cover;
 }
 /* Drop Down */
 .dropdown-button{
-    min-width: 200px;
+    min-width: 150px;
     padding: 10px;
     border-radius: 30px;
     border: none;
@@ -301,6 +300,10 @@ onMounted(async () => {
 :deep(.table-striped>tbody>tr:nth-of-type(odd)>* ) {
     --bs-table-bg-type: rgba(202, 240, 248, 0.4);
 }
+:deep(.table) {
+    table-layout: fixed;
+    /* width: 100%; */
+}
 tbody {
     max-height: 200px ;
     width: 100%;
@@ -319,6 +322,10 @@ tr {
     text-align: center !important;
     border-color: rgba(19, 53, 123, 0.4) !important;
     font-size: 14px;
+}
+th.remove, td.remove, th.number, td.number, th.rating, td.rating, th.type, td.type {
+    width: 10%;
+    text-align: center;
 }
 td {
     color: #13357B !important;

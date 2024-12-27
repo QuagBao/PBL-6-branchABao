@@ -32,10 +32,12 @@
                                 </div>
                             </div>
                         </div>
-                        <Carousel class="custom" :currentImage="currentImage" :images="images"/>
+                        <Carousel class="custom" :currentImage="currentImage" :images="computedImages"/>
                         <div class="info-hotel">
                             <div class="contact d-flex flex-column gap-5">
-                                <div class="map"><p>Map</p></div>
+                                <div class="map">
+                                    <Map :destinationID = "hotel.id"/>
+                                </div>
                                 <div class="location-phone">
                                     <div class="frame location">
                                         <i class="icon-location"></i>
@@ -107,17 +109,17 @@
 </template>
 
 <script setup>
-  import { useRoute } from 'vue-router';
-  import { ref, onMounted, watch, nextTick } from 'vue';
-  import hotelViewModel from '../../viewModels/detailLocation_HotelViewModel.js';
-  import generateViewModel from '../../viewModels/generate_ratingViewModel';
+import { useRoute } from 'vue-router';
+import { ref, onMounted, watch, nextTick, computed } from 'vue';
+import hotelViewModel from '../../viewModels/detailLocation_HotelViewModel.js';
+import generateViewModel from '../../viewModels/generate_ratingViewModel';
 
-  // Lấy thông tin từ route
-  const route = useRoute();
-  const destinationID = route.params.id; // Lấy destinationID từ route params
+// Lấy thông tin từ route
+const route = useRoute();
+const destinationID = route.params.id; // Lấy destinationID từ route params
 
-  // Destructure các giá trị từ destinationViewModel
-  const {
+// Destructure các giá trị từ destinationViewModel
+const {
     commentList,
     images,
     currentImage,
@@ -131,26 +133,30 @@
     city,
     isLoading,
     user,
+    token,
     ratings,
     canReview,
-  } = hotelViewModel(destinationID);
+} = hotelViewModel(destinationID);
 
-  const {
+const {
     generateStars,
-  } = generateViewModel();
+} = generateViewModel();
 
-  const navigateToUpdateDestination = (id) => {
-  window.location.assign(`/Business/Destination/Update/${id}`);
+const navigateToUpdateDestination = (id) => {
+    window.location.assign(`/Business/Destination/Update/${id}`);
 };
 const navigateToUpdateHotel = (id) => {
-  window.location.assign(`/Business/Hotel/Update/${id}`);
+    window.location.assign(`/Business/Hotel/Update/${id}`);
 };
 
 const formatPrice = (value) => {
     return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
-  // Các hàm hoặc logic bổ sung có thể được thêm vào nếu cần
+const computedImages = computed(() => {
+    return images.value.length > 0 ? images.value : ['/blue-image.jpg'];
+});
+// Các hàm hoặc logic bổ sung có thể được thêm vào nếu cần
 </script>
 
 <script>
@@ -159,11 +165,12 @@ import Top_Button from '../Top_Button.vue';
 import Header from '../Header.vue';
 import Carousel from '../Carousel.vue';
 import Contribute from '../Contribute.vue';
+import Map from '../Map/Map.vue';
 export default {
     name: "Hotel",
     components: {
         Header, Scroll_Bar_Component, Top_Button, Carousel,
-        Contribute,
+        Contribute, Map
     }
 }
 
@@ -223,13 +230,9 @@ export default {
     margin-bottom: 50px;
 }
 .map{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 200px;
     border-radius: 15px;
-    background-color: #e1e5f2;
-    margin-bottom: 20px;
+    height: fit-content;
+    box-shadow: 0 2px 6px -1px rgba(19, 53, 123, .1), 0 6px 18px -1px rgba(19, 53, 123, .08) !important;
 }
 .frame{
     display: grid;

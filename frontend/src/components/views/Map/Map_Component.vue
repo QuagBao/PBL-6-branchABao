@@ -1,5 +1,8 @@
 <template>
     <div class="map-container">
+        <div v-if="!selectedLocations.length" class="loading-spinner">
+            <p class="p-4">Loading Map...</p>
+        </div>
         <div id="map"></div>
     </div>
 </template>
@@ -25,27 +28,41 @@ export default {
         };
     },
     mounted() {
-        this.initMap();
+        if (this.selectedLocations.length > 0) {
+            this.initMap();
+        } else {
+            this.$watch(
+                'selectedLocations',
+                (newLocations) => {
+                    if (newLocations.length > 0) {
+                        this.initMap();
+                    }
+                },
+                { immediate: true }
+            );
+        }
     },
     watch: {
         selectedLocations: {
             handler(newLocations) {
-                if (this.map) {
+                console.log('New Locations in MapComponent:', newLocations);
+                if (this.map && newLocations.length > 0) {
                     this.addMarkers(newLocations);
                 }
             },
-            immediate: true
+            immediate: true,
+            deep: true,
         }
     },
     methods: {
         initMap() {
-            const defaultCenter = this.selectedLocations[0];
+            const defaultCenter = this.selectedLocations[0] || [108.2434152, 16.0562963];
 
             this.map = new maplibregl.Map({
                 container: 'map',
                 style: `${this.mapUrl}goong_map_web.json?api_key=${this.mapKey}`,
-                center: defaultCenter, // Tâm bản đồ mặc định
-                zoom: this.zoom
+                center: defaultCenter,
+                zoom: this.zoom,
             });
 
             this.map.on('load', () => {

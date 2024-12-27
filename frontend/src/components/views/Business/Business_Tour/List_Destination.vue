@@ -10,29 +10,27 @@
                     <table class="table table-responsive table-striped">
                         <thead>
                             <tr>
-                                <th>Number</th>
+                                <th class="number">Number</th>
                                 <th>Photo</th>
                                 <th>Destination Name</th>
-                                <th>Type</th>
-                                <th>Rating</th>
-                                <th>Add</th>
+                                <th class="type">Type</th>
+                                <th class="rating">Rating</th>
+                                <th class="add">Add</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="(destination, index) in paginatedList" :key="index">
-                                <td> {{ index + 1 + (currentPage - 1) * itemsPerPage }} </td>
+                                <td class="number"> {{ index + 1 + (currentPage - 1) * itemsPerPage }} </td>
                                 <td>
                                     <img class="img1" :src="destination.images[0]?.url || '/blue-image.jpg'" alt="">
                                 </td>
                                 <td class="text-break">{{ destination.name }}</td>
-                                <td>{{ destination.hotel_id !== null && destination.restaurant_id === null 
+                                <td class="type">{{ destination.hotel_id !== null && destination.restaurant_id === null 
                                         ? "Hotel" 
                                         : destination.hotel_id === null && destination.restaurant_id !== null
                                         ? "Restaurant" : "Place" }}</td>
-                                <td>
-                                    {{ destination.rating }}
-                                </td>
-                                <td>
+                                <td class="rating">{{ destination.rating }}</td>
+                                <td class="add">
                                     <button class="btn-add"  @click="emit('add-destination', destination)">
                                         <svg fill="currentColor" width="22px" height="22px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                                             <path d="M416 208H272V64c0-17.7-14.3-32-32-32h-32c-17.7 0-32 14.3-32 32v144H32c-17.7 0-32 14.3-32 32v32c0 17.7 14.3 32 32 32h144v144c0 17.7 14.3 32 32 32h32c17.7 0 32-14.3 32-32V304h144c17.7 0 32-14.3 32-32v-32c0-17.7-14.3-32-32-32z"/>
@@ -91,9 +89,13 @@ const totalPages = computed(() => {
 });
 </script>
 
-<style>
+<style scoped>
 :deep(.table-striped>tbody>tr:nth-of-type(odd)>* ) {
     --bs-table-bg-type: rgba(202, 240, 248, 0.4);
+}
+:deep(.table) {
+    table-layout: fixed;
+    /* width: 100%; */
 }
 tbody {
     max-height: 200px ;
@@ -105,7 +107,7 @@ th {
     color: #EDF6F9 !important;
     background-color: #4AA4D9 !important;
     text-align: center; 
-    padding: .5rem 1.5rem;
+    /* padding: .5rem 1.5rem; */
     font-weight: 900 !important;
 }
 tr {
@@ -113,6 +115,10 @@ tr {
     text-align: center !important;
     border-color: rgba(19, 53, 123, 0.4) !important;
     font-size: 14px;
+}
+th.add, td.add, th.number, td.number, th.rating, td.rating, th.type, td.type {
+    width: 10%;
+    text-align: center !important;
 }
 td {
     color: #13357B !important;
