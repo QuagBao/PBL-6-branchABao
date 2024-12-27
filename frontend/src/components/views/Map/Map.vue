@@ -9,21 +9,25 @@ export default defineComponent({
     MapComponent
   },
   props: {
-    destinationID: Number,
+    destinationID: [Number, Array],
     required: true,
   },
   setup(props) {
     const selectedLocation = ref([]);
 
     const fetchLocations = async () => {
+      console.log('Destination ID:', props.destinationID);
+      const destListID = Array.isArray(props.destinationID) ? props.destinationID : [props.destinationID];
       try {
-        console.log('Destination ID:', props.destinationID);
-        const locations = await getMapbyID(props.destinationID);
-        if (locations.length > 0) {
-          selectedLocation.value = [[locations[0].longitude, locations[0].latitude]];
-          selectedLocation.value = JSON.parse(JSON.stringify(selectedLocation.value));
+        for (const destinationID of destListID) {
+          const location = await getMapbyID(destinationID);
+          console.log('Location:', location);
+          if (location &&  location ) {
+            selectedLocation.value.push([location[0].longitude, location[0].latitude]);
+          } else {
+            console.warn(`Invalid data for destination ID: ${destinationID}`);
+          }
         }
-        console.log('Selected Location:', selectedLocation.value);
         console.log('Selected Location to MapComponent:', selectedLocation.value);
       } catch (error) {
         console.error('Error fetching locations:', error);

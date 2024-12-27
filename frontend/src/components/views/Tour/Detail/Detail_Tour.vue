@@ -67,11 +67,10 @@
                         </div>
                         <div class="frame-tinerary">
                             <div class="frame-schedule">
-                                <Schedule :destinations="tour?.destinations"/>
+                                <Schedule :destinations="tour?.destinations"/>/
                             </div>
                             <div class="frame-map">
-                                <Map/>
-                                <!-- <Map_Component :selectedLocation="tour?.destinations"/> -->
+                                <Map v-if="destListID.length > 0" :destinationID="destListID" />
                             </div>
                         </div>
                         <div class="frame-contribute">
@@ -124,7 +123,7 @@ const reviews = ref([]);
 const user = ref(null);
 const token = ref(null);
 const totalPriceBottom = ref(0);
-
+const destListID = ref([]);
 
 const navigateToEditTour = (id) => {
     window.location.assign(`/Business/Tour/Update/${id}`);
@@ -134,6 +133,8 @@ onMounted(async () => {
     // Load data
     tour.value = await loadTourById(tourID);
     console.log('Tour:', tour.value.user_id);
+    destListID.value = tour.value.destinations.map(dest => dest.id);
+    console.log('Dest List:', destListID.value);
 
     cities.value = await loadCities();
     user_create.value = await loadUser(tour.value.user_id);
@@ -183,12 +184,11 @@ import About from './About.vue';
 import Schedule from './Schedule.vue';
 import Contribute from './Contribute.vue';
 import Map from '../../Map/Map.vue';
-import Map_Component from '../../Map/Map_Component.vue';
 export default {
     name: "Detail_Tour",
     components: {
         Header, Top_Button, Info_Card, About, Schedule, Contribute,
-        Map, Map_Component
+        Map
     }
 }
 </script>

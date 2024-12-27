@@ -43,13 +43,31 @@
                     <!-- Pagination -->
                     <div class="pagination-container d-flex justify-content-center align-items-center mt-3">
                         <button class="btn-pagination prev" :disabled="currentPage === 1" @click="currentPage--">Previous</button>
-                        <button 
-                            v-for="page in totalPages" 
-                            :key="page" 
-                            class="btn-pagination"
-                            :class="{ active: page === currentPage }"
-                            @click="currentPage = page">
+                        <!-- Trang đầu -->
+                        <button class="btn-pagination" 
+                                :class="{ active: currentPage === 1 }"
+                                @click="currentPage = 1">
+                            1
+                        </button>
+                        <!-- Dấu ... trước trang hiện tại -->
+                        <span class="dot" v-if="currentPage > 3">...</span>
+
+                        <button v-for="page in pagesToShow" 
+                                :key="page" 
+                                class="btn-pagination"
+                                :class="{ active: page === currentPage }"
+                                @click="currentPage = page">
                             {{ page }}
+                        </button>
+
+                        <!-- Dấu ... sau trang hiện tại -->
+                        <span class="dot" v-if="currentPage < totalPages - 2">...</span>
+
+                        <!-- Trang cuối -->
+                        <button class="btn-pagination" 
+                                :class="{ active: currentPage === totalPages }"
+                                @click="currentPage = totalPages">
+                            {{ totalPages }}
                         </button>
                         <button class="btn-pagination next" :disabled="currentPage === totalPages" @click="currentPage++">Next</button>
                     </div>
@@ -83,9 +101,19 @@ const paginatedList = computed(() => {
     return props.destList.slice(start, end);
 });
 
-// Total pages calculation
+// Tính tổng số trang
 const totalPages = computed(() => {
     return Math.ceil(props.destList.length / itemsPerPage);
+});
+
+// Tính danh sách các trang cần hiển thị
+const pagesToShow = computed(() => {
+    const pages = [];
+    // Hiển thị các trang từ currentPage - 2 đến currentPage + 2
+    for (let i = Math.max(2, currentPage.value - 1); i <= Math.min(totalPages.value - 1, currentPage.value + 1); i++) {
+        pages.push(i);
+    }
+    return pages;
 });
 </script>
 
@@ -174,5 +202,8 @@ tbody tr:hover td{
 .modal-title {
     color: #13357B;
     font-weight: 900;
+}
+.dot {
+    color: #13357B;
 }
 </style>

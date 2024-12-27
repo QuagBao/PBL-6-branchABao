@@ -60,7 +60,7 @@
                             
                         </td>
                         <td class="delete">
-                            <button class="btn-delete" @click="deleteTourByTourID(tour.id)">
+                            <button class="btn-delete" @click="navigateToDeleteTour(tour.id)">
                                 <svg fill="currentColor" width="22px" height="22px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
                                     <path d="M268 416h24a12 12 0 0 0 12-12V188a12 12 0 0 0 -12-12h-24a12 12 0 0 0 -12 12v216a12 12 0 0 0 12 12zM432 80h-82.4l-34-56.7A48 48 0 0 0 274.4 0H173.6a48 48 0 0 0 -41.2 23.3L98.4 80H16A16 16 0 0 0 0 96v16a16 16 0 0 0 16 16h16v336a48 48 0 0 0 48 48h288a48 48 0 0 0 48-48V128h16a16 16 0 0 0 16-16V96a16 16 0 0 0 -16-16zM171.8 50.9A6 6 0 0 1 177 48h94a6 6 0 0 1 5.2 2.9L293.6 80H154.4zM368 464H80V128h288zm-212-48h24a12 12 0 0 0 12-12V188a12 12 0 0 0 -12-12h-24a12 12 0 0 0 -12 12v216a12 12 0 0 0 12 12z"/>
                                 </svg>
@@ -73,13 +73,31 @@
             <!-- Pagination -->
             <div class="pagination-container d-flex justify-content-center align-items-center mt-3">
                 <button class="btn-pagination prev" :disabled="currentPage === 1" @click="currentPage--">Previous</button>
-                <button 
-                    v-for="page in totalPages" 
-                    :key="page" 
-                    class="btn-pagination"
-                    :class="{ active: page === currentPage }"
-                    @click="currentPage = page">
+                <!-- Trang đầu -->
+                <button class="btn-pagination" 
+                        :class="{ active: currentPage === 1 }"
+                        @click="currentPage = 1">
+                    1
+                </button>
+                <!-- Dấu ... trước trang hiện tại -->
+                <span class="dot" v-if="currentPage > 3">...</span>
+
+                <button v-for="page in pagesToShow" 
+                        :key="page" 
+                        class="btn-pagination"
+                        :class="{ active: page === currentPage }"
+                        @click="currentPage = page">
                     {{ page }}
+                </button>
+
+                <!-- Dấu ... sau trang hiện tại -->
+                <span class="dot" v-if="currentPage < totalPages - 2">...</span>
+
+                <!-- Trang cuối -->
+                <button class="btn-pagination" 
+                        :class="{ active: currentPage === totalPages }"
+                        @click="currentPage = totalPages">
+                    {{ totalPages }}
                 </button>
                 <button class="btn-pagination next" :disabled="currentPage === totalPages" @click="currentPage++">Next</button>
             </div>
@@ -116,9 +134,19 @@ const paginatedList = computed(() => {
     return tourList.value.slice(start, end);
 });
 
-// Total pages calculation
+// Tính tổng số trang
 const totalPages = computed(() => {
     return Math.ceil(tourList.value.length / itemsPerPage);
+});
+
+// Tính danh sách các trang cần hiển thị
+const pagesToShow = computed(() => {
+    const pages = [];
+    // Hiển thị các trang từ currentPage - 2 đến currentPage + 2
+    for (let i = Math.max(2, currentPage.value - 1); i <= Math.min(totalPages.value - 1, currentPage.value + 1); i++) {
+        pages.push(i);
+    }
+    return pages;
 });
 
 const navigateToDetailTour = (tour_id) => {
@@ -132,6 +160,11 @@ const navigateToEditTour = (tour_id) => {
 const navigateToAddTour = (tour_id) => {
   window.location.assign(`/Business/Tour/Add`);
 };
+
+const navigateToDeleteTour = (tour_id) => {
+    deleteTourByTourID(tour_id);
+    window.reload();
+}
 </script>
 
 
@@ -255,5 +288,8 @@ tbody tr:hover td{
 }
 .prev, .next {
     min-width: 85px;
+}
+.dot {
+    color: #13357B;
 }
 </style>

@@ -12,7 +12,7 @@
                     <!-- Main Context -->
                     <div class="container-fluid frame-main d-flex flex-column justify-content-center align-items-center gap-3">
                         <div class="frame-title">
-                            <h1>Update Destination</h1>
+                            <h1>Add New Destination</h1>
                         </div>
                         <div class="container-fluid frame-info">
                             <div class="frame-name dest-location d-flex justify-content-center ">
@@ -233,7 +233,6 @@ const {
 
 const handleCancel = () => {
     window.location.assign(`/business/destination`);
-    // window.location.reload();
 }
 
 onMounted(() => {
