@@ -25,7 +25,7 @@
                                         Update Place 
                                     </button>
                                     <button v-if="token && restaurant.user_id == user?.id" 
-                                            @click="navigateToUpdateHotel(restaurant.id)" 
+                                            @click="navigateToUpdateRestaurant(restaurant.id)" 
                                             class="write-review">
                                         Update Restaurant Detail 
                                     </button>

@@ -15,7 +15,6 @@ import { fetchDestinations,
 
  import { fetchCities as fetchCitiesAPI } from "../models/CityModel";
  import SignInModel from '../models/SignInModel';
- 
 
 export default function () {
     const toast = useToast();
@@ -93,7 +92,6 @@ export default function () {
           toast.error("Error fetching cities:", error);
         }
     };
-    
     const user = ref(null);
     const token = sessionStorage.getItem('access_token');
     const loadUser = async () => {
@@ -295,7 +293,33 @@ export default function () {
 
 
 const dropdownVisibleRegion = ref(false);
+
+const languages = [
+  'Korean',
+  'Japanese',
+  'English',
+  'Vietnamese',
+  'Thai',
+  'Chinese',
+  'French',
+];
+const dropdownVisibleLanguage = ref(false);
+const selectedLanguage = ref('');
 // Đóng mở dropdown
+const toggleDropDownLanguage = () => {
+  dropdownVisibleLanguage.value = !dropdownVisibleLanguage.value;
+}
+const selectLanguage = (language) => {
+  selectedLanguage.value = language;
+  destination.value.language = selectedLanguage.value;
+  console.log('Selected Language:', destination.value.language);
+  console.log('Selected Language 1:', selectedLanguage.value);
+  dropdownVisibleLanguage.value = false; // Đóng dropdown
+}
+const selectedLanguageName = computed(() => {
+  return selectedLanguage.value ? selectedLanguage.value : 'Select Language';
+});
+
 const toggleDropDownRegion = () => {
   dropdownVisibleRegion.value = !dropdownVisibleRegion.value;
 };
@@ -341,6 +365,12 @@ const selectedCityName = computed(() => {
         dropdownVisibleRegion,
         toggleDropDownRegion,
         selectCity,
-        selectedCityName
+        selectedCityName,
+        selectedLanguage,
+        dropdownVisibleLanguage,
+        toggleDropDownLanguage,
+        selectLanguage,
+        selectedLanguageName, 
+        languages,
     };
 }

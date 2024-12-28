@@ -85,6 +85,11 @@ const tourEditView = () => import('./components/views/Business/Business_Tour/Bus
 const tourAddView = () => import('./components/views/Business/Business_Tour/Business_Tour_Add.vue');
 const destUpdateView = () => import('./components/views/Business/Business_Destination/Edit_Destination.vue');
 const destAddView = () => import('./components/views/Business/Business_Destination/Add_Destination.vue');
+
+const restUpdateView = () => import('./components/views/Business/Business_Destination/Edit_Restaurant.vue');
+const restAddView = () => import('./components/views/Business/Business_Destination/Add_Restaurant.vue');
+const hotelUpdateView = () => import('./components/views/Business/Business_Destination/Edit_Hotel.vue');
+const hotelAddView = () => import('./components/views/Business/Business_Destination/Add_Hotel.vue');
 //Search
 const search = () => import('./components/views/Search/Search.vue');
 
@@ -163,18 +168,16 @@ const routes = [
   { path: '/Business/Destination/Add', name: 'destAddView', component: destAddView },
   { path: '/Business/Destination/Update/:id', name: 'destUpdateView', component: destUpdateView },
   
-  { path: '/Business/Hotel/Add/:id', name: 'AddHotel', component: addHotel },
-  { path: '/Business/Hotel/Update/:id', name: 'UpdateHotel', component: updateHotel },
-  { path: '/Business/Restaurant/Add/:id', name: 'AddRestaurant', component: addRestaurant },
-  { path: '/Business/Restaurant/Update/:id', name: 'UpdateRestaurant', component: updateRestaurant },
-  { path: '/Business/Restaurant/Update/:id', name: 'UpdateRestaurant', component: updateRestaurant },
+  { path: '/Business/Hotel/Add/:id', name: 'hotelAddView', component: hotelAddView },
+  { path: '/Business/Hotel/Update/:id', name: 'hotelUpdateView', component: hotelUpdateView },
+
+  { path: '/Business/Restaurant/Add/:id', name: 'restAddView', component: restAddView },
+  { path: '/Business/Restaurant/Update/:id', name: 'restUpdateView', component: restUpdateView },
+
   { path: '/Business/Destination', name: 'DestinationView', component: destinationView },
   { path: '/Business/Tour', name: 'tourView', component: tourView },
   { path: '/Business/Tour/Update/:id', name: 'tourEditView', component: tourEditView },
   { path: '/Business/Tour/Add', name: 'tourAddView', component: tourAddView },
-  
-  // { path: '/Business/Des/Add', name: 'destAddView', component: destAddView },
-  
   
   // Search
   { 
