@@ -26,7 +26,7 @@
           <label for="description">Description</label>
         </div>
         <div class="form-floating mb-3">
-          <input type="text" v-model="currentUser.userInfo.phone_number" class="form-control" id="phone" />
+          <input type="text" v-model="currentUser.userInfo.phone_number" placeholder=" " class="form-control" id="phone" />
           <label for="phone">Phone Number</label>
         </div>
 
@@ -65,15 +65,15 @@
           <label for="city">City</label>
         </div>
         <div class="form-floating mb-3">
-          <input type="text" v-model="currentUser.userInfo.address.district" class="form-control" id="district" />
+          <input type="text" v-model="currentUser.userInfo.address.district" placeholder=" " class="form-control" id="district" />
           <label for="district">District</label>
         </div>
         <div class="form-floating mb-3">
-          <input type="text" v-model="currentUser.userInfo.address.ward" class="form-control" id="ward" />
+          <input type="text" v-model="currentUser.userInfo.address.ward" placeholder=" " class="form-control" id="ward" />
           <label for="ward">Ward</label>
         </div>
         <div class="form-floating mb-3">
-          <input type="text" v-model="currentUser.userInfo.address.street" class="form-control" id="street" />
+          <input type="text" v-model="currentUser.userInfo.address.street" placeholder=" " class="form-control" id="street" />
           <label for="street">Street</label>
         </div>
 

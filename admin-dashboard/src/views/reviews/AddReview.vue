@@ -1,6 +1,5 @@
 <template>
   <div class="destination-management container">
-    <h2 class="text-center my-4 title-effect">Review Management</h2>
 
     <!-- Create Review Form -->
     <div class="form-container">
@@ -30,25 +29,25 @@
 
         <!-- Title -->
         <div class="form-floating mb-3">
-          <input type="text" v-model="review.title" class="form-control" id="title" />
+          <input type="text" v-model="review.title" placeholder=" " class="form-control" id="title" />
           <label for="title">Title</label>
         </div>
 
         <!-- Content -->
         <div class="form-floating mb-3">
-          <input type="text" v-model="review.content" class="form-control" id="content" />
+          <input type="text" v-model="review.content" placeholder=" " class="form-control" id="content" />
           <label for="content">Content</label>
         </div>
 
         <!-- Rating -->
         <div class="form-floating mb-3">
-          <input type="number" v-model="review.rating" class="form-control" id="rating" />
+          <input type="number" v-model="review.rating" placeholder=" " class="form-control" id="rating" />
           <label for="rating">Rating</label>
         </div>
 
         <!-- Date Create -->
         <div class="form-floating mb-3">
-          <input type="date" v-model="review.date_create" class="form-control" id="dateCreate" />
+          <input type="date" v-model="review.date_create" placeholder=" " class="form-control" id="dateCreate" />
           <label for="dateCreate">Date Create</label>
         </div>
 
@@ -64,8 +63,12 @@
 
         <!-- Language -->
         <div class="form-floating mb-3">
-          <input type="text" v-model="review.language" class="form-control" id="language" />
-          <label for="language">Language</label>
+          <select v-model="review.language" class="form-select" id="companion">
+            <option v-for="language in languages" :key="language" :value="language">
+              {{ language }}
+            </option>
+          </select>
+          <label for="lamguage">Language</label>
         </div>
 
         <!-- Images Section -->
@@ -75,7 +78,9 @@
           <div class="image-list">
             <div v-for="(img, index) in previewImages" :key="index" class="image-item position-relative">
               <img :src="img" alt="Image Preview" class="img-thumbnail" />
-              <button @click.prevent="removeImage(index)" class="btn btn-danger position-absolute top-0 end-0" style="z-index: 10;">&times;</button>
+              <button type="button" @click.prevent="removeImage(index)" class="btn btn-danger btn-sm position-absolute top-0 end-0 translate-middle rounded-circle" style="z-index: 1; width: 30px; height: 30px; padding: 0; font-size: 18px; line-height: 20px; background-color: rgba(255, 0, 0, 0.7);">
+                  -
+                </button>
             </div>
           </div>
         </div>
@@ -111,6 +116,15 @@ const destinationID = route.params.id;
     { value: 'Company', label: 'Company' },
     { value: 'Other', label: 'Other' },
   ];
+  const languages = [
+  'Korean',
+  'Japanese',
+  'English',
+  'Vietnamese',
+  'Thai',
+  'Chinese',
+  'French',
+];
   
   const {
     fetchCities,

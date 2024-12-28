@@ -74,6 +74,14 @@ const loadTags = async () => {
 
 onMounted(loadTags);
 
+const showCreateForm = () => {
+  window.location.href = "/tags/create";
+};
+
+const showUpdateForm = async (tagID) => {
+  window.location.href = `/tags/update/${tagID}`;
+};
+
 const showDetail = async (tagID) => {
   window.location.href = `/tags/${tagID}`;
 };
