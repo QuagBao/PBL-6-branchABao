@@ -24,7 +24,8 @@ export default {
             mapUrl: 'https://tiles.goong.io/assets/',
             apiKey: 'ArPlUISaEBAdJFTABi9dcNGcue8WQ4cOAuGcNoBE',
             mapKey: 'tLyW2vk0aY3yfQLu8ZPy986mAgaW8igMYufv3BLY',
-            zoom: 16 // Độ zoom mặc định
+            zoom: 16, // Độ zoom mặc định
+            routes: []
         };
     },
     mounted() {
@@ -57,6 +58,7 @@ export default {
                 } else if (this.map && newLocations.length > 0) {    
                     console.log('Adding markers to existing map');
                     this.addMarkers(newLocations);
+                    this.drawLineBetweenPoints(newLocations);
                 }
             },
             immediate: true,
@@ -78,9 +80,11 @@ export default {
                 if (this.selectedLocations.length > 0) {
                     console.log('Selected Locations in MapComponent(child):', this.selectedLocations);
                     this.addMarkers(this.selectedLocations);
+                    this.drawLineBetweenPoints(this.selectedLocations);
                 }
             });
         },
+        // Hàm tạo marker có đánh số thứ tự
         addMarkers(locations) {
             const features = locations.map((location, index) => ({
                 type: 'Feature',
@@ -153,13 +157,112 @@ export default {
                 }
             });
         },
+        // Hàm nối các điểm trên map
+        drawLineBetweenPoints(locations) {
+            if (locations.length >= 2) {
+                for (let i = 0; i < locations.length - 1; i++) {
+                    const startCoords = locations[i];
+                    const endCoords = locations[i + 1];
+                    this.fetchRoute(startCoords, endCoords);
+                }
+                console.log('Vẽ tuyến đường.');
+            } else {
+                console.warn('Không đủ tọa độ để vẽ tuyến đường.');
+            }
+        },
+        // Hàm lấy route
+        fetchRoute(startCoords, endCoords) {
+            const apiLink = `${this.apiUrl}/direction?origin=${startCoords[1]},${startCoords[0]}&destination=${endCoords[1]},${endCoords[0]}&vehicle=car&api_key=${this.apiKey}`;
+            fetch(apiLink)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.routes && data.routes.length > 0) {
+                        const route = data.routes[0].overview_polyline.points; // Tuyến đường mã hóa
+                        const decodedRoute = this.decodePolyline(route); // Giải mã tuyến đường
+                        console.log('Decoded route:', decodedRoute);
+                        this.displayRoute(decodedRoute); // Hiển thị tuyến đường
+                    } else {
+                        console.error('Không tìm thấy tuyến đường phù hợp.');
+                    }
+                })
+                .catch(error => console.error('Lỗi khi lấy tuyến đường:', error));
+        },
+        // Hàm giải mã route
+        decodePolyline(encoded) {
+            let points = [];
+            let index = 0, len = encoded.length;
+            let lat = 0, lng = 0;
+
+            while (index < len) {
+                let b, shift = 0, result = 0;
+                do {
+                    b = encoded.charCodeAt(index++) - 63;
+                    result |= (b & 0x1f) << shift;
+                    shift += 5;
+                } while (b >= 0x20);
+                let dlat = (result & 1) ? ~(result >> 1) : (result >> 1);
+                lat += dlat;
+
+                shift = 0;
+                result = 0;
+                do {
+                    b = encoded.charCodeAt(index++) - 63;
+                    result |= (b & 0x1f) << shift;
+                    shift += 5;
+                } while (b >= 0x20);
+                let dlng = (result & 1) ? ~(result >> 1) : (result >> 1);
+                lng += dlng;
+
+                points.push([lng * 1e-5, lat * 1e-5]);
+            }
+            console.log("Points",points);
+            return points;
+        },
+        // Hàm hiển thị route
+        displayRoute(route) {
+            this.routes.push(route);
+            const allRoutes = {
+                type: 'FeatureCollection',
+                features: this.routes.map(route => ({
+                    type: 'Feature',
+                    geometry: {
+                        type: 'LineString',
+                        coordinates: route
+                    }
+                }))
+            };
+
+            // Cập nhật hoặc thêm mới source
+            if (this.map.getSource('routes')) {
+                this.map.getSource('routes').setData(allRoutes);
+            } else {
+                this.map.addSource('routes', {
+                    type: 'geojson',
+                    data: allRoutes
+                });
+
+                this.map.addLayer({
+                    id: 'routes',
+                    type: 'line',
+                    source: 'routes',
+                    layout: {
+                        'line-join': 'round',
+                        'line-cap': 'round'
+                    },
+                    paint: {
+                        'line-color': '#13357B',
+                        'line-width': 6
+                    }
+                });
+            }
+        },
         removeLayer(layerId) {
             if (this.map.getLayer(layerId) && layerId.startsWith('marker-layer-')) {
                 this.map.removeLayer(layerId);
                 console.log(`Layer ${layerId} removed successfully`);
             }
         },
-        rremoveSource(sourceId) {
+        removeSource(sourceId) {
             if (this.map.getSource(sourceId)) {
                 const layersUsingSource = this.map.getStyle().layers.filter(
                     (layer) => layer.source === sourceId
