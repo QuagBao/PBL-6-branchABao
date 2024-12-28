@@ -1,8 +1,6 @@
 <template>
   <div class="destination-management">
-    <h2>Destination Management</h2>
     <div class="form-container">
-      <h3>Update Restaurant</h3>
       <form @submit.prevent="submitUpdateRestaurant" class="form-style">
         <div class="form-floating mb-4">
           <input type="text" class="form-control" id="cuisine" v-model="currentDestination.restaurant.cuisine" placeholder=" " required />
