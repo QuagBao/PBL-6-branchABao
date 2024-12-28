@@ -1,45 +1,44 @@
 <template>
-    <div class="city-management">
-      <h2>City Management</h2>
-      <div class="form-container">
-        <h3>Create City</h3>
-        <form @submit.prevent="submitAddCity" class="form-style">
-          <div class="form-group">
-            <label>City Name:</label>
-            <input type="text" v-model="city.name" required />
-          </div>
-          <div class="form-group">
-            <label>Description:</label>
-            <input type="text" v-model="city.description" required />
-          </div>
-          <div class="form-group">
-            <label>Images:</label>
-            <input type="file" @change="handleImageUpload" multiple />
-            <div class="image-list">
-              <div
-                v-for="(img, index) in previewImages"
-                :key="index"
-                class="image-item"
-              >
-                <img :src="img" alt="Image Preview" />
-                <button @click.prevent="removeImage(index)">-</button>
-              </div>
+  <div class="city-management container">
+    <div class="form-container">
+      <form @submit.prevent="submitAddCity" class="form-style">
+        <!-- City Name -->
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="cityName" v-model="city.name" required placeholder=" " />
+          <label for="cityName">City Name</label>
+        </div>
+
+        <!-- Description -->
+        <div class="form-floating mb-3">
+          <input type="text" class="form-control" id="cityDescription" v-model="city.description" required placeholder=" " />
+          <label for="cityDescription">Description</label>
+        </div>
+
+        <!-- Images -->
+        <div class="mb-3">
+          <label for="cityImages" class="form-label">Images:</label>
+          <input type="file" id="cityImages" class="form-control" @change="handleImageUpload" multiple />
+          <div class="image-list mt-2">
+            <div v-for="(img, index) in previewImages" :key="index" class="image-item d-inline-block me-2 position-relative" style="max-width: 150px; max-height: 150px;">
+              <img :src="img" alt="Image Preview" class="img-fluid w-100 h-100 object-fit-cover" />
+              <!-- Delete button -->
+              <button type="button" @click.prevent="removeImage(index)" class="btn btn-danger btn-sm position-absolute top-0 end-0 translate-middle rounded-circle" style="z-index: 1; width: 30px; height: 30px; padding: 0; font-size: 18px; line-height: 20px; background-color: rgba(255, 0, 0, 0.7);">
+                -
+              </button>
             </div>
           </div>
-          <div class="button-group">
-            <button type="submit" class="action-button add-button">Create</button>
-            <button
-              type="button"
-              @click="cancelAction"
-              class="action-button delete-button"
-            >
-              Cancel
-            </button>
-          </div>
-        </form>
-      </div>
+        </div>
+
+        <!-- Submit and Cancel Buttons -->
+        <div class="d-flex justify-content-between">
+          <button type="submit" class="btn btn-success">Create</button>
+          <button type="button" @click="cancelAction" class="btn btn-danger">Cancel</button>
+        </div>
+      </form>
     </div>
-  </template>
+  </div>
+</template>
+
   
   <script setup>
   import CityManagementController from "@/controllers/CityManagementController";
@@ -87,248 +86,38 @@
   
   
   <style scoped>
-  /* Reset CSS */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
-  }
-  
-  body {
-    background-color: #ffffff; /* White background */
-    color: #333333; /* Black text */
-    line-height: 1.6;
-  }
-  
   .city-management {
-    padding: 20px;
-  }
-  
-  h2 {
-    margin-bottom: 20px;
-    font-size: 24px;
-    color: #333333;
-    text-align: center;
-  }
-  
-  /* Table Styling */
-  .table-container {
-    overflow-x: auto;
-  }
-  
-  .city-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-    border: 1px solid #ddd; /* Light border */
-  }
-  
-  .city-table th,
-  .city-table td {
-    padding: 12px;
-    text-align: left;
-    border-bottom: 1px solid #ddd; /* Light border between rows */
-  }
-  
-  .city-table th {
-    background-color: #f8f8f8; /* Light gray header */
-    color: #333333;
-    font-weight: bold;
-  }
-  
-  .city-table tr:nth-child(even) {
-    background-color: #f9f9f9; /* Alternate row colors */
-  }
-  
-  .city-table tr:nth-child(odd) {
-    background-color: #ffffff; /* Alternate row colors */
-  }
-  
-  .city-table tr:hover {
-    background-color: #f1f1f1; /* Row hover effect */
-  }
-  
-  /* Button Styling */
-  button {
-    padding: 8px 12px;
-    font-size: 14px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-  }
-  
-  button:hover {
-    background-color: #333333;
-    color: #ffffff;
-  }
-  
-  .action-button {
-    padding: 8px 12px;
-    margin: 0 5px;
-    border-radius: 5px;
-    color: #ffffff;
-    font-weight: bold;
-    transition: background-color 0.3s, transform 0.2s;
-    margin: 10px;
-  }
-  
-  .edit-button {
-    background-color: #1877f2;
-    color: #ffffff;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  
-  .add-button {
-    background-color: #28a745;
-    color: #ffffff;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  
-  .delete-button {
-    background-color: #dc3545;
-    color: #ffffff;
-    border: none;
-    padding: 8px 12px;
-    border-radius: 4px;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-  }
-  
-  .edit-button:hover,
-  .add-button:hover,
-  .delete-button:hover {
-    transform: scale(1.1); /* Phóng to 1.1 lần */
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Tạo hiệu ứng nổi */
-  }
-  
-  .button-group {
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end;
-  }
-  
-  body {
-    background-color: #f9f9f9; /* Light background for entire page */
-    color: #333333; /* Dark text for contrast */
-    line-height: 1.6;
-  }
-  
-  .form-container {
-    max-width: 500px; /* Restrict width for better responsiveness */
-    margin: 40px auto; /* Center form */
-    padding: 20px 30px; /* Comfortable padding */
-    background-color: #ffffff; /* White background */
-    border-radius: 8px; /* Smooth rounded corners */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-  }
-  
-  /* Form Group Styling */
-  .form-group {
-    margin-bottom: 20px;
-  }
-  
-  .form-group label {
-    display: block;
-    font-size: 14px;
-    color: #4a4a4a; /* Dark gray for labels */
-    margin-bottom: 6px; /* Space between label and input */
-    font-weight: 600;
-  }
-  
-  /* Input and Textarea Styling */
-  input,
-  textarea {
-    width: 100%; /* Full width */
-    padding: 12px 14px; /* Comfortable padding */
-    font-size: 14px; /* Readable font size */
-    border: 1px solid #d1d5db; /* Light border */
-    border-radius: 6px; /* Rounded corners */
-    background-color: #f7f8fa; /* Slightly lighter background */
-    color: #333333;
-    outline: none;
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
-  }
-  
-  input::placeholder,
-  textarea::placeholder {
-    color: #9ca3af; /* Light gray for placeholders */
-  }
-  
-  input:focus,
-  textarea:focus {
-    border-color: #1877f2; /* Blue border on focus */
-    box-shadow: 0 0 3px rgba(24, 119, 242, 0.5); /* Subtle glow */
-  }
-  
-  .pagination {
-    margin-top: 20px;
-    display: flex;
-    justify-content: center;
-    gap: 10px;
-  }
-  
-  .pagination button {
-    padding: 5px 10px;
-    background-color: #007bff;
-    border: none;
-    color: white;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-  
-  .pagination button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-  
-  .pagination span {
-    font-weight: bold;
-  }
-  
-  /* Hình ảnh */
-  .image-list {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-  }
-  
-  .image-item {
-    position: relative;
-    width: 100px;
-    height: 100px;
-  }
-  
-  .image-item img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border: 1px solid #e5e7eb;
-    border-radius: 6px;
-  }
-  
-  .image-item button {
-    position: absolute;
-    top: 5px;
-    right: 5px;
-    background: #dc3545;
-    color: #ffffff;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    padding: 5px;
-    font-size: 12px;
-    transition: transform 0.2s;
-  }
-  
-  .image-item button:hover {
-    transform: scale(1.1);
-  }
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.form-container {
+  padding: 20px;
+}
+
+h2, h3 {
+  text-align: center;
+  color: #333;
+}
+
+.form-floating label {
+  transition: all 0.3s ease;
+}
+
+.form-floating input:focus + label,
+.form-floating input:not(:placeholder-shown) + label {
+  transform: translateY(-1.5rem);
+  font-size: 0.8rem;
+  color: #0b31f0;
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+}
   </style>
   

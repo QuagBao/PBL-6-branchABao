@@ -1,123 +1,112 @@
 <template>
-  <div class="destination-management">
-    <h2>Destination Management</h2>
+  <div class="destination-management container">
+    <h2 class="title">Destination Management</h2>
     <div class="form-container">
-      <h3>Update Destination Info</h3>
+      <h3>Update Destination</h3>
       <form @submit.prevent="submitUpdateDestination" class="form-style">
-        <div class="form-group">
-          <label>ID:</label>
-          <input type="text" v-model="currentDestination.id" disabled />
+        <!-- Basic Information -->
+        <div class="form-floating mb-4">
+          <input type="text" v-model="currentDestination.name" id="destination-name" class="form-control" required placeholder=" " />
+          <label for="destination-name">Destination Name</label>
         </div>
-        <div class="form-group">
-          <label>Destination Name:</label>
-          <input type="text" v-model="currentDestination.name" required />
-        </div>
-        <div class="form-group">
-          <label>User create:</label>
-          <select v-model="currentDestination.user_id" class="form-control">
+        <div class="form-floating mb-4">
+          <select v-model="currentDestination.user_id" id="user-select" class="form-select">
             <option v-for="user in users" :key="user.id" :value="user.id">
               {{ user.username }}
             </option>
           </select>
+          <label for="user-select">User Create</label>
         </div>
-        <div class="form-group">
-          <label>Description:</label>
-          <input type="text" v-model="currentDestination.description" />
+        <div class="form-floating mb-4">
+          <input type="text" v-model="currentDestination.description" id="destination-description" class="form-control" placeholder=" " />
+          <label for="destination-description">Description</label>
         </div>
+
         <!-- Toggleable Additional Information -->
-        <button type="button" class="toggle-button" @click="toggleMoreInfo">
-          More Information <span>{{ isMoreInfoVisible ? '▲' : '▼' }}</span>
+        <button type="button" class="btn btn-link" @click="toggleMoreInfo">
+          <span>{{ isMoreInfoVisible ? '▲' : '▼' }}</span> More Information
         </button>
+
         <div v-if="isMoreInfoVisible" class="additional-info">
-          <div class="form-group">
-            <label>Price bottom:</label>
-            <input type="number" v-model="currentDestination.price_bottom" />
+          <div class="form-floating mb-4">
+            <input type="number" v-model="currentDestination.price_bottom" id="price-bottom" class="form-control" placeholder=" " />
+            <label for="price-bottom">Price Bottom</label>
           </div>
-          <div class="form-group">
-            <label>Price top:</label>
-            <input type="number" v-model="currentDestination.price_top" />
+          <div class="form-floating mb-4">
+            <input type="number" v-model="currentDestination.price_top" id="price-top" class="form-control" placeholder=" " />
+            <label for="price-top">Price Top</label>
           </div>
-          <div class="form-group">
-            <label>Age:</label>
-            <input type="number" v-model="currentDestination.age" />
+          <div class="form-floating mb-4">
+            <input type="number" v-model="currentDestination.age" id="age" class="form-control" placeholder=" " />
+            <label for="age">Age</label>
           </div>
-          <div class="form-group">
-            <label>Open time:</label>
-            <input type="time" v-model="currentDestination.opentime" />
+          <div class="form-floating mb-4">
+            <input type="time" v-model="currentDestination.opentime" id="opentime" class="form-control" placeholder=" " />
+            <label for="opentime">Open Time</label>
           </div>
-          <div class="form-group">
-            <label>Duration:</label>
-            <input type="number" v-model="currentDestination.duration" />
+          <div class="form-floating mb-4">
+            <input type="number" v-model="currentDestination.duration" id="duration" class="form-control" placeholder=" " />
+            <label for="duration">Duration</label>
           </div>
-          <div class="form-group">
-            <label>Date Create:</label>
-            <input type="date" v-model="currentDestination.date_create" />
+          <div class="form-floating mb-4">
+            <input type="date" v-model="currentDestination.date_create" id="date-create" class="form-control" placeholder=" " />
+            <label for="date-create">Date Created</label>
           </div>
-          <div class="form-group" v-if="currentDestination && currentDestination.address">
-            <label>City:</label>
-            <select
-              v-model="currentDestination.address.city_id"
-              class="form-control"
-            >
+          <div class="form-floating mb-4">
+            <select v-model="currentDestination.address.city_id" id="city-select" class="form-select">
               <option v-for="city in cities" :key="city.id" :value="city.id">
                 {{ city.name }}
               </option>
             </select>
+            <label for="city-select">City</label>
           </div>
+          <div class="form-floating mb-4">
+            <input type="text" v-model="currentDestination.address.district" id="district" class="form-control" placeholder=" " />
+            <label for="district">District</label>
+          </div>
+          <div class="form-floating mb-4">
+            <input type="text" v-model="currentDestination.address.ward" id="ward" class="form-control" placeholder=" " />
+            <label for="ward">Ward</label>
+          </div>
+          <div class="form-floating mb-4">
+            <input type="text" v-model="currentDestination.address.street" id="street" class="form-control" placeholder=" " />
+            <label for="street">Street</label>
+          </div>
+
+          <!-- Images Section -->
           <div class="form-group">
-            <label>District:</label>
-            <input type="text" v-model="currentDestination.address.district" />
-          </div>
-          <div class="form-group">
-            <label>Ward:</label>
-            <input type="text" v-model="currentDestination.address.ward" />
-          </div>
-          <div class="form-group">
-            <label>Street:</label>
-            <input type="text" v-model="currentDestination.address.street" />
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Current Images:</label>
-          <div class="image-list">
-            <div
-              v-for="img in currentDestination.images"
-              :key="img.id"
-              class="image-item"
-            >
-              <img :src="img.url" alt="Existing Image" />
-              <button @click.prevent="removeExistingImage(img.id)">-</button>
+            <label>Current Images:</label>
+            <div class="image-list mt-2">
+              <div v-for="img in currentDestination.images" :key="img.id" class="image-item d-inline-block me-2 position-relative" style="max-width: 150px; max-height: 150px;">
+                <img :src="img.url" alt="Existing Image" class="img-fluid w-100 h-100 object-fit-cover" />
+                <button @click.prevent="removeExistingImage(img.id)" class="btn btn-danger btn-sm position-absolute top-0 end-0 translate-middle rounded-circle" style="z-index: 1; width: 30px; height: 30px; padding: 0; font-size: 18px; line-height: 20px; background-color: rgba(255, 0, 0, 0.7);">
+                  -
+                </button>
+              </div>
+            </div>
+            <label>Upload New Images:</label>
+            <input type="file" @change="handleNewImageUpload" multiple class="form-control" />
+            <div class="image-list mt-2">
+              <div v-for="(img, index) in previewNewImages" :key="index" class="image-item d-inline-block me-2 position-relative" style="max-width: 150px; max-height: 150px;">
+                <img :src="img" alt="Image Preview" class="img-fluid w-100 h-100 object-fit-cover" />
+                <button @click.prevent="removeNewImage(index)" class="btn btn-danger btn-sm position-absolute top-0 end-0 translate-middle rounded-circle" style="z-index: 1; width: 30px; height: 30px; padding: 0; font-size: 18px; line-height: 20px; background-color: rgba(255, 0, 0, 0.7);">
+                  -
+                </button>
+              </div>
             </div>
           </div>
-          <label>Upload New Images:</label>
-          <input type="file" @change="handleNewImageUpload" multiple />
-          <div class="image-list">
-            <div
-              v-for="(img, index) in previewNewImages"
-              :key="index"
-              class="image-item"
-            >
-              <img :src="img" alt="Image Preview" />
-              <button @click.prevent="removeNewImage(index)">-</button>
-            </div>
-          </div>
         </div>
-        <div class="button-group">
-          <button type="submit" class="action-button edit-button">
-            Update
-          </button>
-          <button
-            type="button"
-            @click="cancelAction"
-            class="action-button delete-button"
-          >
-            Cancel
-          </button>
+
+        <!-- Action Buttons -->
+        <div class="d-flex justify-content-between">
+          <button type="submit" class="btn btn-success">Update</button>
+          <button type="button" @click="cancelAction" class="btn btn-danger">Cancel</button>
         </div>
       </form>
     </div>
   </div>
 </template>
+
 
 <script setup>
 import { ref, onMounted } from 'vue';
@@ -243,265 +232,165 @@ const cancelAction = () => {
   
   
 <style scoped>
-* {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
 .destination-management {
+  max-width: 900px;
+  margin: 0 auto;
   padding: 20px;
-  min-height: 90vh;
-  background-color: #ffffff;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  text-align: center;
   color: #333;
-}
-
-h2 {
-font-size: 24px;
-color: #2c3e50;
-text-align: center;
-margin-bottom: 20px;
-}
-
-/* Form */
-.form-container {
-  width: 100%;
-  max-width: 600px;
-  margin: 20px auto;
-  padding: 20px;
-  background-color: #ffffff;
-  border: 1px solid #e5e7eb;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-h3 {
-font-size: 20px;
-margin-bottom: 15px;
-color: #34495e;
-}
-
-.form-style {
-display: flex;
-flex-direction: column;
-gap: 15px;
-}
-
-.form-group {
-display: flex;
-flex-direction: column;
-gap: 5px;
-}
-
-label {
-font-size: 14px;
-color: #555;
-}
-
-input,
-select,
-textarea {
-  width: 100%;
-  padding: 10px;
-  font-size: 14px;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  background-color: #f9fafb;
-  color: #333;
-  outline: none;
-  transition: border-color 0.2s ease;
-}
-
-input:focus,
-select:focus,
-textarea:focus {
-  border-color: #1877f2;
-  box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
-}
-
-button:hover {
-  filter: brightness(0.9);
-}
-
-input:focus, select:focus {
-outline: none;
-border-color: #0078d7;
-box-shadow: 0 0 5px rgba(0, 120, 215, 0.5);
-}
-
-.toggle-button {
-background: none;
-border: none;
-color: #0078d7;
-cursor: pointer;
-font-size: 14px;
-margin-bottom: 10px;
-}
-
-.toggle-button:hover {
-text-decoration: underline;
-}
-
-.additional-info {
-margin-top: 10px;
-border-top: 1px solid #ddd;
-padding-top: 10px;
-}
-
-.image-list {
-display: flex;
-gap: 10px;
-}
-
-.image-item img {
-width: 50px;
-height: 50px;
-object-fit: cover;
-border-radius: 5px;
-border: 1px solid #ddd;
-}
-
-.image-item button {
-background: #e74c3c;
-color: white;
-border: none;
-padding: 5px;
-border-radius: 50%;
-cursor: pointer;
-font-size: 10px;
-position: relative;
-top: -5px;
-left: -5px;
-}
-
-.image-item button:hover {
-background: #c0392b;
-}
-
-/* CSS cho các action button */
-.action-buttons {
-  display: flex;
-  justify-content: flex-end; /* Đẩy các nút về phía phải */
-  gap: 10px; /* Khoảng cách giữa các nút */
-  margin-top: 10px; /* Tạo khoảng cách giữa nút và phần phía trên */
-}
-
-.action-buttons button {
-  background-color: transparent;
-  border: 1px solid #007bff; /* Màu viền cho nút */
-  color: #007bff; /* Màu chữ cho nút */
-  padding: 10px 20px;
-  font-size: 14px;
-  border-radius: 5px; /* Bo tròn góc cho nút */
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-}
-
-.action-buttons button i {
-  margin-right: 5px; /* Khoảng cách giữa icon và chữ */
-}
-
-.action-buttons button:hover {
-  background-color: #007bff;
-  color: #fff; /* Màu chữ khi hover */
-}
-
-/* Căn nút ở góc phải trong phần Hotel Information và Restaurant Information */
-.detail-card .action-buttons,
-.info-card .action-buttons {
-  position: absolute; /* Vị trí tuyệt đối so với phần tử cha */
-  right: 0;
-  top: 10px;
-  display: flex;
-  gap: 10px;
-}
-
-/* Điều chỉnh nút khi không có dữ liệu */
-.no-data .action-buttons {
-  justify-content: flex-end;
-}
-
-button {
-  padding: 8px 12px;
-  font-size: 14px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-}
-
-button:hover {
-  background-color: #333333;
-  color: #ffffff;
-}
-
-/* Nút hành động */
-.action-button {
-  padding: 8px 12px;
-  margin: 0 5px;
-  border-radius: 6px;
-  font-size: 14px;
-  font-weight: 500;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-  margin: 10px;
+  font-size: 2rem;
+  margin-bottom: 20px;
   font-weight: 700;
 }
 
-.action-button:hover {
-  filter: brightness(0.9);
+.form-container {
+  padding: 20px;
 }
 
-.edit-button {
-  background-color: #1877f2;
-  color: #ffffff;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+h3 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  font-weight: 700;
 }
 
-.add-button {
-  background-color: #28a745;
-  color: #ffffff;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+.form-floating {
+  position: relative;
 }
 
-.delete-button {
-  background-color: #ec870b;
-  color: #ffffff;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+.form-floating input, 
+.form-floating select {
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  padding: 10px;
+  width: 100%;
+  font-size: 1rem;
 }
 
-.view-button {
-  background-color: #0fb6e0;
-  color: #ffffff;
-  border: none;
-  padding: 8px 12px;
-  border-radius: 4px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
+.form-floating label {
+  position: absolute;
+  top: 50%;
+  left: 10px;
+  transform: translateY(-50%);
+  font-size: 1rem;
+  color: #6c757d;
+  pointer-events: none;
+  transition: all 0.3s ease;
 }
 
-.edit-button:hover,
-.add-button:hover,
-.delete-button:hover,
-.view-button:hover {
-  transform: scale(1.1); /* Phóng to 1.1 lần */
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Tạo hiệu ứng nổi */
+.form-floating input:focus + label,
+.form-floating input:not(:placeholder-shown) + label,
+.form-floating select:focus + label,
+.form-floating select:not(:placeholder-shown) + label {
+  top: 0;
+  font-size: 0.75rem;
+  transform: translateY(-45%);
+  color: #022e5a;
 }
 
-.button-group {
+.form-control {
+  padding: 10px;
+  margin: 5px 0;
+  font-size: 1rem;
+}
+
+.form-select {
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 1rem;
+  margin-top: 5px;
+}
+
+.additional-info {
+  margin-top: 20px;
+}
+
+.btn-link {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.image-list {
   display: flex;
   gap: 10px;
-  justify-content: flex-end;
+  margin-top: 10px;
+}
+
+.image-item {
+  position: relative;
+}
+
+.image-item img {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.image-item button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: rgba(255, 0, 0, 0.7);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 5px;
+  cursor: pointer;
+}
+
+.btn {
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.btn {
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  transition: background-color 0.3s ease;
+  width: 48%; /* Mỗi nút chiếm 48% chiều rộng */
+}
+
+.btn-create {
+  background-color: #240def;
+  color: white;
+}
+
+.btn-create:hover {
+  background-color: #150280;
+}
+
+.btn-cancel {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-cancel:hover {
+  background-color: #c82333;
+}
+.additional-info {
+  margin-top: 20px;
+  background-color: #f0f0f0;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+button[type="button"].btn-link {
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+button[type="button"].btn-link:hover {
+  text-decoration: underline;
 }
 </style>
   

@@ -6,6 +6,8 @@ import Toast from "vue-toastification";
 import "vue-toastification/dist/index.css";
 import "@fortawesome/fontawesome-free/css/all.css";
 import VueApexCharts from 'vue3-apexcharts';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap';
 
 const app = createApp(App);
 
