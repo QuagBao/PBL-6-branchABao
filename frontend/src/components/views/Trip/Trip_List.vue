@@ -22,7 +22,7 @@
             v-for="trip in trips"
                 :key="trip.id"
                 :trip="trip"
-                @click="navigateToDetailTrip(trip.id)"
+                
             />
         </div>
     </div>
@@ -31,7 +31,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import TripViewModel from '../../viewModels/TripViewModel';
-const { fetchTripByUser } = TripViewModel();
+const { fetchTripByUser, deleteTripById } = TripViewModel();
 const trips = ref([]);
 onMounted(async () => {
     trips.value = await fetchTripByUser();

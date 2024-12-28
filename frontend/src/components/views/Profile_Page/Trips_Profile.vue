@@ -18,7 +18,6 @@
             v-for="trip in trips"
                 :key="trip.id"
                 :trip="trip"
-                @click="navigateToDetailTrip(trip.id)"
             />
         </div>
     </div>
