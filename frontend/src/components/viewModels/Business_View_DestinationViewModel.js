@@ -1,8 +1,8 @@
 import { onMounted, ref } from 'vue';
-import { fetchDestinationsByUser } from '../models/destinationModel';
+import { fetchDestinationsByUser,  deleteDestination as deleteDestinationAPI, } from '../models/destinationModel';
 import { fetchCities as fetchCitiesAPI } from "../models/CityModel";
 import SignInModel from '../models/SignInModel';
-
+import { useToast } from 'vue-toastification';
 export default function() {
     const isLoading = ref(false);
     const places = ref([]);
@@ -13,6 +13,7 @@ export default function() {
     const hotels = ref([]);
     const restaurants = ref([]);
     const cities = ref([]);
+    const toast = useToast();
 
     const loadDestinations = async () => {
         try {
@@ -22,7 +23,6 @@ export default function() {
                 if (userResult.success) {
                     user.value = userResult.user;
                     places.value = await fetchDestinationsByUser(user.value.id);
-                    places.reverse();
                     console.log("Places:", places.value);
                     destinations.value = places.value.filter(destination => destination.hotel_id === null && destination.restaurant_id === null);
                     hotels.value = places.value.filter(destination => destination.hotel_id !== null);
@@ -48,6 +48,21 @@ export default function() {
         }
     };
 
+    const deleteDestination = async (destinationID) => {
+        try {
+            const result = await deleteDestinationAPI(destinationID);
+            console.log("Delete result:", destinationID);
+        if (result.success) {
+            toast.success("Deleted", destinationID)
+            toast.success("Delete destination successfully");
+        } else {
+            toast.error("Delete destination failed");
+        }
+        } catch (error) {
+            toast.error("Error deleting destination:", error);
+        }
+    };
+
     onMounted( async() => {
         await loadDestinations();
         await getCities();
@@ -59,6 +74,7 @@ export default function() {
         restaurants,
         places, 
         getCities,
-        cities
+        cities, 
+        deleteDestination
     }
 }

@@ -119,6 +119,7 @@ const filterCategory = (category) => {
 }
 .dropdown-menu {
     background: #CAF0F8;
+    z-index: 99999;
 }
 .nav-item .dropdown-menu {
     display: block;

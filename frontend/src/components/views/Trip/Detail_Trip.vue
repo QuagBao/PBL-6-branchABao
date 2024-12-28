@@ -35,11 +35,19 @@
                         </div>
                         <div>
                             <Tag_Trip @change-tab="handleTabChange"/>
-                            <component :is="currentComponent" :trip="trip"></component>
+                            <component :is="currentComponent" :trip="trip" ref="itineraryList"
+                                @update-dest-list-id="handleDestListIDUpdate"></component>
                         </div>
                     </div>
-                    <div class="container-fluid map">
-                        <Map/>
+                    <div class="container-fluid frame-map">
+                        <!-- Hiển thị Map ứng với tab Itinerary_List -->
+                        <div v-if="currentComponent === 'Itinerary_List' && destListID.length > 0">
+                            <p class="p-1">Map For Itinerary</p>
+                            <Map :destinationID="destListID" />
+                        </div>
+                        <div v-else>
+                            <p class="p-1">Itinerary Map Unavailable</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -73,7 +81,8 @@ export default {
     data() {
         return {
             viewModel: new DetailTripViewModel(), //quản lý tag_trip
-            currentComponent: 'Saved_List'
+            currentComponent: 'Saved_List',
+            destListID: [], 
         }
     },  
     methods: {
@@ -83,6 +92,19 @@ export default {
             this.currentComponent = this.viewModel.getCurrentComponent(); // Cập nhật component hiển thị
             console.log('Current Component:', this.currentComponent);
         },
+        handleDestListIDUpdate(destListID) {
+            this.destListID = destListID;
+            console.log('Received destListID from child:', this.destListID);
+        },
+    },
+    mounted() {
+        // Gửi yêu cầu tới tất cả các component con để đảm bảo nhận dữ liệu
+        this.$nextTick(() => {
+            const itineraryComponent = this.$refs.itineraryList;
+            if (itineraryComponent && itineraryComponent.sendDestListID) {
+                itineraryComponent.sendDestListID();
+            }
+        });
     },
 }
 </script>
@@ -102,10 +124,7 @@ export default {
     gap: .5%;
 }
 .frame-image {
-    width: 65vw;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+    width: fit-content;
 }
 .image {
     height: 500px;
@@ -170,14 +189,13 @@ export default {
 }
 .frame-map {
     border-radius: 15px;
-    background-color: #EDF6F9;
     color: #13357B;
     border-radius: 20px;
     padding: 10px;
     height: fit-content;
-    box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);    
-    font-size: 50px;
-    position: sticky;
-    top: 170px;
+    font-size: 40px;
+}
+.p-1 {
+    font-weight: 900;
 }
 </style>

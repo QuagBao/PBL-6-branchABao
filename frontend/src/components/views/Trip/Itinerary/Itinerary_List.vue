@@ -10,8 +10,8 @@
         <button class="day nav-link" v-if="day_0.length > 0" @click="filterDay(8)">Place to stay</button>
     </div>
     <div class="frame-list d-flex flex-column gap-5" v-if="day_1.length > 0">
-        <div class="item-days d-flex flex-column gap-3" v-if="day_1.length > 0">
-            <div class="title">
+        <div id="day-1" class="item-days d-flex flex-column gap-3" v-if="day_1.length > 0">
+            <div class="title" @click="toggleDay(1)">
                 <h2>Day 1</h2>
                 <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" @click="toggleDay(1)">
                     <path :d="visibleDays[1] ? 'M5 15L12 9L19 15' : 'M19 9L12 15L5 9'" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -26,8 +26,8 @@
                 />
             </div>
         </div>
-        <div class="item-days d-flex flex-column gap-3" v-if="day_2.length > 0">
-            <div class="title">
+        <div id="day-2" class="item-days d-flex flex-column gap-3" v-if="day_2.length > 0">
+            <div class="title" @click="toggleDay(2)">
                 <h2>Day 2</h2>
                 <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" @click="toggleDay(2)">
                     <path :d="visibleDays[2] ? 'M5 15L12 9L19 15' : 'M19 9L12 15L5 9'" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -42,8 +42,8 @@
                 />
             </div>
         </div>
-        <div class="item-days d-flex flex-column gap-3" v-if="day_3.length > 0">
-            <div class="title">
+        <div id="day-3" class="item-days d-flex flex-column gap-3" v-if="day_3.length > 0">
+            <div class="title" @click="toggleDay(3)">
                 <h2>Day 3</h2>
                 <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" @click="toggleDay(3)">
                     <path :d="visibleDays[3] ? 'M5 15L12 9L19 15' : 'M19 9L12 15L5 9'" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -58,8 +58,8 @@
                 />
             </div>
         </div>
-        <div class="item-days d-flex flex-column gap-3" v-if="day_4.length > 0">
-            <div class="title">
+        <div id="day-4" class="item-days d-flex flex-column gap-3" v-if="day_4.length > 0">
+            <div class="title" @click="toggleDay(4)">
                 <h2>Day 4</h2>
                 <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" @click="toggleDay(4)">
                     <path :d="visibleDays[4] ? 'M5 15L12 9L19 15' : 'M19 9L12 15L5 9'" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -74,8 +74,8 @@
                 />
             </div>
         </div>
-        <div class="item-days d-flex flex-column gap-3" v-if="day_5.length > 0">
-            <div class="title">
+        <div id="day-5" class="item-days d-flex flex-column gap-3" v-if="day_5.length > 0">
+            <div class="title" @click="toggleDay(5)">
                 <h2>Day 5</h2>
                 <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" @click="toggleDay(5)">
                     <path :d="visibleDays[5] ? 'M5 15L12 9L19 15' : 'M19 9L12 15L5 9'" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -90,8 +90,8 @@
                 />
             </div>
         </div>
-        <div class="item-days d-flex flex-column gap-3" v-if="day_6.length > 0">
-            <div class="title">
+        <div id="day-6" class="item-days d-flex flex-column gap-3" v-if="day_6.length > 0">
+            <div class="title" @click="toggleDay(6)">
                 <h2>Day 6</h2>
                 <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" @click="toggleDay(6)">
                     <path :d="visibleDays[6] ? 'M5 15L12 9L19 15' : 'M19 9L12 15L5 9'" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -106,8 +106,8 @@
                 />
             </div>
         </div>
-        <div class="item-days d-flex flex-column gap-3" v-if="day_7.length > 0">
-            <div class="title">
+        <div id="day-7" class="item-days d-flex flex-column gap-3" v-if="day_7.length > 0">
+            <div class="title"@click="toggleDay(7)">
                 <h2>Day 7</h2>
                 <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" @click="toggleDay(7)">
                     <path :d="visibleDays[7] ? 'M5 15L12 9L19 15' : 'M19 9L12 15L5 9'" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -122,8 +122,8 @@
                 />
             </div>
         </div>
-        <div class="item-days d-flex flex-column gap-3" v-if="day_0.length > 0">
-            <div class="title">
+        <div id="day-8" class="item-days d-flex flex-column gap-3" v-if="day_0.length > 0">
+            <div class="title" @click="toggleDay(8)">
                 <h2>Place to stay</h2>
                 <svg width="40px" height="40px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" @click="toggleDay(8)">
                     <path :d="visibleDays[8] ? 'M5 15L12 9L19 15' : 'M19 9L12 15L5 9'" stroke="#13357B" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -146,7 +146,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted } from 'vue';
 import Itinerary_Item from './Itinerary_Item.vue';
 
 const props = defineProps({
@@ -162,6 +162,14 @@ const day_5 = ref([]);
 const day_6 = ref([]);
 const day_7 = ref([]);
 
+//Định nghĩa emit sự kiện và tính toán destListID
+const emit = defineEmits(['update-dest-list-id']);
+const destListID = computed(() => props.trip.destinations.map(destination => destination.id));
+// Gửi dl khi tính toán xong
+onMounted(() => {
+    emit('update-dest-list-id', destListID.value);
+});
+
 const visibleDays = ref({1: true, 2: true, 3: true, 4: true, 5: true, 6: true, 7: true, 8: true});
 
 const toggleDay = (day) => {
@@ -170,15 +178,15 @@ const toggleDay = (day) => {
 
 const filterDay = (day) => {
     // Set all days to false
-    for (let key in visibleDays.value) {
-        visibleDays.value[key] = false;
+    const element = document.getElementById(`day-${day}`);
+    if (element) {
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
-    // Set the selected day to true
-    visibleDays.value[day] = true;
 }
 
 const sortDestinations = () => {
     if (props.trip && props.trip.destinations) {
+        console.log('props.trip.destinations:', destListID.value);
         props.trip.destinations.forEach(destination => {
             switch (destination.day) {
                 case 0:
@@ -240,15 +248,15 @@ const navigateToDetailHotel = (hotel_id) => window.location.assign(`/Detail/Hote
 <style scoped>
 .frame-day{
     display: flex;
-    gap: 27.5px;    
+    gap: 10px;    
     padding: 20px 0;
     border-bottom: 1px solid #13357B;
     margin-bottom: 20px;
 }
 .day {
-    min-width: 95px;
+    width: fit-content;
     color: #13357B; 
-    padding: 5px 10px;
+    padding: 5px 18px;
     background-color: #CAF0F8;   
     border-radius: 25px; 
 }

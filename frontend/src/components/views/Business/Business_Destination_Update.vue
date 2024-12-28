@@ -191,7 +191,7 @@
   
   
     
-  <style>
+  <style scoped>
   :root {
     --default-font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
       Ubuntu, "Helvetica Neue", Helvetica, Arial, "PingFang SC",
