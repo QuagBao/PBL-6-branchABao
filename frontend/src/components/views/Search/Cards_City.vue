@@ -9,9 +9,6 @@
       <div class="description">
         <p>{{ description }}</p>
       </div>
-      <div class="heart">
-        <btn_heart class="custom" />
-      </div>
     </div>
   </template>  
   <script>
@@ -54,6 +51,7 @@
 }
 .img-location {
   width: 100%;
+  height: 200px;
   object-fit: cover;
   border-radius: 15px;
 }

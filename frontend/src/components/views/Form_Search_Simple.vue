@@ -3,13 +3,29 @@
     <div class="container-fluid search">
         <div class="container-fluid position-relative">
             <!-- Input search -->
-            <input class="form-control" type="text" :placeholder="name" v-model="searchQuery">
+            <input 
+                class="form-control" 
+                type="text" 
+                :placeholder="name" 
+                v-model="searchQuery"
+                @keyup.enter="performSearch" 
+            />
             
             <!-- Nút Search -->
-            <button type="button" class="btn btn-primary" @click="performSearch">Search</button>
+            <button 
+                type="button" 
+                class="btn btn-primary" 
+                @click="performSearch"
+            >
+                Search
+            </button>
             
             <!-- Danh sách kết quả -->
-            <div v-if="results.length" class="search-results" :class="{'show': results.length > 0}">
+            <div 
+                v-if="results && results.length" 
+                class="search-results" 
+                :class="{'show': results.length > 0}"
+            >
                 <ul>
                     <li 
                         v-for="(result, index) in results" 
@@ -25,25 +41,34 @@
   </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import useLiveSearch from '../viewModels/LiveSearchViewModel.js';
 
+// Trạng thái tìm kiếm
 const searchQuery = ref('');
-const { search, isLoading, results } = useLiveSearch(searchQuery);
+const { search, results } = useLiveSearch(searchQuery);
+
+// Theo dõi sự thay đổi query để cập nhật kết quả
+watch(searchQuery, (newQuery) => {
+    if (newQuery.trim()) {
+        search(newQuery);
+    }
+});
 
 // Hàm thực hiện tìm kiếm
-const performSearch = (query = null) => {
-  const queryToSearch = query || searchQuery.value;
+const performSearch = () => {
+  const queryToSearch = searchQuery.value.trim(); // Lấy query từ v-model
   if (queryToSearch) {
-      window.location.assign(`/search?q=${queryToSearch}`);
+    window.location.href = `/search?q=${encodeURIComponent(queryToSearch)}`;
   } else {
-      alert('Please enter a search query.');
+    alert('Please enter a search query.');
   }
 };
 
-// Hàm xử lý khi chọn một kết quả
+// Hàm xử lý khi chọn một kết quả từ danh sách
 const selectResult = (result) => {
-  performSearch(result);
+    searchQuery.value = result; // Cập nhật query
+    performSearch(); // Thực hiện tìm kiếm
 };
 </script>
 
