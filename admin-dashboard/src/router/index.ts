@@ -82,7 +82,7 @@ const routes = [
     component: () => import("@/views/destinations/UpdateHotel.vue"),
   },
   {
-    path: "/destinations/restaurant/add/:id",
+    path: "/destinations/restaurant/create/:id",
     name: "DestinationManagement-AddRestaurant",
     component: () => import("@/views/destinations/AddRestaurant.vue"),
   },
