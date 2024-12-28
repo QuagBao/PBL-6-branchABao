@@ -5,6 +5,7 @@
                 <h1>Name your trip</h1>
                 <h5>Organize your saves and create a itinerary trip by AI</h5>
             </div>
+            
 
             <div class="container frame-name">
                 <div class="container-fluid">
@@ -15,6 +16,11 @@
                                class="itinerary-input form-control" />
                     </form>
                 </div>
+            </div>
+
+            <div id="loading-indicator" style="display: none; text-align: center; padding: 10px; color:blue; font-weight: 700;">
+                <div class="spinner"></div>
+                <span>Loading...</span>
             </div>
 
             <div class="container-fluid frame-button px-5">
@@ -132,5 +138,21 @@ const {
 button:hover {
     background-color: #13357B;
     color: #EDF6F9
+}
+
+/* Spinner Effect */
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(19, 53, 123, 0.2);
+    border-top: 4px solid #13357B;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin: 10px auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
 }
 </style>

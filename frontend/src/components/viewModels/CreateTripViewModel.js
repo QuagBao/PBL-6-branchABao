@@ -169,44 +169,18 @@ const selectAll = (newvalue) => {
     const router = useRouter();
   
     const finishItinerary = async () => {
-      tripStore.setName(itineraryName.value);
-      await loadUser();
-      tripStore.setUserId(user.value.id);
-      console.log('All Data:', tripStore.getAllInformation());
-      // const tour = {
-      //   name: tripStore.name,
-      //   description: tripStore.description,
-      //   user_id: tripStore.userId,
-      //   city_id: tripStore.cityId,
-      //   destination_ids: tripStore.listDestination,
-      // }
-      // await addTour(tour);
+      try{
+        const loadingIndicator = document.getElementById('loading-indicator');
+        if (loadingIndicator) loadingIndicator.style.display = 'block';
+        tripStore.setName(itineraryName.value);
+        await loadUser();
+        tripStore.setUserId(user.value.id);
+        console.log('All Data:', tripStore.getAllInformation());
 
-      const result =  await addTrip(tripStore.name, tripStore.selectedMonth, tripStore.selectedLength, tripStore.userId, tripStore.listPlace);
-      if(result.success){
-        toast.success('Your trip has been created successfully');
-        const tripId = result.data.id;
-        router.push({ 
-          name: 'Page_7', 
-          params: { id: tripId } // Chỉ cần truyền params
-        });
-      } else {
-        toast.error('An error occurred while creating your trip');
-      }
-
-    }
-
-    const finishItineraryAI = async () => {
-      tripStore.setName(itineraryName.value);
-      await loadUser();
-      tripStore.setUserId(user.value.id);
-      console.log('All Data:', tripStore.getAllInformation());
-      if(tripStore.listRestaurant.length >= tripStore.selectedLength){
-        const result =  await addTripByAi(tripStore.name, tripStore.selectedMonth, tripStore.selectedLength, tripStore.userId, tripStore.listDestination, tripStore.listHotel, tripStore.listRestaurant);
-        //const result =  await addTripByAi(tripStore.name, tripStore.selectedMonth, tripStore.selectedLength, tripStore.userId, [2253 ,1800], [3,4,5], [128 , 1919 ,1909]);
+        const result =  await addTrip(tripStore.name, tripStore.selectedMonth, tripStore.selectedLength, tripStore.userId, tripStore.listPlace);
         if(result.success){
           toast.success('Your trip has been created successfully');
-          const tripId = result.data;
+          const tripId = result.data.id;
           router.push({ 
             name: 'Page_7', 
             params: { id: tripId } // Chỉ cần truyền params
@@ -214,13 +188,61 @@ const selectAll = (newvalue) => {
         } else {
           toast.error('An error occurred while creating your trip');
         }
-      } else {
-        toast.error('Please select enough restaurants for your trip');
+      } catch (error) {
+        console.error('Error:', error);
+        toast.error('An unexpected error occurred');
+      } finally {
+        // Tắt trạng thái loading sau khi xử lý xong
+        const loadingIndicator = document.getElementById('loading-indicator');
+        if (loadingIndicator) loadingIndicator.style.display = 'none';
       }
-
-      
-
     }
+
+    const finishItineraryAI = async () => {
+      try {
+        // Hiển thị trạng thái loading
+        const loadingIndicator = document.getElementById('loading-indicator');
+        if (loadingIndicator) loadingIndicator.style.display = 'block';
+    
+        // Bắt đầu xử lý logic
+        tripStore.setName(itineraryName.value);
+        await loadUser();
+        tripStore.setUserId(user.value.id);
+        console.log('All Data:', tripStore.getAllInformation());
+    
+        if (tripStore.listRestaurant.length >= tripStore.selectedLength) {
+          const result = await addTripByAi(
+            tripStore.name,
+            tripStore.selectedMonth,
+            tripStore.selectedLength,
+            tripStore.userId,
+            tripStore.listDestination,
+            tripStore.listHotel,
+            tripStore.listRestaurant
+          );
+    
+          if (result.success) {
+            toast.success('Your trip has been created successfully');
+            const tripId = result.data;
+            router.push({ 
+              name: 'Page_7', 
+              params: { id: tripId } // Chỉ cần truyền params
+            });
+          } else {
+            toast.error('An error occurred while creating your trip');
+          }
+        } else {
+          toast.error('Please select enough restaurants for your trip');
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        toast.error('An unexpected error occurred');
+      } finally {
+        // Tắt trạng thái loading sau khi xử lý xong
+        const loadingIndicator = document.getElementById('loading-indicator');
+        if (loadingIndicator) loadingIndicator.style.display = 'none';
+      }
+    };
 
 
     

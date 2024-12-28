@@ -224,12 +224,10 @@ const navigateToDetailPlace = (id) => {
     color: #13357B !important;
 }
 .button-category:hover {
-    background-color: #0077b6;
-    color: #EDF6F9 
+    background-color: #CAF0F8;
 }     
 .button-category.selected {
-    background-color: #13357B;
-    color: #EDF6F9;
+    background-color: #48cae4;
 }
 .content {
     margin-bottom: 30px;

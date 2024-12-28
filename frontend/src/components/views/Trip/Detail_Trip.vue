@@ -35,16 +35,18 @@
                         </div>
                         <div>
                             <Tag_Trip @change-tab="handleTabChange"/>
-                            <component :is="currentComponent" :trip="trip" @update-dest-list-id="handleDestListIDUpdate"></component>
+                            <component :is="currentComponent" :trip="trip" ref="itineraryList"
+                                @update-dest-list-id="handleDestListIDUpdate"></component>
                         </div>
                     </div>
                     <div class="container-fluid frame-map">
-                        <div v-if="destListID.length > 0" class="loading-spinner">
+                        <!-- Hiển thị Map ứng với tab Itinerary_List -->
+                        <div v-if="currentComponent === 'Itinerary_List' && destListID.length > 0">
                             <p class="p-1">Map For Itinerary</p>
+                            <Map :destinationID="destListID" />
                         </div>
-                        <Map v-if="destListID.length > 0" :destinationID="destListID" />
-                        <div v-if="destListID.length == 0" class="loading-spinner">
-                            <p class="p-1">No Information</p>
+                        <div v-else>
+                            <p class="p-1">Itinerary Map Unavailable</p>
                         </div>
                     </div>
                 </div>
@@ -81,7 +83,6 @@ export default {
             viewModel: new DetailTripViewModel(), //quản lý tag_trip
             currentComponent: 'Saved_List',
             destListID: [], 
-            savedListID: []
         }
     },  
     methods: {
@@ -95,10 +96,15 @@ export default {
             this.destListID = destListID;
             console.log('Received destListID from child:', this.destListID);
         },
-        handleSavedListIDUpdate(savedListID) {
-            this.savedListID = savedListID;
-            console.log('Received savedListID from child:', this.savedListID);
-        },
+    },
+    mounted() {
+        // Gửi yêu cầu tới tất cả các component con để đảm bảo nhận dữ liệu
+        this.$nextTick(() => {
+            const itineraryComponent = this.$refs.itineraryList;
+            if (itineraryComponent && itineraryComponent.sendDestListID) {
+                itineraryComponent.sendDestListID();
+            }
+        });
     },
 }
 </script>
@@ -118,10 +124,7 @@ export default {
     gap: .5%;
 }
 .frame-image {
-    /* width: 65vw; */
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
+    width: fit-content;
 }
 .image {
     height: 500px;
