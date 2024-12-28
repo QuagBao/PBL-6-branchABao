@@ -14,6 +14,8 @@ export default class TagViewModel {
             new URL('@/assets/svg/tags/mountain.svg', import.meta.url).href,
             new URL('@/assets/svg/tags/general.svg', import.meta.url).href,
             new URL('@/assets/svg/tags/hotel.svg', import.meta.url).href,
+            new URL('@/assets/svg/tags/food-drink.svg', import.meta.url).href,
+            new URL('@/assets/svg/tags/hotel.svg', import.meta.url).href,
         ];
     }
 

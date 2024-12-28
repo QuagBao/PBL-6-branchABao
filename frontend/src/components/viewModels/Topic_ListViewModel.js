@@ -17,7 +17,7 @@ export default function (topicName) {
   const setTopicId = () => {
     switch (topicName) {
       case 'culture': topicId.value = 2; break;
-      case 'great-food': topicId.value = 1; break;
+      case 'great-food': topicId.value = 13; break;
       case 'must-see-attraction': topicId.value = 5; break;
       case 'shopping': topicId.value = 9; break;
       default: topicId.value = 11; break;
