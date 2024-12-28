@@ -35,11 +35,17 @@
                         </div>
                         <div>
                             <Tag_Trip @change-tab="handleTabChange"/>
-                            <component :is="currentComponent" :trip="trip"></component>
+                            <component :is="currentComponent" :trip="trip" @update-dest-list-id="handleDestListIDUpdate"></component>
                         </div>
                     </div>
-                    <div class="container-fluid map">
-                        <Map/>
+                    <div class="container-fluid frame-map">
+                        <div v-if="destListID.length > 0" class="loading-spinner">
+                            <p class="p-1">Map For Itinerary</p>
+                        </div>
+                        <Map v-if="destListID.length > 0" :destinationID="destListID" />
+                        <div v-if="destListID.length == 0" class="loading-spinner">
+                            <p class="p-1">No Information</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -73,7 +79,9 @@ export default {
     data() {
         return {
             viewModel: new DetailTripViewModel(), //quản lý tag_trip
-            currentComponent: 'Saved_List'
+            currentComponent: 'Saved_List',
+            destListID: [], 
+            savedListID: []
         }
     },  
     methods: {
@@ -82,6 +90,14 @@ export default {
             this.viewModel.changeTab(tabName); // Thay đổi tab mà không duyệt danh sách
             this.currentComponent = this.viewModel.getCurrentComponent(); // Cập nhật component hiển thị
             console.log('Current Component:', this.currentComponent);
+        },
+        handleDestListIDUpdate(destListID) {
+            this.destListID = destListID;
+            console.log('Received destListID from child:', this.destListID);
+        },
+        handleSavedListIDUpdate(savedListID) {
+            this.savedListID = savedListID;
+            console.log('Received savedListID from child:', this.savedListID);
         },
     },
 }
@@ -102,7 +118,7 @@ export default {
     gap: .5%;
 }
 .frame-image {
-    width: 65vw;
+    /* width: 65vw; */
     display: flex;
     flex-direction: column;
     gap: 20px;
@@ -170,14 +186,13 @@ export default {
 }
 .frame-map {
     border-radius: 15px;
-    background-color: #EDF6F9;
     color: #13357B;
     border-radius: 20px;
     padding: 10px;
     height: fit-content;
-    box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);    
-    font-size: 50px;
-    position: sticky;
-    top: 170px;
+    font-size: 40px;
+}
+.p-1 {
+    font-weight: 900;
 }
 </style>

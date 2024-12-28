@@ -162,6 +162,12 @@ const day_5 = ref([]);
 const day_6 = ref([]);
 const day_7 = ref([]);
 
+//Định nghĩa emit sự kiện và tính toán destListID
+const emit = defineEmits(['update-dest-list-id']);
+const destListID = computed(() => props.trip.destinations.map(destination => destination.id));
+// Gửi dl khi tính toán xong
+emit('update-dest-list-id', destListID.value);
+
 const visibleDays = ref({1: true, 2: true, 3: true, 4: true, 5: true, 6: true, 7: true, 8: true});
 
 const toggleDay = (day) => {
@@ -170,6 +176,7 @@ const toggleDay = (day) => {
 
 const sortDestinations = () => {
     if (props.trip && props.trip.destinations) {
+        console.log('props.trip.destinations:', destListID.value);
         props.trip.destinations.forEach(destination => {
             switch (destination.day) {
                 case 0:

@@ -89,6 +89,12 @@ const props = defineProps({
   trip: Object
 })
 
+//Định nghĩa emit sự kiện và tính toán destListID
+const emit = defineEmits(['update-saved-list-id']);
+const listIDSaved = computed(() => props.trip?.destinations.map(destination => destination.id));
+// Gửi dl khi tính toán xong
+emit('update-saved-list-id', listIDSaved.value);
+
 const thingtodos = computed(() => props.trip?.destinations.filter(d => !d.restaurant_id && !d.hotel_id) || [])
 const hotels = computed(() => props.trip?.destinations.filter(d => !d.restaurant_id && d.hotel_id) || [])
 const restaurants = computed(() => props.trip?.destinations.filter(d => d.restaurant_id) || [])
