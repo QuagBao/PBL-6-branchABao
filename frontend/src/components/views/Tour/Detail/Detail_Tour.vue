@@ -67,7 +67,7 @@
                         </div>
                         <div class="frame-tinerary">
                             <div class="frame-schedule">
-                                <Schedule :destinations="tour?.destinations"/>/
+                                <Schedule :destinations="tour?.destinations"/>
                             </div>
                             <div class="frame-map">
                                 <Map v-if="destListID.length > 0" :destinationID="destListID" />
