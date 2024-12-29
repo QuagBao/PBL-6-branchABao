@@ -76,8 +76,6 @@ export async function getTrip() {
         month_time: trip.month_time,
         duration: trip.duration,
         user_id: trip.user_id,
-        isAI: trip.city_id,
-        trip_destinations: trip.trip_destinations,
       }));
     } catch (error) {
       console.error("Error fetching trip:", error);
@@ -98,8 +96,6 @@ export async function getTrip() {
         month_time: trip.month_time,
         duration: trip.duration,
         user_id: trip.user_id,
-        isAI: trip.city_id,
-        trip_destinations: trip.trip_destinations,
       }));
     } catch (error) {
       console.error("Error fetching trip:", error);
