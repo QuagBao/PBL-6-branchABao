@@ -12,19 +12,18 @@
                         <div class="frame-selection">
                             <div class="frame-select-location">
                                 <h5>Location</h5>
-                                <button 
-                                    class="dropdown-button" 
-                                    :class="{ 'active': dropdownVisibleRegion }" 
+                                <button class="dropdown-button" :class="{ 'active': dropdownVisibleRegion }"
                                     @click="toggleDropDownRegion">
                                     {{ selectedCityName }}
                                     <span class="arrow" :class="{ 'up': dropdownVisibleRegion }">
-                                        <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <svg width="30px" height="30px" viewBox="0 0 24 24" fill="none"
+                                            xmlns="http://www.w3.org/2000/svg">
                                             <path d="M19 9L14 14.1599C13.7429 14.4323 13.4329 
                                             14.6493 13.089 14.7976C12.7451 14.9459 12.3745 15.0225 
                                             12 15.0225C11.6255 15.0225 11.2549 14.9459 10.9109 
-                                            14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9" 
-                                            stroke="#currentColor" stroke-width="1.5" stroke-linecap="round" 
-                                            stroke-linejoin="round" />
+                                            14.7976C10.567 14.6493 10.2571 14.4323 10 14.1599L5 9"
+                                                stroke="#currentColor" stroke-width="1.5" stroke-linecap="round"
+                                                stroke-linejoin="round" />
                                         </svg>
                                     </span>
                                 </button>
@@ -35,10 +34,7 @@
                                         Việt Nam
                                     </button>
                                     <!-- Tùy chọn các thành phố -->
-                                    <button 
-                                        class="dropdown-item" 
-                                        v-for="city in cities" 
-                                        :key="city.id" 
+                                    <button class="dropdown-item" v-for="city in cities" :key="city.id"
                                         @click="selectCity(city.id)">
                                         {{ city.name }}
                                     </button>
@@ -47,13 +43,8 @@
                         </div>
                     </div>
                     <div class="frame-list-items">
-                        <Tour_Item 
-                            v-for="tour in filteredTours"
-                            :key="tour.id"
-                            :tour="tour"
-                            :city="getCity(tour.city_id)"
-                            @click="navigateToDetailTour(tour.id)"
-                        />
+                        <Tour_Item v-for="tour in filteredTours" :key="tour.id" :tour="tour"
+                            :city="getCity(tour.city_id)" @click="navigateToDetailTour(tour.id)" />
                     </div>
                 </div>
             </div>
@@ -138,44 +129,59 @@ export default {
     display: grid;
     grid-template-columns: 0% 96% 4%;
 }
+
 .overall {
     grid-column: 2/3;
 }
+
 .frame-list {
-    width: 100%; /* Chiều rộng toàn màn hình */
-    min-height: 100vh; /* Chiều cao tối thiểu toàn màn hình */
-    margin-top: 200px; /* Giảm khoảng cách từ phía trên */
+    width: 100%;
+    /* Chiều rộng toàn màn hình */
+    min-height: 100vh;
+    /* Chiều cao tối thiểu toàn màn hình */
+    margin-top: 200px;
+    /* Giảm khoảng cách từ phía trên */
     display: grid;
-    grid-template-columns: 20% 80%; /* Chỉnh lại tỷ lệ cột để hài hòa hơn */
+    grid-template-columns: 20% 80%;
+    /* Chỉnh lại tỷ lệ cột để hài hòa hơn */
     gap: 50px;
-    padding: 20px; /* Thêm padding để tránh sát mép */
+    padding: 20px;
+    /* Thêm padding để tránh sát mép */
 }
 
 .frame-list-items {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* Đảm bảo responsive */
-    gap:50px;
+    grid-template-columns: repeat(3, 1fr);
+    /* Đảm bảo responsive */
+    gap: 50px;
     place-items: center;
-    margin-bottom: 40px; /* Tăng một chút khoảng cách phía dưới */
+    margin-bottom: 40px;
+    /* Tăng một chút khoảng cách phía dưới */
 }
 
-.frame-list-items > * { 
-    max-height: 600px; /* Giảm chiều cao tối đa cho mỗi item */
-    overflow: hidden; 
-    border-radius: 10px; /* Bo góc để giao diện mềm mại hơn */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Thêm bóng để tạo chiều sâu */
+.frame-list-items>* {
+    max-height: 600px;
+    /* Giảm chiều cao tối đa cho mỗi item */
+    overflow: hidden;
+    border-radius: 10px;
+    /* Bo góc để giao diện mềm mại hơn */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    /* Thêm bóng để tạo chiều sâu */
 }
+
 .frame-selection {
     display: flex;
     flex-direction: column;
     color: #13357B;
     gap: 30px;
 }
+
 h5 {
     font-weight: 700;
     font-size: 22px;
 }
-.dropdown-button{
+
+.dropdown-button {
     min-width: 200px;
     padding: 10px;
     border-radius: 15px;
@@ -190,17 +196,21 @@ h5 {
     cursor: pointer;
     gap: 20px;
 }
+
 .dropdown-button svg {
     stroke: #13357B;
 }
+
 .dropdown-button.active {
     background-color: #13357B;
     color: #EDF6F9;
 }
+
 .dropdown-button.active svg {
     stroke: #EDF6F9;
     transform: rotate(180deg);
 }
+
 .dropdown-list {
     position: absolute;
     margin-top: 10px;
@@ -216,17 +226,20 @@ h5 {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    scrollbar-width: thin; /* Chỉ áp dụng trên Firefox */
-    scrollbar-color: #13357B #EDF6F9; /* Màu thanh cuộn và nền */
+    scrollbar-width: thin;
+    /* Chỉ áp dụng trên Firefox */
+    scrollbar-color: #13357B #EDF6F9;
+    /* Màu thanh cuộn và nền */
 }
-.dropdown-item {    
+
+.dropdown-item {
     padding: 15px;
     cursor: pointer;
     transition: background-color 0.3s ease;
 }
+
 .dropdown-item:hover {
     background-color: #13357B;
     color: #EDF6F9;
 }
-
 </style>

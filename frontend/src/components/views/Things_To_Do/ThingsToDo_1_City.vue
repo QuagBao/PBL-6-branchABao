@@ -1,7 +1,7 @@
 <template>
     <div class="container-fluid">
-        <Header/>
-        <Top_Button v-if="cityId" :cityID="parseInt(cityId, 10)"/>
+        <Header />
+        <Top_Button v-if="cityId" :cityID="parseInt(cityId, 10)" />
     </div>
 
     <div class="contaner-fluid-1">
@@ -30,10 +30,11 @@
                         </div>
                         <div v-else class="container-fluid mx-2 frame-button">
                             <div class="list-button d-flex gap-3 justify-content-flex-start flex-wrap px-5 py-4">
-                                <button class="button-category d-flex align-items-center justify-content-around gap-1" v-for="item in buttons" :key="item.id"  
-                                        :class="{ selected: selectedIndices.includes(item.id) }" 
-                                        @click="selectButton(item.id)">
-                                    <img :src="svgIcons[item.id-1]" alt="icon" class="icon">
+                                <button class="button-category d-flex align-items-center justify-content-around gap-1"
+                                    v-for="item in buttons" :key="item.id"
+                                    :class="{ selected: selectedIndices.includes(item.id) }"
+                                    @click="selectButton(item.id)">
+                                    <img :src="svgIcons[item.id - 1]" alt="icon" class="icon">
                                     {{ item.name }}
                                 </button>
                             </div>
@@ -44,34 +45,26 @@
                         <div v-if="!loadingDestinations" class=" title-content">
                             <p class="title p-5">Top Attraction in {{ city?.name || 'Loading...' }}</p>
                             <div class="container-fluid list-items-1">
-                                <Info_Card v-for="(item, index) in paginatedListHotels"
-                                            :key="index"
-                                            :destID="item.id"
-                                            :imageUrl="item.images[0]?.url||'/blue-image.jpg'"
-                                            :name="item.name"
-                                            :stars="generateStars(item.rating)"
-                                            :review-number="item.review_count"
-                                            :tags="item.tag"
-                                            :description="item.description"
-                                            @click="navigateToDetailPlace(item.id)"/>
+                                <Info_Card v-for="(item, index) in paginatedListHotels" :key="index" :destID="item.id"
+                                    :imageUrl="item.images[0]?.url || '/blue-image.jpg'" :name="item.name"
+                                    :stars="generateStars(item.rating)" :review-number="item.review_count"
+                                    :tags="item.tag" :description="item.description"
+                                    @click="navigateToDetailPlace(item.id)" />
                             </div>
                             <!-- Pagination -->
                             <div class="pagination-container d-flex justify-content-center align-items-center mt-3">
-                                <button class="btn-pagination prev" :disabled="currentPageHotels === 1" @click="currentPageHotels--">Previous</button>
+                                <button class="btn-pagination prev" :disabled="currentPageHotels === 1"
+                                    @click="currentPageHotels--">Previous</button>
                                 <!-- Trang đầu -->
-                                <button class="btn-pagination" 
-                                        :class="{ active: currentPageHotels === 1 }"
-                                        @click="currentPageHotels = 1">
+                                <button class="btn-pagination" :class="{ active: currentPageHotels === 1 }"
+                                    @click="currentPageHotels = 1">
                                     1
                                 </button>
                                 <!-- Dấu ... trước trang hiện tại -->
                                 <span class="dot" v-if="currentPageHotels > 3">...</span>
 
-                                <button v-for="page in pagesToShowHotels" 
-                                        :key="page" 
-                                        class="btn-pagination"
-                                        :class="{ active: page === currentPageHotels }"
-                                        @click="currentPageHotels = page">
+                                <button v-for="page in pagesToShowHotels" :key="page" class="btn-pagination"
+                                    :class="{ active: page === currentPageHotels }" @click="currentPageHotels = page">
                                     {{ page }}
                                 </button>
 
@@ -79,18 +72,20 @@
                                 <span class="dot" v-if="currentPageHotels < totalPagesHotels - 2">...</span>
 
                                 <!-- Trang cuối -->
-                                <button class="btn-pagination" 
-                                        :class="{ active: currentPageHotels === totalPagesHotels }"
-                                        @click="currentPageHotels = totalPagesHotels">
+                                <button class="btn-pagination"
+                                    :class="{ active: currentPageHotels === totalPagesHotels }"
+                                    @click="currentPageHotels = totalPagesHotels">
                                     {{ totalPagesHotels }}
                                 </button>
-                                <button class="btn-pagination next" :disabled="currentPageHotels === totalPagesHotels" @click="currentPageHotels++">Next</button>
+                                <button class="btn-pagination next" :disabled="currentPageHotels === totalPagesHotels"
+                                    @click="currentPageHotels++">Next</button>
                             </div>
                         </div>
                         <div v-if="!loadingDestinations" class=" title-content">
                             <p class="title p-5">Recommedations in {{ city?.name || 'Loading...' }}</p>
                             <div class="container-fluid">
-                                <Recomment_Destination :destinations="recommendations" :generateStars="generateStars" :cities="cities"/>
+                                <Recomment_Destination :destinations="recommendations" :generateStars="generateStars"
+                                    :cities="cities" />
                             </div>
                         </div>
                     </div>
@@ -98,7 +93,7 @@
             </div>
         </div>
     </div>
- </template>
+</template>
 
 <script setup>
 import destinationViewModel from '../../viewModels/ThingToDo_City_ListViewModel';
@@ -130,7 +125,7 @@ const {
     buttons,
     selectedIndices,
     selectButton,
-    
+
     destinations,
     filteredDestinations,
     city,
@@ -162,7 +157,7 @@ const {
     generateCircle,
     generateStars,
     totalRating,
-  } = generateViewModel();
+} = generateViewModel();
 const navigateToDetailPlace = (id) => {
     window.location.assign(`/Detail/Place/${id}`);
 };
@@ -194,19 +189,19 @@ const pagesToShowHotels = computed(() => {
 </script>
 
 <script>
-    import Header from '../Header.vue';
-    import Scroll_Bar_Component from '../Scroll_Bar_Component.vue';
-    import Top_Button from '../Top_Button.vue';
-    import Info_Card from './Info_Card.vue';
-    import Btn_Catagory from './Btn_Catagory.vue';
-    import Recomment_Destination from '../Recomment_Destination.vue';
-    export default {
-        name: "ThingsToDo_List",
-        components: {
-            Header, Scroll_Bar_Component, 
-            Top_Button, Info_Card, Btn_Catagory, Recomment_Destination
-        }
+import Header from '../Header.vue';
+import Scroll_Bar_Component from '../Scroll_Bar_Component.vue';
+import Top_Button from '../Top_Button.vue';
+import Info_Card from './Info_Card.vue';
+import Btn_Catagory from './Btn_Catagory.vue';
+import Recomment_Destination from '../Recomment_Destination.vue';
+export default {
+    name: "ThingsToDo_List",
+    components: {
+        Header, Scroll_Bar_Component,
+        Top_Button, Info_Card, Btn_Catagory, Recomment_Destination
     }
+}
 </script>
 
 <style scoped>
@@ -214,9 +209,11 @@ const pagesToShowHotels = computed(() => {
     display: grid;
     grid-template-columns: 5% 90% 5%;
 }
+
 .overall {
     grid-column: 2/3;
 }
+
 .container-fluid-1 {
     display: flex;
     flex-direction: column;
@@ -228,20 +225,24 @@ const pagesToShowHotels = computed(() => {
     padding: 0;
     overflow: hidden;
 }
-.overall1{
+
+.overall1 {
     display: flex;
     margin-top: 200px;
     color: #13357B;
 }
-.image-container{
+
+.image-container {
     display: flex;
 }
-.base{
+
+.base {
     margin: 0 0 0 90px;
     min-width: 38vw;
     min-height: 38vw;
     background-color: #D5DEF7;
 }
+
 .img-fluid {
     position: absolute;
     margin: 25px 0 0 115px;
@@ -250,19 +251,23 @@ const pagesToShowHotels = computed(() => {
     height: 38vw;
     box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);
 }
-.text-container{
+
+.text-container {
     gap: 50px;
     font-size: 2vw;
 }
-.text-container h1{
+
+.text-container h1 {
     font-size: 3.5vw;
     font-weight: 900;
 }
-.title-content p{
+
+.title-content p {
     color: #13357B;
     font-size: 45px;
     font-weight: 900;
 }
+
 .list-items-1 {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -272,14 +277,17 @@ const pagesToShowHotels = computed(() => {
     height: 100%;
     margin-bottom: 50px;
 }
-.frame-button{
+
+.frame-button {
     display: grid;
     grid-template-columns: 5% 90% 5%;
 }
-.list-button{
+
+.list-button {
     grid-column: 2/3;
 }
-.button-category{
+
+.button-category {
     color: #13357B;
     width: fit-content;
     padding: 10px 15px;
@@ -289,26 +297,35 @@ const pagesToShowHotels = computed(() => {
     background-color: #EDF6F9;
     transition: background-color 0.3s ease;
 }
+
 .icon {
     width: 20px;
     height: 20px;
     color: #13357B !important;
 }
+
 .button-category:hover {
     background-color: #CAF0F8;
-}     
+}
+
 .button-category.selected {
     background-color: #48cae4;
 }
+
 .content {
     margin-bottom: 30px;
 }
+
 :deep(.custom .carousel-control-next .carousel-control-next-icon) {
-    margin-right: -8.5vw; /* Giá trị mới */
+    margin-right: -8.5vw;
+    /* Giá trị mới */
 }
+
 :deep(.custom .carousel-control-prev .carousel-control-prev-icon) {
-    margin-left: -8.5vw; /* Giá trị mới */
+    margin-left: -8.5vw;
+    /* Giá trị mới */
 }
+
 .skeleton-loader {
     height: 200px;
     margin: 10px;
@@ -321,13 +338,16 @@ const pagesToShowHotels = computed(() => {
     from {
         background-position: 200% 0;
     }
+
     to {
         background-position: -200% 0;
     }
 }
+
 .pagination-container {
     gap: 10px;
 }
+
 .btn-pagination {
     font-size: 18px;
     padding: 8px 16px;
@@ -354,9 +374,12 @@ const pagesToShowHotels = computed(() => {
     color: #EDF6F9;
     font-weight: bold;
 }
-.prev, .next {
+
+.prev,
+.next {
     min-width: 85px;
 }
+
 .dot {
     color: #13357B;
 }

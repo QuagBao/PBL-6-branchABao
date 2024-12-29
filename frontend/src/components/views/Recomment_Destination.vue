@@ -89,16 +89,16 @@ const props = defineProps({
 });
 
 const navigateToDetail = (destination) => {
-    console.log("Hotel ID:",destination.hotel_id);
-    console.log("Restaurant ID:",destination.restaurant_id);
-    console.log("Place ID:",destination.id);
-    if (destination.hotel_id !== null || destination.restaurant_id === null) {
+    console.log("hotel_id:",destination.hotel_id);
+    console.log("restaurant_id:",destination.restaurant_id);
+    console.log("destination_id:",destination.id);
+    if (destination.hotel_id !== null && destination.restaurant_id === null) {
         window.location.assign(`/Detail/Hotel/${destination.hotel_id}`);
     } 
-    else if (destination.hotel_id === null || destination.restaurant_id !== null) {
+    else if (destination.restaurant_id !== null) {
         window.location.assign(`/Detail/Restaurant/${destination.restaurant_id}`);
     }
-    else if (destination.hotel_id === null || destination.restaurant_id === null){
+    else {
         window.location.assign(`/Detail/Place/${destination.id}`);
     }
 };
