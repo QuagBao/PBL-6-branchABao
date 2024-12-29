@@ -1,6 +1,6 @@
 import { ref, onMounted, watch, nextTick, computed } from 'vue';
 import { fetchCities } from '../models/CityModel'
-import { fetchAttractions } from '../models/destinationModel';
+import { fetchAttractions,  } from '../models/destinationModel';
 
 export default function () {
 
@@ -20,7 +20,6 @@ export default function () {
     cities.value = await fetchCities();
     loadingCities.value = false;
     attractions.value = await fetchAttractions();
-    
     loading.value = false;
   });
 

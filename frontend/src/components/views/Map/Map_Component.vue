@@ -221,6 +221,7 @@ export default {
         // Hàm hiển thị route
         displayRoute(route) {
             this.routes.push(route);
+            console.log('Routes: ', this.routes);
             const allRoutes = {
                 type: 'FeatureCollection',
                 features: this.routes.map(route => ({

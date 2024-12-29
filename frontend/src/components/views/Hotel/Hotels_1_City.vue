@@ -88,8 +88,9 @@
               <div v-if="loading">
                 <div class="skeleton-loader" v-for="n in 10" :key="n"></div>
               </div>
-              <div v-else class="list-hotels">
-                <Card_Item  v-for="(item, index) in hotels"
+              <div v-else class="frame-hotels">
+                <div class="list-hotels">
+                  <Card_Item  v-for="(item, index) in paginatedList"
                             :key="index"
                             :destID="item.id"
                             :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
@@ -99,6 +100,38 @@
                             :reviewNumber="item.review_count"
                             :tags="item.tag"
                             @click="navigateToDetailHotel(item.hotel_id)" />
+                </div>
+                <!-- Pagination -->
+                <div class="pagination-container d-flex justify-content-center align-items-center mt-3">
+                    <button class="btn-pagination prev" :disabled="currentPage === 1" @click="currentPage--">Previous</button>
+                    <!-- Trang đầu -->
+                    <button class="btn-pagination" 
+                            :class="{ active: currentPage === 1 }"
+                            @click="currentPage = 1">
+                        1
+                    </button>
+                    <!-- Dấu ... trước trang hiện tại -->
+                    <span class="dot" v-if="currentPage > 3">...</span>
+
+                    <button v-for="page in pagesToShow" 
+                            :key="page" 
+                            class="btn-pagination"
+                            :class="{ active: page === currentPage }"
+                            @click="currentPage = page">
+                        {{ page }}
+                    </button>
+
+                    <!-- Dấu ... sau trang hiện tại -->
+                    <span class="dot" v-if="currentPage < totalPages - 2">...</span>
+
+                    <!-- Trang cuối -->
+                    <button class="btn-pagination" 
+                            :class="{ active: currentPage === totalPages }"
+                            @click="currentPage = totalPages">
+                        {{ totalPages }}
+                    </button>
+                    <button class="btn-pagination next" :disabled="currentPage === totalPages" @click="currentPage++">Next</button>
+                </div>
               </div>
             </div>
           </div>
@@ -110,7 +143,7 @@
   </template>
 
 <script setup>
-import { ref, onMounted, watch, nextTick } from 'vue';
+import { ref, onMounted, watch, nextTick, computed } from 'vue';
 import destinationViewModel from '../../viewModels/Hotel_City_ListViewModel';
 import generateViewModel from '../../viewModels/generate_ratingViewModel';
 import { useRoute } from 'vue-router';
@@ -162,6 +195,31 @@ const {
 const navigateToDetailHotel = (hotel_id) => {
         window.location.assign(`/Detail/Hotel/${hotel_id}`);
     };
+
+    const currentPage = ref(1);
+const itemsPerPage = 12;
+
+// Computed property to calculate paginated list
+const paginatedList = computed(() => {
+    const start = (currentPage.value - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    return hotels.value.slice(start, end);
+});
+
+// Tính tổng số trang
+const totalPages = computed(() => {
+    return Math.ceil(hotels.value.length / itemsPerPage);
+});
+
+// Tính danh sách các trang cần hiển thị
+const pagesToShow = computed(() => {
+    const pages = [];
+    // Hiển thị các trang từ currentPage - 2 đến currentPage + 2
+    for (let i = Math.max(2, currentPage.value - 1); i <= Math.min(totalPages.value - 1, currentPage.value + 1); i++) {
+        pages.push(i);
+    }
+    return pages;
+});
 </script>
 
 <script>
@@ -372,6 +430,42 @@ const navigateToDetailHotel = (hotel_id) => {
     to {
         background-position: -200% 0;
     }
+}
+.pagination-container {
+    gap: 10px;
+    margin-bottom: 50px;
+}
+.btn-pagination {
+    font-size: 18px;
+    padding: 8px 16px;
+    border: 1px solid #4AA4D9;
+    background-color: #EDF6F9;
+    color: #13357B;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+.btn-pagination:hover {
+    background-color: #4AA4D9;
+    color: #EDF6F9;
+}
+
+.btn-pagination:disabled {
+    background-color: #CAF0F8;
+    cursor: not-allowed;
+}
+
+.btn-pagination.active {
+    background-color: #4AA4D9;
+    color: #EDF6F9;
+    font-weight: bold;
+}
+.prev, .next {
+    min-width: 85px;
+}
+.dot {
+    color: #13357B;
 }
 </style>
 

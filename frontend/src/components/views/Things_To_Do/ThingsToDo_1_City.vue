@@ -5,14 +5,14 @@
     </div>
 
     <div class="contaner-fluid-1">
-        <div class="contaner-fluid">
-            <div class="contaner-fluid">
+        <div class="contaner-fluid frame-overall">
+            <div class="contaner-fluid overall">
                 <div class="contaner-fluid frame-1 d-flex flex-column gap-5">
                     <!-- Images -->
                     <div v-if="loading">
                         <div class="skeleton-loader" v-for="n in 10" :key="n"></div>
                     </div>
-                    <div v-else class="overall">
+                    <div v-else class="overall1">
                         <div class="image-container">
                             <div class="base"></div>
                             <img :src="city?.images?.[0]?.url || '/blue-image.jpg'" alt="City 1" class="img-fluid">
@@ -41,10 +41,10 @@
                         <div v-if="loadingDestinations">
                             <div class="skeleton-loader" v-for="n in 10" :key="n"></div>
                         </div>
-                        <div v-else class=" title-content">
+                        <div v-if="!loadingDestinations" class=" title-content">
                             <p class="title p-5">Top Attraction in {{ city?.name || 'Loading...' }}</p>
                             <div class="container-fluid list-items-1">
-                                <Info_Card v-for="(item, index) in filteredDestinations"
+                                <Info_Card v-for="(item, index) in paginatedListHotels"
                                             :key="index"
                                             :destID="item.id"
                                             :imageUrl="item.images[0]?.url||'/blue-image.jpg'"
@@ -54,6 +54,43 @@
                                             :tags="item.tag"
                                             :description="item.description"
                                             @click="navigateToDetailPlace(item.id)"/>
+                            </div>
+                            <!-- Pagination -->
+                            <div class="pagination-container d-flex justify-content-center align-items-center mt-3">
+                                <button class="btn-pagination prev" :disabled="currentPageHotels === 1" @click="currentPageHotels--">Previous</button>
+                                <!-- Trang đầu -->
+                                <button class="btn-pagination" 
+                                        :class="{ active: currentPageHotels === 1 }"
+                                        @click="currentPageHotels = 1">
+                                    1
+                                </button>
+                                <!-- Dấu ... trước trang hiện tại -->
+                                <span class="dot" v-if="currentPageHotels > 3">...</span>
+
+                                <button v-for="page in pagesToShowHotels" 
+                                        :key="page" 
+                                        class="btn-pagination"
+                                        :class="{ active: page === currentPageHotels }"
+                                        @click="currentPageHotels = page">
+                                    {{ page }}
+                                </button>
+
+                                <!-- Dấu ... sau trang hiện tại -->
+                                <span class="dot" v-if="currentPageHotels < totalPagesHotels - 2">...</span>
+
+                                <!-- Trang cuối -->
+                                <button class="btn-pagination" 
+                                        :class="{ active: currentPageHotels === totalPagesHotels }"
+                                        @click="currentPageHotels = totalPagesHotels">
+                                    {{ totalPagesHotels }}
+                                </button>
+                                <button class="btn-pagination next" :disabled="currentPageHotels === totalPagesHotels" @click="currentPageHotels++">Next</button>
+                            </div>
+                        </div>
+                        <div v-if="!loadingDestinations" class=" title-content">
+                            <p class="title p-5">Recommedations in {{ city?.name || 'Loading...' }}</p>
+                            <div class="container-fluid">
+                                <Recomment_Destination :destinations="recommendations" :generateStars="generateStars" :cities="cities"/>
                             </div>
                         </div>
                     </div>
@@ -102,6 +139,7 @@ const {
     heartFull,
     heartEmpty,
     truncatedDescription,
+    user, token, loadUser, recommendations, cities, loadCities, getRecommendationsByCity,
 } = destinationViewModel(cityId);
 
 const loading = ref(true);
@@ -112,6 +150,8 @@ onMounted(async () => {
     await fetchTags();
     loading.value = false;
     await fetchDestinationsData();
+    await loadUser();
+    await loadCities();
     loadingDestinations.value = false;
 });
 
@@ -126,6 +166,31 @@ const {
 const navigateToDetailPlace = (id) => {
     window.location.assign(`/Detail/Place/${id}`);
 };
+const currentPageHotels = ref(1);
+const itemsPerPage = 9;
+
+// Pagination For Things To Do
+// Computed property to calculate paginated list
+const paginatedListHotels = computed(() => {
+    const start = (currentPageHotels.value - 1) * itemsPerPage;
+    const end = start + itemsPerPage;
+    return filteredDestinations.value.slice(start, end);
+});
+
+// Tính tổng số trang
+const totalPagesHotels = computed(() => {
+    return Math.ceil(filteredDestinations.value.length / itemsPerPage);
+});
+
+// Tính danh sách các trang cần hiển thị
+const pagesToShowHotels = computed(() => {
+    const pages = [];
+    // Hiển thị các trang từ currentPage - 2 đến currentPage + 2
+    for (let i = Math.max(2, currentPageHotels.value - 1); i <= Math.min(totalPagesHotels.value - 1, currentPageHotels.value + 1); i++) {
+        pages.push(i);
+    }
+    return pages;
+});
 </script>
 
 <script>
@@ -134,16 +199,24 @@ const navigateToDetailPlace = (id) => {
     import Top_Button from '../Top_Button.vue';
     import Info_Card from './Info_Card.vue';
     import Btn_Catagory from './Btn_Catagory.vue';
+    import Recomment_Destination from '../Recomment_Destination.vue';
     export default {
         name: "ThingsToDo_List",
         components: {
             Header, Scroll_Bar_Component, 
-            Top_Button, Info_Card, Btn_Catagory
+            Top_Button, Info_Card, Btn_Catagory, Recomment_Destination
         }
     }
 </script>
 
 <style scoped>
+.frame-overall {
+    display: grid;
+    grid-template-columns: 5% 90% 5%;
+}
+.overall {
+    grid-column: 2/3;
+}
 .container-fluid-1 {
     display: flex;
     flex-direction: column;
@@ -155,7 +228,7 @@ const navigateToDetailPlace = (id) => {
     padding: 0;
     overflow: hidden;
 }
-.overall{
+.overall1{
     display: flex;
     margin-top: 200px;
     color: #13357B;
@@ -185,12 +258,9 @@ const navigateToDetailPlace = (id) => {
     font-size: 3.5vw;
     font-weight: 900;
 }
-.title-content {
-    margin-bottom: 2vw;
-}
 .title-content p{
     color: #13357B;
-    font-size: 2vw;
+    font-size: 45px;
     font-weight: 900;
 }
 .list-items-1 {
@@ -200,6 +270,7 @@ const navigateToDetailPlace = (id) => {
     align-items: center;
     width: 80vw;
     height: 100%;
+    margin-bottom: 50px;
 }
 .frame-button{
     display: grid;
@@ -253,6 +324,41 @@ const navigateToDetailPlace = (id) => {
     to {
         background-position: -200% 0;
     }
+}
+.pagination-container {
+    gap: 10px;
+}
+.btn-pagination {
+    font-size: 18px;
+    padding: 8px 16px;
+    border: 1px solid #4AA4D9;
+    background-color: #EDF6F9;
+    color: #13357B;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+.btn-pagination:hover {
+    background-color: #4AA4D9;
+    color: #EDF6F9;
+}
+
+.btn-pagination:disabled {
+    background-color: #CAF0F8;
+    cursor: not-allowed;
+}
+
+.btn-pagination.active {
+    background-color: #4AA4D9;
+    color: #EDF6F9;
+    font-weight: bold;
+}
+.prev, .next {
+    min-width: 85px;
+}
+.dot {
+    color: #13357B;
 }
 </style>
 

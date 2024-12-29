@@ -320,10 +320,10 @@ tbody tr:hover td{
     font-weight: 900;
     color: #13357B;
 }
+
 .pagination-container {
     gap: 10px;
 }
-
 .btn-pagination {
     padding: 8px 16px;
     border: 1px solid #4AA4D9;

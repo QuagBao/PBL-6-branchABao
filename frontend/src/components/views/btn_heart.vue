@@ -28,6 +28,7 @@ export default {
 
     // Hàm xử lý click vào nút
     const handleHeartClick = async () => {
+      console.log("Destination ID:", props.destID);
       try {
         if (isActive.value) {
           await unlike(props.destID); // Unlike

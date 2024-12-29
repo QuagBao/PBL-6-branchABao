@@ -209,12 +209,8 @@ img {
     color: #13357B !important;
     border: none;
     position: absolute;
-    margin-top: -30px;
+    margin-top: -60px;
     cursor: pointer;
-}
-:deep(.swiper-pagination) {
-    position: relative;
-    margin-top: 30px;
 }
 :deep(.swiper-pagination-bullet-active) {
     background-color: #13357B !important;
@@ -223,11 +219,10 @@ img {
     background-color: #8ecae6;
     opacity: 1 !important;
 }
-
 .mySwiper {
     width: 100%;
     position: relative;
-    padding: 0 60px;
+    padding: 0 55px;
 }
 </style>
   

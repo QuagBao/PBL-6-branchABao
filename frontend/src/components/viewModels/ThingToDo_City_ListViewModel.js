@@ -1,8 +1,8 @@
 import { ref, computed, onMounted } from 'vue';
-import { fetchDestinationsByCity, getTagById} from '../models/destinationModel';
-import { fetchCityDetails } from '../models/CityModel';
+import { fetchDestinationsByCity, getTagById, fetchRecommendationsByCity} from '../models/destinationModel';
+import { fetchCityDetails, fetchCities } from '../models/CityModel';
 import { getTags as fetchTagsAPI } from '../models/TagModel';
-
+import SignInModel from '../models/SignInModel';
 export default function (cityId) {
   
 
@@ -114,6 +114,54 @@ export default function (cityId) {
   const heartFull = new URL('@/assets/svg/heart-full.svg', import.meta.url).href;
   const heartEmpty = new URL('@/assets/svg/heart-none.svg', import.meta.url).href;
 
+
+  const recommendations = ref([]);
+  const cities = ref([]);
+  const user = ref(null);
+  const token = sessionStorage.getItem('access_token');
+  const loadUser = async () => {
+    const signInModel = new SignInModel("", "");
+    try{
+      if(token){
+        const userResult = await signInModel.fetchCurrentUser(token);
+        console.log("User",userResult);
+        if(userResult.success){
+          user.value = userResult.user;
+          console.log("User",user.value);
+          console.log("User ID",user.value.id);
+          await getRecommendationsByCity(user.value.id, cityId);
+          console.log("Dữ liệu khóa học", recommendations.value);
+        } else {
+        console.error('Cannot get user:', error);
+        }
+      }
+      
+    } catch (error) {
+      console.error('An error occurred during authentication:', error);
+      return { success: false, message: error.message || 'An error occurred' };
+    }
+    
+  }
+
+  const loadCities = async () => {
+    try {
+      const data = await fetchCities();
+      console.log("Dữ liệu thành phố:", data); // Kiểm tra dữ liệu
+      cities.value = data;
+    } catch (error) {
+      console.error("Có lỗi xảy ra khi lấy dữ liệu thành phố:", error);
+    }
+  };
+
+  const getRecommendationsByCity = async () => {
+    console.log("User ID",user.value); 
+    try {
+      const data = await fetchRecommendationsByCity(user.value.id, cityId);
+      recommendations.value = data;
+    } catch (error) {
+      console.error("Có lỗi xảy ra khi lấy dữ liệu khóa học:", error);
+    }
+  };
   return {
     isMenuVisible,
     toggleMenu,
@@ -132,5 +180,6 @@ export default function (cityId) {
     heartFull,
     heartEmpty,
     truncatedDescription,
+    user, token, loadUser, recommendations, cities, loadCities, getRecommendationsByCity,
   };
 }
