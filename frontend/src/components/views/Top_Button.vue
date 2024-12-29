@@ -77,7 +77,7 @@
 .container-fluid {
     width: 100%;
     position: fixed;
-    top: -25px;
+    top: -20px;
     left: 0;
     border-bottom: 1px solid #13357B;
     background-color: #EDF6F9;
@@ -92,12 +92,13 @@
 }
 
 .topper{
-    padding-top: 20px;
-    padding-bottom: 5px;
+    padding-top: 25px;
+    padding-bottom: 15px;
 }
 .topper button {
     position: relative;
     color: #13357B;
+    font-size: 21px;
     padding: 6px 20px;
     border: none;
     width: 200px;

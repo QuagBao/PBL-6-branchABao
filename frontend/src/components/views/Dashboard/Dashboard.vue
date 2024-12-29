@@ -12,6 +12,7 @@
                 <div class="container-fluid search-btn">
                     <Search_Btn_Big/>
                 </div>
+                <!-- Popular Destination -->
                 <div class="container-fluid frame destination">
                     <div class="container">
                         <div class="mx-auto text-center mb-5 title">
@@ -48,6 +49,7 @@
                         </button>
                     </div>
                 </div>
+                <!-- Topic -->
                 <div class="container-fluid frame topic">
                     <div class="container">
                         <div class="mx-auto text-center mb-5 title">
@@ -67,6 +69,20 @@
                         </div>
                     </div>
                 </div>
+                <!-- Recomment -->
+                <div v-if="user" class="container-fluid frame topic">
+                    <div class="container">
+                        <div class="mx-auto text-center mb-5 title">
+                            <h5 class="section-title px-3 ">How About This?</h5>
+                            <h1 class="mb-0">Highly Recommended Places</h1>
+                        </div>
+                    </div>
+
+                    <div class="container-fluid">
+                        <Recomment_Destination :destinations="recommendations" :generateStars="generateStars" :cities="cities"/>
+                    </div>
+                </div>
+                <!-- Tour -->
                 <div class="container-fluid frame tour">
                     <div class="container" style="z-index: 10;">
                         <div class="mx-auto text-center mb-5 title">
@@ -100,6 +116,7 @@ const {
   tours, visibleToblurs, prevTour, nextTour,
   isMenuVisible, toggleMenu,
   generateStars, goToDestination, // vẫn import để lấy id
+  recommendations, user
 } = dashboardViewModel;
 
 const navigateToDestination = (id) => {
@@ -134,12 +151,13 @@ onUnmounted(() => {
     import Img_Card_2 from '../Img_Card_2.vue';
     import Swiper_Tour from './Swiper_Tour.vue';
     import Top_Button from '../Top_Button.vue';
+    import Recomment_Destination from '../Recomment_Destination.vue';
     export default {
         name: "Dashboard",
         components: {
             Header, Scroll_Bar_Component, Search_Btn_Big, Tag_Button,
             Control_Button, Carousel_For_Dashboard, Img_Card,
-            Img_Card_2, Swiper_Tour, Top_Button
+            Img_Card_2, Swiper_Tour, Top_Button, Recomment_Destination
         }
     }
 

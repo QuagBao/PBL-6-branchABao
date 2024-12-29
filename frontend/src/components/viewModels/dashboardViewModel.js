@@ -2,18 +2,47 @@ import { ref, computed } from 'vue';
 import { fetchTopics } from '../models/dashboardModel';
 import { fetchCities } from '../models/CityModel'
 import { fetchTours } from '../models/TourModel'
+import { fetchRecommendtions } from '../models/destinationModel';
+import SignInModel from '../models/SignInModel';
 
 const activeButton = ref('all');
 const cities = ref([]);
 const topics = ref([]);
 const tours = ref([]);
 const currentIndex = ref(0);
+const recommendations = ref([]);
+const user = ref(null);
+const token = sessionStorage.getItem('access_token');
 
 const setActive = (button) => {
   console.log(button);
   activeButton.value = button;
   currentIndex.value = 0;
 };
+
+const loadUser = async () => {
+  const signInModel = new SignInModel("", "");
+  try{
+    if(token){
+      const userResult = await signInModel.fetchCurrentUser(token);
+      console.log("User",userResult);
+      if(userResult.success){
+        user.value = userResult.user;
+        console.log("User",user.value);
+        console.log("User ID",user.value.id);
+        await getRecommendations(user.value.id);
+        console.log("Dữ liệu khóa học", recommendations.value);
+      } else {
+      console.error('Cannot get user:', error);
+      }
+    }
+    
+  } catch (error) {
+    console.error('An error occurred during authentication:', error);
+    return { success: false, message: error.message || 'An error occurred' };
+  }
+  
+}
 
 const loadCities = async () => {
   try {
@@ -22,6 +51,16 @@ const loadCities = async () => {
     cities.value = data;
   } catch (error) {
     console.error("Có lỗi xảy ra khi lấy dữ liệu thành phố:", error);
+  }
+};
+
+const getRecommendations = async () => {
+  console.log("User ID",user.value); 
+  try {
+    const data = await fetchRecommendtions(user.value.id);
+    recommendations.value = data;
+  } catch (error) {
+    console.error("Có lỗi xảy ra khi lấy dữ liệu khóa học:", error);
   }
 };
 
@@ -128,9 +167,12 @@ const toggleMenu = () => {
   isMenuVisible.value = !isMenuVisible.value;
 };
 
+
+
 loadCities();
 loadTopics();
 loadTours();
+loadUser();
 
 export default {
   activeButton,
@@ -152,4 +194,7 @@ export default {
   generateStars,
   goToDestination,
   getCityName,
+  recommendations,
+  user, 
+  
 };

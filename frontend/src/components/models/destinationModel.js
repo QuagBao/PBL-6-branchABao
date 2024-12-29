@@ -977,6 +977,66 @@ export async function fetchDestinationsByUser(userId) {
     return [];
   }
 };
+// Lấy recommend trong trang home
+export async function fetchRecommendtions(userID) {
+  try {
+    const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/recommendations_bylikes/${userID}?limit=20`);
+    return response.data.map(destination => ({
+      id: destination.id,
+      name: destination.name,
+      user_id: destination.user_id,
+      price_bottom: destination.price_bottom,
+      price_top: destination.price_top,
+      age: destination.age,
+      opentime: destination.opentime,
+      duration: destination.duration,
+      description: destination.description,
+      date_create: destination.date_create,
+      address: destination.address,
+      hotel_id: destination.hotel_id,
+      hotel: destination.hotel,
+      restaurant_id: destination.restaurant_id,
+      restaurant: destination.restaurant,
+      tags: destination.tags,
+      images: destination.images,
+      rating: destination.average_rating ? parseFloat(destination.average_rating.toFixed(1)) : 0  ,
+      review_count: destination.review_count,
+    }));
+  } catch (error) {
+    console.error('Error fetching destinations:', error);
+    return [];
+  }
+}
+// Lấy recommend trong khu vực
+export async function fetchRecommendationsByCity(userID, city_id) {
+  try {
+    const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/recommendations_bylikes/${userID}?city_id=${city_id}&limit=20`);
+    return response.data.map(destination => ({
+      id: destination.id,
+      name: destination.name,
+      user_id: destination.user_id,
+      price_bottom: destination.price_bottom,
+      price_top: destination.price_top,
+      age: destination.age,
+      opentime: destination.opentime,
+      duration: destination.duration,
+      description: destination.description,
+      date_create: destination.date_create,
+      address: destination.address,
+      hotel_id: destination.hotel_id,
+      hotel: destination.hotel,
+      restaurant_id: destination.restaurant_id,
+      restaurant: destination.restaurant,
+      tags: destination.tags,
+      images: destination.images,
+      rating: destination.average_rating ? parseFloat(destination.average_rating.toFixed(1)) : 0  ,
+      review_count: destination.review_count,
+    }));
+  } catch (error) {
+    console.error('Error fetching destinations:', error);
+    return [];
+  }
+}
 
 export async function fetchDestinationsByCity_Tag(city_id, tags) {
   try {

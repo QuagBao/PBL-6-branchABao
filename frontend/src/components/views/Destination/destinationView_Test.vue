@@ -72,7 +72,7 @@
                         <div class="title-content">
                             <p class="p-5 things-to-do">Things to do</p>
                             <div class="container-fluid context">
-                                <Cards v-for="(item, index) in destinations"
+                                <Cards v-for="(item, index) in paginatedListThingsTodo"
                                         :key="index"
                                         :destID="item.id"
                                         :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
@@ -82,13 +82,44 @@
                                         :tags="item.tag"
                                         @click="navigateToDetailPlace(item.id)"/>
                             </div>
+                            <!-- Pagination -->
+                            <div class="pagination-container d-flex justify-content-center align-items-center mt-3">
+                                <button class="btn-pagination prev" :disabled="currentPageThingsToDo === 1" @click="currentPageThingsToDo--">Previous</button>
+                                <!-- Trang đầu -->
+                                <button class="btn-pagination" 
+                                        :class="{ active: currentPageThingsToDo === 1 }"
+                                        @click="currentPageThingsToDo = 1">
+                                    1
+                                </button>
+                                <!-- Dấu ... trước trang hiện tại -->
+                                <span class="dot" v-if="currentPageThingsToDo > 3">...</span>
+
+                                <button v-for="page in pagesToShowThingsTodo" 
+                                        :key="page" 
+                                        class="btn-pagination"
+                                        :class="{ active: page === currentPageThingsToDo }"
+                                        @click="currentPageThingsToDo = page">
+                                    {{ page }}
+                                </button>
+
+                                <!-- Dấu ... sau trang hiện tại -->
+                                <span class="dot" v-if="currentPageThingsToDo < totalPagesThingstodo - 2">...</span>
+
+                                <!-- Trang cuối -->
+                                <button class="btn-pagination" 
+                                        :class="{ active: currentPageThingsToDo === totalPagesThingstodo }"
+                                        @click="currentPageThingsToDo = totalPagesThingstodo">
+                                    {{ totalPagesThingstodo }}
+                                </button>
+                                <button class="btn-pagination next" :disabled="currentPageThingsToDo === totalPages" @click="currentPageThingsToDo++">Next</button>
+                            </div>
                         </div>
 
                         <!-- Restaurants Section -->
                         <div class="title-content">
                             <p class="p-5 restaurants">Restaurants</p>
                             <div class="container-fluid context">
-                                <Cards v-for="(item, index) in restaurants"
+                                <Cards v-for="(item, index) in paginatedListRestaurants"
                                         :key="index"
                                         :destID="item.id"
                                         :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
@@ -98,13 +129,44 @@
                                         :tags="item.tag"
                                         @click="navigateToDetailRestaurant(item.restaurant_id)"/>
                             </div>
+                            <!-- Pagination -->
+                            <div class="pagination-container d-flex justify-content-center align-items-center mt-3">
+                                <button class="btn-pagination prev" :disabled="currentPageRestaurants === 1" @click="currentPageRestaurants--">Previous</button>
+                                <!-- Trang đầu -->
+                                <button class="btn-pagination" 
+                                        :class="{ active: currentPageRestaurants === 1 }"
+                                        @click="currentPageRestaurants = 1">
+                                    1
+                                </button>
+                                <!-- Dấu ... trước trang hiện tại -->
+                                <span class="dot" v-if="currentPageRestaurants > 3">...</span>
+
+                                <button v-for="page in pagesToShowRestaurants" 
+                                        :key="page" 
+                                        class="btn-pagination"
+                                        :class="{ active: page === currentPageRestaurants }"
+                                        @click="currentPageRestaurants = page">
+                                    {{ page }}
+                                </button>
+
+                                <!-- Dấu ... sau trang hiện tại -->
+                                <span class="dot" v-if="currentPageRestaurants < totalPagesRestaurants - 2">...</span>
+
+                                <!-- Trang cuối -->
+                                <button class="btn-pagination" 
+                                        :class="{ active: currentPageRestaurants === totalPagesRestaurants }"
+                                        @click="currentPageRestaurants = totalPagesRestaurants">
+                                    {{ totalPagesRestaurants }}
+                                </button>
+                                <button class="btn-pagination next" :disabled="currentPageRestaurants === totalPagesRestaurants" @click="currentPageRestaurants++">Next</button>
+                            </div>
                         </div>
 
                         <!-- Resort & Hotels Section -->
                         <div class="title-content">
                             <p class="p-5 resorts">Resort & Hotels</p>
                             <div class="container-fluid context">
-                                <Cards v-for="(item, index) in hotels"
+                                <Cards v-for="(item, index) in paginatedListHotels"
                                         :key="index"
                                         :destID="item.id"
                                         :imageUrl="item.images[0]?.url || '/blue-image.jpg'"
@@ -113,6 +175,45 @@
                                         :rating="item.rating"
                                         :tags="item.tag"
                                         @click="navigateToDetailHotel(item.hotel_id)"/>
+                            </div>
+                            <!-- Pagination -->
+                            <div class="pagination-container d-flex justify-content-center align-items-center mt-3">
+                                <button class="btn-pagination prev" :disabled="currentPageHotels === 1" @click="currentPageHotels--">Previous</button>
+                                <!-- Trang đầu -->
+                                <button class="btn-pagination" 
+                                        :class="{ active: currentPageHotels === 1 }"
+                                        @click="currentPageHotels = 1">
+                                    1
+                                </button>
+                                <!-- Dấu ... trước trang hiện tại -->
+                                <span class="dot" v-if="currentPageHotels > 3">...</span>
+
+                                <button v-for="page in pagesToShowHotels" 
+                                        :key="page" 
+                                        class="btn-pagination"
+                                        :class="{ active: page === currentPageHotels }"
+                                        @click="currentPageHotels = page">
+                                    {{ page }}
+                                </button>
+
+                                <!-- Dấu ... sau trang hiện tại -->
+                                <span class="dot" v-if="currentPageHotels < totalPagesHotels - 2">...</span>
+
+                                <!-- Trang cuối -->
+                                <button class="btn-pagination" 
+                                        :class="{ active: currentPageHotels === totalPagesHotels }"
+                                        @click="currentPageHotels = totalPagesHotels">
+                                    {{ totalPagesHotels }}
+                                </button>
+                                <button class="btn-pagination next" :disabled="currentPageHotels === totalPagesHotels" @click="currentPageHotels++">Next</button>
+                            </div>
+                        </div>
+
+                        <!-- Recommedations -->
+                        <div class="title-content">
+                            <p class="p-5 resorts">Recommedations</p>
+                            <div class="container-fluid">
+                                <Recomment_Destination :destinations="recommendations" :generate-stars="generateStars" :cities="cities"/>
                             </div>
                         </div>
                     </div>
@@ -166,7 +267,9 @@
         isHotelsLoading,
         isRestaurantsLoading,
         fetchAllData,
+        user, token, loadUser, recommendations, cities, loadCities, getRecommendationsByCity,
     } = destinationViewModel(cityId);
+    
 
     const loading = ref(true);
 
@@ -175,6 +278,8 @@
         await fetchCityDetailsData();
         await fetchDestinationsData();
         await fetchTags();
+        await loadUser();
+        await loadCities();
         loading.value = false;
     });
 
@@ -184,6 +289,79 @@
 
     // Rating Generation Function
     const { generateStars } = generate_ratingViewModel();
+
+    const currentPageThingsToDo = ref(1);
+    const currentPageRestaurants = ref(1);
+    const currentPageHotels = ref(1);
+    const itemsPerPage = 9;
+
+    // Pagination For Things To Do
+    // Computed property to calculate paginated list
+    const paginatedListThingsTodo = computed(() => {
+        const start = (currentPageThingsToDo.value - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        return destinations.value.slice(start, end);
+    });
+
+    // Tính tổng số trang
+    const totalPagesThingstodo = computed(() => {
+        return Math.ceil(destinations.value.length / itemsPerPage);
+    });
+
+    // Tính danh sách các trang cần hiển thị
+    const pagesToShowThingsTodo = computed(() => {
+        const pages = [];
+        // Hiển thị các trang từ currentPage - 2 đến currentPage + 2
+        for (let i = Math.max(2, currentPageThingsToDo.value - 1); i <= Math.min(totalPagesThingstodo.value - 1, currentPageThingsToDo.value + 1); i++) {
+            pages.push(i);
+        }
+        return pages;
+    });
+
+    // Pagination For Restaurants
+    // Computed property to calculate paginated list
+    const paginatedListRestaurants = computed(() => {
+        const start = (currentPageRestaurants.value - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        return restaurants.value.slice(start, end);
+    });
+
+    // Tính tổng số trang
+    const totalPagesRestaurants = computed(() => {
+        return Math.ceil(restaurants.value.length / itemsPerPage);
+    });
+
+    // Tính danh sách các trang cần hiển thị
+    const pagesToShowRestaurants = computed(() => {
+        const pages = [];
+        // Hiển thị các trang từ currentPageRestaurants - 2 đến currentPageRestaurants + 2
+        for (let i = Math.max(2, currentPageRestaurants.value - 1); i <= Math.min(pagesToShowRestaurants.value - 1, currentPageRestaurants.value + 1); i++) {
+            pages.push(i);
+        }
+        return pages;
+    });
+    // Pagination For Hotels
+    // Computed property to calculate paginated list
+    const paginatedListHotels = computed(() => {
+        const start = (currentPageHotels.value - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        return hotels.value.slice(start, end);
+    });
+
+    // Tính tổng số trang
+    const totalPagesHotels = computed(() => {
+        return Math.ceil(hotels.value.length / itemsPerPage);
+    });
+
+    // Tính danh sách các trang cần hiển thị
+    const pagesToShowHotels = computed(() => {
+        const pages = [];
+        // Hiển thị các trang từ currentPageHotels - 2 đến currentPageHotels + 2
+        for (let i = Math.max(2, currentPageHotels.value - 1); i <= Math.min(pagesToShowHotels.value - 1, currentPageHotels.value + 1); i++) {
+            pages.push(i);
+        }
+        return pages;
+    });
 
     // Navigation Functions
     const navigateToDetailPlace = (id) => window.location.assign(`/Detail/Place/${id}`);
@@ -198,12 +376,13 @@
     import Cards from './Cards.vue';
     import Carousel from '../Carousel.vue';
     import Search_Btn_Big from '../Search_Btn_Big.vue';
+    import Recomment_Destination from '../Recomment_Destination.vue';
 
     export default {
         name: "Destination_View",
         components: {
             Header, Scroll_Bar_Component, Top_Button,
-            Search_Btn_Big, Cards, Carousel,
+            Search_Btn_Big, Cards, Carousel, Recomment_Destination,
         }
     }
 </script>
@@ -270,7 +449,7 @@
 }
 .title-content p{
     color: #13357B;
-    font-size: 30px;
+    font-size: 48px;
     font-weight: 900;
 }
 
@@ -347,5 +526,41 @@
 
 .swiper .swiper-scrollbar-drag {
     background-color: #13357B !important;
+}
+.pagination-container {
+    gap: 10px;
+    margin-bottom: 50px;
+}
+.btn-pagination {
+    font-size: 18px;
+    padding: 8px 16px;
+    border: 1px solid #4AA4D9;
+    background-color: #EDF6F9;
+    color: #13357B;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.3s;
+}
+
+.btn-pagination:hover {
+    background-color: #4AA4D9;
+    color: #EDF6F9;
+}
+
+.btn-pagination:disabled {
+    background-color: #CAF0F8;
+    cursor: not-allowed;
+}
+
+.btn-pagination.active {
+    background-color: #4AA4D9;
+    color: #EDF6F9;
+    font-weight: bold;
+}
+.prev, .next {
+    min-width: 85px;
+}
+.dot {
+    color: #13357B;
 }
 </style>
