@@ -93,7 +93,7 @@ const navigateToDetail = (destination) => {
     console.log("Restaurant ID:",destination.restaurant_id);
     console.log("Place ID:",destination.id);
     if (destination.hotel_id != null && destination.restaurant_id == null) {
-        window.location.assign(`/Detail/Place/${destination.id}`);  
+        window.location.assign(`/Detail/Hotel/${destination.id}`);  
     } 
     else if (destination.restaurant_id != null) {
         window.location.assign(`/Detail/Restaurant/${destination.restaurant_id}`);
