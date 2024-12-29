@@ -122,6 +122,16 @@ const companions = [
   { value: 'Other', label: 'Other' },
 ];
 
+const languages = [
+  'Korean',
+  'Japanese',
+  'English',
+  'Vietnamese',
+  'Thai',
+  'Chinese',
+  'French',
+];
+
 const {
   fetchCities,
   fetchUsers,
