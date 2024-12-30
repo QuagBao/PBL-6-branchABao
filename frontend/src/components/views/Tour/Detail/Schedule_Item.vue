@@ -2,18 +2,19 @@
     <div class="cards">
         <div class="">
             <div class="img-location">
-                <img :src="destination?.images && destination.images[0] ? destination.images[0].url : '/blue-image.jpg'" alt="pic" class="img-location"/>
+                <img :src="destination?.images && destination.images[0] ? destination.images[0].url : '/blue-image.jpg'"
+                    alt="pic" class="img-location" />
             </div>
             <div class="p-2">
-                <div class="btn-heart"> 
+                <div class="btn-heart">
                     <btn_heart :destID="destination.id" />
                 </div>
-            </div>   
+            </div>
         </div>
         <div class="frame-rating">
             <div class="rating">
                 <div v-for="(star, index) in generateStars(destination?.average_rating)" :key="index">
-                    <img :src="star" alt="Star" class="star"/>
+                    <img :src="star" alt="Star" class="star" />
                 </div>
             </div>
             <p class="review-number">/ {{ destination.review_count }} reivews</p>
@@ -42,7 +43,7 @@ export default {
     props: {
         destination: {
             type: Object,
-            default: () => {}
+            default: () => { }
         },
         imageUrl: String,
         rating: Number,
@@ -60,25 +61,31 @@ img {
     object-fit: cover;
     border-radius: 20px;
 }
-.btn-heart{
+
+.btn-heart {
     text-align: right;
     margin: -350px 3px 0 0px;
 }
-.frame-rating{
+
+.frame-rating {
     display: flex;
 }
-.rating{
+
+.rating {
     display: flex;
     margin: 0px 0 0 10px;
 }
+
 .rating img {
     width: 20px;
     height: 20px;
 }
+
 .review-number {
     margin-top: 2px;
 }
-.cards{
+
+.cards {
     width: 90%;
     margin: 20px 0;
 }

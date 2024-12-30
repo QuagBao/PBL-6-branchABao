@@ -2,9 +2,9 @@
     <div class="container-fluid">
         <div class="container row info ">
             <div class="col-1">
-                <img :src="imageUrl ? imageUrl: '/blue-image.jpg'" alt="User Image" class="user-image" />
+                <img :src="imageUrl ? imageUrl : '/blue-image.jpg'" alt="User Image" class="user-image" />
             </div>
-            
+
             <div class="col-6">
                 <div class="container">
                     <div class="comment-content">
@@ -26,11 +26,7 @@
             <h6>{{ comment }}</h6>
         </div>
         <div class="container img">
-            <img v-if="condition"
-                v-for="(img, index) in URL" 
-                :src="img.url" 
-                :key="index" 
-                alt="Review Image" 
+            <img v-if="condition" v-for="(img, index) in URL" :src="img.url" :key="index" alt="Review Image"
                 class="review-image" />
         </div>
     </div>
@@ -43,8 +39,8 @@ const {
     deleteReview
 } = DeleteReview();
 const updateReview = (id) => {
-        window.location.assign(`/Review/Tour/Update/${id}`);
-    };
+    window.location.assign(`/Review/Tour/Update/${id}`);
+};
 </script>
 
 <script>
@@ -66,59 +62,70 @@ export default {
 </script>
 
 <style>
-.info{
+.info {
     display: flex;
     align-items: center;
 }
-.user-image{
+
+.user-image {
     width: 40px;
     height: 40px;
 }
-.rating-stars{
+
+.rating-stars {
     display: flex;
     gap: 3px;
 }
-.circle-icon{
+
+.circle-icon {
     width: 20px;
     height: 20px;
 }
-.content-comment{
+
+.content-comment {
     margin-top: 30px;
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
-.review-image{
+
+.review-image {
     margin-top: 20px;
     width: 250px;
     border-radius: 15px;
     margin-bottom: 20px;
 }
-.review-image:hover{
+
+.review-image:hover {
     cursor: pointer;
     transform: scale(1.2);
     max-width: 120%;
 }
-.line{
-    margin: 20px 0 ;
+
+.line {
+    margin: 20px 0;
     height: 2px;
     background-color: #13357B;
     border-radius: 5px;
 }
+
 i {
-  margin-right: 8px;
-  font-size: 16px;
-  display: inline-block;
-  font-weight: 900;
-  font-family: "Font Awesome 5 Free";
+    margin-right: 8px;
+    font-size: 16px;
+    display: inline-block;
+    font-weight: 900;
+    font-family: "Font Awesome 5 Free";
 }
+
 .icon-update:before {
-  content: "\f044";
-  color: #007bff;
+    content: "\f044";
+    color: #007bff;
 }
+
 .update-container {
     display: flex;
-    justify-content: flex-end; /* Căn icon sang phải */
+    justify-content: flex-end;
+    /* Căn icon sang phải */
     align-items: center;
 }
 
@@ -130,17 +137,20 @@ i {
 }
 
 .icon-update:hover {
-    color: #0056b3; /* Màu khi hover */
-    transform: scale(1.2); /* Phóng to nhẹ khi hover */
+    color: #0056b3;
+    /* Màu khi hover */
+    transform: scale(1.2);
+    /* Phóng to nhẹ khi hover */
 }
 
 .icon-update:active {
-    transform: scale(1); /* Trả về kích thước ban đầu khi nhấn */
+    transform: scale(1);
+    /* Trả về kích thước ban đầu khi nhấn */
 }
 
 .icon-delete:before {
-  content: "\f2ed";
-  color: #dc3545;
+    content: "\f2ed";
+    color: #dc3545;
 }
 
 .icon-delete {
@@ -151,11 +161,14 @@ i {
 }
 
 .icon-delete:hover {
-    color: #a90d05; /* Màu khi hover */
-    transform: scale(1.2); /* Phóng to nhẹ khi hover */
+    color: #a90d05;
+    /* Màu khi hover */
+    transform: scale(1.2);
+    /* Phóng to nhẹ khi hover */
 }
 
 .icon-delete:active {
-    transform: scale(1); /* Trả về kích thước ban đầu khi nhấn */
+    transform: scale(1);
+    /* Trả về kích thước ban đầu khi nhấn */
 }
 </style>

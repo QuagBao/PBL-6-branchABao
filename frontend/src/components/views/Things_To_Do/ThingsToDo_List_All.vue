@@ -1,7 +1,7 @@
- <template>
+<template>
     <div class="container-fluid">
-        <Header/>
-        <Top_Button/>
+        <Header />
+        <Top_Button />
     </div>
 
     <div class="container-fluid">
@@ -14,8 +14,8 @@
                         <!-- Search -->
                         <div class="container-fluid search">
                             <div class="container">
-                                <Form_Search    :name_of_page="'Find Things to Do anywhere in Viet Nam'"
-                                                :name="'Attraction, activities or destination'"/>
+                                <Form_Search :name_of_page="'Find Things to Do anywhere in Viet Nam'"
+                                    :name="'Attraction, activities or destination'" />
                             </div>
                         </div>
                     </div>
@@ -33,11 +33,8 @@
                                     <span class="carousel-control-prev-icon"></span>
                                 </button>
 
-                                <Img_Card v-for="(city, index) in visibleCities"
-                                    :key="index"
-                                    :imageUrl="city.images[0]"
-                                    :name="city.name"
-                                    @click="navigateToThingsCity(city.id)"/>
+                                <Img_Card v-for="(city, index) in visibleCities" :key="index" :imageUrl="city.images[0]"
+                                    :name="city.name" @click="navigateToThingsCity(city.id)" />
 
                                 <button @click="nextCity" class="carousel-control-next" type="button">
                                     <span class="carousel-control-next-icon"></span>
@@ -53,33 +50,25 @@
                                 Top attractions in Viet Nam
                             </p>
                             <div class="container-fluid context list-items-1">
-                                <Card_Item v-for="(item, index) in paginatedList"
-                                        :key="index"
-                                        :destID="item.id"
-                                        :imageUrl="item.images[0]?.url|| '/blue-image.jpg'"
-                                        :name="item.name"
-                                        :stars="generateStars(item.rating)"
-                                        :review-number="item.review_count"
-                                        :tags="item.tag"
-                                        @click="navigateToDetailPlace(item.id)"/>
+                                <Card_Item v-for="(item, index) in paginatedList" :key="index" :destID="item.id"
+                                    :imageUrl="item.images[0]?.url || '/blue-image.jpg'" :name="item.name"
+                                    :stars="generateStars(item.rating)" :review-number="item.review_count"
+                                    :tags="item.tag" @click="navigateToDetailPlace(item.id)" />
                             </div>
                             <!-- Pagination -->
                             <div class="pagination-container d-flex justify-content-center align-items-center mt-3">
-                                <button class="btn-pagination prev" :disabled="currentPage === 1" @click="currentPage--">Previous</button>
+                                <button class="btn-pagination prev" :disabled="currentPage === 1"
+                                    @click="currentPage--">Previous</button>
                                 <!-- Trang đầu -->
-                                <button class="btn-pagination" 
-                                        :class="{ active: currentPage === 1 }"
-                                        @click="currentPage = 1">
+                                <button class="btn-pagination" :class="{ active: currentPage === 1 }"
+                                    @click="currentPage = 1">
                                     1
                                 </button>
                                 <!-- Dấu ... trước trang hiện tại -->
                                 <span class="dot" v-if="currentPage > 3">...</span>
 
-                                <button v-for="page in pagesToShow" 
-                                        :key="page" 
-                                        class="btn-pagination"
-                                        :class="{ active: page === currentPage }"
-                                        @click="currentPage = page">
+                                <button v-for="page in pagesToShow" :key="page" class="btn-pagination"
+                                    :class="{ active: page === currentPage }" @click="currentPage = page">
                                     {{ page }}
                                 </button>
 
@@ -87,20 +76,20 @@
                                 <span class="dot" v-if="currentPage < totalPages - 2">...</span>
 
                                 <!-- Trang cuối -->
-                                <button class="btn-pagination" 
-                                        :class="{ active: currentPage === totalPages }"
-                                        @click="currentPage = totalPages">
+                                <button class="btn-pagination" :class="{ active: currentPage === totalPages }"
+                                    @click="currentPage = totalPages">
                                     {{ totalPages }}
                                 </button>
-                                <button class="btn-pagination next" :disabled="currentPage === totalPages" @click="currentPage++">Next</button>
+                                <button class="btn-pagination next" :disabled="currentPage === totalPages"
+                                    @click="currentPage++">Next</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>    
- </template>
+    </div>
+</template>
 
 <script setup>
 import { ref, onMounted, watch, nextTick, computed } from 'vue';
@@ -126,7 +115,7 @@ const {
     generateCircle,
     generateStars,
     totalRating,
-  } = generateViewModel();
+} = generateViewModel();
 
 const navigateToDetailPlace = (id) => {
     window.location.assign(`/Detail/Place/${id}`);
@@ -163,19 +152,19 @@ const pagesToShow = computed(() => {
 </script>
 
 <script>
-    import Header from '../Header.vue';
-    import Scroll_Bar_Component from '../Scroll_Bar_Component.vue';
-    import Top_Button from '../Top_Button.vue';
-    import Form_Search from '../Form_Search.vue';
-    import Img_Card from '../Img_Card.vue';
-    import Card_Item from '../Card_Item.vue';
-    export default {
-        name: "ThingsToDo_List",
-        components: {
-            Header, Scroll_Bar_Component, Top_Button, Form_Search,
-            Img_Card, Card_Item,
-        }
+import Header from '../Header.vue';
+import Scroll_Bar_Component from '../Scroll_Bar_Component.vue';
+import Top_Button from '../Top_Button.vue';
+import Form_Search from '../Form_Search.vue';
+import Img_Card from '../Img_Card.vue';
+import Card_Item from '../Card_Item.vue';
+export default {
+    name: "ThingsToDo_List",
+    components: {
+        Header, Scroll_Bar_Component, Top_Button, Form_Search,
+        Img_Card, Card_Item,
     }
+}
 </script>
 
 <style scoped>
@@ -183,9 +172,11 @@ const pagesToShow = computed(() => {
     display: grid;
     grid-template-columns: 5% 90% 5%;
 }
+
 .overall {
     grid-column: 2/3;
 }
+
 .img-fluid {
     margin-top: 150px;
     width: 100vw;
@@ -193,21 +184,25 @@ const pagesToShow = computed(() => {
     border-radius: 20px;
     box-shadow: 0px 5px 15px rgba(19, 53, 123, 0.25);
 }
-.search{
+
+.search {
     margin-top: -25%;
     margin-bottom: 15%;
 }
-.content{
+
+.content {
     display: flex;
     flex-direction: column;
     color: #13357B;
     font-size: 28px;
     margin-top: 15px;
 }
-.content p{
+
+.content p {
     font-weight: 900;
-    margin-top: 15px; 
+    margin-top: 15px;
 }
+
 .list-items {
     position: relative;
     display: grid;
@@ -217,14 +212,20 @@ const pagesToShow = computed(() => {
     width: 95%;
     height: 100%;
 }
+
 .list-items-1 {
     display: grid;
-    grid-template-columns: repeat(3, 1fr); /* 3 cột, mỗi cột có kích thước bằng nhau */
-    gap: 40px; /* Khoảng cách giữa các phần tử */
-    align-items: center; /* Căn giữa theo chiều dọc */
-    justify-items: center; /* Căn giữa theo chiều ngang */
+    grid-template-columns: repeat(3, 1fr);
+    /* 3 cột, mỗi cột có kích thước bằng nhau */
+    gap: 40px;
+    /* Khoảng cách giữa các phần tử */
+    align-items: center;
+    /* Căn giữa theo chiều dọc */
+    justify-items: center;
+    /* Căn giữa theo chiều ngang */
     width: 100%;
 }
+
 .carousel-control-prev,
 .carousel-control-next {
     position: absolute;
@@ -237,6 +238,7 @@ const pagesToShow = computed(() => {
     height: 50px;
     cursor: pointer;
 }
+
 .carousel-control-prev-icon,
 .carousel-control-next-icon {
     display: flex;
@@ -244,10 +246,12 @@ const pagesToShow = computed(() => {
     height: 30px;
     align-items: center;
 }
+
 .pagination-container {
     gap: 10px;
     margin-bottom: 50px;
 }
+
 .btn-pagination {
     font-size: 18px;
     padding: 8px 16px;
@@ -274,12 +278,16 @@ const pagesToShow = computed(() => {
     color: #EDF6F9;
     font-weight: bold;
 }
-.prev, .next {
+
+.prev,
+.next {
     min-width: 85px;
 }
+
 .dot {
     color: #13357B;
 }
+
 .skeleton-loader {
     height: 200px;
     margin: 10px;
@@ -292,9 +300,9 @@ const pagesToShow = computed(() => {
     from {
         background-position: 200% 0;
     }
+
     to {
         background-position: -200% 0;
     }
 }
 </style>
-

@@ -2,7 +2,7 @@
     <div class="frame">
         <h3>About</h3>
         <div class="frame-description">
-            <p class="text-break" >
+            <p class="text-break">
                 {{ description }}
             </p>
         </div>
@@ -31,10 +31,12 @@ export default {
     flex-direction: column;
     gap: 20px;
 }
-h3 { 
+
+h3 {
     font-weight: 900;
 }
-.read-more-or-less{
+
+.read-more-or-less {
     color: #13357B;
     background: none;
     border: none;
@@ -45,7 +47,8 @@ h3 {
     text-decoration: underline;
     transition: all 0.3s ease-in-out;
 }
-.read-more-or-less:hover{
+
+.read-more-or-less:hover {
     color: #729AE9;
 }
 </style>

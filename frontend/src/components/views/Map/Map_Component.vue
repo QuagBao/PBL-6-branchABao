@@ -24,51 +24,38 @@ export default {
             mapUrl: 'https://tiles.goong.io/assets/',
             apiKey: 'ArPlUISaEBAdJFTABi9dcNGcue8WQ4cOAuGcNoBE',
             mapKey: 'tLyW2vk0aY3yfQLu8ZPy986mAgaW8igMYufv3BLY',
-            zoom: 16, // Độ zoom mặc định
+            zoom: 14, // Độ zoom mặc định
             routes: []
         };
     },
     mounted() {
-        console.log('Mounted: Initial selectedLocations:', this.selectedLocations);
         if (this.selectedLocations.length > 0) {
-            console.log('Calling initMap directly');
             this.initMap();
-        } else {
-            console.log('Watching for selectedLocations updates');
-            this.$watch(
-                'selectedLocations',
-                (newLocations) => {
-                    console.log('Updated selectedLocations:', newLocations);
-                    if (newLocations.length > 0) {
-                        console.log('Calling initMap from watcher');
-                        this.initMap();
-                    }
-                },
-                { immediate: true }
-            );
         }
     },
     watch: {
         selectedLocations: {
             handler(newLocations) {
-                console.log('Watcher triggered with new locations:', newLocations);
-                if (!this.map && newLocations.length > 0) {
-                    console.log('Calling initMap from watcher');
-                    this.initMap();
-                } else if (this.map && newLocations.length > 0) {    
-                    console.log('Adding markers to existing map');
-                    this.addMarkers(newLocations);
-                    this.drawLineBetweenPoints(newLocations);
+                if (newLocations.length > 0) {
+                    if (this.map) {
+                        // Cập nhật map center
+                        this.map.setCenter(newLocations[0]);
+                        console.log("Updated map center:", newLocations[0]);
+                        this.updateMap(newLocations);
+                    } else {
+                        // Nếu map chưa được tạo, khởi tạo lại
+                        this.initMap();
+                    }
                 }
             },
             immediate: true,
-            deep: true,
+            deep: true
         }
     },
     methods: {
         initMap() {
-            const defaultCenter = this.selectedLocations[0] || [108.2434152, 16.0562963];
-            console.log('InitMap started');
+            const defaultCenter = this.selectedLocations[0];
+            console.log('Initializing map with center:', defaultCenter);
             this.map = new maplibregl.Map({
                 container: 'map',
                 style: `${this.mapUrl}goong_map_web.json?api_key=${this.mapKey}`,
@@ -83,6 +70,15 @@ export default {
                     this.drawLineBetweenPoints(this.selectedLocations);
                 }
             });
+        },
+        updateMap(locations) {
+            console.log('Updating map with new locations:', locations);
+
+            // Gọi hàm addMarkers của bạn để cập nhật marker
+            this.addMarkers(locations);
+
+            // Cập nhật tuyến đường
+            this.drawLineBetweenPoints(locations);
         },
         // Hàm tạo marker có đánh số thứ tự
         addMarkers(locations) {
@@ -141,7 +137,7 @@ export default {
                             height: canvas.height,
                             data: imageData.data
                         });
-                        
+
                         this.map.addLayer({
                             id: `marker-layer-${index + 1}`,
                             type: "symbol",
@@ -153,12 +149,14 @@ export default {
                             },
                             filter: ["==", "id", feature.properties.id],
                         });
-                    };   
+                    };
                 }
             });
         },
         // Hàm nối các điểm trên map
         drawLineBetweenPoints(locations) {
+            this.routes = [];
+
             if (locations.length >= 2) {
                 for (let i = 0; i < locations.length - 1; i++) {
                     const startCoords = locations[i];
@@ -177,10 +175,8 @@ export default {
                 .then(response => response.json())
                 .then(data => {
                     if (data.routes && data.routes.length > 0) {
-                        const route = data.routes[0].overview_polyline.points; // Tuyến đường mã hóa
-                        const decodedRoute = this.decodePolyline(route); // Giải mã tuyến đường
-                        console.log('Decoded route:', decodedRoute);
-                        this.displayRoute(decodedRoute); // Hiển thị tuyến đường
+                        const route = this.decodePolyline(data.routes[0].overview_polyline.points);
+                        this.displayRoute(route);
                     } else {
                         console.error('Không tìm thấy tuyến đường phù hợp.');
                     }
@@ -215,7 +211,6 @@ export default {
 
                 points.push([lng * 1e-5, lat * 1e-5]);
             }
-            console.log("Points",points);
             return points;
         },
         // Hàm hiển thị route
