@@ -7,7 +7,7 @@ export async function getDestinations() {
 
     // Gửi yêu cầu để lấy danh sách người dùng
     const response = await axios.get(
-      "https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/?limit=500"
+      "https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/?limit=2000"
     );
 
     return response.data.map((destination) => ({

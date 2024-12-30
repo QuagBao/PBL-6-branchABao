@@ -1,7 +1,13 @@
 <template>
   <div class="destination-management">
     <h2>Destination Management</h2>
-    <div class="table-container">
+
+    <!-- Skeleton Loader Spinner -->
+    <div v-if="isLoading" class="spinner-container">
+      <div class="spinner"></div>
+    </div>
+
+    <div v-else class="table-container">
       <!-- Thanh tìm kiếm -->
       <div class="search-container">
         <input
@@ -103,10 +109,11 @@ const destinations = ref([]);
 const cities = ref([]);
 const users = ref([]);
 const activeDropdown = ref(null);
+const isLoading = ref(true); // Loading state
 
 const itemsPerPage = 5;
 const currentPage = ref(1);
-const searchQuery = ref(''); // Biến tìm kiếm
+const searchQuery = ref('');
 
 const {
   fetchDestinations,
@@ -115,9 +122,9 @@ const {
   fetchUsers,
 } = DestinationManagementController();
 
-// Load data
 const loadDestinations = async () => {
   destinations.value = await fetchDestinations();
+  isLoading.value = false; // Turn off loading
 };
 
 const loadCity = async () => {
@@ -128,10 +135,8 @@ const loadUsers = async () => {
   users.value = await fetchUsers();
 };
 
-onMounted(() => {
-  loadUsers();
-  loadCity();
-  loadDestinations();
+onMounted(async () => {
+  await Promise.all([loadUsers(), loadCity(), loadDestinations()]);
 });
 
 const getCityName = (city_id) => {
@@ -144,7 +149,6 @@ const getUserName = (user_id) => {
   return user ? user.username : 'Unknown User';
 };
 
-// Form actions
 const showCreateForm = () => {
   window.location.assign(`/destinations/create`);
 };
@@ -153,7 +157,6 @@ const showDetail = async (destinationID) => {
   window.location.assign(`/destinations/${destinationID}`);
 };
 
-// Live Search (Tìm kiếm)
 const filteredDestinations = computed(() => {
   if (!searchQuery.value) {
     return destinations.value;
@@ -163,7 +166,6 @@ const filteredDestinations = computed(() => {
   );
 });
 
-// Pagination (Phân trang)
 const paginatedDestinations = computed(() => {
   const startIndex = (currentPage.value - 1) * itemsPerPage;
   return filteredDestinations.value.slice(startIndex, startIndex + itemsPerPage);
@@ -185,8 +187,7 @@ const toggleDropdown = (destinationId) => {
   activeDropdown.value = activeDropdown.value === destinationId ? null : destinationId;
 };
 
-const maxVisiblePages = 5; // Số trang hiển thị trước và sau trang hiện tại
-
+const maxVisiblePages = 5;
 const visiblePages = computed(() => {
   const pages = [];
   const startPage = Math.max(1, currentPage.value - 2);
@@ -194,14 +195,6 @@ const visiblePages = computed(() => {
 
   for (let i = startPage; i <= endPage; i++) {
     pages.push(i);
-  }
-
-  if (pages[0] !== 1) {
-    pages.unshift(1); // Thêm trang 1 nếu không nằm trong dải hiển thị
-  }
-
-  if (pages[pages.length - 1] !== totalPages.value) {
-    pages.push(totalPages.value); // Thêm trang cuối nếu không nằm trong dải hiển thị
   }
 
   return pages;
@@ -970,6 +963,26 @@ const goToPage = (page) => {
 .search-input:focus {
   border-color: #1877f2;
   box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+}
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
   </style>
   
