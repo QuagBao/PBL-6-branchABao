@@ -1,7 +1,10 @@
 <template>
   <div class="destination-management">
     <h2>Review Management</h2>
-    <div class="header-container">
+    <div v-if="isLoading" class="spinner-container">
+      <div class="spinner"></div>
+    </div>
+    <div v-else class="header-container">
       <div class="search-container">
         <input
           type="text"
@@ -80,6 +83,7 @@ const searchQuery = ref(""); // Khai báo biến cho thanh tìm kiếm
 
 const itemsPerPage = 5;
 const currentPage = ref(1);
+const isLoading = ref(true);
 
 const {
   fetchCities,
@@ -99,9 +103,12 @@ const loadUsers = async () => {
   users.value = await fetchUsers();
 };
 
-onMounted(loadUsers);
-onMounted(loadCity);
-onMounted(loadDestinations);
+onMounted(async () => {
+  await loadCity();
+  await loadUsers();
+  await loadDestinations();
+  isLoading.value = false;
+});
 
 // Lọc destinations theo tên
 const filteredDestinations = computed(() => {
@@ -876,6 +883,26 @@ const goToPage = (page) => {
 .search-input:focus {
   border-color: #1877f2;
   box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+}
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
   </style>
   

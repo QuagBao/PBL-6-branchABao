@@ -1,7 +1,10 @@
 <template>
   <div class="destination-management container">
     <h2 class="title">Destination Management</h2>
-    <div class="form-container">
+    <div v-if="isLoading" class="spinner-container">
+        <div class="spinner"></div>
+    </div>
+    <div v-else class="form-container">
       <h3>Create Destination</h3>
       <form @submit.prevent="submitAddDestination" class="form-style">
         <!-- Basic Information -->
@@ -110,6 +113,7 @@ const cities = ref([]);
 const users = ref([]);
 const previewImages = ref([]);
 const isMoreInfoVisible = ref(false);
+const isLoading = ref(true);
 
 const { confirmCreate, fetchCities, fetchUsers } = DestinationManagementController();
 
@@ -135,6 +139,7 @@ const destination = ref({
 onMounted(async () => {
   cities.value = await fetchCities();
   users.value = await fetchUsers();
+  isLoading.value = false;
 });
 
 const submitAddDestination = async () => {
@@ -310,6 +315,25 @@ button[type="button"].btn-link:hover {
   padding: 5px;
   cursor: pointer;
 }
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
 
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 </style>
   

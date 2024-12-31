@@ -1,6 +1,9 @@
 <template>
   <div class="user-management">
     <h2>User Management</h2>
+    <div v-if="isLoading" class="spinner-container">
+      <div class="spinner"></div>
+    </div>
     <div class="table-container">
       <!-- Thanh tìm kiếm -->
        <div class="header-container">
@@ -139,6 +142,7 @@ const searchQuery = ref(''); // Biến tìm kiếm
 const currentPage = ref(1);
 const itemsPerPage = 5;
 const activeDropdown = ref(null);
+const isLoading = ref(true);
 
 const router = useRouter();
 const toast = useToast();
@@ -169,10 +173,10 @@ const loadCity = async () => {
   cities.value = await fetchCities();
 };
 
-onMounted(loadCity);
-
 onMounted(async () => {
+  await loadCity();
   await loadUsers();
+  isLoading.value = false;
 });
 
 // Live Search (Tìm kiếm)
@@ -640,7 +644,26 @@ const goToPage = (page) => {
   border-color: #1877f2;
   box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
 }
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
 
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
 
 
   </style>

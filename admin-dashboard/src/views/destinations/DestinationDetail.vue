@@ -1,8 +1,11 @@
 <template>
     <div class="destination-management">
       <h2>Destination Management</h2>
+      <div v-if="isLoading" class="spinner-container">
+        <div class="spinner"></div>
+      </div>
   
-      <div class="detail-destination">
+      <div v-else class="detail-destination">
         <div class="header-overlay">
           <button class="back-button" @click="goBack">
             <i class="icon-back"></i>
@@ -265,6 +268,7 @@
   const cities = ref([]);
   const users = ref([]);
   const destinationID = route.params.id;
+  const isLoading = ref(true);
   
   const {
     fetchCities,
@@ -329,6 +333,7 @@
     loadUsers();
     loadCity();
     showDetail(destinationID);
+    isLoading.value = false;
   });
   
   const getCityName = (city_id) => {
@@ -1024,5 +1029,26 @@
   .no-data .action-buttons {
     justify-content: flex-end;
   }
+
+  .spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
   </style>
   

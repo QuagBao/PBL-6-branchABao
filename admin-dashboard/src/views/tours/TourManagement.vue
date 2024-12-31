@@ -1,7 +1,10 @@
 <template>
   <div class="tour-management">
     <h2>Tour Management</h2>
-    <div class="header-container">
+    <div v-if="isLoading" class="spinner-container">
+      <div class="spinner"></div>
+    </div>
+    <div v-else class="header-container">
       <button class="action-button add-button" @click="showCreateForm">
         Add New Tour
       </button>
@@ -92,25 +95,21 @@ import TourManagementController from "@/controllers/TourManagementController";
 import { ref, computed, onMounted } from "vue";
 
 const tours = ref([]);
-const destinations = ref([]);
 const users = ref([]);
 const cities = ref([]);
 const currentPage = ref(1);
 const itemsPerPage = 5;
 const activeDropdown = ref(null);
 const searchQuery = ref(""); // Khai báo biến cho thanh tìm kiếm
+const isLoading = ref(true);
 
 const {
   fetchTours,
   deleteTour,
-  getDestination,
   fetchCities,
   fetchUsers,
 } = TourManagementController();
 
-const fetchDestination = async () => {
-  destinations.value = await getDestination();
-};
 
 const loadTours = async () => {
   tours.value = await fetchTours();
@@ -124,11 +123,11 @@ const loadCity = async () => {
   cities.value = await fetchCities();
 };
 
-onMounted(() => {
-  loadCity();
-  loadUsers();
-  loadTours();
-  fetchDestination();
+onMounted( async () => {
+  await loadCity();
+  await loadUsers();
+  await loadTours();
+  isLoading.value = false;
 });
 
 const getCityName = (city_id) => {
@@ -1039,6 +1038,26 @@ const toggleDropdown = (tourId) => {
 .search-input:focus {
   border-color: #1877f2;
   box-shadow: 0 0 0 2px rgba(24, 119, 242, 0.2);
+}
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
   </style>
   

@@ -2,8 +2,10 @@
   <div class="destination-management container">
     <h2 class="title">Destination Management</h2>
     <div class="form-container">
-      <h3>Update Destination</h3>
-      <form @submit.prevent="submitUpdateDestination" class="form-style">
+      <div v-if="isLoading" class="spinner-container">
+        <div class="spinner"></div>
+      </div>
+      <form v-else @submit.prevent="submitUpdateDestination" class="form-style">
         <!-- Basic Information -->
         <div class="form-floating mb-4">
           <input type="text" v-model="currentDestination.name" id="destination-name" class="form-control" required placeholder=" " />
@@ -121,6 +123,7 @@ const new_images = ref([]);
 const image_ids_to_remove = ref([]);
 const previewNewImages = ref([]);
 const isMoreInfoVisible = ref(false);
+const isLoading = ref(true);
 
 const {
   updateDestination,
@@ -186,6 +189,7 @@ onMounted(async () => {
   await loadUsers();
   await loadCity();
   await showUpdateForm(destinationID);
+  isLoading.value = false;
 });
 
 const showUpdateForm = async (destinationID) => {
@@ -391,6 +395,26 @@ button[type="button"].btn-link {
 
 button[type="button"].btn-link:hover {
   text-decoration: underline;
+}
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>
   

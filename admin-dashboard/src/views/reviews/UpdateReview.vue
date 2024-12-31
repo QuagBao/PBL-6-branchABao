@@ -2,7 +2,10 @@
   <div class="destination-management container">
 
     <!-- Update Review Form -->
-    <div class="form-container">
+    <div v-if="isLoading" class="spinner-container">
+      <div class="spinner"></div>
+    </div>
+    <div v-else class="form-container">
       <h3 class="text-center">Update Review</h3>
       <form @submit.prevent="submitUpdateReview" class="form-style">
         
@@ -113,6 +116,7 @@ const users = ref([]);
 const new_images = ref([]);
 const image_ids_to_remove = ref([]);
 const previewNewImages = ref([]);
+const isLoading = ref(true);
 const companions = [
   { value: 'Solo', label: 'Solo' },
   { value: 'Family', label: 'Family' },
@@ -171,6 +175,7 @@ onMounted(async () => {
     await loadCity();
     await loadUsers();
     await loadDestinations();
+    isLoading.value = false;
   });
 
 
@@ -355,6 +360,26 @@ button[type="button"].btn-link {
 
 button[type="button"].btn-link:hover {
   text-decoration: underline;
+}
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>
   

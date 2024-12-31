@@ -1,7 +1,10 @@
 <template>
     <div class="city-management">
       <h2>City Management</h2>
-      <div class="table-container">
+      <div v-if="isLoading" class="spinner-container">
+        <div class="spinner"></div>
+      </div>
+      <div v-else class="table-container">
         <button class="action-button add-button" @click="showCreateForm">
           Add New City
         </button>
@@ -82,6 +85,7 @@
   const itemsPerPage = 5;
   const currentPage = ref(1);
   const activeDropdown = ref(null);
+  const isLoading = ref(true);
 
   const toggleDropdown = (cityId) => {
   activeDropdown.value = activeDropdown.value === cityId ? null : cityId;
@@ -97,7 +101,10 @@
     cities.value = await fetchCities();
   };
   
-  onMounted(loadCities);
+  onMounted(async () => {
+    await loadCities();
+    isLoading.value = false;
+  });
   
   // Pagination
   const paginatedCities = computed(() => {
@@ -461,6 +468,26 @@ const goToPage = (page) => {
 .dropdown-item:hover {
   background: #0056b3;
   color: white;
+}
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
   </style>
   

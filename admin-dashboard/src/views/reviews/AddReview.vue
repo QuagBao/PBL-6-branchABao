@@ -1,6 +1,9 @@
 <template>
   <div class="destination-management container">
 
+    <div v-if="isLoading" class="spinner-container">
+      <div class="spinner"></div>
+    </div>
     <!-- Create Review Form -->
     <div class="form-container">
       <h3 class="text-center">Create Review</h3>
@@ -108,6 +111,7 @@ const destinationID = route.params.id;
   const cities = ref([]);
   const users = ref([]);
   const previewImages = ref([]);
+  const isLoading = ref(true);
   const companions = [
     { value: 'Solo', label: 'Solo' },
     { value: 'Family', label: 'Family' },
@@ -157,10 +161,13 @@ const destinationID = route.params.id;
   const loadDestinations = async () => {
     destinations.value = await fetchDestinations();
   };
-  
-  onMounted(loadUsers);
-  onMounted(loadCity);
-  onMounted(loadDestinations);
+
+  onMounted(async () => {
+    await loadCity();
+    await loadUsers();
+    await loadDestinations();
+    isLoading.value = false;
+  });
   
   const submitAddReview = async () => {
     await confirmCreate(review.value, images.value);
@@ -344,6 +351,26 @@ button[type="button"].btn-link {
 
 button[type="button"].btn-link:hover {
   text-decoration: underline;
+}
+.spinner-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #3498db;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>
 
