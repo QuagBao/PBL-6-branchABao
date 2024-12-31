@@ -149,12 +149,16 @@ const day_7 = ref([]);
 //Định nghĩa emit sự kiện và tính toán destListID
 const emit = defineEmits(['update-dest-list-id']);
 const destListID = ref([]);
+const select = ref(0);
+const numDay = ref(0);
 // Gửi dl khi tính toán xong
 onMounted(() => {
     if (day_1.value.length > 0) {
+        select.value = 0;
+        numDay.value = 1;
         destListID.value = day_1.value.map(destination => destination.id);
         console.log('Initial destListID:', destListID.value);
-        emit('update-dest-list-id', destListID.value);
+        emit('update-dest-list-id', destListID.value, select.value, numDay.value);
     }
 });
 
@@ -219,27 +223,46 @@ const sendDestListIDbyDay = (day) => {
     switch (day) {
         case 1:
             destListID.value = day_1.value.map(destination => destination.id);
+            select.value = 0;
+            numDay.value = 1;
             break;
         case 2:
             destListID.value = day_2.value.map(destination => destination.id);
+            select.value = 0;
+            numDay.value = 2;
             break;
         case 3:
             destListID.value = day_3.value.map(destination => destination.id);
+            select.value = 0;
+            numDay.value = 3;
             break;
         case 4:
             destListID.value = day_4.value.map(destination => destination.id);
+            select.value = 0;
+            numDay.value = 4;
             break;
         case 5:
             destListID.value = day_5.value.map(destination => destination.id);
+            select.value = 0;
+            numDay.value = 5;
             break;
         case 6:
             destListID.value = day_6.value.map(destination => destination.id);
+            select.value = 0;
+            numDay.value = 6;
             break;
         case 7:
             destListID.value = day_7.value.map(destination => destination.id);
+            select.value = 0;
+            numDay.value = 7;
+            break;
+        case 8:
+            destListID.value = day_0.value.map(destination => destination.id);
+            select.value = 1;
+            numDay.value = 0;
             break;
     }
-    emit('update-dest-list-id', destListID.value);
+    emit('update-dest-list-id', destListID.value, select.value, numDay.value);
 }
 
 const navigate = (destination) => {
@@ -300,8 +323,6 @@ button:hover {
     border: 2px solid #13357B;
     font-weight: bold;
     cursor: pointer;
-
-
 }
 
 .count-text {

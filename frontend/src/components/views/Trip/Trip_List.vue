@@ -1,31 +1,37 @@
 <template>
     <div class="container-fluid header">
-        <Header/>
-        <Top_Button/>
+        <Header />
+        <Top_Button />
     </div>
-    <div class="container-fluid-2 ">
-        <div class="row">
-            <p>My Trips</p>
-        </div>
+    <div class="container-fluid">
+        <div class="container-fluid">
+            <div class="container-fluid frame-overall">
+                <div class="container-fluid overall">
+                    <div class="row">
+                        <div class="row">
+                            <p>My Trips</p>
+                        </div>
 
-        <div class="container-fluid-1">
-            <button @click="navigateToBuildTrip">
-                <svg width="50px" height="50px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6 12H18M12 6V18" stroke="#currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                Create a new trip
-            </button>    
-        </div>
+                        <div class="container-fluid">
+                            <button @click="navigateToBuildTrip">
+                                <svg width="50px" height="50px" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M6 12H18M12 6V18" stroke="#currentColor" stroke-width="2"
+                                        stroke-linecap="round" stroke-linejoin="round" />
+                                </svg>
+                                Create a new trip
+                            </button>
+                        </div>
 
-        <div class="list-trip-items">
-            <Trips_Item
-            v-for="trip in trips"
-                :key="trip.id"
-                :trip="trip"
-                
-            />
+                        <div class="list-trip-items">
+                            <Trips_Item v-for="trip in trips" :key="trip.id" :trip="trip" class="custom" />
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
 </template>
 
 <script setup>
@@ -36,8 +42,8 @@ const trips = ref([]);
 onMounted(async () => {
     trips.value = await fetchTripByUser();
 });
-const navigateToDetailTrip = (trip_id) =>{
-        window.location.assign(`/Trip/${trip_id}`);
+const navigateToDetailTrip = (trip_id) => {
+    window.location.assign(`/Trip/${trip_id}`);
 };
 const navigateToBuildTrip = () => {
     window.location.assign('/Create_Trip/');
@@ -45,16 +51,17 @@ const navigateToBuildTrip = () => {
 </script>
 
 <script>
-    import Trips_Item from './Trips_Item.vue';
-    import Header from '../Header.vue';
-    import Trips_Item_no_date from './Trips_Item_no_date.vue';
-    import Tours_Item from './Tours_Item.vue';
-    import Top_Button from '../Top_Button.vue';
+import Trips_Item from './Trips_Item.vue';
+import Header from '../Header.vue';
+import Trips_Item_no_date from './Trips_Item_no_date.vue';
+import Tours_Item from './Tours_Item.vue';
+import Top_Button from '../Top_Button.vue';
+import Scroll_Bar_Component from '../Scroll_Bar_Component.vue';
 import { onMounted } from 'vue';
 export default {
-    name: "Trips_Profile", 
+    name: "Trips_Profile",
     components: {
-        Trips_Item, Trips_Item_no_date, 
+        Trips_Item, Trips_Item_no_date,
         Tours_Item, Header, Top_Button
     },
     data() {
@@ -79,28 +86,14 @@ export default {
 </script>
 
 <style scoped>
-* {
-    box-sizing: border-box; /* Bao gồm padding và border trong chiều rộng và chiều cao */
+.frame-overall {
+    display: grid;
+    grid-template-columns: 5% 90% 5%;
 }
 
-.container-fluid-2 {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-    width: 100vw;
-    min-height: 100vh;
-    margin-top: 150px;
-    padding: 0 10%; /* Thêm padding bên trái và phải 10% */
-    overflow-x: hidden; /* Ẩn thanh cuộn ngang nếu có */
-}
-
-.container-fluid-1 {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-left: 0px;
-    padding: 10px 5px;
-    gap: 10px;
+.overall {
+    grid-column: 2/3;
+    margin-top: 180px;
 }
 
 .row p {
@@ -133,7 +126,8 @@ button {
     border: 1px solid #13357B;
     font-weight: bold;
     cursor: pointer;
-    flex: 1; /* Để hai nút cách đều và chiếm cùng một khoảng rộng */
+    flex: 1;
+    /* Để hai nút cách đều và chiếm cùng một khoảng rộng */
 }
 
 button:hover {
@@ -141,5 +135,4 @@ button:hover {
     color: #CAF0F8;
     stroke: #CAF0F8;
 }
-
 </style>

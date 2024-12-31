@@ -15,6 +15,10 @@ export default {
         selectedLocations: {
             type: Array,
             default: () => [] // Danh sách các địa điểm
+        },
+        select: {
+            type: Number,
+            default: 0
         }
     },
     data() {
@@ -24,7 +28,7 @@ export default {
             mapUrl: 'https://tiles.goong.io/assets/',
             apiKey: 'ArPlUISaEBAdJFTABi9dcNGcue8WQ4cOAuGcNoBE',
             mapKey: 'tLyW2vk0aY3yfQLu8ZPy986mAgaW8igMYufv3BLY',
-            zoom: 14, // Độ zoom mặc định
+            zoom: 16, // Độ zoom mặc định
             routes: []
         };
     },
@@ -67,7 +71,9 @@ export default {
                 if (this.selectedLocations.length > 0) {
                     console.log('Selected Locations in MapComponent(child):', this.selectedLocations);
                     this.addMarkers(this.selectedLocations);
-                    this.drawLineBetweenPoints(this.selectedLocations);
+                    if (this.select == 0) {
+                        this.drawLineBetweenPoints(this.selectedLocations);
+                    }
                 }
             });
         },
@@ -77,8 +83,13 @@ export default {
             // Gọi hàm addMarkers của bạn để cập nhật marker
             this.addMarkers(locations);
 
-            // Cập nhật tuyến đường
-            this.drawLineBetweenPoints(locations);
+            if (this.select == 0) {
+                // Cập nhật tuyến đường
+                this.drawLineBetweenPoints(locations);
+            }
+            else {
+                this.clearRoutes();
+            }
         },
         // Hàm tạo marker có đánh số thứ tự
         addMarkers(locations) {
@@ -252,29 +263,22 @@ export default {
                 });
             }
         },
-        removeLayer(layerId) {
-            if (this.map.getLayer(layerId) && layerId.startsWith('marker-layer-')) {
-                this.map.removeLayer(layerId);
-                console.log(`Layer ${layerId} removed successfully`);
+        clearRoutes() {
+            // Xóa layer 'routes' nếu tồn tại
+            if (this.map.getLayer('routes')) {
+                this.map.removeLayer('routes');
+                console.log('Layer routes removed');
             }
+
+            // Xóa source 'routes' nếu tồn tại
+            if (this.map.getSource('routes')) {
+                this.map.removeSource('routes');
+                console.log('Source routes removed');
+            }
+
+            // Xóa mảng routes trong component
+            this.routes = [];
         },
-        removeSource(sourceId) {
-            if (this.map.getSource(sourceId)) {
-                const layersUsingSource = this.map.getStyle().layers.filter(
-                    (layer) => layer.source === sourceId
-                );
-
-                layersUsingSource.forEach((layer) => {
-                    if (layer.id.startsWith('marker-layer-')) {
-                        this.map.removeLayer(layer.id);
-                        console.log(`Layer ${layer.id} removed successfully`);
-                    }
-                });
-
-                this.map.removeSource(sourceId);
-                console.log(`Source ${sourceId} removed successfully`);
-            }
-        }
     }
 };
 </script>
@@ -289,6 +293,6 @@ export default {
 
 #map {
     width: 100%;
-    height: 100vh;
+    height: 68vh;
 }
 </style>
