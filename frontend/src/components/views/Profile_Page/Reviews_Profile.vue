@@ -1,9 +1,6 @@
 <template>
     <div class="reviews">
-        <Content_review v-for="review in reviewLists"
-                        :key="review.id"
-                        :review="review"
-                        :user="user" />
+        <Content_review v-for="review in reviewLists" :key="review.id" :review="review" :user="user" />
     </div>
 </template>
 
@@ -16,7 +13,7 @@ const {
 } = UserReviewViewModel();
 const reviewLists = ref([]);
 onMounted(async () => {
-    reviewLists.value =  await reviewList();
+    reviewLists.value = await reviewList();
 });
 </script>
 

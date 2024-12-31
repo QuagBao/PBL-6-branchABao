@@ -12,6 +12,10 @@ export default defineComponent({
       type: [Number, Array],
       required: true,
     },
+    select: {
+      type: Number,
+      default: 0
+    }
   },
   setup(props) {
     const selectedLocation = ref([]);
@@ -54,6 +58,6 @@ export default defineComponent({
 
 <template>
   <div>
-    <MapComponent :selectedLocations="selectedLocation" />
+    <MapComponent :selectedLocations="selectedLocation" :select="select" />
   </div>
 </template>

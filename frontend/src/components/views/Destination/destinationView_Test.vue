@@ -194,7 +194,7 @@
                         </div>
 
                         <!-- Recommedations -->
-                        <div class="title-content">
+                        <div v-if="user" class="title-content">
                             <p class="p-5 resorts">Recommedations</p>
                             <div class="container-fluid">
                                 <Recomment_Destination :destinations="recommendations" :generate-stars="generateStars"

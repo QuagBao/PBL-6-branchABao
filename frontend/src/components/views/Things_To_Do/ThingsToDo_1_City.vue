@@ -81,7 +81,7 @@
                                     @click="currentPageHotels++">Next</button>
                             </div>
                         </div>
-                        <div v-if="!loadingDestinations" class=" title-content">
+                        <div v-if="!loadingDestinations && user" class=" title-content">
                             <p class="title p-5">Recommedations in {{ city?.name || 'Loading...' }}</p>
                             <div class="container-fluid">
                                 <Recomment_Destination :destinations="recommendations" :generateStars="generateStars"

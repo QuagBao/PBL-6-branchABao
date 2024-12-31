@@ -47,8 +47,8 @@
                     <div :class="['container-fluid', 'frame-map', { hidden: !hasMap }]">
                         <!-- Hiển thị Map ứng với tab Itinerary_List -->
                         <div v-if="currentComponent === 'Itinerary_List' && destListID.length > 0">
-                            <p class="p-1">Map For Itinerary</p>
-                            <Map :destinationID="destListID" />
+                            <p class="p-1">Map For {{ numDay !== 0 ? `Day ${numDay}` : 'Places to stay' }}</p>
+                            <Map :destinationID="destListID" :select="select" />
                         </div>
                     </div>
                 </div>
@@ -96,8 +96,12 @@ export default {
             console.log('Current Component:', this.currentComponent);
             this.hasMap = tabName === 'Itinerary' && this.destListID.length > 0;
         },
-        handleDestListIDUpdate(destListID) {
+        handleDestListIDUpdate(destListID, select, numDay) {
             this.destListID = destListID;
+            this.select = select;
+            this.numDay = numDay;
+            console.log('Select:', this.select);
+            console.log('numDay:', this.numDay);
             console.log('Received destListID from child:', this.destListID);
             this.hasMap = this.currentComponent === 'Itinerary' && this.destListID.length > 0;
         },
@@ -223,7 +227,7 @@ export default {
     height: fit-content;
     font-size: 40px;
     position: sticky;
-    top: 60px;
+    top: 150px;
     transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
