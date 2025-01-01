@@ -18,14 +18,6 @@
       <!-- Sign in button -->
       <button type="submit">Sign in</button>
 
-      <!-- Google Sign in -->
-      <div class="google-signin-container">
-        <img src="@/assets/svg/google_logo.svg" alt="Google Logo" class="google-logo"/>
-        <button class="google-signin">
-          Join With Google
-        </button>
-      </div>
-
       <!-- Options -->
       <div class="options">
         <label class="custom-checkbox">

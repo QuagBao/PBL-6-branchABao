@@ -17,7 +17,7 @@
                 </div>
                 <div class="container-fluid length">
                     <div class="button-1">
-                        <svg width="30px" height="30px" @click="decreaseLength" :class="{ disabled: numberLength <= 1 }"
+                        <svg width="40px" height="40px" @click="decreaseLength" :class="{ disabled: numberLength <= 1 }"
                             viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink"
                             xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
@@ -38,7 +38,7 @@
                     </div>
                     <span class="length-input">{{ numberLength }}</span>
                     <div class="button-1">
-                        <svg width="30px" height="30px" @click="increaseLength" :class="{ disabled: numberLength >= 7 }"
+                        <svg width="40px" height="40px" @click="increaseLength" :class="{ disabled: numberLength >= 7 }"
                             viewBox="0 0 32 32" version="1.1" xmlns="http://www.w3.org/2000/svg"
                             xmlns:xlink="http://www.w3.org/1999/xlink"
                             xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
@@ -78,20 +78,14 @@ const dateViewModel = new DateViewModel();
 const tripStore = useTripStore();
 const router = useRouter();
 
-// Reactive state
 const selectedMonthIndex = ref(null);
-
-// Computed properties
 const allMonths = computed(() => dateViewModel.getAllMonthNames());
 const numberLength = ref(1);
 const monthChoose = ref(0);
 
-// Methods
 const selectMonth = (index) => {
     selectedMonthIndex.value = index;
     dateViewModel.setSelectedMonth(index);
-
-    // Cập nhật tháng vào store
     const monthName = allMonths.value[index];
     monthChoose.value = monthName;
 };
@@ -107,18 +101,12 @@ const goNext = () => {
     router.push({ name: 'Page_3' });
 };
 
-const exactDates = () => {
-    router.push({ name: 'Page_2' });
-};
-
 const decreaseLength = () => {
-    numberLength.value = numberLength.value - 1;
-    console.log(numberLength.value);
+    if (numberLength.value > 1) numberLength.value--;
 };
 
 const increaseLength = () => {
-    numberLength.value = numberLength.value + 1;
-    console.log(numberLength.value);
+    if (numberLength.value < 7) numberLength.value++;
 };
 </script>
 
@@ -226,20 +214,22 @@ button:hover {
     color: #13357B;
     text-decoration: underline;
     text-underline-offset: 7px;
-    margin-left: 70px;
+    margin-left: 30%;
+    font-size: 1.5vw;
 }
 
 .length-input {
     background-color: transparent;
     border: none;
-    text-align: center
+    text-align: center;
+    font-size: 1.5vw;
 }
 
 .length {
     display: flex;
     justify-content: flex-end;
     align-items: center;
-    margin-right: 70px;
+    margin-right: 30%;
     gap: 10px;
     color: #13357B;
 }
