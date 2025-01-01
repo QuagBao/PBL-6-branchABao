@@ -4,8 +4,8 @@ import axios from "axios";
 export async function getDestination(userID) {
     try {
         const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/?user_id=${userID}`);
-        const destinations  = response.data;
-        console.log("Model: ",destinations);
+        const destinations = response.data;
+        console.log("Model: ", destinations);
 
         return destinations.map((destination) => ({
             id: destination.id,
@@ -32,7 +32,7 @@ export async function getDestination(userID) {
 }
 
 // Lấy tên tp theo ID
-export async function getAllCities(){
+export async function getAllCities() {
     try {
         const response = await fetch(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/city/`);
         const data = await response.json();
@@ -42,13 +42,13 @@ export async function getAllCities(){
             name: city.name
         }));
     } catch (error) {
-      console.error("Có lỗi xảy ra khi lấy dữ liệu chi tiết thành phố:", error);
-      return null; // Return null or handle as needed
+        console.error("Có lỗi xảy ra khi lấy dữ liệu chi tiết thành phố:", error);
+        return null; // Return null or handle as needed
     }
 }
 
 // Lấy tổng tour, tổng destination, tổng rating
-export async function fetchStatistics(userID){
+export async function fetchStatistics(userID) {
     try {
         const response = await fetch(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/dashboard/business/metrics/${userID}`);
         const data = await response.json();
@@ -56,7 +56,7 @@ export async function fetchStatistics(userID){
         return {
             total_tours: data.total_tours,
             total_destinations: data.total_destinations,
-            average_rating: data.average_rating? parseFloat(data.average_rating.toFixed(1)) : null
+            average_rating: data.average_rating ? parseFloat(data.average_rating.toFixed(1)) : null
         };
     } catch (error) {
         console.error("Có lỗi xảy ra khi lấy dữ liệu chi tiết thành phố:", error);
@@ -68,7 +68,7 @@ export async function fetchStatistics(userID){
 export async function fetchRatingByDestinationID(destinationID) {
     try {
         const response = await fetch(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/dashboard/business/stacked_review?destination_id=${destinationID}&year=2024`);
-        
+
         if (!response.ok) {
             throw new Error(`Failed to fetch data: ${response.statusText}`);
         }
@@ -84,4 +84,3 @@ export async function fetchRatingByDestinationID(destinationID) {
         return [];
     }
 }
-

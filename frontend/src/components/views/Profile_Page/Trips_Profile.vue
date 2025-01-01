@@ -1,24 +1,19 @@
 <template>
     <div class="frame-trip">
-        <div class="container py-5">
+        <div class="container d-flex justify-content-between mt-5">
             <p>My Trips</p>
+            <div class="">
+                <button @click="navigateToBuildTrip">
+                    <svg width="50px" height="50px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M6 12H18M12 6V18" stroke="#currentColor" stroke-width="2" stroke-linecap="round"
+                            stroke-linejoin="round" />
+                    </svg>
+                    Create a new trip
+                </button>
+            </div>
         </div>
-
-        <div class="container-fluid-1">
-            <button @click="navigateToBuildTrip">
-                <svg width="50px" height="50px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M6 12H18M12 6V18" stroke="#currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                Create a new trip
-            </button>    
-        </div>
-
         <div class="list-trip-items">
-            <Trips_Item
-            v-for="trip in trips"
-                :key="trip.id"
-                :trip="trip"
-            />
+            <Trips_Item v-for="trip in trips" :key="trip.id" :trip="trip" />
         </div>
     </div>
 </template>
@@ -31,8 +26,8 @@ const trips = ref([]);
 onMounted(async () => {
     trips.value = await fetchTripByUser();
 });
-const navigateToDetailTrip = (trip_id) =>{
-        window.location.assign(`/Trip/${trip_id}`);
+const navigateToDetailTrip = (trip_id) => {
+    window.location.assign(`/Trip/${trip_id}`);
 };
 const navigateToBuildTrip = () => {
     window.location.assign('/Create_Trip/');
@@ -40,16 +35,16 @@ const navigateToBuildTrip = () => {
 </script>
 
 <script>
-    import Trips_Item from './Trips_Item.vue';
-    import Header from '../Header.vue';
-    import Trips_Item_no_date from './Trips_Item_no_date.vue';
-    import Tours_Item from './Tours_Item.vue';
-    import Top_Button from '../Top_Button.vue';
+import Trips_Item from './Trips_Item.vue';
+import Header from '../Header.vue';
+import Trips_Item_no_date from './Trips_Item_no_date.vue';
+import Tours_Item from './Tours_Item.vue';
+import Top_Button from '../Top_Button.vue';
 import { onMounted } from 'vue';
 export default {
-    name: "Trips_Profile", 
+    name: "Trips_Profile",
     components: {
-        Trips_Item, Trips_Item_no_date, 
+        Trips_Item, Trips_Item_no_date,
         Tours_Item, Header, Top_Button
     },
     data() {
@@ -77,15 +72,16 @@ export default {
 .frame-trip {
     width: 100%;
 }
+
 .container p {
     color: #13357B;
     font-size: 40px;
     font-weight: 900;
 }
 
-.sort{
+.sort {
     display: grid;
-    grid-template-columns: 60% 40%; 
+    grid-template-columns: 60% 40%;
 }
 
 .frame-sort {
@@ -103,16 +99,19 @@ export default {
     box-shadow: 0 2px 6px -1px rgba(19, 53, 123, .07), 0 6px 18px -1px rgba(19, 53, 123, .04) !important;
 }
 
-.select-selected:hover{
+.select-selected:hover {
     background-color: #13357B;
     stroke: #CAF0F8;
 }
-.select-selected:hover{
+
+.select-selected:hover {
     color: #CAF0F8;
 }
-.select-selected{
+
+.select-selected {
     font-weight: bold;
 }
+
 .select-items {
     display: block;
     width: 100%;
@@ -154,14 +153,17 @@ button {
     border: 1px solid #13357B;
     font-weight: bold;
     cursor: pointer;
-    flex: 1; /* Để hai nút cách đều và chiếm cùng một khoảng rộng */
+    flex: 1;
+    /* Để hai nút cách đều và chiếm cùng một khoảng rộng */
 }
+
 button:hover {
     background-color: #13357B;
     color: #CAF0F8;
     stroke: #CAF0F8;
 }
-.list-trip-items{
+
+.list-trip-items {
     display: flex;
     flex-direction: column;
     gap: 20px;

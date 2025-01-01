@@ -8,12 +8,10 @@
             <div class="container-fluid frame-overall">
                 <div class="container-fluid overall">
                     <div class="row">
-                        <div class="row">
-                            <p>My Trips</p>
-                        </div>
-
-                        <div class="container-fluid">
-                            <button @click="navigateToBuildTrip">
+                        <div class="d-flex justify-content-between">
+                            <p class="container-fluid">My Trips</p>
+                            <button class="button d-flex justify-content-center align-items-center"
+                                @click="navigateToBuildTrip">
                                 <svg width="50px" height="50px" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path d="M6 12H18M12 6V18" stroke="#currentColor" stroke-width="2"
@@ -96,7 +94,7 @@ export default {
     margin-top: 180px;
 }
 
-.row p {
+p {
     color: #13357B;
     font-size: 40px;
     font-weight: 900;
@@ -126,7 +124,7 @@ button {
     border: 1px solid #13357B;
     font-weight: bold;
     cursor: pointer;
-    flex: 1;
+    width: 100%;
     /* Để hai nút cách đều và chiếm cùng một khoảng rộng */
 }
 
