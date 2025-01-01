@@ -33,7 +33,7 @@ class SignInViewModel {
           console.log('User role:', userResult.user);
           sessionStorage.setItem('role', userResult.user.role);
           if(userResult.user.role === 'business') {
-            router.push('/business');
+            router.push('/Business');
           }
           else{
             router.push('/home');

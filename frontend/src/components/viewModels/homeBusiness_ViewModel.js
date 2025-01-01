@@ -176,7 +176,7 @@ export default function () {
         try {
             const ratings = await fetchRatingByDestinationID(destinationID);
             // lấy tên thành phố load data
-            nameDestination.value = destinations.value.find(destination => destination.id === destinationID) ? .name || "Unknown";
+            nameDestination.value = destinations.value.find(destination => destination.id === destinationID)?.name || "Unknown";
             ratings.forEach(rating => {
                 switch (rating.rating) {
                     case 1:
@@ -243,7 +243,7 @@ export default function () {
 
     const deleteTourByTourID = async (tourID) => {
         try {
-            console.log("User ID:", user.value ? .id);
+            console.log("User ID:", user.value?.id);
             const token = sessionStorage.getItem('access_token');
             console.log("Token:", token);
             const response = await deleteTour(tourID);
