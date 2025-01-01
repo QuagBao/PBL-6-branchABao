@@ -5,7 +5,7 @@ export async function fetchDestinationsByCity(cityId) {
     const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/?city_id=${cityId}&limit=200`);
     const filteredDestinations = response.data.filter(destination => destination.hotel_id === null && destination.restaurant_id === null);
 
-  // Chỉ map qua các destination đã lọc
+    // Chỉ map qua các destination đã lọc
     return response.data.map(destination => ({
       id: destination.id,
       name: destination.name,
@@ -39,7 +39,7 @@ export async function fetchAttractions() {
     const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/?limit=200`);
     const filteredDestinations = response.data.filter(destination => destination.hotel_id === null && destination.restaurant_id === null);
 
-  // Chỉ map qua các destination đã lọc
+    // Chỉ map qua các destination đã lọc
     return filteredDestinations.map(destination => ({
       id: destination.id,
       name: destination.name,
@@ -69,11 +69,11 @@ export async function fetchAttractions() {
 };
 
 // Hàm để lấy thông tin khách sạn từ API
-export async function fetchHotelsByCity (cityId) {
+export async function fetchHotelsByCity(cityId) {
   try {
     // Gọi API để lấy dữ liệu khách sạn
     const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/hotel/?city_id=${cityId}`);
-    
+
     // In ra dữ liệu khách sạn để kiểm tra
 
     return response.data.map((destination) => ({
@@ -111,11 +111,11 @@ export async function fetchHotelsByCity (cityId) {
 };
 
 // Hàm để lấy thông tin khách sạn từ API
-export async function fetchHotels () {
+export async function fetchHotels() {
   try {
     // Gọi API để lấy dữ liệu khách sạn
     const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/hotel/?is_popular=true`);
-    
+
     // In ra dữ liệu khách sạn để kiểm tra
     return response.data.map((destination) => ({
       id: destination.id,
@@ -151,11 +151,11 @@ export async function fetchHotels () {
   }
 };
 
-  export async function fetchRestaurantsByCity(cityId){
+export async function fetchRestaurantsByCity(cityId) {
   try {
     // Gọi API để lấy dữ liệu khách sạn
     const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/restaurant/?city_id=${cityId}&is_popular=true`);
-    
+
 
     // In ra dữ liệu khách sạn để kiểm tra
 
@@ -193,11 +193,11 @@ export async function fetchHotels () {
   }
 };
 
-export async function fetchRestaurants(){
+export async function fetchRestaurants() {
   try {
     // Gọi API để lấy dữ liệu khách sạn
     const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/restaurant/?is_popular=true`);
-    
+
 
     // In ra dữ liệu khách sạn để kiểm tra
 
@@ -436,14 +436,20 @@ export async function updateDestination(
 
     if (response.status === 200) {
       console.log("Destination updated successfully");
-      return { success: true, message: "Destination updated successfully" };
+      return {
+        success: true,
+        message: "Destination updated successfully"
+      };
     }
   } catch (error) {
     console.error(
       "Error details:",
       error.response ? error.response.data : error.message
     );
-    return { success: false, message: "Failed to update destination" };
+    return {
+      success: false,
+      message: "Failed to update destination"
+    };
   }
 }
 
@@ -483,16 +489,29 @@ export async function addDestination(destination, images) {
     });
 
     if (response.status === 200) {
-      const { id, name } = response.data;
-      console.log("Destination created successfully", { id, name });
-      return { id, name, success: true };
+      const {
+        id,
+        name
+      } = response.data;
+      console.log("Destination created successfully", {
+        id,
+        name
+      });
+      return {
+        id,
+        name,
+        success: true
+      };
     }
   } catch (error) {
     console.error(
       "Error details:",
       error.response ? error.response.data : error.message
     );
-    return { success: false, message: "Failed to update destination" };
+    return {
+      success: false,
+      message: "Failed to update destination"
+    };
   }
 }
 
@@ -505,11 +524,17 @@ export async function deleteDestination(destinationID) {
 
     if (response.status === 200) {
       console.log("City delete successfully");
-      return { success: true, message: "Destination delete successfully" };
+      return {
+        success: true,
+        message: "Destination delete successfully"
+      };
     }
   } catch (error) {
     console.error("Error deleting destination:", error);
-    return { success: false, message: "Failed to deleting destination" };
+    return {
+      success: false,
+      message: "Failed to deleting destination"
+    };
   }
 }
 
@@ -533,11 +558,17 @@ export async function updateHotel(hotel) {
 
     if (response.status === 200) {
       console.log("Hotel updated successfully");
-      return { success: true, message: "Hotel updated successfully" };
+      return {
+        success: true,
+        message: "Hotel updated successfully"
+      };
     }
   } catch (error) {
     console.error("Error updating hotel:", error);
-    return { success: false, message: "Failed to update hotel" };
+    return {
+      success: false,
+      message: "Failed to update hotel"
+    };
   }
 }
 
@@ -561,11 +592,17 @@ export async function addHotel(hotel) {
 
     if (response.status === 200) {
       console.log("Hotel add successfully");
-      return { success: true, message: "Hotel added successfully" };
+      return {
+        success: true,
+        message: "Hotel added successfully"
+      };
     }
   } catch (error) {
     console.error("Error add hotel:", error);
-    return { success: false, message: "Failed to added hotel" };
+    return {
+      success: false,
+      message: "Failed to added hotel"
+    };
   }
 }
 
@@ -578,11 +615,17 @@ export async function deleteHotel(hotelID) {
 
     if (response.status === 200) {
       console.log("Hotel delete successfully");
-      return { success: true, message: "Hotel delete successfully" };
+      return {
+        success: true,
+        message: "Hotel delete successfully"
+      };
     }
   } catch (error) {
     console.error("Error deleting hotel:", error);
-    return { success: false, message: "Failed to deleting hotel" };
+    return {
+      success: false,
+      message: "Failed to deleting hotel"
+    };
   }
 }
 
@@ -601,11 +644,17 @@ export async function updateRestaurant(restaurant) {
 
     if (response.status === 200) {
       console.log("Restaurant updated successfully");
-      return { success: true, message: "Restaurant updated successfully" };
+      return {
+        success: true,
+        message: "Restaurant updated successfully"
+      };
     }
   } catch (error) {
     console.error("Error updating restaurant:", error);
-    return { success: false, message: "Failed to update restaurant" };
+    return {
+      success: false,
+      message: "Failed to update restaurant"
+    };
   }
 }
 
@@ -624,11 +673,17 @@ export async function addRestaurant(restaurant) {
 
     if (response.status === 200) {
       console.log("Restaurant add successfully");
-      return { success: true, message: "Restaurant added successfully" };
+      return {
+        success: true,
+        message: "Restaurant added successfully"
+      };
     }
   } catch (error) {
     console.error("Error add restaurant:", error);
-    return { success: false, message: "Failed to added restaurant" };
+    return {
+      success: false,
+      message: "Failed to added restaurant"
+    };
   }
 }
 
@@ -641,11 +696,17 @@ export async function deleteRestaurant(restaurantID) {
 
     if (response.status === 200) {
       console.log("Restaurant delete successfully");
-      return { success: true, message: "Restaurant delete successfully" };
+      return {
+        success: true,
+        message: "Restaurant delete successfully"
+      };
     }
   } catch (error) {
     console.error("Error deleting Restaurant:", error);
-    return { success: false, message: "Failed to deleting Restaurant" };
+    return {
+      success: false,
+      message: "Failed to deleting Restaurant"
+    };
   }
 }
 
@@ -668,8 +729,8 @@ export async function fetchRestaurantsByFilter(save_option_cuisine, save_option_
     }
 
     const response = await axios.get(url.toString());
-    
-    
+
+
 
     // In ra dữ liệu khách sạn để kiểm tra
 
@@ -701,7 +762,7 @@ export async function fetchRestaurantsByFilter(save_option_cuisine, save_option_
   }
 };
 
-export async function fetchRestaurantsByFilter_City(city_id,save_option_cuisine, save_option_meal, save_option_special_diet, save_option_feature) {
+export async function fetchRestaurantsByFilter_City(city_id, save_option_cuisine, save_option_meal, save_option_special_diet, save_option_feature) {
   try {
     const url = new URL(
       `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/restaurant/?is_popular=true`
@@ -721,8 +782,8 @@ export async function fetchRestaurantsByFilter_City(city_id,save_option_cuisine,
     }
 
     const response = await axios.get(url.toString());
-    
-    
+
+
 
     // In ra dữ liệu khách sạn để kiểm tra
 
@@ -770,8 +831,8 @@ export async function fetchHotelsByFilter(save_option_price_range, save_option_a
     }
 
     const response = await axios.get(url.toString());
-    
-    
+
+
 
     // In ra dữ liệu khách sạn để kiểm tra
 
@@ -803,7 +864,7 @@ export async function fetchHotelsByFilter(save_option_price_range, save_option_a
   }
 };
 
-export async function fetchHotelsByFilter_City(city_id,save_option_price_range, save_option_amenities, save_option_hotel_star) {
+export async function fetchHotelsByFilter_City(city_id, save_option_price_range, save_option_amenities, save_option_hotel_star) {
   try {
     const url = new URL(
       `https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/hotel/?is_popular=true`
@@ -820,8 +881,8 @@ export async function fetchHotelsByFilter_City(city_id,save_option_price_range, 
     }
 
     const response = await axios.get(url.toString());
-    
-    
+
+
 
     // In ra dữ liệu khách sạn để kiểm tra
 
@@ -880,36 +941,52 @@ export async function getDestinationRatingStatic(destinationID) {
   }
 }
 
-export async function setLikeForDestination(user_id, destination_id){
-  try{
+export async function setLikeForDestination(user_id, destination_id) {
+  try {
     const response = await axios.post(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/user/${user_id}/like/${destination_id}`)
-    if(response.status === 200){
+    if (response.status === 200) {
       console.log("Destination liked successfully");
-      return { success: true, message: "Destination liked successfully" };
-    }
-    else {
+      return {
+        success: true,
+        message: "Destination liked successfully"
+      };
+    } else {
       console.log("Destination liked failed");
-      return { success: false, message: "Destination liked failed" };
+      return {
+        success: false,
+        message: "Destination liked failed"
+      };
     }
   } catch (error) {
     console.error("Error liking destination:", error);
-    return { success: false, message: "Failed to like destination" };
+    return {
+      success: false,
+      message: "Failed to like destination"
+    };
   }
 }
-export async function setUnLikeForDestination(user_id, destination_id){
-  try{
+export async function setUnLikeForDestination(user_id, destination_id) {
+  try {
     const response = await axios.delete(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/user/${user_id}/unlike/${destination_id}`)
-    if(response.status === 200){
+    if (response.status === 200) {
       console.log("Destination unliked successfully");
-      return { success: true, message: "Destination unliked successfully" };
-    }
-    else {
+      return {
+        success: true,
+        message: "Destination unliked successfully"
+      };
+    } else {
       console.log("Destination unliked failed");
-      return { success: false, message: "Destination unliked failed" };
+      return {
+        success: false,
+        message: "Destination unliked failed"
+      };
     }
   } catch (error) {
     console.error("Error unliking destination:", error);
-    return { success: false, message: "Failed to unlike destination" };
+    return {
+      success: false,
+      message: "Failed to unlike destination"
+    };
   }
 }
 export async function checkLikeForDestination(user_id, destination_id) {
@@ -950,7 +1027,7 @@ export async function fetchDestinationsByUser(userId) {
   try {
     const response = await axios.get(`https://pbl6-travel-fastapi-azfpceg2czdybuh3.eastasia-01.azurewebsites.net/destination/?user_id=${userId}&is_popular=true&get_rating=true`);
 
-  // Chỉ map qua các destination đã lọc
+    // Chỉ map qua các destination đã lọc
     return response.data.map(destination => ({
       id: destination.id,
       name: destination.name,
@@ -969,7 +1046,7 @@ export async function fetchDestinationsByUser(userId) {
       restaurant: destination.restaurant,
       tags: destination.tags,
       images: destination.images,
-      rating: destination.average_rating ? parseFloat(destination.average_rating.toFixed(1)) : 0  ,
+      rating: destination.average_rating ? parseFloat(destination.average_rating.toFixed(1)) : 0,
       review_count: destination.review_count,
     }));
   } catch (error) {
@@ -999,7 +1076,7 @@ export async function fetchRecommendtions(userID) {
       restaurant: destination.restaurant,
       tags: destination.tags,
       images: destination.images,
-      rating: destination.average_rating ? parseFloat(destination.average_rating.toFixed(1)) : 0  ,
+      rating: destination.average_rating ? parseFloat(destination.average_rating.toFixed(1)) : 0,
       review_count: destination.review_count,
     }));
   } catch (error) {
@@ -1029,7 +1106,7 @@ export async function fetchRecommendationsByCity(userID, city_id) {
       restaurant: destination.restaurant,
       tags: destination.tags,
       images: destination.images,
-      rating: destination.average_rating ? parseFloat(destination.average_rating.toFixed(1)) : 0  ,
+      rating: destination.average_rating ? parseFloat(destination.average_rating.toFixed(1)) : 0,
       review_count: destination.review_count,
     }));
   } catch (error) {
@@ -1049,8 +1126,8 @@ export async function fetchDestinationsByCity_Tag(city_id, tags) {
     }
 
     const response = await axios.get(url.toString());
-    
-    
+
+
 
     // In ra dữ liệu khách sạn để kiểm tra
 
@@ -1091,7 +1168,7 @@ export async function fetchDestinationsByTag(tags) {
 
     const response = await axios.get(url.toString());
 
-  // Chỉ map qua các destination đã lọc
+    // Chỉ map qua các destination đã lọc
     return response.data.map(destination => ({
       id: destination.id,
       name: destination.name,

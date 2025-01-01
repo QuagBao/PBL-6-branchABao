@@ -1,8 +1,21 @@
-import { getDestination, fetchStatistics, getAllCities, fetchRatingByDestinationID } from "../models/homeBusinessModel";
-import { ref, onMounted } from "vue";
+import {
+    getDestination,
+    fetchStatistics,
+    getAllCities,
+    fetchRatingByDestinationID
+} from "../models/homeBusinessModel";
+import {
+    ref,
+    onMounted
+} from "vue";
 import SignInModel from "../models/SignInModel";
-import { getTourByUserId, deleteTour } from '../models/TourModel'
-import { useToast } from "vue-toastification";
+import {
+    getTourByUserId,
+    deleteTour
+} from '../models/TourModel'
+import {
+    useToast
+} from "vue-toastification";
 
 export default function () {
     const toast = useToast();
@@ -10,8 +23,8 @@ export default function () {
     const totalDestination = ref(0);
     const totalTour = ref(0);
     const totalReview = ref(0);
-    const averageRating = ref(0);  
-    
+    const averageRating = ref(0);
+
     const selectDestinationID = ref(0);
     const nameDestination = ref("");
     const destID = ref({});
@@ -53,7 +66,7 @@ export default function () {
             if (destinations.value.length) {
                 place = [...destinations.value];
             } else {
-                place = await getDestination(user.value.id);    
+                place = await getDestination(user.value.id);
             }
             // Sắp xếp rating giảm dần dùng để view 5 địa điểm có rating cao nhất
             // của 1 người dùg
@@ -64,13 +77,15 @@ export default function () {
                 destID.value[destination.id] = destination.id;
                 totalReview.value += destination.review_count;
                 const cityName = cityCache.value[destination.address.city_id] || "Unknown";
-                return { ...destination, cityName };
-            }
-        ) 
+                return {
+                    ...destination,
+                    cityName
+                };
+            })
             console.log("Dest ID:", destID.value);
             console.log("Total Review:", totalReview.value);
             destinations.value = place || null;
-            console.log("Place Update Name: ",destinations.value);
+            console.log("Place Update Name: ", destinations.value);
         } catch (error) {
             console.error("Error fetching destinations:", error);
         } finally {
@@ -85,7 +100,10 @@ export default function () {
             //Thêm cityName từ cityCache vào mỗi destination
             tours = tours.map(tour => {
                 const cityName = cityCache.value[tour.city_id] || "Unknown";
-                return { ...tour, cityName };
+                return {
+                    ...tour,
+                    cityName
+                };
             });
             tours.reverse();
             tourList.value = tours || null;
@@ -114,21 +132,24 @@ export default function () {
     const loadUser = async () => {
         const signInModel = new SignInModel("", "");
         const token = sessionStorage.getItem('access_token');
-        try{
-          if(token){
-            const userResult = await signInModel.fetchCurrentUser(token);
-            if(userResult.success){
-            user.value = userResult.user;
-            } else {
-                console.error('Cannot get user:', error);
+        try {
+            if (token) {
+                const userResult = await signInModel.fetchCurrentUser(token);
+                if (userResult.success) {
+                    user.value = userResult.user;
+                } else {
+                    console.error('Cannot get user:', error);
+                }
             }
-          }
-          
+
         } catch (error) {
-          console.error('An error occurred during authentication:', error);
-          return { success: false, message: error.message || 'An error occurred' };
+            console.error('An error occurred during authentication:', error);
+            return {
+                success: false,
+                message: error.message || 'An error occurred'
+            };
         }
-        console.log ("User:", user.value);  
+        console.log("User:", user.value);
     }
 
 
@@ -151,11 +172,11 @@ export default function () {
         }
     }
     // Hàm lấy rating 1 địa điểm
-    const loadRatings  = async (destinationID) => {
+    const loadRatings = async (destinationID) => {
         try {
             const ratings = await fetchRatingByDestinationID(destinationID);
             // lấy tên thành phố load data
-            nameDestination.value = destinations.value.find(destination => destination.id === destinationID)?.name || "Unknown";
+            nameDestination.value = destinations.value.find(destination => destination.id === destinationID) ? .name || "Unknown";
             ratings.forEach(rating => {
                 switch (rating.rating) {
                     case 1:
@@ -200,47 +221,64 @@ export default function () {
         }
     };
     const generateStars = (rating) => {
-        const fullStar = new URL('@/assets/svg/star_full.svg', import.meta.url).href;
-        const halfStar = new URL('@/assets/svg/star_half.svg', import.meta.url).href;
-        const emptyStar = new URL('@/assets/svg/star_none.svg', import.meta.url).href;
-      
+        const fullStar = new URL('@/assets/svg/star_full.svg',
+            import.meta.url).href;
+        const halfStar = new URL('@/assets/svg/star_half.svg',
+            import.meta.url).href;
+        const emptyStar = new URL('@/assets/svg/star_none.svg',
+            import.meta.url).href;
+
         let stars = [];
         for (let i = 1; i <= 5; i++) {
-          if (rating >= i) {
-            stars.push(fullStar);
-          } else if ((rating > i - 1 && rating - i + 1 >=0.5 )&& rating < i) {
-            stars.push(halfStar);
-          } else {
-            stars.push(emptyStar);
-          }
+            if (rating >= i) {
+                stars.push(fullStar);
+            } else if ((rating > i - 1 && rating - i + 1 >= 0.5) && rating < i) {
+                stars.push(halfStar);
+            } else {
+                stars.push(emptyStar);
+            }
         }
         return stars;
     };
 
-    const deleteTourByTourID = async (tourID) =>{
-        try{
-            console.log("User ID:", user.value?.id);
+    const deleteTourByTourID = async (tourID) => {
+        try {
+            console.log("User ID:", user.value ? .id);
             const token = sessionStorage.getItem('access_token');
             console.log("Token:", token);
             const response = await deleteTour(tourID);
-            if(response.success){
+            if (response.success) {
                 toast.success("Delete a tour complete");
                 tourList.value = tourList.value.filter(tour => tour.id !== tourID);
-            }else{
+            } else {
                 toast.error("Delete a tour faild");
             }
-        }catch(error){
+        } catch (error) {
             console.error('Error getting tour:', error);
             return [];
         }
     }
 
 
-    return { 
-        destinations, isLoading, loadDestinations, //trả về dùng cho table
-        totalDestination, totalTour, averageRating, totalReview, //Dùng cho các biến khái quát ban đầu
-        rating_1, rating_2, rating_3, rating_4, rating_5, loadRatings, nameDestination, //dùng cho chart
-        selectDestinationID, getSelectDestinationID, //dùng để load dl cho chart khi chọn từ table
-        tourList, generateStars, deleteTourByTourID,
+    return {
+        destinations,
+        isLoading,
+        loadDestinations, //trả về dùng cho table
+        totalDestination,
+        totalTour,
+        averageRating,
+        totalReview, //Dùng cho các biến khái quát ban đầu
+        rating_1,
+        rating_2,
+        rating_3,
+        rating_4,
+        rating_5,
+        loadRatings,
+        nameDestination, //dùng cho chart
+        selectDestinationID,
+        getSelectDestinationID, //dùng để load dl cho chart khi chọn từ table
+        tourList,
+        generateStars,
+        deleteTourByTourID,
     };
-}   
+}

@@ -1,9 +1,19 @@
-import { onMounted, ref } from 'vue';
-import { fetchDestinationsByUser,  deleteDestination as deleteDestinationAPI, } from '../models/destinationModel';
-import { fetchCities as fetchCitiesAPI } from "../models/CityModel";
+import {
+    onMounted,
+    ref
+} from 'vue';
+import {
+    fetchDestinationsByUser,
+    deleteDestination as deleteDestinationAPI,
+} from '../models/destinationModel';
+import {
+    fetchCities as fetchCitiesAPI
+} from "../models/CityModel";
 import SignInModel from '../models/SignInModel';
-import { useToast } from 'vue-toastification';
-export default function() {
+import {
+    useToast
+} from 'vue-toastification';
+export default function () {
     const isLoading = ref(false);
     const places = ref([]);
     const user = ref(null);
@@ -42,7 +52,7 @@ export default function() {
         try {
             cities.value = await fetchCitiesAPI();
             console.log("Cities:", cities.value);
-            
+
         } catch (error) {
             toast.error("Error fetching cities:", error);
         }
@@ -52,18 +62,18 @@ export default function() {
         try {
             const result = await deleteDestinationAPI(destinationID);
             console.log("Delete result:", destinationID);
-        if (result.success) {
-            toast.success("Deleted", destinationID)
-            toast.success("Delete destination successfully");
-        } else {
-            toast.error("Delete destination failed");
-        }
+            if (result.success) {
+                toast.success("Deleted", destinationID)
+                toast.success("Delete destination successfully");
+            } else {
+                toast.error("Delete destination failed");
+            }
         } catch (error) {
             toast.error("Error deleting destination:", error);
         }
     };
 
-    onMounted( async() => {
+    onMounted(async () => {
         await loadDestinations();
         await getCities();
     });
@@ -72,9 +82,9 @@ export default function() {
         destinations,
         hotels,
         restaurants,
-        places, 
+        places,
         getCities,
-        cities, 
+        cities,
         deleteDestination
     }
 }
