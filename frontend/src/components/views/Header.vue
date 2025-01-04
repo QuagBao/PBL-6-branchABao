@@ -25,7 +25,7 @@
             <div class="dropdown-menu dropdown-menu-end m-0">
               <button class="dropdown-item" @click="handleButtonClick('myTrips', '/business/tour')">All
                 Packages</button>
-              <button class="dropdown-item" @click="handleButtonClick('startNewTrip', '//business/tour/add')">Add New
+              <button class="dropdown-item" @click="handleButtonClick('startNewTrip', '/business/tour/add')">Add New
                 Package</button>
             </div>
           </div>
